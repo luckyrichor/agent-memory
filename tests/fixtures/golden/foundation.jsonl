@@ -1,0 +1,1 @@
+{"case_id":"arm64-build-failure","tenant_id":"00000000-0000-0000-0000-00000000000a","workspace_id":"project-a","expected_memory_type":"episodic","expected_scope_kind":"workspace","expected_content":"项目 A 曾因 x86_64 依赖在 Apple Silicon 上构建失败；替换为 arm64 版本后构建通过。"}
