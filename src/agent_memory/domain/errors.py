@@ -24,3 +24,23 @@ class MemoryScopeForbidden(MemoryError):
 
 class IdempotencyConflict(MemoryError):
     pass
+
+
+class InvalidEvent(MemoryError):
+    pass
+
+
+class EventIdempotencyConflict(MemoryError):
+    pass
+
+
+class EventSequenceConflict(MemoryError):
+    pass
+
+
+class LeaseUnavailable(MemoryError):
+    pass
+
+
+class LeaseLost(MemoryError):
+    pass
