@@ -3,6 +3,7 @@ from typing import Any
 from uuid import UUID
 
 from sqlalchemy import (
+    BigInteger,
     CheckConstraint,
     DateTime,
     Float,
@@ -138,3 +139,143 @@ class AuditLogRow(Base):
     resource_id: Mapped[UUID | None] = mapped_column(PG_UUID(as_uuid=True))
     metadata_json: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False, default=dict)
     occurred_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class EventRow(Base):
+    __tablename__ = "events"
+    __table_args__ = (
+        CheckConstraint("sequence_number > 0", name="ck_events_positive_sequence"),
+        CheckConstraint(
+            "event_type IN ('tool.result', 'task.completed', 'user.confirmed')",
+            name="ck_events_type",
+        ),
+        CheckConstraint(
+            "(scope_kind = 'tenant' AND workspace_id IS NULL AND subject_user_id IS NULL) OR "
+            "(scope_kind = 'workspace' AND workspace_id IS NOT NULL "
+            "AND subject_user_id IS NULL) OR "
+            "(scope_kind = 'user_global' AND workspace_id IS NULL "
+            "AND subject_user_id IS NOT NULL) OR "
+            "(scope_kind = 'user_workspace' AND workspace_id IS NOT NULL "
+            "AND subject_user_id IS NOT NULL)",
+            name="ck_events_scope_shape",
+        ),
+        UniqueConstraint("tenant_id", "idempotency_key", name="uq_events_idempotency"),
+        UniqueConstraint(
+            "tenant_id",
+            "session_id",
+            "sequence_number",
+            name="uq_events_session_sequence",
+        ),
+    )
+
+    tenant_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True)
+    event_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True)
+    idempotency_key: Mapped[str] = mapped_column(String(255), nullable=False)
+    request_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    session_id: Mapped[str] = mapped_column(String(255), nullable=False)
+    sequence_number: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    event_type: Mapped[str] = mapped_column(String(64), nullable=False)
+    scope_kind: Mapped[str] = mapped_column(String(32), nullable=False)
+    workspace_id: Mapped[str | None] = mapped_column(String(512))
+    subject_user_id: Mapped[UUID | None] = mapped_column(PG_UUID(as_uuid=True))
+    actor_user_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), nullable=False)
+    agent_id: Mapped[str] = mapped_column(String(255), nullable=False)
+    occurred_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    received_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    payload: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
+
+
+class OutboxMessageRow(Base):
+    __tablename__ = "outbox_messages"
+    __table_args__ = (
+        CheckConstraint("status IN ('pending', 'published')", name="ck_outbox_status"),
+        CheckConstraint("attempts >= 0", name="ck_outbox_attempts"),
+        UniqueConstraint(
+            "tenant_id", "topic", "aggregate_id", name="uq_outbox_aggregate"
+        ),
+        Index(
+            "ix_outbox_claimable",
+            "tenant_id",
+            "status",
+            "available_at",
+            "created_at",
+        ),
+    )
+
+    tenant_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True)
+    outbox_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True)
+    topic: Mapped[str] = mapped_column(String(64), nullable=False)
+    aggregate_type: Mapped[str] = mapped_column(String(64), nullable=False)
+    aggregate_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), nullable=False)
+    payload: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
+    status: Mapped[str] = mapped_column(String(16), nullable=False)
+    available_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    attempts: Mapped[int] = mapped_column(Integer, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class JobRow(Base):
+    __tablename__ = "jobs"
+    __table_args__ = (
+        CheckConstraint(
+            "status IN ('pending', 'running', 'retry_wait', 'succeeded', 'dead')",
+            name="ck_jobs_status",
+        ),
+        CheckConstraint("attempts >= 0", name="ck_jobs_attempts"),
+        CheckConstraint("max_attempts > 0", name="ck_jobs_max_attempts"),
+        UniqueConstraint(
+            "tenant_id", "job_type", "idempotency_key", name="uq_jobs_idempotency"
+        ),
+        Index(
+            "ix_jobs_claimable",
+            "tenant_id",
+            "status",
+            "available_at",
+            "created_at",
+        ),
+        Index("ix_jobs_expired_lease", "tenant_id", "status", "leased_until"),
+    )
+
+    tenant_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True)
+    job_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True)
+    job_type: Mapped[str] = mapped_column(String(64), nullable=False)
+    idempotency_key: Mapped[str] = mapped_column(String(255), nullable=False)
+    payload: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
+    status: Mapped[str] = mapped_column(String(16), nullable=False)
+    attempts: Mapped[int] = mapped_column(Integer, nullable=False)
+    max_attempts: Mapped[int] = mapped_column(Integer, nullable=False)
+    available_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    leased_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    lease_owner: Mapped[str | None] = mapped_column(String(255))
+    last_error_code: Mapped[str | None] = mapped_column(String(64))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class EvidenceRow(Base):
+    __tablename__ = "evidence"
+    __table_args__ = (
+        CheckConstraint(
+            "role IN ('supports', 'contradicts', 'triggered_by', 'verified_by')",
+            name="ck_evidence_role",
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "memory_version_id"],
+            ["memory_versions.tenant_id", "memory_versions.memory_version_id"],
+            name="fk_evidence_memory_version",
+            ondelete="CASCADE",
+        ),
+        ForeignKeyConstraint(
+            ["tenant_id", "event_id"],
+            ["events.tenant_id", "events.event_id"],
+            name="fk_evidence_event",
+            ondelete="CASCADE",
+        ),
+    )
+
+    tenant_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True)
+    memory_version_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True)
+    event_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True)
+    role: Mapped[str] = mapped_column(String(32), primary_key=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)

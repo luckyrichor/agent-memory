@@ -14,7 +14,15 @@ from agent_memory.infrastructure.db import (
     create_session_factory,
     session_for_principal,
 )
-from agent_memory.infrastructure.orm import AuditLogRow, MemoryRow, MemoryVersionRow
+from agent_memory.infrastructure.orm import (
+    AuditLogRow,
+    EventRow,
+    EvidenceRow,
+    JobRow,
+    MemoryRow,
+    MemoryVersionRow,
+    OutboxMessageRow,
+)
 from agent_memory.infrastructure.repositories import PostgresAuditSink, PostgresMemoryRepository
 
 TENANT_A = UUID("10000000-0000-0000-0000-00000000000a")
@@ -24,6 +32,11 @@ USER_B = UUID("20000000-0000-0000-0000-000000000002")
 MEMORY_ID = UUID("10000000-0000-0000-0000-000000000003")
 VERSION_ID = UUID("10000000-0000-0000-0000-000000000004")
 NOW = datetime(2026, 8, 30, 15, 0, tzinfo=UTC)
+PIPELINE_MEMORY_ID = UUID("10000000-0000-0000-0000-000000000013")
+PIPELINE_VERSION_ID = UUID("10000000-0000-0000-0000-000000000014")
+EVENT_ID = UUID("10000000-0000-0000-0000-000000000015")
+OUTBOX_ID = UUID("10000000-0000-0000-0000-000000000016")
+JOB_ID = UUID("10000000-0000-0000-0000-000000000017")
 
 
 def principal(tenant_id: UUID, user_id: UUID) -> RequestPrincipal:
@@ -123,4 +136,115 @@ async def test_known_id_cannot_cross_tenant_read_update_link_or_audit(
 
     assert still_active == "active"
     assert version_count == 1
+    await engine.dispose()
+
+
+@pytest.mark.asyncio
+async def test_event_pipeline_known_ids_are_isolated_by_tenant(
+    app_database_url: str,
+) -> None:
+    engine = create_engine(app_database_url)
+    sessions = create_session_factory(engine)
+    tenant_a = principal(TENANT_A, USER_A)
+    tenant_b = principal(TENANT_B, USER_B)
+    memory, version = Memory.create(
+        tenant_id=TENANT_A,
+        memory_id=PIPELINE_MEMORY_ID,
+        version_id=PIPELINE_VERSION_ID,
+        memory_type=MemoryType.EPISODIC,
+        scope=MemoryScope(ScopeKind.WORKSPACE, "project-a", None),
+        owner_user_id=USER_A,
+        content="private pipeline memory",
+        now=NOW,
+    )
+
+    async with session_for_principal(sessions, tenant_a) as session:
+        await PostgresMemoryRepository(session).add(TENANT_A, memory, version)
+        session.add_all(
+            [
+                EventRow(
+                    tenant_id=TENANT_A,
+                    event_id=EVENT_ID,
+                    idempotency_key="pipeline-event-a",
+                    request_hash="1" * 64,
+                    session_id="pipeline-session-a",
+                    sequence_number=1,
+                    event_type="tool.result",
+                    scope_kind="workspace",
+                    workspace_id="project-a",
+                    subject_user_id=None,
+                    actor_user_id=USER_A,
+                    agent_id="coding_agent",
+                    occurred_at=NOW,
+                    received_at=NOW,
+                    payload={"tool_name": "build", "exit_code": 1},
+                ),
+                OutboxMessageRow(
+                    tenant_id=TENANT_A,
+                    outbox_id=OUTBOX_ID,
+                    topic="event.recorded",
+                    aggregate_type="event",
+                    aggregate_id=EVENT_ID,
+                    payload={"event_id": str(EVENT_ID)},
+                    status="pending",
+                    available_at=NOW,
+                    attempts=0,
+                    created_at=NOW,
+                    published_at=None,
+                ),
+                JobRow(
+                    tenant_id=TENANT_A,
+                    job_id=JOB_ID,
+                    job_type="extract_event",
+                    idempotency_key=f"extract:{EVENT_ID}:v1",
+                    payload={"event_id": str(EVENT_ID), "extractor_version": "v1"},
+                    status="pending",
+                    attempts=0,
+                    max_attempts=5,
+                    available_at=NOW,
+                    leased_until=None,
+                    lease_owner=None,
+                    last_error_code=None,
+                    created_at=NOW,
+                    updated_at=NOW,
+                ),
+                EvidenceRow(
+                    tenant_id=TENANT_A,
+                    memory_version_id=PIPELINE_VERSION_ID,
+                    event_id=EVENT_ID,
+                    role="triggered_by",
+                    created_at=NOW,
+                ),
+            ]
+        )
+
+    async with session_for_principal(sessions, tenant_b) as session:
+        assert list((await session.execute(select(EventRow.event_id))).scalars()) == []
+        assert list((await session.execute(select(OutboxMessageRow.outbox_id))).scalars()) == []
+        assert list((await session.execute(select(JobRow.job_id))).scalars()) == []
+        assert list((await session.execute(select(EvidenceRow.event_id))).scalars()) == []
+        changed = await session.execute(
+            update(JobRow).where(JobRow.job_id == JOB_ID).values(status="dead")
+        )
+        assert changed.rowcount == 0
+
+    with pytest.raises(IntegrityError):
+        async with session_for_principal(sessions, tenant_b) as session:
+            session.add(
+                EvidenceRow(
+                    tenant_id=TENANT_B,
+                    memory_version_id=PIPELINE_VERSION_ID,
+                    event_id=EVENT_ID,
+                    role="triggered_by",
+                    created_at=NOW,
+                )
+            )
+            await session.flush()
+
+    async with session_for_principal(sessions, tenant_a) as session:
+        assert await session.scalar(select(JobRow.status).where(JobRow.job_id == JOB_ID)) == "pending"
+        assert await session.scalar(
+            select(EvidenceRow.event_id).where(EvidenceRow.event_id == EVENT_ID)
+        ) == EVENT_ID
+
     await engine.dispose()
