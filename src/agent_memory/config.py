@@ -8,3 +8,6 @@ class Settings(BaseSettings):
         "postgresql+psycopg_async://agent_memory:local-development-only"
         "@localhost:55432/agent_memory"
     )
+    jwt_public_key: str = ""
+    jwt_issuer: str = ""
+    jwt_audience: str = ""
