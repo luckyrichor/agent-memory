@@ -8,11 +8,17 @@ from fastapi.responses import JSONResponse
 
 from agent_memory.api.auth import JwtPrincipalResolver
 from agent_memory.api.errors import AuthenticationRequired
+from agent_memory.api.event_routes import create_event_router
 from agent_memory.api.routes import create_router
+from agent_memory.application.event_ingestion import EventIngestionService
 from agent_memory.application.explicit_memory import ExplicitMemoryService
 from agent_memory.config import Settings
 from agent_memory.domain.errors import (
+    EventIdempotencyConflict,
+    EventScopeForbidden,
+    EventSequenceConflict,
     IdempotencyConflict,
+    InvalidEvent,
     MemoryNotFound,
     MemoryScopeForbidden,
     RevisionConflict,
@@ -23,6 +29,7 @@ from agent_memory.infrastructure.db import (
     create_session_factory,
     session_for_principal,
 )
+from agent_memory.infrastructure.event_repositories import PostgresEventIngestionRepository
 from agent_memory.infrastructure.repositories import (
     PostgresAuditSink,
     PostgresIdempotencyRepository,
@@ -54,6 +61,18 @@ def create_app(settings: Settings) -> FastAPI:
                 ),
                 new_id=uuid4,
                 now=lambda: datetime.now(UTC),
+            )
+
+    async def event_service_dependency(
+        principal: Annotated[RequestPrincipal, Depends(resolver)],
+    ) -> AsyncIterator[EventIngestionService]:
+        async with session_for_principal(sessions, principal) as session:
+            yield EventIngestionService(
+                PostgresEventIngestionRepository(
+                    session,
+                    new_id=uuid4,
+                    now=lambda: datetime.now(UTC),
+                )
             )
 
     @app.exception_handler(AuthenticationRequired)
@@ -117,7 +136,53 @@ def create_app(settings: Settings) -> FastAPI:
             409,
         )
 
+    @app.exception_handler(EventScopeForbidden)
+    async def event_scope_forbidden(
+        request: Request,
+        error: EventScopeForbidden,
+    ) -> JSONResponse:
+        return domain_error_response(
+            request,
+            "EVENT_SCOPE_FORBIDDEN",
+            "The caller cannot access this event scope.",
+            403,
+        )
+
+    @app.exception_handler(EventIdempotencyConflict)
+    async def event_idempotency_conflict(
+        request: Request,
+        error: EventIdempotencyConflict,
+    ) -> JSONResponse:
+        return domain_error_response(
+            request,
+            "EVENT_IDEMPOTENCY_CONFLICT",
+            "The event idempotency key was reused with different input.",
+            409,
+        )
+
+    @app.exception_handler(EventSequenceConflict)
+    async def event_sequence_conflict(
+        request: Request,
+        error: EventSequenceConflict,
+    ) -> JSONResponse:
+        return domain_error_response(
+            request,
+            "EVENT_SEQUENCE_CONFLICT",
+            "The session sequence number is already occupied.",
+            409,
+        )
+
+    @app.exception_handler(InvalidEvent)
+    async def invalid_event(request: Request, error: InvalidEvent) -> JSONResponse:
+        return domain_error_response(
+            request,
+            "EVENT_BATCH_INVALID",
+            "The event batch is invalid.",
+            422,
+        )
+
     app.include_router(create_router(resolver, service_dependency))
+    app.include_router(create_event_router(resolver, event_service_dependency))
     return app
 
 

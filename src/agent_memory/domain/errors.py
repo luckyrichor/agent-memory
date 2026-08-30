@@ -38,6 +38,10 @@ class EventSequenceConflict(MemoryError):
     pass
 
 
+class EventScopeForbidden(MemoryScopeForbidden):
+    pass
+
+
 class LeaseUnavailable(MemoryError):
     pass
 
