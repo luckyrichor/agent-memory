@@ -23,3 +23,12 @@ class EventIngestionRepository(Protocol):
         actor_user_id: UUID,
         drafts: tuple[EventDraft, ...],
     ) -> tuple[EventIngestionResult, ...]: ...
+
+
+class OutboxDispatchRepository(Protocol):
+    async def dispatch_once(
+        self,
+        tenant_id: UUID,
+        batch_size: int,
+        extractor_version: str,
+    ) -> int: ...

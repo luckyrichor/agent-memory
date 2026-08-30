@@ -1,12 +1,16 @@
 from collections.abc import Iterator
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from uuid import UUID
 
 import pytest
 from sqlalchemy import func, select
 
 from agent_memory.domain.enums import ScopeKind
-from agent_memory.domain.errors import EventIdempotencyConflict, EventSequenceConflict
+from agent_memory.domain.errors import (
+    EventIdempotencyConflict,
+    EventSequenceConflict,
+    LeaseLost,
+)
 from agent_memory.domain.events import EventDraft, EventType
 from agent_memory.domain.models import MemoryScope
 from agent_memory.domain.principal import RequestPrincipal
@@ -15,17 +19,23 @@ from agent_memory.infrastructure.db import (
     create_session_factory,
     session_for_principal,
 )
-from agent_memory.infrastructure.event_repositories import PostgresEventIngestionRepository
-from agent_memory.infrastructure.orm import EventRow, OutboxMessageRow
+from agent_memory.infrastructure.event_repositories import (
+    PostgresEventIngestionRepository,
+    PostgresJobQueue,
+    PostgresOutboxRepository,
+)
+from agent_memory.infrastructure.orm import EventRow, JobRow, OutboxMessageRow
 
 TENANT_ID = UUID("31000000-0000-0000-0000-000000000001")
 USER_ID = UUID("31000000-0000-0000-0000-000000000002")
+DISPATCH_TENANT_ID = UUID("31000000-0000-0000-0000-000000000011")
+LEASE_TENANT_ID = UUID("31000000-0000-0000-0000-000000000012")
 NOW = datetime(2026, 8, 30, 16, 0, tzinfo=UTC)
 
 
-def principal() -> RequestPrincipal:
+def principal(tenant_id: UUID = TENANT_ID) -> RequestPrincipal:
     return RequestPrincipal(
-        tenant_id=TENANT_ID,
+        tenant_id=tenant_id,
         user_id=USER_ID,
         roles=frozenset({"developer"}),
         permissions=frozenset({"memory:write"}),
@@ -150,4 +160,115 @@ async def test_postgres_ingestion_rejects_session_sequence_collision(
             await repository.ingest_batch(
                 TENANT_ID, USER_ID, (draft(key="sequence-attacker", sequence=10),)
             )
+    await engine.dispose()
+
+
+@pytest.mark.asyncio
+async def test_postgres_outbox_dispatch_is_idempotent(app_database_url: str) -> None:
+    engine = create_engine(app_database_url)
+    sessions = create_session_factory(engine)
+    ids = id_source(400)
+    async with session_for_principal(sessions, principal(DISPATCH_TENANT_ID)) as session:
+        await PostgresEventIngestionRepository(
+            session, new_id=lambda: next(ids), now=lambda: NOW
+        ).ingest_batch(
+            DISPATCH_TENANT_ID,
+            USER_ID,
+            (draft(key="dispatch-integration", sequence=20),),
+        )
+
+    async with session_for_principal(sessions, principal(DISPATCH_TENANT_ID)) as session:
+        first = await PostgresOutboxRepository(
+            session, new_id=lambda: next(ids), now=lambda: NOW
+        ).dispatch_once(DISPATCH_TENANT_ID, 10, "coding-failure-rule-v1")
+    async with session_for_principal(sessions, principal(DISPATCH_TENANT_ID)) as session:
+        second = await PostgresOutboxRepository(
+            session, new_id=lambda: next(ids), now=lambda: NOW
+        ).dispatch_once(DISPATCH_TENANT_ID, 10, "coding-failure-rule-v1")
+        jobs = await session.scalar(
+            select(func.count())
+            .select_from(JobRow)
+            .where(JobRow.tenant_id == DISPATCH_TENANT_ID)
+        )
+        status_value = await session.scalar(
+            select(OutboxMessageRow.status).where(
+                OutboxMessageRow.tenant_id == DISPATCH_TENANT_ID,
+                OutboxMessageRow.aggregate_id
+                == select(EventRow.event_id)
+                .where(EventRow.idempotency_key == "dispatch-integration")
+                .scalar_subquery(),
+            )
+        )
+
+    assert first == 1
+    assert second == 0
+    assert jobs == 1
+    assert status_value == "published"
+    await engine.dispose()
+
+
+@pytest.mark.asyncio
+async def test_postgres_job_lease_blocks_steal_and_recovers_after_expiry(
+    app_database_url: str,
+) -> None:
+    engine = create_engine(app_database_url)
+    sessions = create_session_factory(engine)
+    ids = id_source(500)
+    async with session_for_principal(sessions, principal(LEASE_TENANT_ID)) as session:
+        await PostgresEventIngestionRepository(
+            session, new_id=lambda: next(ids), now=lambda: NOW
+        ).ingest_batch(
+            LEASE_TENANT_ID,
+            USER_ID,
+            (draft(key="lease-integration", sequence=21),),
+        )
+    async with session_for_principal(sessions, principal(LEASE_TENANT_ID)) as session:
+        await PostgresOutboxRepository(
+            session, new_id=lambda: next(ids), now=lambda: NOW
+        ).dispatch_once(LEASE_TENANT_ID, 10, "coding-failure-rule-v1")
+
+    async with session_for_principal(sessions, principal(LEASE_TENANT_ID)) as session:
+        claimed = await PostgresJobQueue(session).claim(
+            LEASE_TENANT_ID, "worker-a", NOW, timedelta(seconds=30)
+        )
+    assert claimed is not None
+    assert claimed.attempts == 1
+
+    async with session_for_principal(sessions, principal(LEASE_TENANT_ID)) as session:
+        blocked = await PostgresJobQueue(session).claim(
+            LEASE_TENANT_ID,
+            "worker-b",
+            NOW + timedelta(seconds=29),
+            timedelta(seconds=30),
+        )
+    assert blocked is None
+
+    async with session_for_principal(sessions, principal(LEASE_TENANT_ID)) as session:
+        queue = PostgresJobQueue(session)
+        reclaimed = await queue.claim(
+            LEASE_TENANT_ID,
+            "worker-b",
+            NOW + timedelta(seconds=31),
+            timedelta(seconds=30),
+        )
+        assert reclaimed is not None
+        assert reclaimed.job_id == claimed.job_id
+        assert reclaimed.attempts == 2
+        with pytest.raises(LeaseLost):
+            await queue.renew(
+                LEASE_TENANT_ID,
+                reclaimed.job_id,
+                "worker-a",
+                NOW + timedelta(seconds=32),
+                timedelta(seconds=30),
+            )
+        renewed = await queue.renew(
+            LEASE_TENANT_ID,
+            reclaimed.job_id,
+            "worker-b",
+            NOW + timedelta(seconds=32),
+            timedelta(seconds=30),
+        )
+        assert renewed.leased_until == NOW + timedelta(seconds=62)
+
     await engine.dispose()

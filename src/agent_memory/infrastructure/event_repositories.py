@@ -1,15 +1,21 @@
 from collections.abc import Callable
-from datetime import datetime
+from datetime import datetime, timedelta
 from uuid import UUID
 
 from sqlalchemy import and_, or_, select
+from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from agent_memory.application.event_commands import EventIngestionResult
-from agent_memory.domain.errors import EventIdempotencyConflict, EventSequenceConflict
+from agent_memory.domain.errors import (
+    EventIdempotencyConflict,
+    EventSequenceConflict,
+    LeaseLost,
+)
 from agent_memory.domain.events import EventDraft
-from agent_memory.infrastructure.orm import EventRow, OutboxMessageRow
+from agent_memory.domain.jobs import Job, JobStatus
+from agent_memory.infrastructure.orm import EventRow, JobRow, OutboxMessageRow
 
 
 class PostgresEventIngestionRepository:
@@ -134,3 +140,202 @@ class PostgresEventIngestionRepository:
                 raise EventSequenceConflict("concurrent sequence collision") from error
             raise
         return tuple(results)
+
+
+class PostgresOutboxRepository:
+    def __init__(
+        self,
+        session: AsyncSession,
+        *,
+        new_id: Callable[[], UUID],
+        now: Callable[[], datetime],
+    ) -> None:
+        self._session = session
+        self._new_id = new_id
+        self._now = now
+
+    async def dispatch_once(
+        self,
+        tenant_id: UUID,
+        batch_size: int,
+        extractor_version: str,
+    ) -> int:
+        now = self._now()
+        messages = list(
+            (
+                await self._session.execute(
+                    select(OutboxMessageRow)
+                    .where(
+                        OutboxMessageRow.tenant_id == tenant_id,
+                        OutboxMessageRow.status == "pending",
+                        OutboxMessageRow.available_at <= now,
+                    )
+                    .order_by(OutboxMessageRow.created_at, OutboxMessageRow.outbox_id)
+                    .limit(batch_size)
+                    .with_for_update(skip_locked=True)
+                )
+            ).scalars()
+        )
+        for message in messages:
+            idempotency_key = (
+                f"extract_event:{message.aggregate_id}:{extractor_version}"
+            )
+            await self._session.execute(
+                insert(JobRow)
+                .values(
+                    tenant_id=tenant_id,
+                    job_id=self._new_id(),
+                    job_type="extract_event",
+                    idempotency_key=idempotency_key,
+                    payload={
+                        "event_id": str(message.aggregate_id),
+                        "extractor_version": extractor_version,
+                    },
+                    status=JobStatus.PENDING.value,
+                    attempts=0,
+                    max_attempts=5,
+                    available_at=now,
+                    leased_until=None,
+                    lease_owner=None,
+                    last_error_code=None,
+                    created_at=now,
+                    updated_at=now,
+                )
+                .on_conflict_do_nothing(
+                    index_elements=["tenant_id", "job_type", "idempotency_key"]
+                )
+            )
+            message.status = "published"
+            message.attempts += 1
+            message.published_at = now
+        await self._session.flush()
+        return len(messages)
+
+
+class PostgresJobQueue:
+    def __init__(self, session: AsyncSession) -> None:
+        self._session = session
+
+    async def claim(
+        self,
+        tenant_id: UUID,
+        worker_id: str,
+        now: datetime,
+        lease_duration: timedelta,
+    ) -> Job | None:
+        row = (
+            await self._session.execute(
+                select(JobRow)
+                .where(
+                    JobRow.tenant_id == tenant_id,
+                    or_(
+                        and_(
+                            JobRow.status.in_(["pending", "retry_wait"]),
+                            JobRow.available_at <= now,
+                        ),
+                        and_(
+                            JobRow.status == "running",
+                            JobRow.leased_until <= now,
+                        ),
+                    ),
+                )
+                .order_by(JobRow.available_at, JobRow.created_at, JobRow.job_id)
+                .limit(1)
+                .with_for_update(skip_locked=True)
+            )
+        ).scalar_one_or_none()
+        if row is None:
+            return None
+        claimed = self._to_domain(row).claim(worker_id, now, lease_duration)
+        self._apply(row, claimed)
+        await self._session.flush()
+        return claimed
+
+    async def renew(
+        self,
+        tenant_id: UUID,
+        job_id: UUID,
+        worker_id: str,
+        now: datetime,
+        lease_duration: timedelta,
+    ) -> Job:
+        row = await self._locked_row(tenant_id, job_id)
+        renewed = self._to_domain(row).renew(worker_id, now, lease_duration)
+        self._apply(row, renewed)
+        await self._session.flush()
+        return renewed
+
+    async def succeed(
+        self,
+        tenant_id: UUID,
+        job_id: UUID,
+        worker_id: str,
+        now: datetime,
+    ) -> Job:
+        row = await self._locked_row(tenant_id, job_id)
+        succeeded = self._to_domain(row).succeed(worker_id, now)
+        self._apply(row, succeeded)
+        await self._session.flush()
+        return succeeded
+
+    async def fail(
+        self,
+        tenant_id: UUID,
+        job_id: UUID,
+        worker_id: str,
+        now: datetime,
+        error_code: str,
+        *,
+        retryable: bool,
+    ) -> Job:
+        row = await self._locked_row(tenant_id, job_id)
+        failed = self._to_domain(row).fail(
+            worker_id,
+            now,
+            error_code,
+            retryable=retryable,
+        )
+        self._apply(row, failed)
+        await self._session.flush()
+        return failed
+
+    async def _locked_row(self, tenant_id: UUID, job_id: UUID) -> JobRow:
+        row = (
+            await self._session.execute(
+                select(JobRow)
+                .where(JobRow.tenant_id == tenant_id, JobRow.job_id == job_id)
+                .with_for_update()
+            )
+        ).scalar_one_or_none()
+        if row is None:
+            raise LeaseLost(str(job_id))
+        return row
+
+    @staticmethod
+    def _to_domain(row: JobRow) -> Job:
+        return Job(
+            tenant_id=row.tenant_id,
+            job_id=row.job_id,
+            job_type=row.job_type,
+            idempotency_key=row.idempotency_key,
+            payload=row.payload,
+            status=JobStatus(row.status),
+            attempts=row.attempts,
+            max_attempts=row.max_attempts,
+            available_at=row.available_at,
+            leased_until=row.leased_until,
+            lease_owner=row.lease_owner,
+            last_error_code=row.last_error_code,
+            created_at=row.created_at,
+            updated_at=row.updated_at,
+        )
+
+    @staticmethod
+    def _apply(row: JobRow, job: Job) -> None:
+        row.status = job.status.value
+        row.attempts = job.attempts
+        row.available_at = job.available_at
+        row.leased_until = job.leased_until
+        row.lease_owner = job.lease_owner
+        row.last_error_code = job.last_error_code
+        row.updated_at = job.updated_at
