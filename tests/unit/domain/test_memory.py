@@ -3,7 +3,13 @@ from uuid import UUID
 
 import pytest
 
-from agent_memory.domain.enums import MemoryStatus, MemoryType, ScopeKind
+from agent_memory.domain.enums import (
+    AuthorityLevel,
+    MemoryStatus,
+    MemoryType,
+    ScopeKind,
+    VerificationStatus,
+)
 from agent_memory.domain.errors import InvalidScope, InvalidStatusTransition, RevisionConflict
 from agent_memory.domain.models import Memory, MemoryScope
 from agent_memory.domain.principal import RequestPrincipal
@@ -131,3 +137,27 @@ def test_principal_workspace_access_is_explicit() -> None:
     assert principal.can_access_workspace("project-a") is True
     assert principal.can_access_workspace("project-b") is False
     assert principal.can_access_workspace(None) is False
+
+
+def test_candidate_memory_preserves_extractor_trust_dimensions() -> None:
+    memory, version = Memory.create(
+        tenant_id=TENANT_ID,
+        memory_id=MEMORY_ID,
+        version_id=VERSION_1_ID,
+        memory_type=MemoryType.EPISODIC,
+        scope=MemoryScope(ScopeKind.WORKSPACE, "project-a", None),
+        owner_user_id=USER_ID,
+        content="build failed on arm64",
+        now=NOW,
+        status=MemoryStatus.CANDIDATE,
+        confidence=1.0,
+        utility=0.5,
+        authority_level=AuthorityLevel.TOOL_VERIFIED,
+        verification_status=VerificationStatus.VERIFIED,
+    )
+
+    assert memory.status is MemoryStatus.CANDIDATE
+    assert version.confidence == 1.0
+    assert version.utility == 0.5
+    assert version.authority_level is AuthorityLevel.TOOL_VERIFIED
+    assert version.verification_status is VerificationStatus.VERIFIED

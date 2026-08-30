@@ -81,6 +81,10 @@ class Memory:
         content: str,
         now: datetime,
         status: MemoryStatus = MemoryStatus.ACTIVE,
+        confidence: float = 1.0,
+        utility: float = 1.0,
+        authority_level: AuthorityLevel = AuthorityLevel.USER_CONFIRMED,
+        verification_status: VerificationStatus = VerificationStatus.VERIFIED,
     ) -> tuple["Memory", MemoryVersion]:
         version = MemoryVersion(
             tenant_id=tenant_id,
@@ -89,10 +93,10 @@ class Memory:
             version_number=1,
             content=content,
             structured_content={},
-            confidence=1.0,
-            utility=1.0,
-            authority_level=AuthorityLevel.USER_CONFIRMED,
-            verification_status=VerificationStatus.VERIFIED,
+            confidence=confidence,
+            utility=utility,
+            authority_level=authority_level,
+            verification_status=verification_status,
             created_at=now,
         )
         memory = cls(
