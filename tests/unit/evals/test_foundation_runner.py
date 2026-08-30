@@ -1,8 +1,13 @@
+from io import StringIO
 from pathlib import Path
 
 import pytest
 
-from agent_memory.evals.foundation_runner import evaluate_foundation_case
+from agent_memory.evals.foundation_runner import (
+    EvaluationResult,
+    evaluate_foundation_case,
+    report_results,
+)
 from agent_memory.evals.schema import FoundationActual, FoundationCase
 
 FIXTURE = Path(__file__).parents[2] / "fixtures" / "golden" / "foundation.jsonl"
@@ -25,3 +30,38 @@ def test_foundation_case_requires_tenant_and_scope_match() -> None:
             case,
             actual.model_copy(update={"tenant_id": "00000000-0000-0000-0000-00000000000b"}),
         )
+
+
+def test_report_returns_failure_and_never_prints_memory_content() -> None:
+    output = StringIO()
+    results = (
+        EvaluationResult("valid_workspace_memory", True, "PASS"),
+        EvaluationResult(
+            "tenant_known_id_attack",
+            False,
+            "TENANT_LEAK",
+            tenant_leak=True,
+            diagnostic="Tenant A private build memory",
+        ),
+    )
+
+    exit_code = report_results(results, stream=output)
+
+    assert exit_code == 1
+    assert "tenant_known_id_attack:TENANT_LEAK" in output.getvalue()
+    assert "Tenant A private build memory" not in output.getvalue()
+
+
+def test_report_emits_seven_case_summary() -> None:
+    output = StringIO()
+    results = tuple(
+        EvaluationResult(f"case_{number}", True, "PASS") for number in range(7)
+    )
+
+    exit_code = report_results(results, stream=output)
+
+    assert exit_code == 0
+    assert (
+        "Foundation evaluator: total=7 passed=7 failed=0 "
+        "tenant_leaks=0 deleted_memory_hits=0"
+    ) in output.getvalue()

@@ -2,6 +2,7 @@
 .worktrees/
 .venv/
 .uv-cache/
+.local/
 __pycache__/
 *.py[cod]
 .pytest_cache/

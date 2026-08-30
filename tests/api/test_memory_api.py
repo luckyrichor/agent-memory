@@ -7,11 +7,20 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 from httpx import ASGITransport, AsyncClient
 
-from agent_memory.api.app import create_app
+from agent_memory.api.app import create_app, create_app_from_env
 from agent_memory.config import Settings
 
 TENANT_ID = UUID("30000000-0000-0000-0000-000000000001")
 USER_ID = UUID("30000000-0000-0000-0000-000000000002")
+
+
+@pytest.mark.asyncio
+async def test_environment_factory_exposes_uvicorn_entrypoint() -> None:
+    app = create_app_from_env()
+
+    assert app.title == "Agent Memory"
+    assert app.version == "1.0.0"
+    await app.state.engine.dispose()
 
 
 def signing_material() -> tuple[str, str]:

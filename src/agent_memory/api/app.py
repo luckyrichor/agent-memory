@@ -119,3 +119,8 @@ def create_app(settings: Settings) -> FastAPI:
 
     app.include_router(create_router(resolver, service_dependency))
     return app
+
+
+def create_app_from_env() -> FastAPI:
+    """Build the ASGI application from MEMORY_* environment variables."""
+    return create_app(Settings())
