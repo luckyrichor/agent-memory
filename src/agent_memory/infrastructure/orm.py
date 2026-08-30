@@ -37,8 +37,12 @@ class MemoryRow(Base):
             name="ck_memories_scope_shape",
         ),
         ForeignKeyConstraint(
-            ["tenant_id", "current_version_id"],
-            ["memory_versions.tenant_id", "memory_versions.memory_version_id"],
+            ["tenant_id", "memory_id", "current_version_id"],
+            [
+                "memory_versions.tenant_id",
+                "memory_versions.memory_id",
+                "memory_versions.memory_version_id",
+            ],
             name="fk_memories_current_version",
             deferrable=True,
             initially="DEFERRED",
@@ -89,6 +93,12 @@ class MemoryVersionRow(Base):
             "memory_id",
             "version_number",
             name="uq_memory_versions_number",
+        ),
+        UniqueConstraint(
+            "tenant_id",
+            "memory_id",
+            "memory_version_id",
+            name="uq_memory_versions_identity",
         ),
     )
 
