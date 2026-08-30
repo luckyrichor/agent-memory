@@ -5,17 +5,29 @@ from uuid import UUID
 from sqlalchemy import and_, or_, select
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from agent_memory.application.event_commands import EventIngestionResult
+from agent_memory.application.ports import MemoryRepository
+from agent_memory.domain.enums import MemoryStatus, ScopeKind
 from agent_memory.domain.errors import (
     EventIdempotencyConflict,
     EventSequenceConflict,
+    InvalidEvent,
     LeaseLost,
 )
-from agent_memory.domain.events import EventDraft
+from agent_memory.domain.events import Event, EventDraft, EventType, MemoryCandidate
 from agent_memory.domain.jobs import Job, JobStatus
-from agent_memory.infrastructure.orm import EventRow, JobRow, OutboxMessageRow
+from agent_memory.domain.models import Memory, MemoryScope
+from agent_memory.domain.principal import RequestPrincipal
+from agent_memory.infrastructure.db import session_for_principal
+from agent_memory.infrastructure.orm import (
+    EventRow,
+    EvidenceRow,
+    JobRow,
+    OutboxMessageRow,
+)
+from agent_memory.infrastructure.repositories import PostgresMemoryRepository
 
 
 class PostgresEventIngestionRepository:
@@ -339,3 +351,136 @@ class PostgresJobQueue:
         row.lease_owner = job.lease_owner
         row.last_error_code = job.last_error_code
         row.updated_at = job.updated_at
+
+
+class PostgresExtractionBackend:
+    def __init__(
+        self,
+        sessions: async_sessionmaker[AsyncSession],
+        *,
+        new_id: Callable[[], UUID],
+        now: Callable[[], datetime],
+    ) -> None:
+        self._sessions = sessions
+        self._new_id = new_id
+        self._now = now
+
+    async def claim(
+        self,
+        tenant_id: UUID,
+        worker_id: str,
+        now: datetime,
+        lease_duration: timedelta,
+    ) -> Job | None:
+        async with session_for_principal(self._sessions, self._principal(tenant_id)) as session:
+            return await PostgresJobQueue(session).claim(
+                tenant_id,
+                worker_id,
+                now,
+                lease_duration,
+            )
+
+    async def load_event(self, tenant_id: UUID, event_id: UUID) -> Event:
+        async with session_for_principal(self._sessions, self._principal(tenant_id)) as session:
+            row = await session.scalar(
+                select(EventRow).where(
+                    EventRow.tenant_id == tenant_id,
+                    EventRow.event_id == event_id,
+                )
+            )
+            if row is None:
+                raise InvalidEvent("event not found")
+            return Event(
+                tenant_id=row.tenant_id,
+                event_id=row.event_id,
+                actor_user_id=row.actor_user_id,
+                received_at=row.received_at,
+                draft=EventDraft(
+                    idempotency_key=row.idempotency_key,
+                    session_id=row.session_id,
+                    sequence_number=row.sequence_number,
+                    event_type=EventType(row.event_type),
+                    agent_id=row.agent_id,
+                    occurred_at=row.occurred_at,
+                    scope=MemoryScope(
+                        ScopeKind(row.scope_kind),
+                        row.workspace_id,
+                        row.subject_user_id,
+                    ),
+                    payload=row.payload,
+                ),
+            )
+
+    async def commit_candidates(
+        self,
+        tenant_id: UUID,
+        job: Job,
+        worker_id: str,
+        event: Event,
+        candidates: tuple[MemoryCandidate, ...],
+        now: datetime,
+    ) -> None:
+        async with session_for_principal(self._sessions, self._principal(tenant_id)) as session:
+            memory_repository: MemoryRepository = PostgresMemoryRepository(session)
+            for candidate in candidates:
+                memory, version = Memory.create(
+                    tenant_id=tenant_id,
+                    memory_id=self._new_id(),
+                    version_id=self._new_id(),
+                    memory_type=candidate.memory_type,
+                    scope=candidate.scope,
+                    owner_user_id=event.actor_user_id,
+                    content=candidate.content,
+                    now=now,
+                    status=MemoryStatus.CANDIDATE,
+                    confidence=candidate.confidence,
+                    utility=candidate.utility,
+                    authority_level=candidate.authority_level,
+                    verification_status=candidate.verification_status,
+                )
+                await memory_repository.add(tenant_id, memory, version)
+                session.add(
+                    EvidenceRow(
+                        tenant_id=tenant_id,
+                        memory_version_id=version.version_id,
+                        event_id=event.event_id,
+                        role="triggered_by",
+                        created_at=now,
+                    )
+                )
+            await PostgresJobQueue(session).succeed(
+                tenant_id,
+                job.job_id,
+                worker_id,
+                now,
+            )
+
+    async def fail_job(
+        self,
+        tenant_id: UUID,
+        job_id: UUID,
+        worker_id: str,
+        now: datetime,
+        error_code: str,
+        *,
+        retryable: bool,
+    ) -> Job:
+        async with session_for_principal(self._sessions, self._principal(tenant_id)) as session:
+            return await PostgresJobQueue(session).fail(
+                tenant_id,
+                job_id,
+                worker_id,
+                now,
+                error_code,
+                retryable=retryable,
+            )
+
+    @staticmethod
+    def _principal(tenant_id: UUID) -> RequestPrincipal:
+        return RequestPrincipal(
+            tenant_id=tenant_id,
+            user_id=UUID(int=0),
+            roles=frozenset({"extraction_worker"}),
+            permissions=frozenset(),
+            allowed_workspace_ids=frozenset(),
+        )
