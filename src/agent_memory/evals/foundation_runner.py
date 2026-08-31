@@ -1,6 +1,6 @@
 import asyncio
 import sys
-from collections.abc import Awaitable, Callable, Sequence
+from collections.abc import Awaitable, Callable, Iterator, Sequence
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from typing import TextIO
@@ -11,7 +11,11 @@ from agent_memory.application.commands import (
     DisableMemoryCommand,
     RememberMemoryCommand,
 )
+from agent_memory.application.event_commands import IngestEventBatchCommand
+from agent_memory.application.event_ingestion import EventIngestionService
 from agent_memory.application.explicit_memory import ExplicitMemoryService
+from agent_memory.application.extraction import CodingFailureRuleExtractor
+from agent_memory.application.outbox_dispatcher import OutboxDispatcher
 from agent_memory.domain.enums import MemoryStatus, MemoryType, ScopeKind
 from agent_memory.domain.errors import (
     InvalidScope,
@@ -19,7 +23,8 @@ from agent_memory.domain.errors import (
     MemoryNotFound,
     RevisionConflict,
 )
-from agent_memory.domain.models import MemoryScope
+from agent_memory.domain.events import Event, EventDraft, EventType
+from agent_memory.domain.models import Memory, MemoryScope
 from agent_memory.domain.principal import RequestPrincipal
 from agent_memory.evals.schema import FoundationActual, FoundationCase, FoundationScore
 from agent_memory.infrastructure.in_memory import (
@@ -27,6 +32,7 @@ from agent_memory.infrastructure.in_memory import (
     InMemoryIdempotencyRepository,
     InMemoryMemoryRepository,
 )
+from agent_memory.infrastructure.in_memory_events import InMemoryEventIngestionRepository
 
 TENANT_A = UUID("00000000-0000-0000-0000-00000000000a")
 TENANT_B = UUID("00000000-0000-0000-0000-00000000000b")
@@ -180,6 +186,87 @@ async def _tenant_procedure_needs_review() -> bool:
     return result.status is MemoryStatus.NEEDS_REVIEW
 
 
+async def _automatic_memory_pipeline() -> bool:
+    id_values: Iterator[UUID] = iter(
+        UUID(f"00000000-0000-0000-0001-{number:012d}") for number in range(1, 8)
+    )
+    now = datetime(2026, 8, 30, 19, 0, tzinfo=UTC)
+    repository = InMemoryEventIngestionRepository(
+        new_id=lambda: next(id_values),
+        now=lambda: now,
+    )
+    service = EventIngestionService(repository)
+    principal = _principal(TENANT_A, USER_A)
+    draft = EventDraft(
+        idempotency_key="evaluation-build-failure",
+        session_id="evaluation-session",
+        sequence_number=1,
+        event_type=EventType.TOOL_RESULT,
+        agent_id="coding_agent",
+        occurred_at=now,
+        scope=MemoryScope(ScopeKind.WORKSPACE, WORKSPACE_ID, None),
+        payload={
+            "tool_name": "build",
+            "exit_code": 1,
+            "summary": "private build diagnostic",
+        },
+    )
+    command = IngestEventBatchCommand((draft,))
+    accepted = await service.ingest_batch(command, principal)
+    replay = await service.ingest_batch(command, principal)
+
+    extractor = CodingFailureRuleExtractor()
+    dispatcher = OutboxDispatcher(repository, extractor.version)
+    dispatched = await dispatcher.dispatch_once(TENANT_A, 10)
+    redispatched = await dispatcher.dispatch_once(TENANT_A, 10)
+    event = Event(
+        tenant_id=TENANT_A,
+        event_id=accepted[0].event_id,
+        draft=draft,
+        actor_user_id=USER_A,
+        received_at=now,
+    )
+    candidates = await extractor.extract(event)
+    memories_and_versions = tuple(
+        Memory.create(
+            tenant_id=TENANT_A,
+            memory_id=next(id_values),
+            version_id=next(id_values),
+            memory_type=candidate.memory_type,
+            scope=candidate.scope,
+            owner_user_id=USER_A,
+            content=candidate.content,
+            now=now,
+            status=MemoryStatus.CANDIDATE,
+            confidence=candidate.confidence,
+            utility=candidate.utility,
+            authority_level=candidate.authority_level,
+            verification_status=candidate.verification_status,
+        )
+        for candidate in candidates
+    )
+    evidence = {
+        (memory_version.version_id, event.event_id)
+        for _, memory_version in memories_and_versions
+    }
+    counts = (
+        repository.event_count,
+        repository.outbox_count,
+        repository.job_count,
+        len(memories_and_versions),
+        len(memories_and_versions),
+        len(evidence),
+    )
+    return (
+        replay[0].event_id == accepted[0].event_id
+        and replay[0].disposition == "duplicate"
+        and dispatched == 1
+        and redispatched == 0
+        and counts == (1, 1, 1, 1, 1, 1)
+        and memories_and_versions[0][0].status is MemoryStatus.CANDIDATE
+    )
+
+
 async def run_foundation_evaluation() -> tuple[EvaluationResult, ...]:
     cases: tuple[tuple[str, Callable[[], Awaitable[bool]], str], ...] = (
         ("valid_workspace_memory", _valid_workspace_memory, "VALID_MEMORY_FAILED"),
@@ -192,6 +279,11 @@ async def run_foundation_evaluation() -> tuple[EvaluationResult, ...]:
             "tenant_procedure_needs_review",
             _tenant_procedure_needs_review,
             "UNREVIEWED_PROCEDURE_ACTIVATED",
+        ),
+        (
+            "automatic_memory_pipeline",
+            _automatic_memory_pipeline,
+            "AUTOMATIC_MEMORY_PIPELINE_FAILED",
         ),
     )
     results: list[EvaluationResult] = []

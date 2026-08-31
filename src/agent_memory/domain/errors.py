@@ -30,6 +30,10 @@ class InvalidEvent(MemoryError):
     pass
 
 
+class RetryableExtractionError(MemoryError):
+    pass
+
+
 class EventIdempotencyConflict(MemoryError):
     pass
 

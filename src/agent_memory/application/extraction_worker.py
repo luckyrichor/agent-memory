@@ -5,15 +5,15 @@ from typing import Literal, Protocol
 from uuid import UUID
 
 from agent_memory.application.extraction import MemoryExtractor
-from agent_memory.domain.errors import InvalidEvent, LeaseLost
+from agent_memory.domain.errors import InvalidEvent, LeaseLost, RetryableExtractionError
 from agent_memory.domain.events import Event, MemoryCandidate
-from agent_memory.domain.jobs import Job
+from agent_memory.domain.jobs import Job, JobStatus
 
 
 @dataclass(frozen=True, slots=True)
 class WorkerResult:
     job_id: UUID | None
-    outcome: Literal["no_job", "succeeded", "dead", "lease_lost"]
+    outcome: Literal["no_job", "succeeded", "retry_wait", "dead", "lease_lost"]
     reason_code: str
 
 
@@ -102,3 +102,16 @@ class ExtractionWorker:
                 retryable=False,
             )
             return WorkerResult(job.job_id, "dead", "INVALID_EVENT_FOR_EXTRACTION")
+        except RetryableExtractionError:
+            failed = await self._backend.fail_job(
+                tenant_id,
+                job.job_id,
+                worker_id,
+                self._now(),
+                "EXTRACTION_FAILED",
+                retryable=True,
+            )
+            outcome: Literal["retry_wait", "dead"] = (
+                "dead" if failed.status is JobStatus.DEAD else "retry_wait"
+            )
+            return WorkerResult(job.job_id, outcome, "EXTRACTION_FAILED")

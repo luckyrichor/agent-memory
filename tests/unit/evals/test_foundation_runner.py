@@ -1,3 +1,4 @@
+import asyncio
 from io import StringIO
 from pathlib import Path
 
@@ -7,6 +8,7 @@ from agent_memory.evals.foundation_runner import (
     EvaluationResult,
     evaluate_foundation_case,
     report_results,
+    run_foundation_evaluation,
 )
 from agent_memory.evals.schema import FoundationActual, FoundationCase
 
@@ -52,16 +54,26 @@ def test_report_returns_failure_and_never_prints_memory_content() -> None:
     assert "Tenant A private build memory" not in output.getvalue()
 
 
-def test_report_emits_seven_case_summary() -> None:
+def test_foundation_evaluation_includes_automatic_memory_pipeline() -> None:
+    results = asyncio.run(run_foundation_evaluation())
+
+    assert len(results) == 8
+    assert any(
+        result.case_id == "automatic_memory_pipeline" and result.passed
+        for result in results
+    )
+
+
+def test_report_emits_eight_case_summary() -> None:
     output = StringIO()
     results = tuple(
-        EvaluationResult(f"case_{number}", True, "PASS") for number in range(7)
+        EvaluationResult(f"case_{number}", True, "PASS") for number in range(8)
     )
 
     exit_code = report_results(results, stream=output)
 
     assert exit_code == 0
     assert (
-        "Foundation evaluator: total=7 passed=7 failed=0 "
+        "Foundation evaluator: total=8 passed=8 failed=0 "
         "tenant_leaks=0 deleted_memory_hits=0"
     ) in output.getvalue()
