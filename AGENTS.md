@@ -44,9 +44,23 @@ uv run python -m agent_memory.workers.extraction dispatch --tenant-id <uuid> --o
 uv run python -m agent_memory.workers.extraction work --tenant-id <uuid> --worker-id w1 --once
 ```
 
-**`tests/api` `tests/integration` `tests/e2e` 走 Testcontainers**，Docker daemon 没启动时会直接抛 `DockerException` 而不是跳过 —— 那是环境问题不是代码问题，先起 Docker。
+**`tests/api` `tests/integration` `tests/e2e` 走 Testcontainers**，Docker daemon 不可用时会直接抛 `DockerException` 而不是跳过 —— 那是环境问题不是代码问题。
 
-基线状态（2026-09-19 实测）：`tests/unit` 55 个全过、ruff 干净、mypy strict 39 文件无错、基础评估 8/8。需 Docker 的 api/integration/e2e 未跑。
+**Docker 默认跑在 `tx` 服务器上**（见下方「Docker 运行位置」）。tx 上 Postgres 已常驻，`ubuntu` 已加入 docker 组，Testcontainers 可直接使用。
+
+### 基线状态（2026-09-19 在 tx 上完整验证）
+
+| 门 | 结果 |
+|---|---|
+| `uv run pytest` | **75 passed**（含 19 个 Testcontainers 测试） |
+| `uv run ruff check src tests migrations` | All checks passed |
+| `uv run mypy src`（strict） | 39 文件无错 |
+| `evals.foundation_runner` | 8/8，0 租户泄漏，0 删除命中 |
+| `alembic upgrade head` | 三条迁移全部成功 |
+
+这是**完整**基线，不是「除了需要 Docker 的部分」。已验证的包括：RLS 跨租户隔离（已知 ID 攻击）、迁移建表与 pgvector 扩展、Postgres 仓储与内存仓储行为一致、Event 摄取的原子性与幂等、Outbox 派发幂等、Job 租约防抢占与过期恢复、API 的 JWT 租户绑定与版本生命周期、Event→Evidence→MemoryVersion 完整血缘。
+
+**在此基础上改动后，四道门都要重新跑过再提交。**
 
 ## 架构：六边形分层，依赖单向朝内
 
