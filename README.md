@@ -178,6 +178,62 @@ uv run python -m agent_memory.workers.extraction work \
 
 这一阶段没有增加新的 Python 依赖；所有现有依赖仍由 `uv sync --dev` 安装到项目 `.venv` 中。
 
+## 项目结构
+
+四层依赖单向向内（`api` → `application` → `domain`，`infrastructure` 实现 `application` 定义的端口）：
+
+```
+src/agent_memory/
+├── domain/           纯领域层，不依赖框架和数据库
+│   ├── models.py         记忆、版本、作用域等核心模型
+│   ├── events.py         不可变 Event
+│   ├── jobs.py           提取 Job 及其状态机
+│   ├── principal.py      身份主体（租户、用户、权限）
+│   ├── enums.py errors.py
+├── application/      用例编排，通过 ports 抽象依赖
+│   ├── ports.py / event_ports.py       仓储与外部依赖的接口定义
+│   ├── commands.py / event_commands.py 命令处理
+│   ├── explicit_memory.py              显式记忆写入路径
+│   ├── event_ingestion.py              Event 批量接入
+│   ├── outbox_dispatcher.py            事务 Outbox 派发
+│   ├── extraction.py / extraction_worker.py  提取逻辑与 worker 编排
+├── infrastructure/   端口的具体实现
+│   ├── orm.py / db.py                  SQLAlchemy 映射与连接
+│   ├── repositories.py / event_repositories.py
+│   ├── in_memory.py / in_memory_events.py   内存适配器（供快速测试）
+├── api/              FastAPI 层
+│   ├── app.py routes.py event_routes.py
+│   ├── auth.py                         JWT RS256 校验与权限
+│   ├── schemas.py event_schemas.py errors.py
+├── workers/extraction.py   独立运行的提取 worker 进程
+└── evals/                  评估框架（foundation_runner、schema）
+
+migrations/versions/   三个 Alembic 迁移，对应三个实现阶段：
+                       0001 记忆基础 → 0002 当前版本完整性 → 0003 Event 流水线
+reference/claude-prototype/   早期原型，保留作对照，不参与构建
+docs/superpowers/{specs,plans}/   设计文档与实施计划
+```
+
+**内存适配器是刻意保留的**：`in_memory.py` 让应用层评估不依赖数据库就能快速跑；而 RLS、真实仓储、迁移这些必须碰数据库的部分由 Testcontainers 做集成测试。
+
+## 异步提取流水线
+
+```
+Event 接入 ──→ Outbox（同一事务写入，保证不丢）
+                 │
+          outbox_dispatcher 派发
+                 │
+              Job（幂等键去重）
+                 │
+   extraction worker 租约领取 ──→ 退避重试 ──→ 死信终态
+                 │
+          Candidate Memory（带 Event → Evidence → MemoryVersion 血缘）
+```
+
+用事务 Outbox 而不是直接投递消息队列，是为了让「Event 落库」和「派发任务」在同一个事务里 —— 否则进程在两步之间崩溃就会丢事件。Job 带幂等键，worker 用租约领取，所以 worker 崩溃后任务可被其他实例接管，重复投递也不会重复提取。
+
+> 当前提取器是**确定性规则**（针对 build/test 失败），不是 LLM 提取。见下方「当前边界」。
+
 ## 五个容易混淆的概念
 
 | 概念 | 作用 | 例子 | 是否属于本阶段 |
