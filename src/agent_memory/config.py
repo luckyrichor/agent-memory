@@ -1,3 +1,5 @@
+from typing import Literal
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -11,3 +13,9 @@ class Settings(BaseSettings):
     jwt_public_key: str = ""
     jwt_issuer: str = ""
     jwt_audience: str = ""
+
+    service_name: str = "agent-memory"
+    log_level: str = "INFO"
+    log_json: bool = True
+    trace_exporter: Literal["none", "console"] = "none"
+    metrics_exporter: Literal["none", "console"] = "none"

@@ -5,10 +5,12 @@ from uuid import uuid4
 
 from fastapi import Depends, FastAPI, Request
 from fastapi.responses import JSONResponse
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from agent_memory.api.auth import JwtPrincipalResolver
 from agent_memory.api.errors import AuthenticationRequired
 from agent_memory.api.event_routes import create_event_router
+from agent_memory.api.middleware import observe_request
 from agent_memory.api.routes import create_router
 from agent_memory.application.event_ingestion import EventIngestionService
 from agent_memory.application.explicit_memory import ExplicitMemoryService
@@ -35,10 +37,13 @@ from agent_memory.infrastructure.repositories import (
     PostgresIdempotencyRepository,
     PostgresMemoryRepository,
 )
+from agent_memory.observability.setup import configure_observability
 
 
 def create_app(settings: Settings) -> FastAPI:
+    configure_observability(settings)
     app = FastAPI(title="Agent Memory", version="1.0.0")
+    app.add_middleware(BaseHTTPMiddleware, dispatch=observe_request)
     engine = create_engine(settings.database_url)
     sessions = create_session_factory(engine)
     resolver = JwtPrincipalResolver(settings)
@@ -87,7 +92,7 @@ def create_app(settings: Settings) -> FastAPI:
                     "code": "AUTHENTICATION_REQUIRED",
                     "message": "A valid bearer token is required.",
                     "retryable": False,
-                    "request_id": request.headers.get("X-Request-Id", "unavailable"),
+                    "request_id": _request_id(request),
                 }
             },
         )
@@ -100,7 +105,7 @@ def create_app(settings: Settings) -> FastAPI:
                     "code": code,
                     "message": message,
                     "retryable": False,
-                    "request_id": request.headers.get("X-Request-Id", "unavailable"),
+                    "request_id": _request_id(request),
                 }
             },
         )
@@ -184,6 +189,12 @@ def create_app(settings: Settings) -> FastAPI:
     app.include_router(create_router(resolver, service_dependency))
     app.include_router(create_event_router(resolver, event_service_dependency))
     return app
+
+
+def _request_id(request: Request) -> str:
+    """The id the middleware assigned, so an error body matches the access log."""
+    request_id = getattr(request.state, "request_id", None)
+    return request_id if isinstance(request_id, str) else "unavailable"
 
 
 def create_app_from_env() -> FastAPI:

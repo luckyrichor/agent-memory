@@ -21,6 +21,10 @@ from agent_memory.infrastructure.event_repositories import (
     PostgresExtractionBackend,
     PostgresOutboxRepository,
 )
+from agent_memory.observability import correlation, get_logger, span
+from agent_memory.observability.setup import configure_observability
+
+_logger = get_logger("agent_memory.workers.extraction")
 
 
 def _bounded_integer(minimum: int, maximum: int) -> type[argparse.Action]:
@@ -118,6 +122,7 @@ def _install_signal_handlers(stop: asyncio.Event) -> None:
 
 async def _run_dispatch(args: argparse.Namespace, stop: asyncio.Event) -> None:
     settings = Settings()
+    configure_observability(settings)
     engine = create_engine(settings.database_url)
     sessions = create_session_factory(engine)
     extractor = CodingFailureRuleExtractor()
@@ -128,17 +133,29 @@ async def _run_dispatch(args: argparse.Namespace, stop: asyncio.Event) -> None:
     )
     try:
         while not stop.is_set():
-            async with session_for_principal(sessions, principal) as session:
-                repository = PostgresOutboxRepository(
-                    session,
-                    new_id=uuid4,
-                    now=lambda: datetime.now(UTC),
-                )
-                count = await OutboxDispatcher(
-                    repository,
-                    extractor.version,
-                ).dispatch_once(args.tenant_id, args.batch_size)
+            with correlation(request_id=str(uuid4()), tenant_id=args.tenant_id), span(
+                "outbox.dispatch",
+                action="outbox.dispatch",
+                tenant_id=args.tenant_id,
+                batch_size=args.batch_size,
+            ):
+                async with session_for_principal(sessions, principal) as session:
+                    repository = PostgresOutboxRepository(
+                        session,
+                        new_id=uuid4,
+                        now=lambda: datetime.now(UTC),
+                    )
+                    count = await OutboxDispatcher(
+                        repository,
+                        extractor.version,
+                    ).dispatch_once(args.tenant_id, args.batch_size)
             reason_code = "OUTBOX_DISPATCHED" if count else "NO_PENDING_OUTBOX"
+            _logger.event(
+                "outbox.dispatched",
+                tenant_id=args.tenant_id,
+                count=count,
+                reason_code=reason_code,
+            )
             print(f"dispatch:count={count} reason_code={reason_code}")
             if args.once:
                 break
@@ -149,6 +166,7 @@ async def _run_dispatch(args: argparse.Namespace, stop: asyncio.Event) -> None:
 
 async def _run_worker(args: argparse.Namespace, stop: asyncio.Event) -> None:
     settings = Settings()
+    configure_observability(settings)
     engine = create_engine(settings.database_url)
     sessions = create_session_factory(engine)
     worker = ExtractionWorker(
@@ -163,7 +181,8 @@ async def _run_worker(args: argparse.Namespace, stop: asyncio.Event) -> None:
     )
     try:
         while not stop.is_set():
-            result = await worker.run_once(args.tenant_id, args.worker_id)
+            with correlation(request_id=str(uuid4()), tenant_id=args.tenant_id):
+                result = await worker.run_once(args.tenant_id, args.worker_id)
             print(format_worker_result(result))
             if args.once:
                 break

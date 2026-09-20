@@ -26,6 +26,9 @@ from agent_memory.domain.errors import (
 )
 from agent_memory.domain.models import Memory, MemoryScope
 from agent_memory.domain.principal import RequestPrincipal
+from agent_memory.observability import annotate, get_logger, record_operation, span
+
+_logger = get_logger("agent_memory.application.memory")
 
 
 class ExplicitMemoryService:
@@ -50,6 +53,22 @@ class ExplicitMemoryService:
         principal: RequestPrincipal,
     ) -> MemoryResult:
         request_hash = self._remember_hash(command)
+        with span(
+            "memory.remember",
+            action="memory.remember",
+            tenant_id=principal.tenant_id,
+            actor_id=principal.user_id,
+            memory_type=command.memory_type.value,
+            scope_kind=command.scope.kind.value,
+        ):
+            return await self._remember(command, principal, request_hash)
+
+    async def _remember(
+        self,
+        command: RememberMemoryCommand,
+        principal: RequestPrincipal,
+        request_hash: str,
+    ) -> MemoryResult:
         try:
             self._authorize_scope(principal, command.scope, "memory:write")
             existing = await self._idempotency.get(principal.tenant_id, command.idempotency_key)
@@ -62,6 +81,12 @@ class ExplicitMemoryService:
                     "allow",
                     "IDEMPOTENT_REPLAY",
                     existing.result.memory_id,
+                )
+                self._observe(
+                    "memory.remember",
+                    "allow",
+                    "IDEMPOTENT_REPLAY",
+                    memory_id=existing.result.memory_id,
                 )
                 return existing.result
 
@@ -96,6 +121,13 @@ class ExplicitMemoryService:
                 "MEMORY_CREATED",
                 memory.memory_id,
             )
+            self._observe(
+                "memory.remember",
+                "allow",
+                "MEMORY_CREATED",
+                memory_id=memory.memory_id,
+                memory_status=memory.status.value,
+            )
             return result
         except (IdempotencyConflict, MemoryScopeForbidden) as error:
             reason = (
@@ -110,16 +142,48 @@ class ExplicitMemoryService:
                 reason,
                 None,
             )
+            self._observe("memory.remember", "deny", reason)
             raise
 
     async def get_active(self, memory_id: UUID, principal: RequestPrincipal) -> MemoryRecord:
-        record = await self._required_record(memory_id, principal)
-        self._authorize_scope(principal, record.memory.scope, "memory:read")
-        if record.memory.status is not MemoryStatus.ACTIVE:
-            raise MemoryNotFound(str(memory_id))
-        return record
+        with span(
+            "memory.get_active",
+            action="memory.get_active",
+            tenant_id=principal.tenant_id,
+            actor_id=principal.user_id,
+            memory_id=memory_id,
+        ):
+            record = await self._required_record(memory_id, principal)
+            self._authorize_scope(principal, record.memory.scope, "memory:read")
+            if record.memory.status is not MemoryStatus.ACTIVE:
+                self._observe("memory.get_active", "deny", "MEMORY_NOT_ACTIVE", memory_id=memory_id)
+                raise MemoryNotFound(str(memory_id))
+            self._observe(
+                "memory.get_active",
+                "allow",
+                "MEMORY_RETURNED",
+                memory_id=memory_id,
+                memory_status=record.memory.status.value,
+                version_number=record.current_version.version_number,
+            )
+            return record
 
     async def correct(
+        self,
+        command: CorrectMemoryCommand,
+        principal: RequestPrincipal,
+    ) -> MemoryResult:
+        with span(
+            "memory.correct",
+            action="memory.correct",
+            tenant_id=principal.tenant_id,
+            actor_id=principal.user_id,
+            memory_id=command.memory_id,
+            revision=command.expected_revision,
+        ):
+            return await self._correct(command, principal)
+
+    async def _correct(
         self,
         command: CorrectMemoryCommand,
         principal: RequestPrincipal,
@@ -145,6 +209,14 @@ class ExplicitMemoryService:
             "MEMORY_VERSION_CREATED",
             updated.memory_id,
         )
+        self._observe(
+            "memory.correct",
+            "allow",
+            "MEMORY_VERSION_CREATED",
+            memory_id=updated.memory_id,
+            version_number=version.version_number,
+            revision=updated.revision,
+        )
         return MemoryResult(
             updated.memory_id,
             version.version_id,
@@ -153,6 +225,21 @@ class ExplicitMemoryService:
         )
 
     async def disable(
+        self,
+        command: DisableMemoryCommand,
+        principal: RequestPrincipal,
+    ) -> MemoryResult:
+        with span(
+            "memory.disable",
+            action="memory.disable",
+            tenant_id=principal.tenant_id,
+            actor_id=principal.user_id,
+            memory_id=command.memory_id,
+            memory_status=command.status.value,
+        ):
+            return await self._disable(command, principal)
+
+    async def _disable(
         self,
         command: DisableMemoryCommand,
         principal: RequestPrincipal,
@@ -172,12 +259,26 @@ class ExplicitMemoryService:
             f"MEMORY_{command.status.value.upper()}",
             command.memory_id,
         )
+        self._observe(
+            "memory.disable",
+            "allow",
+            f"MEMORY_{command.status.value.upper()}",
+            memory_id=command.memory_id,
+            memory_status=updated.status.value,
+        )
         return MemoryResult(
             updated.memory_id,
             updated.current_version_id,
             updated.revision,
             updated.status,
         )
+
+    @staticmethod
+    def _observe(action: str, decision: str, reason_code: str, **fields: object) -> None:
+        """Emit the three signals for one outcome: span, log line, counter."""
+        annotate(decision=decision, reason_code=reason_code, **fields)
+        _logger.event(action, decision=decision, reason_code=reason_code, **fields)
+        record_operation(action=action, decision=decision, reason_code=reason_code)
 
     async def _required_record(
         self,

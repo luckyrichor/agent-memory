@@ -7,6 +7,9 @@ from agent_memory.domain.enums import ScopeKind
 from agent_memory.domain.errors import EventScopeForbidden, InvalidEvent
 from agent_memory.domain.models import MemoryScope
 from agent_memory.domain.principal import RequestPrincipal
+from agent_memory.observability import annotate, get_logger, span
+
+_logger = get_logger("agent_memory.application.events")
 
 
 class EventIngestionService:
@@ -18,15 +21,31 @@ class EventIngestionService:
         command: IngestEventBatchCommand,
         principal: RequestPrincipal,
     ) -> tuple[EventIngestionResult, ...]:
-        if not 1 <= len(command.drafts) <= 100:
-            raise InvalidEvent("event batch size must be between 1 and 100")
-        for draft in command.drafts:
-            self._authorize_scope(principal, draft.scope)
-        return await self._repository.ingest_batch(
-            principal.tenant_id,
-            principal.user_id,
-            command.drafts,
-        )
+        with span(
+            "events.ingest_batch",
+            action="events.ingest_batch",
+            tenant_id=principal.tenant_id,
+            actor_id=principal.user_id,
+            batch_size=len(command.drafts),
+        ):
+            if not 1 <= len(command.drafts) <= 100:
+                raise InvalidEvent("event batch size must be between 1 and 100")
+            for draft in command.drafts:
+                self._authorize_scope(principal, draft.scope)
+            results = await self._repository.ingest_batch(
+                principal.tenant_id,
+                principal.user_id,
+                command.drafts,
+            )
+            annotate(event_count=len(results), reason_code="EVENTS_INGESTED")
+            _logger.event(
+                "events.ingested",
+                tenant_id=principal.tenant_id,
+                actor_id=principal.user_id,
+                batch_size=len(command.drafts),
+                event_count=len(results),
+            )
+            return results
 
     @staticmethod
     def _authorize_scope(principal: RequestPrincipal, scope: MemoryScope) -> None:

@@ -205,6 +205,12 @@ src/agent_memory/
 │   ├── app.py routes.py event_routes.py
 │   ├── auth.py                         JWT RS256 校验与权限
 │   ├── schemas.py event_schemas.py errors.py
+├── observability/    结构化日志、trace、metrics（叶子包，不反向依赖其他层）
+│   ├── fields.py                       遥测字段白名单，正文没有可写入的字段名
+│   ├── logging.py                      JSON 结构化日志
+│   ├── tracing.py / metrics.py         span 与四个指标
+│   ├── context.py                      request_id / tenant_id 关联上下文
+│   └── setup.py                        从 Settings 一次性配置三者
 ├── workers/extraction.py   独立运行的提取 worker 进程
 └── evals/                  评估框架（foundation_runner、schema）
 
@@ -257,9 +263,33 @@ Event 记录“发生了什么”，一旦接入不会就地覆盖；Audit 记�
 - pgvector 扩展和向量字段的数据库基础；
 - 不可变 Event 批量接入、事务 Outbox、幂等 Job；
 - 租约领取、退避重试、死信终态和可恢复 worker；
-- 对 build/test 失败的确定性规则提取，以及 Event → Evidence → MemoryVersion 血缘。
+- 对 build/test 失败的确定性规则提取，以及 Event → Evidence → MemoryVersion 血缘；
+- 可观测性地基：写入/检索/提取全链路 trace、JSON 结构化日志、四个基础指标，字段白名单保证正文不外流。
 
-后续阶段依次实现：真实模型提取与敏感信息策略；全文与向量混合检索；反馈、归档和物理删除传播；配额、管理审核、可观测性和压测。当前的提取器是可验证的确定性规则，不是 LLM 提取；不要把这些未实现能力描述成已经完成。
+后续阶段依次实现：真实模型提取与敏感信息策略；全文与向量混合检索；反馈、归档和物理删除传播；配额、管理审核和压测。可观测性目前**只到 M1 地基**：有 trace / 日志 / 指标三条通路和导出开关，但没有接到任何后端（OTLP 导出、采样策略、告警、看板都未实现），spec 第 17 节的四层评测仍然是空的。当前的提取器是可验证的确定性规则，不是 LLM 提取；不要把这些未实现能力描述成已经完成。
+
+## 可观测性
+
+三条通路共用 `observability/fields.py` 的**字段白名单**：只有名单里的字段名才能进日志、span 和指标标签，而名单里没有任何可以放正文的字段，长字符串也会被拒绝。这不是靠约定，是调用即抛 `UnsafeTelemetryField`。
+
+导出默认关闭，按需打开：
+
+```bash
+MEMORY_TRACE_EXPORTER=console MEMORY_METRICS_EXPORTER=console \
+  uv run uvicorn agent_memory.api.app:create_app_from_env --factory
+```
+
+| 环境变量 | 默认 | 说明 |
+|---|---|---|
+| `MEMORY_SERVICE_NAME` | `agent-memory` | 资源属性与日志 `service` 字段 |
+| `MEMORY_LOG_LEVEL` | `INFO` | 根 logger 级别 |
+| `MEMORY_LOG_JSON` | `true` | 关掉则输出人读格式 |
+| `MEMORY_TRACE_EXPORTER` | `none` | `none` / `console` |
+| `MEMORY_METRICS_EXPORTER` | `none` | `none` / `console` |
+
+一次写入请求的 span 树：`POST /v1/memories` → `db.session` → `memory.remember`；提取侧是 `extraction.run_once`。每条日志带 `request_id`、`tenant_id`、`trace_id`、`span_id`，可与 trace 对齐。
+
+指标四个：`agent_memory.http.requests`、`agent_memory.http.duration`、`agent_memory.memory.operations`、`agent_memory.worker.jobs`。HTTP 标签用**路由模板**而非具体路径，避免记忆 ID 撑爆标签基数。
 
 ## 验证与发布门
 

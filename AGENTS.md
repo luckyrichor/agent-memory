@@ -48,19 +48,21 @@ uv run python -m agent_memory.workers.extraction work --tenant-id <uuid> --worke
 
 **Docker 默认跑在 `tx` 服务器上**（见下方「Docker 运行位置」）。tx 上 Postgres 已常驻，`ubuntu` 已加入 docker 组，Testcontainers 可直接使用。
 
-### 基线状态（2026-09-19 在 tx 上完整验证）
+### 基线状态（2026-09-20 在 tx 上完整验证）
 
 | 门 | 结果 |
 |---|---|
-| `uv run pytest` | **75 passed**（含 19 个 Testcontainers 测试） |
+| `uv run pytest` | **103 passed**（含 Testcontainers 测试；2026-09-19 基线为 75） |
 | `uv run ruff check src tests migrations` | All checks passed |
-| `uv run mypy src`（strict） | 39 文件无错 |
+| `uv run mypy src`（strict） | 47 文件无错 |
 | `evals.foundation_runner` | 8/8，0 租户泄漏，0 删除命中 |
 | `alembic upgrade head` | 三条迁移全部成功 |
 
 这是**完整**基线，不是「除了需要 Docker 的部分」。已验证的包括：RLS 跨租户隔离（已知 ID 攻击）、迁移建表与 pgvector 扩展、Postgres 仓储与内存仓储行为一致、Event 摄取的原子性与幂等、Outbox 派发幂等、Job 租约防抢占与过期恢复、API 的 JWT 租户绑定与版本生命周期、Event→Evidence→MemoryVersion 完整血缘。
 
 **在此基础上改动后，四道门都要重新跑过再提交。**
+
+**测试必须跑全量，不能只跑改动相关的那几个文件。** M1 期间踩到过一次：单文件跑通、全量跑挂，原因是 alembic 迁移会影响 logging 状态，而单跑时迁移根本没执行。
 
 ## 架构：六边形分层，依赖单向朝内
 
@@ -76,6 +78,8 @@ workers/      CLI 入口，把 application 的服务接到长驻循环上
 evals/        用内存适配器跑的场景评估，不碰数据库
 ```
 
+`observability/` 是**叶子包**：不 import 其他层（只 import `config`），所以每层都能用它而不产生环。日志、span、指标三条通路共用同一份字段白名单。理由见 `docs/design-decisions.md` 的 D1、D2。
+
 `infrastructure/in_memory*.py` 与 `repositories.py` / `event_repositories.py` 是同一批 Protocol 的两套实现 —— 这是单测和 evals 能秒跑、只有集成测试才需要 Docker 的原因。**加新用例时先在 `application/*_ports.py` 定义 Protocol，两套适配器都要实现**，否则 evals 会掉队。
 
 ## 核心不变量（改代码时不能破坏）
@@ -86,14 +90,14 @@ evals/        用内存适配器跑的场景评估，不碰数据库
 - **Event 不可变**，`(tenant_id, idempotency_key)` 幂等；同键不同内容、或同 session 重复 sequence，都返回稳定 409。
 - **Event 与 Outbox 同事务落库**，再由 dispatcher 幂等转 Job。Job 30 秒租约、指数退避上限 300 秒、5 次后进 `dead`。
 - **候选记忆不得扩大 scope**：`ExtractionWorker` 显式检查 `candidate.scope != event.draft.scope` 并判为不可重试失败。
-- **日志和 CLI 输出不得包含 Event 正文或记忆正文**，只输出计数、ID、结果和原因码。
+- **日志和 CLI 输出不得包含 Event 正文或记忆正文**，只输出计数、ID、结果和原因码。这条已经由 `observability/fields.py` 的字段白名单强制：白名单里没有任何能放正文的字段名，越界即抛 `UnsafeTelemetryField`。**要加新字段就改那个文件**，不要绕过 `StructuredLogger` 直接用 `logging`。
 - 高风险组合（procedural + tenant scope + 无 `memory:admin`）自动落到 `needs_review` 而非 `active`。
 
 ## 已实现 vs 未实现
 
 **不要把未实现的说成已完成**，README「当前边界」一节是权威口径。
 
-已有 —— 三类记忆、四类 scope、JWT + 权限 + RLS、幂等创建、乐观并发、不可覆盖版本、逻辑删除、审计、pgvector 扩展和向量字段（**只建了字段，没有检索逻辑**）、Event 批量摄取、事务 Outbox、幂等 Job、租约重试死信、确定性规则提取、Event→Evidence→MemoryVersion 血缘。
+已有 —— 可观测性地基（trace／结构化日志／指标，见 README「可观测性」一节）、三类记忆、四类 scope、JWT + 权限 + RLS、幂等创建、乐观并发、不可覆盖版本、逻辑删除、审计、pgvector 扩展和向量字段（**只建了字段，没有检索逻辑**）、Event 批量摄取、事务 Outbox、幂等 Job、租约重试死信、确定性规则提取、Event→Evidence→MemoryVersion 血缘。
 
 未有 —— 见下方路线。
 
@@ -105,7 +109,7 @@ evals/        用内存适配器跑的场景评估，不碰数据库
 
 - **混合检索**：PG 全文 + pgvector 向量 + 结构化过滤三路候选，可解释融合与重排。含 **embedding worker**（现在完全没有生成 embedding 的管道）。
 - **Context Builder + Token 预算**：spec 10.5 的 Memory Context Packet，未实现。
-- **可观测性**：现在零 trace、零 metrics、零结构化日志，spec 第 17 节规划的四层评测全空。
+- **可观测性**：M1 已完成地基 —— 全链路 trace、JSON 结构化日志、四个基础指标（2026-09-20）。**未完成**：没接任何后端（只有 console 导出器，无 OTLP／采样／告警／看板），spec 第 17 节的四层评测仍然全空。
 - **基线对比评测**：spec 验收标准第 10 条要求对比 No Memory 和 Naive Vector 两条基线，未实现。
 - **Python SDK**：spec 12.1 规划未写；`agent-ops-platform` 要调用本服务。
 

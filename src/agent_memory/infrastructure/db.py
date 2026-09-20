@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from agent_memory.domain.principal import RequestPrincipal
+from agent_memory.observability import span
 
 
 def create_engine(database_url: str) -> AsyncEngine:
@@ -25,9 +26,10 @@ async def session_for_principal(
     session_factory: async_sessionmaker[AsyncSession],
     principal: RequestPrincipal,
 ) -> AsyncIterator[AsyncSession]:
-    async with session_factory() as session, session.begin():
-        await session.execute(
-            text("SELECT set_config('app.current_tenant_id', :tenant_id, true)"),
-            {"tenant_id": str(principal.tenant_id)},
-        )
-        yield session
+    with span("db.session", tenant_id=principal.tenant_id):
+        async with session_factory() as session, session.begin():
+            await session.execute(
+                text("SELECT set_config('app.current_tenant_id', :tenant_id, true)"),
+                {"tenant_id": str(principal.tenant_id)},
+            )
+            yield session

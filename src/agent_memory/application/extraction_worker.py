@@ -8,6 +8,9 @@ from agent_memory.application.extraction import MemoryExtractor
 from agent_memory.domain.errors import InvalidEvent, LeaseLost, RetryableExtractionError
 from agent_memory.domain.events import Event, MemoryCandidate
 from agent_memory.domain.jobs import Job, JobStatus
+from agent_memory.observability import annotate, get_logger, record_job, span
+
+_logger = get_logger("agent_memory.application.extraction_worker")
 
 
 @dataclass(frozen=True, slots=True)
@@ -65,6 +68,31 @@ class ExtractionWorker:
         self._lease_duration = lease_duration
 
     async def run_once(self, tenant_id: UUID, worker_id: str) -> WorkerResult:
+        with span(
+            "extraction.run_once",
+            action="extraction.run_once",
+            tenant_id=tenant_id,
+            worker_id=worker_id,
+            extractor_version=self._extractor.version,
+        ):
+            result = await self._run_once(tenant_id, worker_id)
+            annotate(
+                job_id=result.job_id,
+                outcome=result.outcome,
+                reason_code=result.reason_code,
+            )
+            _logger.event(
+                "extraction.job",
+                tenant_id=tenant_id,
+                worker_id=worker_id,
+                job_id=result.job_id,
+                outcome=result.outcome,
+                reason_code=result.reason_code,
+            )
+            record_job(outcome=result.outcome, reason_code=result.reason_code)
+            return result
+
+    async def _run_once(self, tenant_id: UUID, worker_id: str) -> WorkerResult:
         job = await self._backend.claim(
             tenant_id,
             worker_id,
@@ -79,6 +107,7 @@ class ExtractionWorker:
                 raise InvalidEvent("extractor version mismatch")
             event = await self._backend.load_event(tenant_id, event_id)
             candidates = await self._extractor.extract(event)
+            annotate(event_id=event_id, candidate_count=len(candidates))
             if any(candidate.scope != event.draft.scope for candidate in candidates):
                 raise InvalidEvent("candidate scope expansion")
             await self._backend.commit_candidates(
