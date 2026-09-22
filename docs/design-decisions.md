@@ -18,7 +18,11 @@
 - *靠 review 和约定*：有效期等于团队记性。三个月后加一个新的日志点，没人会回头翻这条约定。
 - *只在 CI 加一个扫描脚本*：能发现字符串字面量，发现不了运行时才拼出来的值。
 
-**代价**　加字段要改 `fields.py`，是一次显式的、会被 review 的编辑 —— 这是刻意的摩擦。另外 64 字符上限意味着长的 reason code 也会被拒，写码时得挑短名字。
+**代价**　加字段要改 `fields.py`，是一次显式的、会被 review 的编辑 —— 这是刻意的摩擦。团队规模大到这里成为瓶颈时，该做的是按模块拆命名空间，而不是取消白名单。
+
+［2026-09-22 修正］此处原先写"64 字符上限意味着长的 reason code 也会被拒"，**把摩擦说重了**：上限管的是字段**值**，而现存最长的 reason code 是 `AUTOMATIC_MEMORY_PIPELINE_FAILED`（32 字符），离上限还有一倍空间，实际不构成约束。
+
+**一个尚未封住的口子**　白名单只在调用方走 `StructuredLogger` 时有效。谁直接 `import logging` 就绕过去了 —— `AGENTS.md` 写了"不要绕过"，但**没有任何测试或 lint 规则强制**。这比字符上限严重得多，已排进 M2。
 
 **证据**　`tests/unit/observability/test_fields.py` 断言 `content`/`payload`/`message`/`text`/`body`/`draft` 这些名字**不存在**于白名单；`tests/api/test_observability_api.py` 与 `test_worker_instrumentation.py` 把导出的 span JSON 和日志字段整体搜一遍正文子串。
 

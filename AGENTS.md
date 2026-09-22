@@ -113,7 +113,13 @@ evals/        用内存适配器跑的场景评估，不碰数据库
 - **基线对比评测**：spec 验收标准第 10 条要求对比 No Memory 和 Naive Vector 两条基线，未实现。
 - **Python SDK**：spec 12.1 规划未写；`agent-ops-platform` 要调用本服务。
 
-**第二梯队** —— 生命周期补全（supersede / archive / 物理删除执行，现在 DeletionRequest 只落库）、Consolidation Engine、MemoryRelation（spec 8.5 列了但表未建）、Feedback Service、真实 LLM 提取器替换确定性规则、评测扩容（现在只有 8 场景 1 条 golden）。
+- **真实 LLM 提取器**：现在的 `CodingFailureRuleExtractor` 只认 build/test 失败这一种硬编码规则。**2026-09-22 已从第二梯队提为 M7，排在 W8**（须早于 M5 基线评测，否则评测量的是临时替身）。
+
+**第二梯队** —— 生命周期补全（supersede / archive / 物理删除执行，现在 DeletionRequest 只落库）、Consolidation Engine、MemoryRelation（spec 8.5 列了但表未建）、Feedback Service、评测扩容（现在只有 8 场景 1 条 golden）、限流。
+
+### 已知缺口与它们的归属
+
+外部评审 2026-09-22 提的五点已逐条核实属实，处置写在 `workplan-docs/总节奏表.md` 第五节，**权威口径是 README「已知缺口」那张表**。要点：CI 在 W4 接、删除幂等与防绕过测试进 M2、分页随 M4、LLM 提取器是 M7；**物理删除执行与限流明确暂不排期，不得声称已支持**。
 
 `MemoryExtractor` 是 Protocol，本来就是为替换设计的 —— 换 LLM 提取器不需要动 worker。
 
