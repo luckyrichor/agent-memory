@@ -1,0 +1,140 @@
+{
+  "generated_at": "2026-10-01T18:07:17.447955+00:00",
+  "source_head": "462ec1a8b0cafd2d7784f6174b97110bcf75d19a",
+  "uncommitted": true,
+  "source_sha256": {
+    "src/agent_memory/sdk.py": "34a589de0f977ab5814b424e212ae74ab6f6bbc45477c15f9b6e32eca24c5837",
+    "src/agent_memory/__init__.py": "a1981ed495d4a1f81ac886c9c2206eca346a9e4a4ef61131cc09ed9351fb592f",
+    "src/agent_memory/config.py": "9236f3a4284ed85b8ac399160b6ff13f8652c9d7a3ef62f4b1a2e6bc7880e7a7",
+    "src/agent_memory/evals/schema.py": "e5ac616b397e54346216915c01bf3346bed1c1a2fb6b2d1357525f3d904e6b5b",
+    "src/agent_memory/evals/foundation_runner.py": "19ab57690511f0d6336da8dfae5657254183fe4aa6ac38c0c4073895dca1d39d",
+    "src/agent_memory/evals/__init__.py": "6220208d96c1302ce442bb906a51d3f95100d2a6f114d3e987cfb28fea9679db",
+    "src/agent_memory/api/retrieval_routes.py": "00a61fa89d9ba25ac7855f2d2422974e49503112d71d6867bacc883cb0c588a1",
+    "src/agent_memory/api/middleware.py": "788502faed3bac1aa5420de44d6b3b844162fc8b9bb988e171dda645e0be0b81",
+    "src/agent_memory/api/app.py": "6eb0b7b51ef004bbe0b829e7c0edc99ba6048f297a0ecd5bc5c556d3f75ed9da",
+    "src/agent_memory/api/routes.py": "d7b3b54b7eb419681d433ed680b5634f1eb8d8b87e6853d219f0be2f2dfacdb5",
+    "src/agent_memory/api/event_routes.py": "2b29e6f66e0b80c89718b261f8700f887805533bc211c26c3aec6411263c8363",
+    "src/agent_memory/api/auth.py": "271bda9fe929b5e40a90d5e847467811d5d854391fecc024fec1988a95da5a48",
+    "src/agent_memory/api/schemas.py": "6a83bf13a9658e4558566de0c4d87c649d0e46e567e558eb5b69095eaf680e33",
+    "src/agent_memory/api/event_schemas.py": "7593f57f9046f5e1bdeb26ca682021b4a86774448179ddd7b561798ef0d50546",
+    "src/agent_memory/api/errors.py": "485336696b14b8f3662b94217067926cd3c313a928adb3bf9ea145f5230ff687",
+    "src/agent_memory/api/__init__.py": "0d0450b0d641ccdaf61c99a3e43742018ba6ac4368a60708b7ebc0425fde938a",
+    "src/agent_memory/workers/extraction.py": "4835d947897297b82eaf7c0e1b513cda6dd117a24a220607dbf5d6cb9d9350f6",
+    "src/agent_memory/workers/embedding.py": "7c92906134446dc0c63552b297175444d861b3a185064f5b3b02210951b72379",
+    "src/agent_memory/workers/__init__.py": "f8bc83e7545373ef4cc6e3cd9102bdd85b8226b20131f8eaee2ec834ca4a21ae",
+    "src/agent_memory/domain/principal.py": "54b98868e5e68ed25008270f803d1b21dfa2e66dd39d5aac18c9156f8b684a34",
+    "src/agent_memory/domain/jobs.py": "6d689ea8eaa3216347c1d6ee539bec22a3ee09fb11a52667a430e80068a71ec8",
+    "src/agent_memory/domain/enums.py": "ee2163689dd19df14bb66b70865dacc841ad6f255864f59ba228e0a522053042",
+    "src/agent_memory/domain/models.py": "bf09c225a7f412bbdc949bd830b15885085745d426818eb23c557ab0923b25c4",
+    "src/agent_memory/domain/events.py": "b2f37adbbfad4409f6a3defe7cbb8e17b89c672714b3d32b64669ef57b4356c7",
+    "src/agent_memory/domain/errors.py": "3965fcffbb6e66575e16aefde3842d85e413e810b4626e9f5707b373b613019c",
+    "src/agent_memory/domain/__init__.py": "95718812b60b194a9bff74c239abdec16e603c5b3a5dddaaccb467688251d8d5",
+    "src/agent_memory/observability/setup.py": "771d43d97f8e04673b425cf03b661ab1583e0bca5056b77afa8916d41c854343",
+    "src/agent_memory/observability/fields.py": "7525fa17414b66b4bdcfe935a9d1616c653f4bf222d4143c2dad3428c83c6629",
+    "src/agent_memory/observability/logging.py": "42596b440a7e1b32a7635cf4bacf3e3bbd69ea40ff6964ffe596bbb50c76a6e8",
+    "src/agent_memory/observability/metrics.py": "4c484e623a314d3f7f1b3f0dc7b4c10591d59655ace3657e9d13eaa147031b06",
+    "src/agent_memory/observability/context.py": "1e3b3680696e44c5e2d56c19322bb7ad0ae13b56dcef41edad6014330672f4f0",
+    "src/agent_memory/observability/tracing.py": "9c66229d66ffe48758a6459d7735020b6d79d58e22c88330d4fcddc1467cc4d9",
+    "src/agent_memory/observability/__init__.py": "72ccc1dc6c60207e46ef6009f861e38372b6ebe553612bbb4f56db2024961caa",
+    "src/agent_memory/application/extraction_worker.py": "df7b86933d719a34825a6d63c62fe585069103840ff52e293bf50267dcf6d606",
+    "src/agent_memory/application/retrieval.py": "23e44ce413a60d0ae7df859bfdb3e271c4d6d62f34d9143caef9b6e94e3be480",
+    "src/agent_memory/application/ports.py": "54583fff13f1370108d167b8bd066a8e5e5aaf578ae34084951e82a7eb79af8a",
+    "src/agent_memory/application/event_commands.py": "1791725cd93a6414f5412158fc5d45434acd6d838172c562e8951d002ff78c14",
+    "src/agent_memory/application/event_ports.py": "50440aeddc86ee2ba85a79c57fbcc65ed7c682efc6dc1a449e587b94a9eecd8c",
+    "src/agent_memory/application/event_ingestion.py": "7b081e9a28b206740ead8f471194536b106915c153f3eb502f4d24a3138492e6",
+    "src/agent_memory/application/extraction.py": "92b70036e96f00558e936737916cabe9faca7070b4eb39f0d5365cc4a3b4e772",
+    "src/agent_memory/application/embedding.py": "24804f55821f2bded74cde6f83169dd36bbaae88f0ba2748b116b4837dc2a349",
+    "src/agent_memory/application/outbox_dispatcher.py": "fad71e8f2bf13ca78a8888d8de0914b1902658c4fbd4270da209e1dfc2e2f186",
+    "src/agent_memory/application/__init__.py": "963cdb872a3f9a65383213656d375c28d13cb105aeec35bd40bbb1c328b3ff72",
+    "src/agent_memory/application/commands.py": "30c8d8e6958e37c817cffdc70bb4fec71e7c2e4c1f390405122fd3f6bb5c0662",
+    "src/agent_memory/application/explicit_memory.py": "5a938dedeff41a6c0abdd0894756eea0b95eff8e66df8ee3c54c2a748ac1ae1f",
+    "src/agent_memory/infrastructure/retrieval.py": "e7b9299dce471e7565debff7e1a539676d4ab90e7a62d43177671e99b9947231",
+    "src/agent_memory/infrastructure/orm.py": "79c996f8f2db0680948e4c1e18fe857760de962a25c220724f9d1e836bddcc6c",
+    "src/agent_memory/infrastructure/in_memory_events.py": "5e4a7debe8bcf81a7ea065886770a6be4f4f7675d7b729e1b25af227a7696959",
+    "src/agent_memory/infrastructure/db.py": "a6bc5172b09b7316d14fd907a1ee6c6aff04fda1893703ef8396d19d4bc800bf",
+    "src/agent_memory/infrastructure/in_memory.py": "8406927b85bd3a86921bde3702f7f310a0250d3d7b89f1ac81f103999da0bd69",
+    "src/agent_memory/infrastructure/in_memory_embedding.py": "a7b5bfbb4245750ffbb3a08396e149782567d2be537bf4262dfe7c8d1ff725bc",
+    "src/agent_memory/infrastructure/in_memory_retrieval.py": "c5a39b34d614556a0ce47fab7199c4aa9ca858770ff9619026607d03e98a3218",
+    "src/agent_memory/infrastructure/embedding.py": "9523ade4813eafa300903341f1777ba8f0b6d4d237076dc77ad8f323b6e089e9",
+    "src/agent_memory/infrastructure/repositories.py": "8d3dcd3a4230ec5cdde1f115cf08f4d0ab1a90d167b4a4464051a1d847aa9c02",
+    "src/agent_memory/infrastructure/event_repositories.py": "6bcdd2ae84907fed0bb378348a9deeb9b8912244a3daa7470fabdedaa2d907c5",
+    "src/agent_memory/infrastructure/__init__.py": "d7d62cc84972303c97aa81c75ff56ed698ab0deb20eb9a41ff0e459dc9c10200",
+    "migrations/env.py": "6931314367ec08a953a0ee44f911f5074b515bf6d8fd154749ebbcafedc18df2",
+    "migrations/versions/0005_lexical_index.py": "76d192318e273d877fbca6b137827ae228616386c75a6c5da7e5b0f2bb94ef6a",
+    "migrations/versions/0006_embedding_1024.py": "0256e13dc920e5465f2074cbedde396da52ddd844571d65520f745f361e58fbd",
+    "migrations/versions/0001_memory_foundation.py": "c266ea4465f5ef8874107194c4c748c966e30fe854c8f4d333340e6bf13fc732",
+    "migrations/versions/0003_event_pipeline.py": "447cb30afa9605c77bd64d19e9c7ea753a776d7d7983f77f489e6bee23f940cc",
+    "migrations/versions/0002_current_version_integrity.py": "3d2050da7de8cfdc966e8401e97e5bc5e1d479eaf5bd0efd7fb9e623a0415ee7",
+    "migrations/versions/0004_embedding_jobs.py": "9acf5866fca736479448d102b66902f05d5306c5ae8f0108edb7725151b92aa2"
+  },
+  "model": "doubao-embedding-vision-251215",
+  "dimensions": 1024,
+  "corpus_size": 5,
+  "queries": 5,
+  "top1_correct": 5,
+  "observations": [
+    {
+      "case": 1,
+      "top1_correct": true,
+      "channel_counts": {
+        "lexical": 0,
+        "vector": 5,
+        "structured": 0
+      },
+      "top1_ranks": {
+        "vector": 1
+      }
+    },
+    {
+      "case": 2,
+      "top1_correct": true,
+      "channel_counts": {
+        "lexical": 0,
+        "vector": 5,
+        "structured": 0
+      },
+      "top1_ranks": {
+        "vector": 1
+      }
+    },
+    {
+      "case": 3,
+      "top1_correct": true,
+      "channel_counts": {
+        "lexical": 0,
+        "vector": 5,
+        "structured": 0
+      },
+      "top1_ranks": {
+        "vector": 1
+      }
+    },
+    {
+      "case": 4,
+      "top1_correct": true,
+      "channel_counts": {
+        "lexical": 0,
+        "vector": 5,
+        "structured": 0
+      },
+      "top1_ranks": {
+        "vector": 1
+      }
+    },
+    {
+      "case": 5,
+      "top1_correct": true,
+      "channel_counts": {
+        "lexical": 0,
+        "vector": 5,
+        "structured": 0
+      },
+      "top1_ranks": {
+        "vector": 1
+      }
+    }
+  ],
+  "tenant_leaks": 0,
+  "deleted_hits": 0,
+  "boundary": "synthetic five-case smoke, not production quality estimate"
+}

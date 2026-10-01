@@ -34,12 +34,12 @@ async def test_postgres_three_channels_pagination_current_version_and_tombstone(
             frozenset({"memory:read", "memory:write"}), frozenset({"project-a"}))
         async with session_for_principal(create_session_factory(app.state.engine), principal) as session:
             for index, record in enumerate(ids):
-                vector = [0.0] * 1536
+                vector = [0.0] * 1024
                 vector[index] = 1.0
                 session.add(MemoryEmbeddingRow(tenant_id=tenant_id,
                     memory_version_id=UUID(record["version_id"]), model="fixture-semantic-v1",
                     embedding=vector, updated_at=datetime.now(UTC)))
-        vector = [1.0] + [0.0] * 1535
+        vector = [1.0] + [0.0] * 1023
         query = {"query": "compiler", "vector": vector, "model": "fixture-semantic-v1",
                  "memory_type": "semantic", "workspace_id": "project-a", "limit": 1}
         result = await client.post("/v1/memories/search", headers=headers, json=query)
@@ -87,6 +87,6 @@ async def test_postgres_three_channels_pagination_current_version_and_tombstone(
             json={**query, "tenant_id": str(uuid4())})
         assert forged.status_code == 422
         invalid = await client.post("/v1/memories/search", headers=headers,
-            json={**query, "vector": [0.0]*1536})
+            json={**query, "vector": [0.0]*1024})
         assert invalid.status_code == 422
     await app.state.engine.dispose()

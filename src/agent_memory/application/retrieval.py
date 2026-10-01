@@ -23,10 +23,10 @@ class RetrievalQuery:
     def __post_init__(self) -> None:
         if not 1 <= self.limit <= 100 or not 0 <= self.offset <= 2900:
             raise ValueError("invalid pagination")
-        if self.vector is not None and (len(self.vector) != 1536 or
+        if self.vector is not None and (len(self.vector) != 1024 or
                 not all(math.isfinite(x) for x in self.vector) or
                 not any(self.vector) or not self.model):
-            raise ValueError("vector requires a model and 1536 finite nonzero dimensions")
+            raise ValueError("vector requires a model and 1024 finite nonzero dimensions")
 
 
 @dataclass(frozen=True)

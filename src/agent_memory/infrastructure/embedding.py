@@ -1,5 +1,6 @@
 import hashlib
 from datetime import datetime, timedelta
+from typing import Literal
 from uuid import UUID, uuid4
 
 import httpx
@@ -18,7 +19,7 @@ from agent_memory.infrastructure.orm import JobRow, MemoryEmbeddingRow, MemoryVe
 
 class FixtureEmbeddingProvider:
     """Deterministic pipeline fixture, NOT a semantic embedding model."""
-    model = "fixture-sha256-1536-v1"
+    model = "fixture-sha256-1024-v1"
 
     async def embed(self, content: str) -> list[float]:
         digest = hashlib.sha256(content.encode()).digest()
@@ -28,17 +29,24 @@ class FixtureEmbeddingProvider:
 class HTTPEmbeddingProvider:
     """Vendor-neutral endpoint: POST {model,input}, response data[0].embedding."""
     def __init__(self, client: httpx.AsyncClient, *, endpoint: str, model: str,
-                 token: str) -> None:
+                 token: str, protocol: Literal["openai", "ark"] = "openai") -> None:
         self.client = client
         self.endpoint = endpoint
         self.model = model
         self.token = token
+        self.protocol = protocol
 
     async def embed(self, content: str) -> list[float]:
-        response = await self.client.post(self.endpoint, json={"model": self.model, "input": content},
+        payload: dict[str, object] = {"model": self.model, "input": content}
+        if self.protocol == "ark":
+            payload.update(input=[{"type": "text", "text": content}], dimensions=DIMENSIONS,
+                           encoding_format="float")
+        response = await self.client.post(self.endpoint, json=payload,
                                          headers={"Authorization": f"Bearer {self.token}"})
         response.raise_for_status()
-        return [float(x) for x in response.json()["data"][0]["embedding"]]
+        data = response.json()["data"]
+        values = data["embedding"] if self.protocol == "ark" else data[0]["embedding"]
+        return [float(x) for x in values]
 
 
 class PostgresEmbeddingBackend:

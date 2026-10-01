@@ -70,7 +70,7 @@ class VersionListResponse(BaseModel):
 class SearchRequest(BaseModel):
     model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
     query: str = Field(min_length=1, max_length=2000)
-    vector: list[float] | None = Field(default=None, min_length=1536, max_length=1536)
+    vector: list[float] | None = Field(default=None, min_length=1024, max_length=1024)
     model: str | None = Field(default=None, min_length=1, max_length=255)
     memory_type: MemoryType | None = None
     workspace_id: str | None = Field(default=None, min_length=1, max_length=512)

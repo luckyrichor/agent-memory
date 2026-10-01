@@ -1,5 +1,13 @@
 # 进展记录
 
+## 2026-10-02 火山1024维适配与M4真实初验（Codex）
+
+来源agent-memory@462ec1a + 本次工作树修改。统一API/校验/ORM/夹具为1024维；增加Ark协议，worker/API统一Settings。0006清旧向量并排重建，保留记忆版本；新增两租户迁移验证。120 tests、ruff、strict mypy56、foundation8/8通过。
+
+真实doubao-embedding-vision-251215完成worker→独立PostgreSQL→JWT查询API：5条改写Top1均命中，全文/结构化均0命中；0租户泄漏、0删除命中。M4初验通过，非生产统计。报告含实际源码哈希，详见docs/ark-integration.md。
+
+tx常驻空库先备份再0003→0006，vector(1024)、记忆/版本仍0/0，无存量重建任务；未新增常驻服务。密钥只存忽略目录，未进Git。
+
 最后更新：2026-10-02（北京时间）
 
 本仓库已经发生的进展、验证结果、失败与返工。汇总看板在 `workplan-docs/进度总览.md`，排期在 `workplan-docs/总节奏表.md`，设计取舍在 `docs/design-decisions.md`。

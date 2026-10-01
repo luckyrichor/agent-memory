@@ -31,9 +31,10 @@ def create_retrieval_router(
         vector, model = body.vector, body.model
         vector_status = "caller_vector" if vector is not None else "not_configured"
         if vector is None and settings.embedding_endpoint and settings.embedding_model:
-            async with httpx.AsyncClient(timeout=5) as client:
+            async with httpx.AsyncClient(timeout=5, trust_env=settings.embedding_trust_env) as client:
                 provider = HTTPEmbeddingProvider(client, endpoint=settings.embedding_endpoint,
-                    model=settings.embedding_model, token=settings.embedding_token.get_secret_value())
+                    model=settings.embedding_model, token=settings.embedding_token.get_secret_value(),
+                    protocol=settings.embedding_protocol)
                 try:
                     vector, model = await provider.embed(body.query), provider.model
                     RetrievalQuery(body.query, tuple(vector), model)

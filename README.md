@@ -269,7 +269,7 @@ Event 记录“发生了什么”，一旦接入不会就地覆盖；Audit 记�
 - 对 build/test 失败的确定性规则提取，以及 Event → Evidence → MemoryVersion 血缘；
 - 可观测性地基：写入/检索/提取全链路 trace、JSON 结构化日志、四个基础指标，字段白名单保证正文不外流。
 
-后续阶段依次实现：真实模型提取与敏感信息策略；Context Builder 与对比评测；反馈和物理删除传播；配额、管理审核和压测。全文/向量/结构化融合检索已实现，真实语义模型质量尚未验收，见 [docs/retrieval.md](docs/retrieval.md)。排期见 `workplan-docs/总节奏表.md`。可观测性目前**只到 M1 地基**：没有 OTLP 后端／采样／告警／看板。当前提取器仍是确定性规则，M5/M6/M7 未完成。
+后续阶段依次实现：真实模型提取与敏感信息策略；Context Builder 与对比评测；反馈和物理删除传播；配额、管理审核和压测。全文/向量/结构化融合检索已实现，真实火山模型5条语义改写初验通过，生产规模质量未验收，见 [docs/retrieval.md](docs/retrieval.md)。排期见 `workplan-docs/总节奏表.md`。可观测性目前**只到 M1 地基**：没有 OTLP 后端／采样／告警／看板。当前提取器仍是确定性规则，M5/M6/M7 未完成。
 
 ### 已知缺口（2026-09-22 外部评审，逐条核实属实）
 
@@ -277,7 +277,7 @@ Event 记录“发生了什么”，一旦接入不会就地覆盖；Audit 记�
 
 | 缺口 | 现状 | 排期 |
 |---|---|---|
-| **检索能力** | M4 三路召回、硬过滤、可解释 RRF、分页已实现；固定向量夹具不证明线上语义质量，真实模型验收暂跳过 | M4 工程就绪；质量待验收 → M6 |
+| **检索能力** | M4 三路召回、硬过滤、可解释 RRF、分页已实现；火山1024维模型5条语义改写Top1通过，真实worker→PostgreSQL→查询API已验证 | M4初验通过；更大规模质量评测 → M6 |
 | **提取能力** | `CodingFailureRuleExtractor` 只认 `tool_name` 属于 build/test 且退出码非零的事件，其余一律不提取。**不是 LLM 提取** | M7 |
 | 列表分页 | 搜索与版本列表统一 limit/offset/next_offset；版本历史读取量尚未优化 | M4 已实现 |
 | 删除幂等 | 已实现持久幂等结果与事务锁，同键同参重放返回相同结果，同键异参 409 | M2 |
@@ -285,7 +285,7 @@ Event 记录“发生了什么”，一旦接入不会就地覆盖；Audit 记�
 | **物理删除** | `DeletionRequest` 只落库，**没有执行者**。接口返回的 `pending_physical_cleanup` 描述的是意图，不是已发生的事 | 暂不排期 |
 | **限流** | 设计文档第 5 节的 API Gateway 列了 Rate Limit，实现里没有 | 暂不排期 |
 
-当前已有存储、治理与检索工程能力；真实模型提炼、语义质量与任务收益评测仍待验收。
+当前已有存储、治理与检索工程能力；真实模型提炼、更大规模语义质量与任务收益评测仍待验收。
 
 ## 可观测性
 
@@ -331,4 +331,4 @@ docker compose down
 
 ## 2026-10-01 W2–W4 本地更新
 
-历史W2–W4来源 agent-memory@5b9ee55 + 当时未提交修改，随后已推送并通过远端CI。当前W6 M4工作树的接口与结果见 [docs/retrieval.md](docs/retrieval.md) 和 docs/progress.md。SDK 入口 `agent_memory.sdk.MemoryClient`；worker方式见 [docs/embedding-worker.md](docs/embedding-worker.md)。每次可用 `bash scripts/check.sh` 跑四道门；真实模型语义质量尚未验收。
+历史W2–W4来源 agent-memory@5b9ee55 + 当时未提交修改，随后已推送并通过远端CI。当前W6 M4工作树的接口与结果见 [docs/retrieval.md](docs/retrieval.md) 和 docs/progress.md。SDK 入口 `agent_memory.sdk.MemoryClient`；worker方式见 [docs/embedding-worker.md](docs/embedding-worker.md)。每次可用 `bash scripts/check.sh` 跑四道门；真实模型5条语义改写初验通过。

@@ -2,9 +2,11 @@
 
 最后更新：2026-10-02（北京时间）；Codex。实现与测试来源：agent-memory@ac7712a + 本轮工作树修改。
 
-`POST /v1/memories/search`，SDK `MemoryClient.search(SearchRequest(...))`。请求包含 `query`、可选 `memory_type` / `workspace_id`、`limit` / `offset`；可选 `vector`（1536 个有限值、非零）和对应 `model`。身份仅由 JWT 提供，请求体不允许 tenant_id。无向量时仍可全文/结构化检索。
+以上为初始M4来源。本次1024维与真实模型接入来源agent-memory@462ec1a + 本次工作树修改，最新验收见[火山接入记录](ark-integration.md)。Ark模式须设置MEMORY_EMBEDDING_PROTOCOL=ark；本机配置加载方式与迁移边界见该记录。
 
-自然语言查询需要语义向量时，在服务进程配置 `MEMORY_EMBEDDING_ENDPOINT`、`MEMORY_EMBEDDING_MODEL`、`MEMORY_EMBEDDING_TOKEN`。查询模型必须与 embedding worker 的落库模型一致。HTTP provider 超时、失败或返回非法向量时降级到其余通道，响应 `vector_status=degraded`；没有配置则 `not_configured`。本轮未使用线上模型，不能据夹具宣称真实语义质量已验收。
+`POST /v1/memories/search`，SDK `MemoryClient.search(SearchRequest(...))`。请求包含 `query`、可选 `memory_type` / `workspace_id`、`limit` / `offset`；可选 `vector`（1024 个有限值、非零）和对应 `model`。身份仅由 JWT 提供，请求体不允许 tenant_id。无向量时仍可全文/结构化检索。
+
+自然语言查询需要语义向量时，在服务进程配置 `MEMORY_EMBEDDING_ENDPOINT`、`MEMORY_EMBEDDING_MODEL`、`MEMORY_EMBEDDING_TOKEN`。查询模型必须与 embedding worker 的落库模型一致。HTTP provider 超时、失败或返回非法向量时降级到其余通道，响应 `vector_status=degraded`；没有配置则 `not_configured`。2026-10-02已使用真实火山模型完成5条语义改写初验；生产规模质量未评估。
 
 ## 召回与解释
 
@@ -24,4 +26,4 @@
 
 实际 PostgreSQL / pgvector、非 owner API 角色：三路可见、得分重算、分页、纠正后旧向量退出、删除退出、跨租户/工作区/用户 scope/needs_review/archive 硬过滤。固定的改写 query 向量验证向量通道能召回关键词不同的原记忆，属于检索流程夹具测试。内存适配器也验证融合/分页/隔离；其词法模拟不代替 PostgreSQL 测试。
 
-本轮四道门：118 pytest passed；ruff 通过；strict mypy 56 文件通过；foundation 8/8，0 tenant leaks / 0 deleted hits。M4 工程实现通过，真实模型的语义改写效果按用户授权暂跳过，M4 不标为全部验收完成。
+本轮四道门：118 pytest passed；ruff 通过；strict mypy 56 文件通过；foundation 8/8，0 tenant leaks / 0 deleted hits。以上为早期历史测试。最新1024维适配四道门120 tests、ruff、strict mypy56、foundation8/8通过；真实模型5/5改写查询Top1命中，M4初验通过。

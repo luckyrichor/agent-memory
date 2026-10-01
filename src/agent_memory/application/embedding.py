@@ -9,7 +9,7 @@ from agent_memory.domain.errors import LeaseLost
 from agent_memory.domain.jobs import Job, JobStatus
 from agent_memory.observability import get_logger, record_job, span
 
-DIMENSIONS = 1536
+DIMENSIONS = 1024
 _logger = get_logger("agent_memory.application.embedding")
 
 

@@ -11,7 +11,7 @@ uv run python -m agent_memory.workers.embedding work --tenant-id <uuid> --worker
 uv run python -m agent_memory.workers.embedding rebuild --tenant-id <uuid> --version-id <uuid> --key <unique-request-key>
 ```
 
-`--fixture` 仅验证管道，生成确定性 1536 维夹具向量，**不具备语义召回能力，不是已接入真实模型的证据**。实际 HTTP provider 从 MEMORY_EMBEDDING_URL / MEMORY_EMBEDDING_MODEL / MEMORY_EMBEDDING_TOKEN 配置供应商，协议为 POST {model,input} → data[0].embedding；本次仅以 MockTransport 验证协议，无线上模型请求、未读取凭据。维度固定 1536，非法长度/NaN/Infinity 均失败重试。
+`--fixture` 仅验证管道，生成确定性 1024 维夹具向量，**不具备语义召回能力，不是已接入真实模型的证据**。实际 HTTP provider 从 MEMORY_EMBEDDING_ENDPOINT / MEMORY_EMBEDDING_MODEL / MEMORY_EMBEDDING_TOKEN 配置供应商，协议为 POST {model,input} → data[0].embedding；历史初验使用MockTransport；现已增加ark协议并完成真实模型验证。维度固定 1024，非法长度/NaN/Infinity 均失败重试。
 
 迁移不会跨租户扫描历史版本：原有版本需按 tenant/version rebuild，新版本自动排队。未做后台批量重建管理员接口、多模型并存、全文/向量检索、物理清理执行者。被删除的记忆已禁止正常读取，但派生向量清理仍属已知待办。
 

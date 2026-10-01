@@ -290,5 +290,5 @@ class MemoryEmbeddingRow(Base):
     tenant_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True)
     memory_version_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True)
     model: Mapped[str] = mapped_column(String(255), nullable=False)
-    embedding: Mapped[list[float]] = mapped_column(Vector(1536), nullable=False)
+    embedding: Mapped[list[float]] = mapped_column(Vector(1024), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)

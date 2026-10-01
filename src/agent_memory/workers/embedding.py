@@ -1,6 +1,5 @@
 import argparse
 import asyncio
-import os
 from datetime import UTC, datetime
 from uuid import UUID
 
@@ -27,15 +26,18 @@ async def run(args: argparse.Namespace) -> None:
             await backend.rebuild(args.tenant_id, args.version_id, args.key, datetime.now(UTC))
             print("rebuild: outcome=queued")
             return
-        async with httpx.AsyncClient(timeout=10) as http:
+        async with httpx.AsyncClient(timeout=10, trust_env=settings.embedding_trust_env) as http:
             provider: EmbeddingProvider
             if args.fixture:
                 provider = FixtureEmbeddingProvider()
             else:
                 # No credentials are printed; missing configuration fails closed.
-                provider = HTTPEmbeddingProvider(http, endpoint=os.environ["MEMORY_EMBEDDING_URL"],
-                    model=os.environ["MEMORY_EMBEDDING_MODEL"],
-                    token=os.environ["MEMORY_EMBEDDING_TOKEN"])
+                if not settings.embedding_endpoint or not settings.embedding_model:
+                    raise ValueError("embedding endpoint and model must be configured")
+                provider = HTTPEmbeddingProvider(http, endpoint=settings.embedding_endpoint,
+                    model=settings.embedding_model,
+                    token=settings.embedding_token.get_secret_value(),
+                    protocol=settings.embedding_protocol)
             worker = EmbeddingWorker(backend, provider)
             while True:
                 result = await worker.run_once(args.tenant_id, args.worker_id)

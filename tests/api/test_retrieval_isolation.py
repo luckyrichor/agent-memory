@@ -20,7 +20,7 @@ async def test_all_channels_filter_tenant_user_workspace_and_status_before_rank(
         jwt_issuer="memory-test", jwt_audience="memory-api"))
     tenant, user = uuid4(), uuid4()
     base = jwt.decode(bearer_token(private), options={"verify_signature": False})
-    vector = [1.0] + [0.0]*1535
+    vector = [1.0] + [0.0]*1023
     sessions = create_session_factory(app.state.engine)
     def headers(claims):
         return {"Authorization": "Bearer " + jwt.encode(claims, private, algorithm="RS256")}

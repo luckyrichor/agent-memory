@@ -15,6 +15,8 @@ class Settings(BaseSettings):
     jwt_issuer: str = ""
     jwt_audience: str = ""
     embedding_endpoint: str = ""
+    embedding_protocol: Literal["openai", "ark"] = "openai"
+    embedding_trust_env: bool = True
     embedding_model: str = ""
     embedding_token: SecretStr = SecretStr("")
 

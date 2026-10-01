@@ -99,7 +99,7 @@ evals/        用内存适配器跑的场景评估，不碰数据库
 
 **不要把未实现的说成已完成**，README「当前边界」一节是权威口径。
 
-已有 —— 可观测性地基、三类记忆、四类 scope、JWT + 权限 + RLS、幂等创建、乐观并发、不可覆盖版本、生命周期、审计、embedding worker、三路混合检索与分页、Event/Outbox/Job/Evidence 链路。M4 的 API/融合/模型配置和验收边界见 docs/retrieval.md；真实语义模型质量尚未验收。
+已有 —— 可观测性地基、三类记忆、四类 scope、JWT + 权限 + RLS、幂等创建、乐观并发、不可覆盖版本、生命周期、审计、embedding worker、三路混合检索与分页、Event/Outbox/Job/Evidence 链路。M4 的 API/融合/模型配置和验收边界见 docs/retrieval.md；真实模型5条语义改写验收已通过；生产规模质量评估未做。
 
 未有 —— 见下方路线。
 
@@ -109,7 +109,7 @@ evals/        用内存适配器跑的场景评估，不碰数据库
 
 **第一梯队**（岗位 01 直接考 + 被 `agent-ops-platform` 依赖）
 
-- **混合检索**：PG 全文 + pgvector 向量 + 结构化过滤三路候选，可解释融合与重排。含 **embedding worker**（M3 已有生成/落库/重建/重试管道，语义模型质量未验收）。
+- **混合检索**：PG 全文 + pgvector 向量 + 结构化过滤三路候选，可解释融合与重排。含 **embedding worker**（M3 已有生成/落库/重建/重试管道，真实模型语义改写初验通过，生产规模质量评估未做）。
 - **Context Builder + Token 预算**：spec 10.5 的 Memory Context Packet，未实现。
 - **可观测性**：M1 已完成地基 —— 全链路 trace、JSON 结构化日志、四个基础指标（2026-09-20）。**未完成**：没接任何后端（只有 console 导出器，无 OTLP／采样／告警／看板），spec 第 17 节的四层评测仍然全空。
 - **基线对比评测**：spec 验收标准第 10 条要求对比 No Memory 和 Naive Vector 两条基线，未实现。

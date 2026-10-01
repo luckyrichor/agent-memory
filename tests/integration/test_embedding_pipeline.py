@@ -61,7 +61,7 @@ async def test_transactional_embedding_retry_restart_rebuild_and_rls(app_databas
         async with session_for_principal(sessions, principal) as session:
             row = await session.scalar(select(MemoryEmbeddingRow))
             assert row is not None and row.memory_version_id == result.version_id
-            assert len(row.embedding) == 1536
+            assert len(row.embedding) == 1024
         other = PostgresEmbeddingBackend.principal(uuid4())
         async with session_for_principal(sessions, other) as session:
             assert await session.scalar(select(func.count()).select_from(MemoryEmbeddingRow)) == 0
@@ -72,7 +72,7 @@ async def test_transactional_embedding_retry_restart_rebuild_and_rls(app_databas
         assert job is not None
         assert (await ok.run_once(tenant, "recovered", now=at + timedelta(seconds=7))).outcome == "succeeded"
         with pytest.raises(LeaseLost):
-            await backend.complete(job, "abandoned", "invalid", [0.0]*1536, at + timedelta(seconds=8))
+            await backend.complete(job, "abandoned", "invalid", [0.0]*1024, at + timedelta(seconds=8))
         async with session_for_principal(sessions, principal) as session:
             assert await session.scalar(select(func.count()).select_from(JobRow).where(
                 JobRow.tenant_id == tenant, JobRow.job_type == "embed_memory")) == 2
