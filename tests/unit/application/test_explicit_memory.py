@@ -181,3 +181,20 @@ async def test_deleted_memory_is_immediately_excluded_from_active_reads() -> Non
 
     with pytest.raises(MemoryNotFound):
         await service.get_active(created.memory_id, principal())
+
+
+@pytest.mark.asyncio
+async def test_delete_replay_has_one_transition_and_never_bypasses_authorization() -> None:
+    from dataclasses import replace
+    service, repository, _ = make_service()
+    created = await service.remember(workspace_command(), principal())
+    command = DisableMemoryCommand(created.memory_id, 1, MemoryStatus.DELETED, "delete-unit")
+    first = await service.disable(command, principal())
+    assert await service.disable(command, principal()) == first
+    record = await repository.get(TENANT_ID, created.memory_id)
+    assert record is not None and record.memory.revision == 2
+    with pytest.raises(IdempotencyConflict):
+        await service.disable(replace(command, memory_id=UUID(int=999)), principal())
+    unauthorized = replace(principal(), permissions=frozenset({"memory:read"}))
+    with pytest.raises(MemoryScopeForbidden):
+        await service.disable(command, unauthorized)

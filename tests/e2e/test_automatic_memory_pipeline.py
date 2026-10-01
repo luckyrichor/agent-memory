@@ -108,12 +108,14 @@ async def test_duplicate_failure_event_produces_one_complete_candidate_lineage(
         counts = {
             "events": await session.scalar(select(func.count()).select_from(EventRow)),
             "outbox": await session.scalar(select(func.count()).select_from(OutboxMessageRow)),
-            "jobs": await session.scalar(select(func.count()).select_from(JobRow)),
+            "jobs": await session.scalar(select(func.count()).select_from(JobRow).where(JobRow.job_type == "extract_event")),
             "memories": await session.scalar(select(func.count()).select_from(MemoryRow)),
             "versions": await session.scalar(select(func.count()).select_from(MemoryVersionRow)),
             "evidence": await session.scalar(select(func.count()).select_from(EvidenceRow)),
         }
-        job_status = await session.scalar(select(JobRow.status))
+        assert await session.scalar(select(func.count()).select_from(JobRow).where(
+            JobRow.job_type == "embed_memory", JobRow.status == "pending")) == 1
+        job_status = await session.scalar(select(JobRow.status).where(JobRow.job_type == "extract_event"))
         memory_status = await session.scalar(select(MemoryRow.status))
 
     assert processed.outcome == "succeeded"

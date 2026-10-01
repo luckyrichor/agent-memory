@@ -8,6 +8,7 @@ from agent_memory.api.schemas import (
     CorrectMemoryRequest,
     DeletionRequest,
     DeletionResponse,
+    LifecycleRequest,
     MemoryDetailResponse,
     MemoryResponse,
     RememberRequest,
@@ -154,12 +155,12 @@ def create_router(
             Depends(service_dependency),
         ],
     ) -> DeletionResponse:
-        del idempotency_key
         result = await service.disable(
             DisableMemoryCommand(
                 memory_id=body.memory_id,
                 expected_revision=body.expected_revision,
                 status=MemoryStatus.DELETED,
+                idempotency_key=idempotency_key,
             ),
             principal,
         )
@@ -168,5 +169,31 @@ def create_router(
             status="pending_physical_cleanup",
             retrieval_disabled=True,
         )
+
+    @router.post("/memories/{memory_id}/archive", response_model=MemoryResponse)
+    async def archive_memory(
+        memory_id: UUID,
+        body: LifecycleRequest,
+        principal: Annotated[RequestPrincipal, Depends(principal_dependency)],
+        service: Annotated[ExplicitMemoryService, Depends(service_dependency)],
+    ) -> MemoryResponse:
+        result = await service.disable(
+            DisableMemoryCommand(memory_id, body.expected_revision, MemoryStatus.ARCHIVED), principal,
+        )
+        return MemoryResponse(tenant_id=principal.tenant_id, memory_id=result.memory_id, version_id=result.version_id,
+            revision=result.revision, status=result.status)
+
+    @router.post("/memories/{memory_id}/supersede", response_model=MemoryResponse)
+    async def supersede_memory(
+        memory_id: UUID,
+        body: LifecycleRequest,
+        principal: Annotated[RequestPrincipal, Depends(principal_dependency)],
+        service: Annotated[ExplicitMemoryService, Depends(service_dependency)],
+    ) -> MemoryResponse:
+        result = await service.disable(
+            DisableMemoryCommand(memory_id, body.expected_revision, MemoryStatus.SUPERSEDED), principal,
+        )
+        return MemoryResponse(tenant_id=principal.tenant_id, memory_id=result.memory_id, version_id=result.version_id,
+            revision=result.revision, status=result.status)
 
     return router

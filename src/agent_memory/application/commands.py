@@ -26,6 +26,7 @@ class DisableMemoryCommand:
     memory_id: UUID
     expected_revision: int
     status: MemoryStatus
+    idempotency_key: str | None = None
 
 
 @dataclass(frozen=True, slots=True)

@@ -71,6 +71,7 @@ class ExplicitMemoryService:
     ) -> MemoryResult:
         try:
             self._authorize_scope(principal, command.scope, "memory:write")
+            await self._idempotency.lock(principal.tenant_id, command.idempotency_key)
             existing = await self._idempotency.get(principal.tenant_id, command.idempotency_key)
             if existing is not None:
                 if existing.request_hash != request_hash:
@@ -244,8 +245,25 @@ class ExplicitMemoryService:
         command: DisableMemoryCommand,
         principal: RequestPrincipal,
     ) -> MemoryResult:
-        record = await self._required_record(command.memory_id, principal)
+        request_hash = hashlib.sha256(json.dumps({
+            "operation": "disable", "memory_id": str(command.memory_id),
+            "expected_revision": command.expected_revision, "status": command.status.value,
+        }, sort_keys=True).encode()).hexdigest()
+        existing: IdempotencyRecord | None = None
+        if command.idempotency_key is not None:
+            await self._idempotency.lock(principal.tenant_id, command.idempotency_key)
+            existing = await self._idempotency.get(principal.tenant_id, command.idempotency_key)
+        record = await self._required_record(
+            existing.result.memory_id if existing is not None else command.memory_id, principal,
+        )
         self._authorize_scope(principal, record.memory.scope, "memory:delete")
+        if existing is not None:
+            if existing.request_hash != request_hash:
+                raise IdempotencyConflict(command.idempotency_key or "")
+            await self._record_audit(principal, "memory.disable", "allow", "IDEMPOTENT_REPLAY",
+                                     existing.result.memory_id)
+            self._observe("memory.disable", "allow", "IDEMPOTENT_REPLAY")
+            return existing.result
         updated = record.memory.disable(command.status, self._now())
         await self._memories.disable(
             principal.tenant_id,
@@ -266,12 +284,14 @@ class ExplicitMemoryService:
             memory_id=command.memory_id,
             memory_status=updated.status.value,
         )
-        return MemoryResult(
-            updated.memory_id,
-            updated.current_version_id,
-            updated.revision,
-            updated.status,
+        result = MemoryResult(
+            updated.memory_id, updated.current_version_id, updated.revision, updated.status,
         )
+        if command.idempotency_key is not None:
+            await self._idempotency.save(
+                principal.tenant_id, command.idempotency_key, IdempotencyRecord(request_hash, result),
+            )
+        return result
 
     @staticmethod
     def _observe(action: str, decision: str, reason_code: str, **fields: object) -> None:

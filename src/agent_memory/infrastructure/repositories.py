@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Any, cast
 from uuid import UUID
 
-from sqlalchemy import CursorResult, select, update
+from sqlalchemy import CursorResult, select, text, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from agent_memory.application.commands import MemoryResult
@@ -210,6 +210,13 @@ class PostgresIdempotencyRepository:
     def __init__(self, session: AsyncSession, now: Callable[[], datetime]) -> None:
         self._session = session
         self._now = now
+
+    async def lock(self, tenant_id: UUID, key: str) -> None:
+        # Transaction-scoped lock serializes replays before reading their result.
+        await self._session.execute(
+            text("SELECT pg_advisory_xact_lock(hashtextextended(:key, 0))"),
+            {"key": f"{tenant_id}:{key}"},
+        )
 
     async def get(self, tenant_id: UUID, key: str) -> IdempotencyRecord | None:
         row = await self._session.scalar(

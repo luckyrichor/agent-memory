@@ -1,5 +1,7 @@
 # AGENTS.md
 
+最后更新：2026-10-01（北京时间）
+
 本文件为在本仓库工作的编码 agent 提供指引（Claude Code 读 `CLAUDE.md`、Codex 读 `AGENTS.md`，两者都指向这里）。
 
 ## 这是什么
@@ -97,7 +99,7 @@ evals/        用内存适配器跑的场景评估，不碰数据库
 
 **不要把未实现的说成已完成**，README「当前边界」一节是权威口径。
 
-已有 —— 可观测性地基（trace／结构化日志／指标，见 README「可观测性」一节）、三类记忆、四类 scope、JWT + 权限 + RLS、幂等创建、乐观并发、不可覆盖版本、逻辑删除、审计、pgvector 扩展和向量字段（**只建了字段，没有检索逻辑**）、Event 批量摄取、事务 Outbox、幂等 Job、租约重试死信、确定性规则提取、Event→Evidence→MemoryVersion 血缘。
+已有 —— 可观测性地基（trace／结构化日志／指标，见 README「可观测性」一节）、三类记忆、四类 scope、JWT + 权限 + RLS、幂等创建、乐观并发、不可覆盖版本、逻辑删除、审计、pgvector embedding 表与 worker（没有检索逻辑）、Event 批量摄取、事务 Outbox、幂等 Job、租约重试死信、确定性规则提取、Event→Evidence→MemoryVersion 血缘。
 
 未有 —— 见下方路线。
 
@@ -107,15 +109,15 @@ evals/        用内存适配器跑的场景评估，不碰数据库
 
 **第一梯队**（岗位 01 直接考 + 被 `agent-ops-platform` 依赖）
 
-- **混合检索**：PG 全文 + pgvector 向量 + 结构化过滤三路候选，可解释融合与重排。含 **embedding worker**（现在完全没有生成 embedding 的管道）。
+- **混合检索**：PG 全文 + pgvector 向量 + 结构化过滤三路候选，可解释融合与重排。含 **embedding worker**（M3 已有生成/落库/重建/重试管道，语义模型质量未验收）。
 - **Context Builder + Token 预算**：spec 10.5 的 Memory Context Packet，未实现。
 - **可观测性**：M1 已完成地基 —— 全链路 trace、JSON 结构化日志、四个基础指标（2026-09-20）。**未完成**：没接任何后端（只有 console 导出器，无 OTLP／采样／告警／看板），spec 第 17 节的四层评测仍然全空。
 - **基线对比评测**：spec 验收标准第 10 条要求对比 No Memory 和 Naive Vector 两条基线，未实现。
-- **Python SDK**：spec 12.1 规划未写；`agent-ops-platform` 要调用本服务。
+- **Python SDK**：M2 已实现 HTTP SDK；`agent-ops-platform` 要调用本服务。
 
 - **真实 LLM 提取器**：现在的 `CodingFailureRuleExtractor` 只认 build/test 失败这一种硬编码规则。**2026-09-22 已从第二梯队提为 M7，排在 W8**（须早于 M5 基线评测，否则评测量的是临时替身）。
 
-**第二梯队** —— 生命周期补全（supersede / archive / 物理删除执行，现在 DeletionRequest 只落库）、Consolidation Engine、MemoryRelation（spec 8.5 列了但表未建）、Feedback Service、评测扩容（现在只有 8 场景 1 条 golden）、限流。
+**第二梯队** —— 生命周期补全（supersede/archive 已实现，物理删除执行仍未做）、Consolidation Engine、MemoryRelation（spec 8.5 列了但表未建）、Feedback Service、评测扩容（现在只有 8 场景 1 条 golden）、限流。
 
 ### 已知缺口与它们的归属
 
@@ -169,3 +171,8 @@ bash workplan-docs/scripts/run-on-tx.sh agent-memory 'docker compose up -d postg
 | 岗位要求本身 | `workplan-docs/岗位要求原文.md`（唯一事实来源，不要在别处改写） |
 
 写进「环境与踩坑记录」时，用 **［实测］**／**［预警］** 标注区分「已验证的事实」和「未触发的已知风险」，不要把推断写成结论。
+
+
+## 2026-10-01 当前执行入口
+
+M2/M3 与 W4 CI 的最新实际验收见 docs/progress.md（历史 103 tests 基线不可当本次结果）。`bash scripts/check.sh` 使用锁文件运行 pytest、ruff、mypy strict、foundation_runner；当前 shell 缺 docker 组时按环境记录使用 `sg docker -c 'bash scripts/check.sh'`。embedding 操作与夹具/真实 provider 边界见 docs/embedding-worker.md；生产迁移须另行核对部署数据库，当前本次只迁移 Testcontainers。

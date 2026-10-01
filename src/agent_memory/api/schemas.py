@@ -77,3 +77,9 @@ class DeletionResponse(BaseModel):
     memory_id: UUID
     status: str
     retrieval_disabled: bool
+
+
+class LifecycleRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    expected_revision: int

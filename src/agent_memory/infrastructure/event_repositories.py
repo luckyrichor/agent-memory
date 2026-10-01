@@ -234,12 +234,14 @@ class PostgresJobQueue:
         worker_id: str,
         now: datetime,
         lease_duration: timedelta,
+        job_type: str = "extract_event",
     ) -> Job | None:
         row = (
             await self._session.execute(
                 select(JobRow)
                 .where(
                     JobRow.tenant_id == tenant_id,
+                    JobRow.job_type == job_type,
                     or_(
                         and_(
                             JobRow.status.in_(["pending", "retry_wait"]),

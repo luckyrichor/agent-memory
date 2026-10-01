@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID
 
+from pgvector.sqlalchemy import Vector
 from sqlalchemy import (
     BigInteger,
     CheckConstraint,
@@ -279,3 +280,15 @@ class EvidenceRow(Base):
     event_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True)
     role: Mapped[str] = mapped_column(String(32), primary_key=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class MemoryEmbeddingRow(Base):
+    __tablename__ = "memory_embeddings"
+    __table_args__ = (ForeignKeyConstraint(
+        ["tenant_id", "memory_version_id"],
+        ["memory_versions.tenant_id", "memory_versions.memory_version_id"], ondelete="CASCADE"),)
+    tenant_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True)
+    memory_version_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True)
+    model: Mapped[str] = mapped_column(String(255), nullable=False)
+    embedding: Mapped[list[float]] = mapped_column(Vector(1536), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)

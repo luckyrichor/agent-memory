@@ -1,5 +1,7 @@
 # 设计取舍
 
+最后更新：2026-10-01（北京时间）
+
 记录关键设计选择及其理由 —— 面试要能讲清楚的那些。每条写清**问题是什么、选了什么、为什么不选另一个、代价是什么**。
 
 按时间倒序。
@@ -22,7 +24,7 @@
 
 ［2026-09-22 修正］此处原先写"64 字符上限意味着长的 reason code 也会被拒"，**把摩擦说重了**：上限管的是字段**值**，而现存最长的 reason code 是 `AUTOMATIC_MEMORY_PIPELINE_FAILED`（32 字符），离上限还有一倍空间，实际不构成约束。
 
-**一个尚未封住的口子**　白名单只在调用方走 `StructuredLogger` 时有效。谁直接 `import logging` 就绕过去了 —— `AGENTS.md` 写了"不要绕过"，但**没有任何测试或 lint 规则强制**。这比字符上限严重得多，已排进 M2。
+**M2 已增加边界测试（2026-10-01）**　白名单要求调用方走 `StructuredLogger`；`tests/unit/observability/test_no_logging_bypass.py` 现在扫描业务源码 AST，拒绝直接 import logging、alias 和 from import，避免只靠文字约定。遥测适配器本身仍可使用标准 logging。
 
 **证据**　`tests/unit/observability/test_fields.py` 断言 `content`/`payload`/`message`/`text`/`body`/`draft` 这些名字**不存在**于白名单；`tests/api/test_observability_api.py` 与 `test_worker_instrumentation.py` 把导出的 span JSON 和日志字段整体搜一遍正文子串。
 
@@ -61,3 +63,21 @@
 `JsonFormatter.format()` 有可能在上下文退出之后才执行（异步 handler、`QueueHandler`、pytest 的延迟格式化），那时 contextvar 已复位、span 已结束，`request_id` 和 `trace_id` 就都成了空。所以在 `_emit` 里当场把关联 ID 和 span ID 并进字段，格式化只负责渲染。
 
 这个问题是写测试时先暴露出来的：断言在 `with` 块之外读渲染结果，字段消失了。
+
+
+## 2026-10-01 M2：SDK 与删除幂等（Codex）
+
+SDK 采用调用方提供的 httpx.AsyncClient，便于连接复用、明确超时与 ASGI 契约测试；认证只经 Authorization，不接收 tenant_id。纠正/状态迁移不隐式重试，删除重试必须使用原 key 与原 revision。
+
+删除复用现有租户级幂等结果表；请求哈希包含操作名，防止创建与删除误重用 key。结果保存与状态变更同事务；advisory xact lock 在查结果之前获取，处理相同 key 的并发。它会增加热点 key 的等待，但避免重放先撞 deleted 终态或数据库唯一约束。逻辑删除与物理清理明确分开。
+
+Supersede 此阶段表示旧记忆退出正常读取，不自动创建替代记忆/关系边；旧版本保持不可覆盖。
+
+
+## 2026-10-01 M3：同事务 embedding 调度与租约（Codex）
+
+使用版本表 AFTER INSERT / SECURITY INVOKER trigger，而非在每条调用路径里额外 enqueue：所有版本入口天然覆盖，Job 与版本同事务；代价是调度规则进入迁移，不能只读 Python 代码理解写入。provider I/O 在领取事务提交之后，避免持锁等待网络；成功事务先检查当前租约再 upsert 向量，因此过期 worker 不覆盖新 owner 结果。
+
+embedding 表通过租户/版本外键与 FORCE RLS 隔离，1536 维约束明确。provider 故障不记录 exception 字符串，避免供应商请求中正文或 token 泄漏。死信保留而非丢弃，通过 rebuild 新 key 重新执行。
+
+源码核对纠正旧文档措辞：基线迁移启用了 pgvector 扩展，但并无实际映射的向量字段；本次 0004 才建 memory_embeddings 向量表。测试夹具只证明管道，真实语义质量仍留 M4/M5，不把 SHA256 向量称作语义 embedding。

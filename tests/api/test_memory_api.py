@@ -185,3 +185,51 @@ async def test_memory_lifecycle_routes_preserve_versions_and_disable_reads(
     assert deleted.json()["retrieval_disabled"] is True
     assert after_delete.status_code == 404
     await app.state.engine.dispose()
+
+
+@pytest.mark.asyncio
+async def test_sdk_full_lifecycle_and_delete_replays(app_database_url: str) -> None:
+    import asyncio
+
+    from agent_memory.domain.enums import MemoryType, ScopeKind
+    from agent_memory.domain.models import MemoryScope
+    from agent_memory.sdk import MemoryAPIError, MemoryClient
+
+    private, public = signing_material()
+    app = create_app(Settings(database_url=app_database_url, jwt_public_key=public,
+                              jwt_issuer="memory-test", jwt_audience="memory-api"))
+    try:
+        async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as http:
+            sdk = MemoryClient(http, token=bearer_token(private))
+            scope = MemoryScope(ScopeKind.WORKSPACE, "project-a", None)
+            created = await sdk.remember("original", MemoryType.SEMANTIC, scope,
+                                         idempotency_key="sdk-m2-create")
+            assert (await sdk.get(created.memory_id)).content == "original"
+            corrected = await sdk.correct(created.memory_id, expected_revision=1, content="new")
+            assert corrected.revision == 2
+            assert (await sdk.get(created.memory_id)).content == "new"
+            deletes = await asyncio.gather(*[
+                sdk.delete(created.memory_id, expected_revision=2, idempotency_key="sdk-delete")
+                for _ in range(3)])
+            assert deletes[0] == deletes[1] == deletes[2]
+            assert await sdk.delete(created.memory_id, expected_revision=2,
+                                    idempotency_key="sdk-delete") == deletes[0]
+            with pytest.raises(MemoryAPIError) as conflict:
+                await sdk.delete(created.memory_id, expected_revision=3,
+                                 idempotency_key="sdk-delete")
+            assert conflict.value.status_code == 409
+            with pytest.raises(MemoryAPIError) as missing:
+                await sdk.get(created.memory_id)
+            assert missing.value.status_code == 404
+            for action in ("archive", "supersede"):
+                m = await sdk.remember(action, MemoryType.SEMANTIC, scope,
+                                       idempotency_key=f"sdk-{action}")
+                result = await getattr(sdk, action)(m.memory_id, expected_revision=1)
+                assert result.status.value == {"archive": "archived", "supersede": "superseded"}[action]
+                with pytest.raises(MemoryAPIError):
+                    await sdk.get(m.memory_id)
+                with pytest.raises(MemoryAPIError) as stale:
+                    await getattr(sdk, action)(m.memory_id, expected_revision=1)
+                assert stale.value.status_code == 409
+    finally:
+        await app.state.engine.dispose()

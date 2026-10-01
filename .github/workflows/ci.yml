@@ -1,0 +1,20 @@
+name: Foundation gates
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  foundation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          python-version: '3.12'
+      - name: Verify Docker for Testcontainers
+        run: docker info
+      - name: Four gates with locked dependencies
+        run: bash scripts/check.sh

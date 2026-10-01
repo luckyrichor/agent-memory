@@ -1,6 +1,8 @@
 # Agent Memory
 
-这是企业级 Agent Memory 的前两阶段实现：它已经具备显式记忆写入、作用域授权、不可覆盖的版本历史、租户隔离、逻辑删除、审计和 JWT API；同时新增了 `Event → Outbox → Job → Candidate Memory` 的异步自动提取骨架。
+最后更新：2026-10-01（北京时间）
+
+这是企业级 Agent Memory 的存储与治理实现（本次已推进 M2/M3）：它已经具备显式记忆写入、作用域授权、不可覆盖的版本历史、租户隔离、逻辑删除、审计和 JWT API；同时新增了 `Event → Outbox → Job → Candidate Memory` 的异步自动提取骨架。
 
 ## 先回答 PostgreSQL 安装问题
 
@@ -260,13 +262,14 @@ Event 记录“发生了什么”，一旦接入不会就地覆盖；Audit 记�
 - tenant、workspace、user_global、user_workspace 四类作用域；
 - JWT 身份绑定、权限检查、PostgreSQL 强制 RLS；
 - 幂等创建、乐观并发、不可覆盖版本、逻辑删除、审计；
-- pgvector 扩展和向量字段的数据库基础；
+- pgvector embedding 表与异步任务、租约重试/死信/按版本重建（M3）；
+- Python HTTP SDK、archive/supersede、真正的删除 key 幂等（M2）；
 - 不可变 Event 批量接入、事务 Outbox、幂等 Job；
 - 租约领取、退避重试、死信终态和可恢复 worker；
 - 对 build/test 失败的确定性规则提取，以及 Event → Evidence → MemoryVersion 血缘；
 - 可观测性地基：写入/检索/提取全链路 trace、JSON 结构化日志、四个基础指标，字段白名单保证正文不外流。
 
-后续阶段依次实现：真实模型提取与敏感信息策略；全文与向量混合检索；反馈、归档和物理删除传播；配额、管理审核和压测。排期见 `workplan-docs/总节奏表.md`。可观测性目前**只到 M1 地基**：有 trace / 日志 / 指标三条通路和导出开关，但没有接到任何后端（OTLP 导出、采样策略、告警、看板都未实现），spec 第 17 节的四层评测仍然是空的。当前的提取器是可验证的确定性规则，不是 LLM 提取；不要把这些未实现能力描述成已经完成。
+后续阶段依次实现：真实模型提取与敏感信息策略；全文与向量混合检索；反馈和物理删除传播；配额、管理审核和压测。排期见 `workplan-docs/总节奏表.md`。可观测性目前**只到 M1 地基**：有 trace / 日志 / 指标三条通路和导出开关，但没有接到任何后端（OTLP 导出、采样策略、告警、看板都未实现），spec 第 17 节的四层评测仍然是空的。当前的提取器是可验证的确定性规则，不是 LLM 提取；不要把这些未实现能力描述成已经完成。
 
 ### 已知缺口（2026-09-22 外部评审，逐条核实属实）
 
@@ -274,11 +277,11 @@ Event 记录“发生了什么”，一旦接入不会就地覆盖；Audit 记�
 
 | 缺口 | 现状 | 排期 |
 |---|---|---|
-| **检索能力** | 只能按 `memory_id` 精确查。没有列表、没有搜索、没有向量或全文检索。pgvector 扩展和向量字段建了，但**没有生成 embedding 的管道，也没有检索逻辑** | M3 → M4 → M6 |
+| **检索能力** | 只能按 `memory_id` 精确查。没有列表、没有搜索、没有向量或全文检索。M3 已有异步 embedding 落库/重建/重试；**没有检索逻辑**。夹具向量不证明语义质量 | M3 → M4 → M6 |
 | **提取能力** | `CodingFailureRuleExtractor` 只认 `tool_name` 属于 build/test 且退出码非零的事件，其余一律不提取。**不是 LLM 提取** | M7 |
 | 列表分页 | `GET /memories/{id}/versions` 一次返回全部版本，无 `limit`/`offset` | 随 M4 统一定契约 |
-| 删除幂等 | 接口收 `Idempotency-Key` 但**未使用**，幂等实际靠 `expected_revision` 乐观锁。与 `POST /memories` 的契约不一致 | M2 |
-| CI | 四道门只在本地手动跑，仓库没有流水线配置 | W4 |
+| 删除幂等 | 已实现持久幂等结果与事务锁，同键同参重放返回相同结果，同键异参 409 | M2 |
+| CI | 已配置 `.github/workflows/ci.yml` 与 `scripts/check.sh`，本地四道门通过；未提交/推送，远端未触发 | W4 |
 | **物理删除** | `DeletionRequest` 只落库，**没有执行者**。接口返回的 `pending_physical_cleanup` 描述的是意图，不是已发生的事 | 暂不排期 |
 | **限流** | 设计文档第 5 节的 API Gateway 列了 Rate Limit，实现里没有 | 暂不排期 |
 
@@ -324,3 +327,8 @@ git diff --check
 ```bash
 docker compose down
 ```
+
+
+## 2026-10-01 W2–W4 本地更新
+
+来源 agent-memory@5b9ee55 + 未提交修改。M2/M3 自动验收通过，CI 已配置并本地核验，远端尚未触发。SDK 入口 `agent_memory.sdk.MemoryClient`；worker 使用方式与实际覆盖边界见 [docs/embedding-worker.md](docs/embedding-worker.md)，实际测试结果见 docs/progress.md。每次可用 `bash scripts/check.sh` 运行四道门。真实模型 embedding 的线上请求未执行，语义检索留 M4。

@@ -62,6 +62,10 @@ class InMemoryIdempotencyRepository:
     def __init__(self) -> None:
         self._records: dict[tuple[UUID, str], IdempotencyRecord] = {}
 
+    async def lock(self, tenant_id: UUID, key: str) -> None:
+        # Methods in this adapter do not suspend; operations run atomically in one loop.
+        pass
+
     async def get(self, tenant_id: UUID, key: str) -> IdempotencyRecord | None:
         return self._records.get((tenant_id, key))
 

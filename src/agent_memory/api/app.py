@@ -21,6 +21,7 @@ from agent_memory.domain.errors import (
     EventSequenceConflict,
     IdempotencyConflict,
     InvalidEvent,
+    InvalidStatusTransition,
     MemoryNotFound,
     MemoryScopeForbidden,
     RevisionConflict,
@@ -185,6 +186,11 @@ def create_app(settings: Settings) -> FastAPI:
             "The event batch is invalid.",
             422,
         )
+
+    @app.exception_handler(InvalidStatusTransition)
+    async def invalid_status(request: Request, error: InvalidStatusTransition) -> JSONResponse:
+        return domain_error_response(request, "INVALID_STATUS_TRANSITION",
+                                     "The memory state does not allow this operation.", 409)
 
     app.include_router(create_router(resolver, service_dependency))
     app.include_router(create_event_router(resolver, event_service_dependency))
