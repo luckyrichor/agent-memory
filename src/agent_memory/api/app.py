@@ -11,9 +11,11 @@ from agent_memory.api.auth import JwtPrincipalResolver
 from agent_memory.api.errors import AuthenticationRequired
 from agent_memory.api.event_routes import create_event_router
 from agent_memory.api.middleware import observe_request
+from agent_memory.api.retrieval_routes import create_retrieval_router
 from agent_memory.api.routes import create_router
 from agent_memory.application.event_ingestion import EventIngestionService
 from agent_memory.application.explicit_memory import ExplicitMemoryService
+from agent_memory.application.retrieval import MemoryRetriever
 from agent_memory.config import Settings
 from agent_memory.domain.errors import (
     EventIdempotencyConflict,
@@ -38,6 +40,7 @@ from agent_memory.infrastructure.repositories import (
     PostgresIdempotencyRepository,
     PostgresMemoryRepository,
 )
+from agent_memory.infrastructure.retrieval import PostgresCandidateProvider
 from agent_memory.observability.setup import configure_observability
 
 
@@ -192,7 +195,14 @@ def create_app(settings: Settings) -> FastAPI:
         return domain_error_response(request, "INVALID_STATUS_TRANSITION",
                                      "The memory state does not allow this operation.", 409)
 
+    async def retrieval_dependency(
+        principal: Annotated[RequestPrincipal, Depends(resolver)],
+    ) -> AsyncIterator[MemoryRetriever]:
+        async with session_for_principal(sessions, principal) as session:
+            yield MemoryRetriever(PostgresCandidateProvider(session))
+
     app.include_router(create_router(resolver, service_dependency))
+    app.include_router(create_retrieval_router(resolver, retrieval_dependency, settings))
     app.include_router(create_event_router(resolver, event_service_dependency))
     return app
 

@@ -44,7 +44,8 @@ class EmbeddingWorker:
             try:
                 content = await self.backend.load_content(tenant, UUID(str(job.payload["version_id"])))
                 vector = await self.provider.embed(content)
-                if len(vector) != DIMENSIONS or not all(math.isfinite(x) for x in vector):
+                if len(vector) != DIMENSIONS or not all(math.isfinite(x) for x in vector) or \
+                        not any(vector):
                     raise ValueError("invalid embedding")
                 # Real completion time fences slow providers that outlive their lease.
                 finished = at if now is not None else datetime.now(UTC)

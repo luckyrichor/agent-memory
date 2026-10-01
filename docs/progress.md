@@ -95,3 +95,10 @@ CI 文件已本地验证，但未提交/推送，GitHub Actions **未触发、�
 用户明确授权后，M2/M3 和 CI 配置已提交、推送为 `3c994e1`。提交前本地复验：pytest 110 passed in 5.96s、ruff 通过、strict mypy 52 文件无错、foundation 8/8。
 
 GitHub Actions [Foundation gates #36811146053](https://github.com/luckyrichor/agent-memory/actions/runs/36811146053) 对应实际提交 `3c994e12784aad37c70e60b4fd98b5a1f4457358`，结论 success：pytest 110 passed in 14.86s、ruff 通过、strict mypy 52 文件无错、foundation 8/8（0 tenant_leaks、0 deleted_memory_hits）。W4 远端 CI 待办已验收；上节的未发布状态保留为当时的历史记录。
+# 2026-10-02 W6 / M4（Codex）
+
+来源 agent-memory@ac7712a + 本轮工作树修改；提前推进用户指定 W5–W7。实现三路混合检索、授权前置硬过滤、可解释加权 RRF、查询 HTTP embedding provider、所有列表分页（含版本），补充 SDK search 与 py.typed、GIN 索引迁移、零向量防护和内存适配器。
+
+本轮末次四道门：118 pytest passed in 7.35s（含实际 PostgreSQL/pgvector）；ruff 通过；strict mypy 56 文件通过；foundation 8/8，0 泄漏/0 删除命中。已验证 scope/租户/user/archive/needs_review/deleted 隔离、纠正后的旧向量退出、分页与分数解释。全量过程中发现等权结构化新近排名与向量排名打平，已降低结构化权重并重新验收；未忽略失败用例。
+
+M4 工程通过，真实语义模型效果暂跳过，不标 M4 全部完成。固定改写向量夹具只证明检索流程。详情见 docs/retrieval.md；无实际工时声明。以下为历史记录。

@@ -3,7 +3,13 @@ from uuid import UUID
 
 import httpx
 
-from agent_memory.api.schemas import DeletionResponse, MemoryDetailResponse, MemoryResponse
+from agent_memory.api.schemas import (
+    DeletionResponse,
+    MemoryDetailResponse,
+    MemoryResponse,
+    SearchRequest,
+    SearchResponse,
+)
 from agent_memory.domain.enums import MemoryType
 from agent_memory.domain.models import MemoryScope
 
@@ -47,6 +53,10 @@ class MemoryClient:
     async def get(self, memory_id: UUID) -> MemoryDetailResponse:
         return MemoryDetailResponse.model_validate(
             await self._request("GET", f"/v1/memories/{memory_id}"))
+
+    async def search(self, query: SearchRequest) -> SearchResponse:
+        return SearchResponse.model_validate(await self._request(
+            "POST", "/v1/memories/search", body=query.model_dump(mode="json")))
 
     async def correct(self, memory_id: UUID, *, expected_revision: int, content: str,
                       reason: str = "user_correction") -> MemoryResponse:

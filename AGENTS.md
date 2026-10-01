@@ -1,6 +1,6 @@
 # AGENTS.md
 
-最后更新：2026-10-01（北京时间）
+最后更新：2026-10-02（北京时间）
 
 本文件为在本仓库工作的编码 agent 提供指引（Claude Code 读 `CLAUDE.md`、Codex 读 `AGENTS.md`，两者都指向这里）。
 
@@ -99,7 +99,7 @@ evals/        用内存适配器跑的场景评估，不碰数据库
 
 **不要把未实现的说成已完成**，README「当前边界」一节是权威口径。
 
-已有 —— 可观测性地基（trace／结构化日志／指标，见 README「可观测性」一节）、三类记忆、四类 scope、JWT + 权限 + RLS、幂等创建、乐观并发、不可覆盖版本、逻辑删除、审计、pgvector embedding 表与 worker（没有检索逻辑）、Event 批量摄取、事务 Outbox、幂等 Job、租约重试死信、确定性规则提取、Event→Evidence→MemoryVersion 血缘。
+已有 —— 可观测性地基、三类记忆、四类 scope、JWT + 权限 + RLS、幂等创建、乐观并发、不可覆盖版本、生命周期、审计、embedding worker、三路混合检索与分页、Event/Outbox/Job/Evidence 链路。M4 的 API/融合/模型配置和验收边界见 docs/retrieval.md；真实语义模型质量尚未验收。
 
 未有 —— 见下方路线。
 

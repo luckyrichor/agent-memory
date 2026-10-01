@@ -2,7 +2,7 @@ from collections.abc import AsyncIterator, Awaitable, Callable
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Header, status
+from fastapi import APIRouter, Depends, Header, Query, status
 
 from agent_memory.api.schemas import (
     CorrectMemoryRequest,
@@ -97,6 +97,8 @@ def create_router(
             ExplicitMemoryService,
             Depends(service_dependency),
         ],
+        limit: Annotated[int, Query(ge=1, le=100)] = 20,
+        offset: Annotated[int, Query(ge=0)] = 0,
     ) -> VersionListResponse:
         record = await service.get_active(memory_id, principal)
         return VersionListResponse(
@@ -106,8 +108,9 @@ def create_router(
                     version_number=version.version_number,
                     content=version.content,
                 )
-                for version in record.versions
-            ]
+                for version in record.versions[offset:offset + limit]
+            ], limit=limit, offset=offset,
+            next_offset=offset + limit if offset + limit < len(record.versions) else None,
         )
 
     @router.post(

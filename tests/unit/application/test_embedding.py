@@ -10,7 +10,8 @@ from agent_memory.infrastructure.in_memory_embedding import InMemoryEmbeddingBac
 
 
 @pytest.mark.asyncio
-async def test_retry_dead_letter_remains_rebuildable_and_tenant_isolated() -> None:
+@pytest.mark.parametrize("invalid", [float("nan"), 0.0])
+async def test_retry_dead_letter_remains_rebuildable_and_tenant_isolated(invalid: float) -> None:
     backend = InMemoryEmbeddingBackend()
     tenant, version = uuid4(), uuid4()
     now = datetime.now(UTC)
@@ -18,7 +19,7 @@ async def test_retry_dead_letter_remains_rebuildable_and_tenant_isolated() -> No
 
     class InvalidProvider(FixtureEmbeddingProvider):
         async def embed(self, content: str) -> list[float]:
-            return [float("nan")] * 1536
+            return [invalid] * 1536
 
     worker = EmbeddingWorker(backend, InvalidProvider())
     assert (await worker.run_once(uuid4(), "other", now=now)).outcome == "no_job"

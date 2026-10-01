@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 from agent_memory.domain.enums import MemoryStatus, MemoryType, ScopeKind
 
@@ -62,6 +62,39 @@ class VersionListResponse(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     items: list[VersionResponse]
+    limit: int = 20
+    offset: int = 0
+    next_offset: int | None = None
+
+
+class SearchRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
+    query: str = Field(min_length=1, max_length=2000)
+    vector: list[float] | None = Field(default=None, min_length=1536, max_length=1536)
+    model: str | None = Field(default=None, min_length=1, max_length=255)
+    memory_type: MemoryType | None = None
+    workspace_id: str | None = Field(default=None, min_length=1, max_length=512)
+    limit: int = Field(default=20, ge=1, le=100)
+    offset: int = Field(default=0, ge=0, le=2900)
+
+
+class SearchHit(BaseModel):
+    memory_id: UUID
+    version_id: UUID
+    content: str
+    score: float
+    ranks: dict[str, int]
+    raw_scores: dict[str, float]
+
+
+class SearchResponse(BaseModel):
+    fusion: str = "RRF(k=60;lexical=1;vector=1;structured=0.25)"
+    items: list[SearchHit]
+    channel_counts: dict[str, int]
+    vector_status: str
+    limit: int
+    offset: int
+    next_offset: int | None
 
 
 class DeletionRequest(BaseModel):

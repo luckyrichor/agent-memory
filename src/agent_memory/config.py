@@ -1,5 +1,6 @@
 from typing import Literal
 
+from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -13,6 +14,9 @@ class Settings(BaseSettings):
     jwt_public_key: str = ""
     jwt_issuer: str = ""
     jwt_audience: str = ""
+    embedding_endpoint: str = ""
+    embedding_model: str = ""
+    embedding_token: SecretStr = SecretStr("")
 
     service_name: str = "agent-memory"
     log_level: str = "INFO"
