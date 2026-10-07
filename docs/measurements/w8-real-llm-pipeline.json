@@ -1,0 +1,11 @@
+{
+  "model": "doubao-seed-2-0-mini-260428",
+  "event_jobs_succeeded": 3,
+  "llm_events": 2,
+  "sensitive_events_rejected": 1,
+  "candidate_count": 2,
+  "scope_preserved": true,
+  "authority_escalations": 0,
+  "tenant_leaks": 0,
+  "limitations": "2 synthetic non-build events; no general extraction-quality claim"
+}

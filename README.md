@@ -269,7 +269,7 @@ Event 记录“发生了什么”，一旦接入不会就地覆盖；Audit 记�
 - 对 build/test 失败的确定性规则提取，以及 Event → Evidence → MemoryVersion 血缘；
 - 可观测性地基：写入/检索/提取全链路 trace、JSON 结构化日志、四个基础指标，字段白名单保证正文不外流。
 
-后续阶段依次实现：真实模型提取与敏感信息策略；Context Builder 与对比评测；反馈和物理删除传播；配额、管理审核和压测。全文/向量/结构化融合检索已实现，真实火山模型5条语义改写初验通过，生产规模质量未验收，见 [docs/retrieval.md](docs/retrieval.md)。排期见 `workplan-docs/总节奏表.md`。可观测性目前**只到 M1 地基**：没有 OTLP 后端／采样／告警／看板。当前提取器仍是确定性规则，M5/M6/M7 未完成。
+M7真实模型候选提炼与M5三组基线工程初验已通过，详见 [提炼与基线验收](docs/llm-extraction-and-baselines.md)。当前可配置真实LLM提炼器，故障回退原规则；敏感信息防护仅覆盖明确模式，生产规模质量未验收。M6 Context Builder、反馈和物理删除传播、配额/审核/压测仍未完成。全文/向量/结构化融合检索已实现，真实火山模型初验见 [docs/retrieval.md](docs/retrieval.md)。排期见 `workplan-docs/总节奏表.md`。可观测性没有 OTLP 后端／采样／告警／看板，未新增常驻 API/worker。
 
 ### 已知缺口（2026-09-22 外部评审，逐条核实属实）
 
@@ -278,7 +278,7 @@ Event 记录“发生了什么”，一旦接入不会就地覆盖；Audit 记�
 | 缺口 | 现状 | 排期 |
 |---|---|---|
 | **检索能力** | M4 三路召回、硬过滤、可解释 RRF、分页已实现；火山1024维模型5条语义改写Top1通过，真实worker→PostgreSQL→查询API已验证 | M4初验通过；更大规模质量评测 → M6 |
-| **提取能力** | `CodingFailureRuleExtractor` 只认 `tool_name` 属于 build/test 且退出码非零的事件，其余一律不提取。**不是 LLM 提取** | M7 |
+| **提取能力** | M7已接真实LLM，非build/test事件与真实worker落库初验通过；模式敏感检查不保证发现所有混淆信息，大规模质量未验收 | M7 初验通过 |
 | 列表分页 | 搜索与版本列表统一 limit/offset/next_offset；版本历史读取量尚未优化 | M4 已实现 |
 | 删除幂等 | 已实现持久幂等结果与事务锁，同键同参重放返回相同结果，同键异参 409 | M2 |
 | CI | W4 已推送并通过远端 CI；新修改四道门见 progress，不能用旧提交的结果代替 | W4 已验收 |

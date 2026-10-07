@@ -1,0 +1,38 @@
+{
+  "benchmark": "synthetic-build-lifecycle-v1",
+  "environment": "PostgreSQL16+pgvector, native C++ compile and run",
+  "cases": [
+    {
+      "case": "active",
+      "success": {
+        "no_memory": false,
+        "naive_vector": true,
+        "system": true
+      }
+    },
+    {
+      "case": "corrected",
+      "success": {
+        "no_memory": false,
+        "naive_vector": false,
+        "system": true
+      }
+    },
+    {
+      "case": "deleted",
+      "success": {
+        "no_memory": false,
+        "naive_vector": false,
+        "system": true
+      }
+    }
+  ],
+  "embedding": "fixed-vector-fixture",
+  "extraction": "M7 adapter with fixed JSON responses, then explicit user confirmation",
+  "successful_replays": {
+    "no_memory": 0,
+    "naive_vector": 1,
+    "system": 3
+  },
+  "limits": "3 synthetic lifecycle faults; not production or general model-quality evidence"
+}

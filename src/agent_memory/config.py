@@ -19,6 +19,10 @@ class Settings(BaseSettings):
     embedding_trust_env: bool = True
     embedding_model: str = ""
     embedding_token: SecretStr = SecretStr("")
+    extraction_endpoint: str = ""
+    extraction_model: str = ""
+    extraction_token: SecretStr = SecretStr("")
+    extraction_trust_env: bool = False
 
     service_name: str = "agent-memory"
     log_level: str = "INFO"

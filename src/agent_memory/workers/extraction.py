@@ -7,7 +7,6 @@ from datetime import UTC, datetime, timedelta
 from types import FrameType
 from uuid import UUID, uuid4
 
-from agent_memory.application.extraction import CodingFailureRuleExtractor
 from agent_memory.application.extraction_worker import ExtractionWorker, WorkerResult
 from agent_memory.application.outbox_dispatcher import OutboxDispatcher
 from agent_memory.config import Settings
@@ -21,6 +20,7 @@ from agent_memory.infrastructure.event_repositories import (
     PostgresExtractionBackend,
     PostgresOutboxRepository,
 )
+from agent_memory.infrastructure.llm_extractor import build_extractor
 from agent_memory.observability import correlation, get_logger, span
 from agent_memory.observability.setup import configure_observability
 
@@ -125,7 +125,7 @@ async def _run_dispatch(args: argparse.Namespace, stop: asyncio.Event) -> None:
     configure_observability(settings)
     engine = create_engine(settings.database_url)
     sessions = create_session_factory(engine)
-    extractor = CodingFailureRuleExtractor()
+    extractor = build_extractor(settings)
     principal = _internal_principal(
         args.tenant_id,
         "outbox_dispatcher",
@@ -175,7 +175,7 @@ async def _run_worker(args: argparse.Namespace, stop: asyncio.Event) -> None:
             new_id=uuid4,
             now=lambda: datetime.now(UTC),
         ),
-        CodingFailureRuleExtractor(),
+        build_extractor(settings),
         now=lambda: datetime.now(UTC),
         lease_duration=timedelta(seconds=30),
     )

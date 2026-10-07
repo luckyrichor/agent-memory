@@ -110,3 +110,12 @@ GitHub Actions [Foundation gates #36811146053](https://github.com/luckyrichor/ag
 本轮末次四道门：118 pytest passed in 7.35s（含实际 PostgreSQL/pgvector）；ruff 通过；strict mypy 56 文件通过；foundation 8/8，0 泄漏/0 删除命中。已验证 scope/租户/user/archive/needs_review/deleted 隔离、纠正后的旧向量退出、分页与分数解释。全量过程中发现等权结构化新近排名与向量排名打平，已降低结构化权重并重新验收；未忽略失败用例。
 
 M4 工程通过，真实语义模型效果暂跳过，不标 M4 全部完成。固定改写向量夹具只证明检索流程。详情见 docs/retrieval.md；无实际工时声明。此前章节为历史记录。
+
+
+## 2026-10-07 Codex：W8–W10实际执行
+
+M7：增加LLMExtractor与dispatch/work共同工厂，原ExtractionWorker不改；有界JSON候选、scope/authority由服务端决定、敏感模式检查、HTTP/格式错误规则回退。真实mini模型验证通过（两条非build/test事件、一条敏感事件拒绝），事件→Outbox→原worker→candidate/evidence/job真实PostgreSQL原子链路通过；candidate_count=2，0权限升级/0租户泄漏。一次在线提炼只产出1条预期模型结果、另一次触发回退，复验2条通过，线上漂移/失败不作为CI依赖。先探测lite返回429/旧flash返回404，再发现mini可用，不笼统判断整个账户不可用。
+
+M5：真实数据库、固定M7响应与同一应用身份下，对No Memory / Naive Vector / 系统作3个合成原生C++构建故障回放；g++实际编译与程序执行，旧知识选择不兼容的header API。固定向量和真实Ark向量两组结果均0/3、1/3、3/3。初验通过，不能外推真实用户工程或一般LLM收益。M6后续仍未做；不启动常驻API/worker。
+
+最终四道门：139 pytest passed in 9.39s；ruff通过，strict mypy57文件通过；foundation8/8，0租户泄漏/0删除命中。来源agent-memory@c5a067a + 本轮工作树；精确SHA256见docs/measurements/w8-w10-source.json，边界见docs/llm-extraction-and-baselines.md。

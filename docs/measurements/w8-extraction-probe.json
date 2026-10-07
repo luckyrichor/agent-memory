@@ -1,0 +1,8 @@
+{
+  "date": "2026-10-07",
+  "model": "doubao-seed-2-0-mini-260428",
+  "reason": "LLM_EXTRACTED",
+  "candidates": 1,
+  "scope_preserved": true,
+  "real_model_extraction_passed": true
+}

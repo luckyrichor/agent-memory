@@ -1,6 +1,6 @@
 # AGENTS.md
 
-最后更新：2026-10-02（北京时间）
+最后更新：2026-10-07（北京时间）
 
 本文件为在本仓库工作的编码 agent 提供指引（Claude Code 读 `CLAUDE.md`、Codex 读 `AGENTS.md`，两者都指向这里）。
 
@@ -176,3 +176,7 @@ bash workplan-docs/scripts/run-on-tx.sh agent-memory 'docker compose up -d postg
 ## 2026-10-01 当前执行入口
 
 M2/M3 与 W4 CI 的最新实际验收见 docs/progress.md（历史 103 tests 基线不可当本次结果）。`bash scripts/check.sh` 使用锁文件运行 pytest、ruff、mypy strict、foundation_runner；当前 shell 缺 docker 组时按环境记录使用 `sg docker -c 'bash scripts/check.sh'`。embedding 操作与夹具/真实 provider 边界见 docs/embedding-worker.md；生产迁移须另行核对部署数据库，当前本次只迁移 Testcontainers。
+
+## 2026-10-07状态补充
+
+M7真实LLM候选提炼与M5三组基线工程初验通过。真实模型、敏感检查边界及样本限制见docs/llm-extraction-and-baselines.md；四道门139测试通过。M6未做，未新增常驻服务。
