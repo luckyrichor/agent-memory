@@ -1,0 +1,20 @@
+{
+  "generated_at": "2026-10-08T06:29:26.720410+00:00",
+  "base_commit": "66845323d4e8152f01c4564a0db1266d8e1777b4",
+  "source_dirty": true,
+  "source_sha256": {
+    "src/agent_memory/domain/content_policy.py": "4f63fc6515fcfe99db8a78a10413e0eeaa9cae442028b905ea544ee79b92ba4c"
+  },
+  "synthetic_reproduction": {
+    "uuid": "12345678-1234-4234-8123-123456789012",
+    "old_match": "12345678-1234-4234",
+    "old_sensitive": true,
+    "fixed_sensitive": false
+  },
+  "verification": {
+    "pytest": "192 passed in 10.88s",
+    "ruff": "passed",
+    "mypy": "66 files passed",
+    "foundation": "8/8, zero tenant leaks and deleted hits"
+  }
+}

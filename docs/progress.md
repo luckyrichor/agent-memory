@@ -132,3 +132,10 @@ M5：真实数据库、固定M7响应与同一应用身份下，对No Memory / N
 - OTLP 本地 HTTP 测试与 Docker collector 实际收包通过；临时 collector 已移除，镜像缓存保留，未启用生产报警。
 - Docker 开发 PostgreSQL 原先停止；启动后确认 memories/versions 均为空，先 pg_dump 到忽略的 .local/backups，再迁移至 0007_review_hardening。未安装宿主机 PostgreSQL，未启动常驻 API/worker。
 - 本次结果对应此次修改后的代码。后续提交及 GitHub CI 状态应以实际提交记录为准，不能沿用旧 W10/ZIP 的验收哈希。
+
+
+## 2026-10-08：数字 UUID 敏感误判修复（Codex）
+
+基线 6684532 + 本轮修改。排查 agent-ops-platform 偶发写入 422 时，确定性复现旧数字正则把 UUID `12345678-1234-4234-8123-123456789012` 中 `12345678-1234-4234` 当作银行卡片段。旧失败未保留正文，无法还原其实际随机 ID；此机制已独立复现，能解释相同的 422 故障。
+
+仅在手机号/身份证/银行卡的数字检查中排除完整、独立的 canonical UUID；密钥关键词、常见令牌、邮箱等仍检查原全文。非法 UUID、附加令牌前缀以及 UUID 旁真实卡号/手机号仍拒绝。增加 10 个针对用例。四道门：**192 passed in 10.88s**、ruff 通过、strict mypy **66 文件**、foundation **8/8**，零租户泄漏/删除命中。精确源码 SHA256 与修复前合成证据见 measurements/content-policy-uuid-2026-10-08.json。无数据库迁移、无模型调用或常驻服务变更；ops 集成使用固定数字 UUID 防止回归。
