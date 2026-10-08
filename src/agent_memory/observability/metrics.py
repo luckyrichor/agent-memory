@@ -48,6 +48,12 @@ def set_meter_provider(provider: MeterProvider | None) -> None:
 
 
 def _reader(exporter: str, interval_ms: int) -> MetricReader:
+    if exporter == "otlp":
+        from opentelemetry.exporter.otlp.proto.http.metric_exporter import OTLPMetricExporter
+
+        return PeriodicExportingMetricReader(
+            OTLPMetricExporter(), export_interval_millis=interval_ms
+        )
     if exporter != "console":
         raise ValueError(f"unknown metrics exporter {exporter!r}")
     return PeriodicExportingMetricReader(
@@ -146,3 +152,11 @@ def record_operation(*, action: str, decision: str, reason_code: str) -> None:
 
 def record_job(*, outcome: str, reason_code: str) -> None:
     _instruments.jobs.add(1, sanitize({"outcome": outcome, "reason_code": reason_code}))
+
+
+def record_queue_snapshot(counts: dict[str, int], oldest_age: float) -> None:
+    meter = _instruments._get_meter()
+    depth = meter.create_gauge("agent_memory.queue.depth", unit="1")
+    for status in ("pending", "running", "retry_wait", "dead", "succeeded"):
+        depth.set(counts.get(status, 0), sanitize({"outcome": status}))
+    meter.create_gauge("agent_memory.queue.oldest_age", unit="s").set(oldest_age)

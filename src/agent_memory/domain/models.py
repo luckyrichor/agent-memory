@@ -50,8 +50,12 @@ class MemoryVersion:
     verification_status: VerificationStatus
     created_at: datetime
 
+    reason: str | None = None
+
     def __post_init__(self) -> None:
-        object.__setattr__(self, "structured_content", MappingProxyType(dict(self.structured_content)))
+        object.__setattr__(
+            self, "structured_content", MappingProxyType(dict(self.structured_content))
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -67,6 +71,7 @@ class Memory:
     created_at: datetime
     updated_at: datetime
     disabled_at: datetime | None = None
+    successor_id: UUID | None = None
 
     @classmethod
     def create(
@@ -120,6 +125,7 @@ class Memory:
         content: str,
         expected_revision: int,
         now: datetime,
+        reason: str | None = None,
     ) -> tuple["Memory", MemoryVersion]:
         if expected_revision != self.revision:
             raise RevisionConflict(
@@ -141,6 +147,7 @@ class Memory:
             authority_level=AuthorityLevel.USER_CONFIRMED,
             verification_status=VerificationStatus.VERIFIED,
             created_at=now,
+            reason=reason,
         )
         return (
             replace(
@@ -152,7 +159,9 @@ class Memory:
             version,
         )
 
-    def disable(self, status: MemoryStatus, now: datetime) -> "Memory":
+    def disable(
+        self, status: MemoryStatus, now: datetime, successor_id: UUID | None = None
+    ) -> "Memory":
         allowed = {
             MemoryStatus.SUPERSEDED,
             MemoryStatus.INVALIDATED,
@@ -161,6 +170,14 @@ class Memory:
         }
         if self.status is MemoryStatus.DELETED:
             raise InvalidStatusTransition("deleted memory is terminal")
+        if status is MemoryStatus.ACTIVE and self.status is MemoryStatus.ARCHIVED:
+            if self.successor_id is not None:
+                raise InvalidStatusTransition("superseded memory cannot be restored")
+            return replace(
+                self, status=status, revision=self.revision + 1, updated_at=now, disabled_at=None
+            )
+        if status is MemoryStatus.SUPERSEDED and successor_id is None:
+            raise InvalidStatusTransition("successor required")
         if status not in allowed:
             raise InvalidStatusTransition(f"cannot disable memory with status {status.value}")
         return replace(
@@ -169,4 +186,5 @@ class Memory:
             revision=self.revision + 1,
             updated_at=now,
             disabled_at=now,
+            successor_id=successor_id or self.successor_id,
         )

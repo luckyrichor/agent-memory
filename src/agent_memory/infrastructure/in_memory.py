@@ -1,4 +1,6 @@
+from collections.abc import Callable
 from dataclasses import replace
+from datetime import UTC, datetime, timedelta
 from uuid import UUID
 
 from agent_memory.application.ports import (
@@ -22,7 +24,14 @@ class InMemoryMemoryRepository:
         self._records[(tenant_id, memory.memory_id)] = MemoryRecord(memory, (version,))
 
     async def get(self, tenant_id: UUID, memory_id: UUID) -> MemoryRecord | None:
-        return self._records.get((tenant_id, memory_id))
+        record = self._records.get((tenant_id, memory_id))
+        return replace(record, versions=(record.current_version,)) if record else None
+
+    async def versions(
+        self, tenant_id: UUID, memory_id: UUID, limit: int, offset: int
+    ) -> tuple[MemoryVersion, ...]:
+        record = self._records.get((tenant_id, memory_id))
+        return record.versions[offset : offset + limit] if record else ()
 
     async def append_version(
         self,
@@ -59,7 +68,9 @@ class InMemoryMemoryRepository:
 
 
 class InMemoryIdempotencyRepository:
-    def __init__(self) -> None:
+    def __init__(self, now: Callable[[], datetime] | None = None) -> None:
+        self._now = now or (lambda: datetime.now(UTC))
+        self._created: dict[tuple[UUID, str], datetime] = {}
         self._records: dict[tuple[UUID, str], IdempotencyRecord] = {}
 
     async def lock(self, tenant_id: UUID, key: str) -> None:
@@ -67,10 +78,15 @@ class InMemoryIdempotencyRepository:
         pass
 
     async def get(self, tenant_id: UUID, key: str) -> IdempotencyRecord | None:
-        return self._records.get((tenant_id, key))
+        identity = (tenant_id, key)
+        if identity in self._created and self._created[identity] <= self._now() - timedelta(days=7):
+            self._records.pop(identity, None)
+            self._created.pop(identity, None)
+        return self._records.get(identity)
 
     async def save(self, tenant_id: UUID, key: str, record: IdempotencyRecord) -> None:
         self._records[(tenant_id, key)] = record
+        self._created[(tenant_id, key)] = self._now()
 
 
 class InMemoryAuditSink:

@@ -79,6 +79,7 @@ class MemoryRow(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     disabled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    successor_id: Mapped[UUID | None] = mapped_column(PG_UUID(as_uuid=True))
 
 
 class MemoryVersionRow(Base):
@@ -116,6 +117,8 @@ class MemoryVersionRow(Base):
     authority_level: Mapped[int] = mapped_column(SmallInteger, nullable=False)
     verification_status: Mapped[str] = mapped_column(String(32), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+    reason: Mapped[str | None] = mapped_column(String(512))
 
 
 class IdempotencyRecordRow(Base):
@@ -191,9 +194,7 @@ class OutboxMessageRow(Base):
     __table_args__ = (
         CheckConstraint("status IN ('pending', 'published')", name="ck_outbox_status"),
         CheckConstraint("attempts >= 0", name="ck_outbox_attempts"),
-        UniqueConstraint(
-            "tenant_id", "topic", "aggregate_id", name="uq_outbox_aggregate"
-        ),
+        UniqueConstraint("tenant_id", "topic", "aggregate_id", name="uq_outbox_aggregate"),
         Index(
             "ix_outbox_claimable",
             "tenant_id",
@@ -225,9 +226,7 @@ class JobRow(Base):
         ),
         CheckConstraint("attempts >= 0", name="ck_jobs_attempts"),
         CheckConstraint("max_attempts > 0", name="ck_jobs_max_attempts"),
-        UniqueConstraint(
-            "tenant_id", "job_type", "idempotency_key", name="uq_jobs_idempotency"
-        ),
+        UniqueConstraint("tenant_id", "job_type", "idempotency_key", name="uq_jobs_idempotency"),
         Index(
             "ix_jobs_claimable",
             "tenant_id",
@@ -284,9 +283,13 @@ class EvidenceRow(Base):
 
 class MemoryEmbeddingRow(Base):
     __tablename__ = "memory_embeddings"
-    __table_args__ = (ForeignKeyConstraint(
-        ["tenant_id", "memory_version_id"],
-        ["memory_versions.tenant_id", "memory_versions.memory_version_id"], ondelete="CASCADE"),)
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["tenant_id", "memory_version_id"],
+            ["memory_versions.tenant_id", "memory_versions.memory_version_id"],
+            ondelete="CASCADE",
+        ),
+    )
     tenant_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True)
     memory_version_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True)
     model: Mapped[str] = mapped_column(String(255), nullable=False)

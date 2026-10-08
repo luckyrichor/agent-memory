@@ -36,7 +36,7 @@ class CorrectMemoryRequest(BaseModel):
 
     expected_revision: int
     content: str
-    reason: str
+    reason: str = Field(min_length=1, max_length=512)
 
 
 class MemoryDetailResponse(BaseModel):
@@ -56,6 +56,8 @@ class VersionResponse(BaseModel):
     version_id: UUID
     version_number: int
     content: str
+
+    reason: str | None = None
 
 
 class VersionListResponse(BaseModel):
@@ -110,6 +112,19 @@ class DeletionResponse(BaseModel):
     memory_id: UUID
     status: str
     retrieval_disabled: bool
+
+
+class SupersedeRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    expected_revision: int
+    successor_id: UUID
+
+
+class LifecycleResponse(BaseModel):
+    memory_id: UUID
+    status: MemoryStatus
+    revision: int
+    successor_id: UUID | None = None
 
 
 class LifecycleRequest(BaseModel):

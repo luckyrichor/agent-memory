@@ -19,6 +19,10 @@ def configure_observability(settings: Settings) -> None:
         level=settings.log_level,
         json_output=settings.log_json,
     )
-    configure_tracing(service_name=settings.service_name, exporter=settings.trace_exporter)
+    configure_tracing(
+        service_name=settings.service_name,
+        exporter=settings.trace_exporter,
+        sample_ratio=settings.trace_sample_ratio,
+    )
     configure_metrics(service_name=settings.service_name, exporter=settings.metrics_exporter)
     reset_instruments()

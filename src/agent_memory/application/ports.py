@@ -33,12 +33,18 @@ class AuditEntry:
     decision: str
     reason_code: str
     resource_id: UUID | None
+    reason: str | None = None
+    successor_id: UUID | None = None
 
 
 class MemoryRepository(Protocol):
     async def add(self, tenant_id: UUID, memory: Memory, version: MemoryVersion) -> None: ...
 
     async def get(self, tenant_id: UUID, memory_id: UUID) -> MemoryRecord | None: ...
+
+    async def versions(
+        self, tenant_id: UUID, memory_id: UUID, limit: int, offset: int
+    ) -> tuple[MemoryVersion, ...]: ...
 
     async def append_version(
         self,

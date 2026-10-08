@@ -1,0 +1,17 @@
+[Unit]
+Description=Agent Memory embedding tenant %i
+After=network-online.target docker.service
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/project/WorkPlan/agent-memory
+EnvironmentFile=/etc/agent-memory/%i.env
+ExecStart=/home/ubuntu/project/WorkPlan/agent-memory/.venv/bin/python -m agent_memory.workers.embedding work --tenant-id %i --worker-id embedding-%i
+Restart=on-failure
+RestartSec=5
+KillSignal=SIGTERM
+TimeoutStopSec=60
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

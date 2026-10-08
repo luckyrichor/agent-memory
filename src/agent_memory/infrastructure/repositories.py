@@ -1,10 +1,10 @@
 import hashlib
 from collections.abc import Callable
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Any, cast
 from uuid import UUID
 
-from sqlalchemy import CursorResult, select, text, update
+from sqlalchemy import CursorResult, delete, select, text, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from agent_memory.application.commands import MemoryResult
@@ -50,6 +50,7 @@ class PostgresMemoryRepository:
                 .where(
                     MemoryVersionRow.tenant_id == tenant_id,
                     MemoryVersionRow.memory_id == memory_id,
+                    MemoryVersionRow.memory_version_id == memory_row.current_version_id,
                 )
                 .order_by(MemoryVersionRow.version_number)
             )
@@ -58,6 +59,18 @@ class PostgresMemoryRepository:
             memory=self._memory_domain(memory_row),
             versions=tuple(self._version_domain(row) for row in version_rows),
         )
+
+    async def versions(
+        self, tenant_id: UUID, memory_id: UUID, limit: int, offset: int
+    ) -> tuple[MemoryVersion, ...]:
+        rows = await self._session.scalars(
+            select(MemoryVersionRow)
+            .where(MemoryVersionRow.tenant_id == tenant_id, MemoryVersionRow.memory_id == memory_id)
+            .order_by(MemoryVersionRow.version_number)
+            .limit(limit)
+            .offset(offset)
+        )
+        return tuple(self._version_domain(row) for row in rows)
 
     async def append_version(
         self,
@@ -107,6 +120,7 @@ class PostgresMemoryRepository:
                     revision=memory.revision,
                     updated_at=memory.updated_at,
                     disabled_at=memory.disabled_at,
+                    successor_id=memory.successor_id,
                 )
             ),
         )
@@ -148,6 +162,7 @@ class PostgresMemoryRepository:
             created_at=memory.created_at,
             updated_at=memory.updated_at,
             disabled_at=memory.disabled_at,
+            successor_id=memory.successor_id,
         )
 
     @staticmethod
@@ -165,6 +180,7 @@ class PostgresMemoryRepository:
             authority_level=int(version.authority_level),
             verification_status=version.verification_status.value,
             created_at=version.created_at,
+            reason=version.reason,
         )
 
     @staticmethod
@@ -187,6 +203,7 @@ class PostgresMemoryRepository:
             created_at=row.created_at,
             updated_at=row.updated_at,
             disabled_at=row.disabled_at,
+            successor_id=row.successor_id,
         )
 
     @staticmethod
@@ -203,6 +220,7 @@ class PostgresMemoryRepository:
             authority_level=AuthorityLevel(row.authority_level),
             verification_status=VerificationStatus(row.verification_status),
             created_at=row.created_at,
+            reason=row.reason,
         )
 
 
@@ -219,6 +237,13 @@ class PostgresIdempotencyRepository:
         )
 
     async def get(self, tenant_id: UUID, key: str) -> IdempotencyRecord | None:
+        await self._session.execute(
+            delete(IdempotencyRecordRow).where(
+                IdempotencyRecordRow.tenant_id == tenant_id,
+                IdempotencyRecordRow.idempotency_key == key,
+                IdempotencyRecordRow.created_at <= self._now() - timedelta(days=7),
+            )
+        )
         row = await self._session.scalar(
             select(IdempotencyRecordRow).where(
                 IdempotencyRecordRow.tenant_id == tenant_id,
@@ -278,7 +303,10 @@ class PostgresAuditSink:
                 decision=entry.decision,
                 reason_code=entry.reason_code,
                 resource_id=entry.resource_id,
-                metadata_json={},
+                metadata_json={
+                    **({"reason": entry.reason} if entry.reason is not None else {}),
+                    **({"successor_id": str(entry.successor_id)} if entry.successor_id else {}),
+                },
                 occurred_at=self._now(),
             )
         )

@@ -154,7 +154,9 @@ async def test_correction_creates_new_version_without_overwriting_original() -> 
     record = await repository.get(TENANT_ID, created.memory_id)
     assert record is not None
     assert corrected.revision == 2
-    assert [version.content for version in record.versions] == [
+    assert [
+        version.content for version in await repository.versions(TENANT_ID, MEMORY_ID, 10, 0)
+    ] == [
         "项目 A 只能使用 Java 17",
         "项目 A 已升级为 Java 21",
     ]
@@ -186,6 +188,7 @@ async def test_deleted_memory_is_immediately_excluded_from_active_reads() -> Non
 @pytest.mark.asyncio
 async def test_delete_replay_has_one_transition_and_never_bypasses_authorization() -> None:
     from dataclasses import replace
+
     service, repository, _ = make_service()
     created = await service.remember(workspace_command(), principal())
     command = DisableMemoryCommand(created.memory_id, 1, MemoryStatus.DELETED, "delete-unit")

@@ -1,4 +1,5 @@
 from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from datetime import UTC, datetime
 from typing import Annotated
 from uuid import uuid4
@@ -18,6 +19,7 @@ from agent_memory.application.explicit_memory import ExplicitMemoryService
 from agent_memory.application.retrieval import MemoryRetriever
 from agent_memory.config import Settings
 from agent_memory.domain.errors import (
+    ContentRejected,
     EventIdempotencyConflict,
     EventScopeForbidden,
     EventSequenceConflict,
@@ -35,6 +37,7 @@ from agent_memory.infrastructure.db import (
     session_for_principal,
 )
 from agent_memory.infrastructure.event_repositories import PostgresEventIngestionRepository
+from agent_memory.infrastructure.query_vectors import QueryVectors
 from agent_memory.infrastructure.repositories import (
     PostgresAuditSink,
     PostgresIdempotencyRepository,
@@ -46,7 +49,17 @@ from agent_memory.observability.setup import configure_observability
 
 def create_app(settings: Settings) -> FastAPI:
     configure_observability(settings)
-    app = FastAPI(title="Agent Memory", version="1.0.0")
+    vectors = QueryVectors(settings)
+
+    @asynccontextmanager
+    async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+        try:
+            yield
+        finally:
+            await vectors.aclose()
+            await engine.dispose()
+
+    app = FastAPI(title="Agent Memory", version="1.0.0", lifespan=lifespan)
     app.add_middleware(BaseHTTPMiddleware, dispatch=observe_request)
     engine = create_engine(settings.database_url)
     sessions = create_session_factory(engine)
@@ -101,7 +114,9 @@ def create_app(settings: Settings) -> FastAPI:
             },
         )
 
-    def domain_error_response(request: Request, code: str, message: str, status_code: int) -> JSONResponse:
+    def domain_error_response(
+        request: Request, code: str, message: str, status_code: int
+    ) -> JSONResponse:
         return JSONResponse(
             status_code=status_code,
             content={
@@ -113,6 +128,10 @@ def create_app(settings: Settings) -> FastAPI:
                 }
             },
         )
+
+    @app.exception_handler(ContentRejected)
+    async def content_rejected(request: Request, error: ContentRejected) -> JSONResponse:
+        return domain_error_response(request, "CONTENT_POLICY_REJECTED", "Content rejected.", 422)
 
     @app.exception_handler(MemoryNotFound)
     async def memory_not_found(request: Request, error: MemoryNotFound) -> JSONResponse:
@@ -192,8 +211,12 @@ def create_app(settings: Settings) -> FastAPI:
 
     @app.exception_handler(InvalidStatusTransition)
     async def invalid_status(request: Request, error: InvalidStatusTransition) -> JSONResponse:
-        return domain_error_response(request, "INVALID_STATUS_TRANSITION",
-                                     "The memory state does not allow this operation.", 409)
+        return domain_error_response(
+            request,
+            "INVALID_STATUS_TRANSITION",
+            "The memory state does not allow this operation.",
+            409,
+        )
 
     async def retrieval_dependency(
         principal: Annotated[RequestPrincipal, Depends(resolver)],
@@ -202,7 +225,7 @@ def create_app(settings: Settings) -> FastAPI:
             yield MemoryRetriever(PostgresCandidateProvider(session))
 
     app.include_router(create_router(resolver, service_dependency))
-    app.include_router(create_retrieval_router(resolver, retrieval_dependency, settings))
+    app.include_router(create_retrieval_router(resolver, retrieval_dependency, settings, vectors))
     app.include_router(create_event_router(resolver, event_service_dependency))
     return app
 

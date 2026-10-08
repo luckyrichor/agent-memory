@@ -119,3 +119,16 @@ M7：增加LLMExtractor与dispatch/work共同工厂，原ExtractionWorker不改�
 M5：真实数据库、固定M7响应与同一应用身份下，对No Memory / Naive Vector / 系统作3个合成原生C++构建故障回放；g++实际编译与程序执行，旧知识选择不兼容的header API。固定向量和真实Ark向量两组结果均0/3、1/3、3/3。初验通过，不能外推真实用户工程或一般LLM收益。M6后续仍未做；不启动常驻API/worker。
 
 最终四道门：139 pytest passed in 9.39s；ruff通过，strict mypy57文件通过；foundation8/8，0租户泄漏/0删除命中。来源agent-memory@c5a067a + 本轮工作树；精确SHA256见docs/measurements/w8-w10-source.json，边界见docs/llm-extraction-and-baselines.md。
+
+
+## 2026-10-08：17 项外部评审修复
+
+详见 [逐项结果与运维说明](review-hardening-2026-10-08.md)。修改涉及提取重试/回退、中文 bigram 索引、纠正原因、向量错误分类、队列运维、SQL 分页、7 天幂等保留、共享客户端、健康检查/超时预算、查询缓存、生命周期权限/继任关系、SDK、OTLP 与独立评测。SIGTERM 提取 worker 原已有，本次补齐向量 worker。
+
+- 本地全量 `uv run pytest -q`：**182 passed in 11.00s**；ruff、strict mypy（66 文件）通过；foundation **8/8**，tenant leaks=0、deleted hits=0。
+- 真实 key 调用 doubao-seed-2-0-mini-260428，12 个构造事件的候选有无及关键词覆盖 12/12；不是生产质量评分。
+- 公平向量基线：朴素 2/4，增加生命周期过滤 4/4，系统 4/4；尚无融合优于过滤向量的证据。
+- 实际 PostgreSQL 中文关键词评测：7 正例 Recall@3/Hit@1=1.0，1 负例为空；6 条人工构造记忆，不包含向量语义质量。
+- OTLP 本地 HTTP 测试与 Docker collector 实际收包通过；临时 collector 已移除，镜像缓存保留，未启用生产报警。
+- Docker 开发 PostgreSQL 原先停止；启动后确认 memories/versions 均为空，先 pg_dump 到忽略的 .local/backups，再迁移至 0007_review_hardening。未安装宿主机 PostgreSQL，未启动常驻 API/worker。
+- 本次结果对应此次修改后的代码。后续提交及 GitHub CI 状态应以实际提交记录为准，不能沿用旧 W10/ZIP 的验收哈希。

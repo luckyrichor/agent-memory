@@ -1,0 +1,45 @@
+{
+  "dataset": "retrieval-zh-v1",
+  "queries": 8,
+  "channel": "PostgreSQL Chinese bigram lexical, no vector provider",
+  "recall_at_3": 1.0,
+  "hit_at_1": 1.0,
+  "limits": "small constructed keyword dataset; no general semantic-quality claim",
+  "cases": [
+    {
+      "query": "配置文件",
+      "recall_at_3": 1.0,
+      "hit_at_1": 1
+    },
+    {
+      "query": "Java 21",
+      "recall_at_3": 1.0,
+      "hit_at_1": 1
+    },
+    {
+      "query": "连接池",
+      "recall_at_3": 1.0,
+      "hit_at_1": 1
+    },
+    {
+      "query": "旧缓存",
+      "recall_at_3": 1.0,
+      "hit_at_1": 1
+    },
+    {
+      "query": "退避重试",
+      "recall_at_3": 1.0,
+      "hit_at_1": 1
+    },
+    {
+      "query": "租约到期",
+      "recall_at_3": 1.0,
+      "hit_at_1": 1
+    },
+    {
+      "query": "任务",
+      "recall_at_3": 1.0,
+      "hit_at_1": 1
+    }
+  ]
+}

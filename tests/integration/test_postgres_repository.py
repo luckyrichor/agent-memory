@@ -33,6 +33,7 @@ def principal_a() -> RequestPrincipal:
         allowed_workspace_ids=frozenset({"project-a"}),
     )
 
+
 @pytest.fixture(scope="module")
 def migrated_engine(database_url: str) -> Iterator[Engine]:
     config = Config("alembic.ini")
@@ -68,10 +69,8 @@ def test_migration_creates_foundation_schema(migrated_engine: Engine) -> None:
     memory_foreign_keys = inspector.get_foreign_keys("memories")
     assert any(
         foreign_key["referred_table"] == "memory_versions"
-        and foreign_key["constrained_columns"]
-        == ["tenant_id", "memory_id", "current_version_id"]
-        and foreign_key["referred_columns"]
-        == ["tenant_id", "memory_id", "memory_version_id"]
+        and foreign_key["constrained_columns"] == ["tenant_id", "memory_id", "current_version_id"]
+        and foreign_key["referred_columns"] == ["tenant_id", "memory_id", "memory_version_id"]
         for foreign_key in memory_foreign_keys
     )
 
@@ -124,10 +123,11 @@ async def test_postgres_repository_round_trip_and_optimistic_update(
 
     async with session_for_principal(sessions, principal_a()) as session:
         record = await PostgresMemoryRepository(session).get(TENANT_A, MEMORY_ID)
+        versions = await PostgresMemoryRepository(session).versions(TENANT_A, MEMORY_ID, 10, 0)
 
     assert record is not None
     assert record.memory.revision == 2
-    assert [version.content for version in record.versions] == [
+    assert [version.content for version in versions] == [
         "项目 A 使用 Java 17",
         "项目 A 已升级为 Java 21",
     ]

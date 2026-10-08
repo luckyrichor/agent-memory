@@ -180,3 +180,8 @@ M2/M3 与 W4 CI 的最新实际验收见 docs/progress.md（历史 103 tests 基
 ## 2026-10-07状态补充
 
 M7真实LLM候选提炼与M5三组基线工程初验通过。真实模型、敏感检查边界及样本限制见docs/llm-extraction-and-baselines.md；四道门139测试通过。M6未做，未新增常驻服务。
+
+
+## 2026-10-08 评审后状态补充
+
+历史说明保留为当时记录。当前能力和边界以 README 与 docs/review-hardening-2026-10-08.md 为准：提取临时故障先重试；显式命令幂等保留 7 天；0007 提供中文 bigram、纠正 reason、successor 关系；队列 admin 和共享 HTTP、查询缓存、OTLP/采样已实现。生产常驻服务与报警仍未部署。新生命周期权限必须单独授予，supersede 必须传 successor_id；版本历史必须 SQL 分页，不退回全量读取。

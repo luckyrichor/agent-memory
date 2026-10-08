@@ -7,6 +7,8 @@ from datetime import UTC, datetime, timedelta
 from types import FrameType
 from uuid import UUID, uuid4
 
+import httpx
+
 from agent_memory.application.extraction_worker import ExtractionWorker, WorkerResult
 from agent_memory.application.outbox_dispatcher import OutboxDispatcher
 from agent_memory.config import Settings
@@ -23,6 +25,7 @@ from agent_memory.infrastructure.event_repositories import (
 from agent_memory.infrastructure.llm_extractor import build_extractor
 from agent_memory.observability import correlation, get_logger, span
 from agent_memory.observability.setup import configure_observability
+from agent_memory.workers.health import heartbeat
 
 _logger = get_logger("agent_memory.workers.extraction")
 
@@ -41,9 +44,7 @@ def _bounded_integer(minimum: int, maximum: int) -> type[argparse.Action]:
             except ValueError:
                 parser.error(f"{option_string} must be an integer")
             if not minimum <= value <= maximum:
-                parser.error(
-                    f"{option_string} must be between {minimum} and {maximum}"
-                )
+                parser.error(f"{option_string} must be between {minimum} and {maximum}")
             setattr(namespace, self.dest, value)
 
     return BoundedInteger
@@ -70,19 +71,19 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         action=_bounded_integer(1, 100),
     )
 
-    work = subparsers.add_parser("work", help="extract memory candidates from jobs")
-    add_common_arguments(work)
-    work.add_argument("--worker-id", required=True)
+    for name in ("work", "drain"):
+        work = subparsers.add_parser(
+            name, help="extract jobs; drain stops after runnable queue empties"
+        )
+        add_common_arguments(work)
+        work.add_argument("--worker-id", required=True)
 
     return parser.parse_args(argv)
 
 
 def format_worker_result(result: WorkerResult) -> str:
     job_id = str(result.job_id) if result.job_id is not None else "none"
-    return (
-        f"work:job_id={job_id} outcome={result.outcome} "
-        f"reason_code={result.reason_code}"
-    )
+    return f"work:job_id={job_id} outcome={result.outcome} reason_code={result.reason_code}"
 
 
 def _internal_principal(tenant_id: UUID, role: str, permission: str) -> RequestPrincipal:
@@ -133,11 +134,14 @@ async def _run_dispatch(args: argparse.Namespace, stop: asyncio.Event) -> None:
     )
     try:
         while not stop.is_set():
-            with correlation(request_id=str(uuid4()), tenant_id=args.tenant_id), span(
-                "outbox.dispatch",
-                action="outbox.dispatch",
-                tenant_id=args.tenant_id,
-                batch_size=args.batch_size,
+            with (
+                correlation(request_id=str(uuid4()), tenant_id=args.tenant_id),
+                span(
+                    "outbox.dispatch",
+                    action="outbox.dispatch",
+                    tenant_id=args.tenant_id,
+                    batch_size=args.batch_size,
+                ),
             ):
                 async with session_for_principal(sessions, principal) as session:
                     repository = PostgresOutboxRepository(
@@ -156,6 +160,7 @@ async def _run_dispatch(args: argparse.Namespace, stop: asyncio.Event) -> None:
                 count=count,
                 reason_code=reason_code,
             )
+            heartbeat(args.tenant_id, "dispatch", "dispatch", reason_code)
             print(f"dispatch:count={count} reason_code={reason_code}")
             if args.once:
                 break
@@ -169,25 +174,46 @@ async def _run_worker(args: argparse.Namespace, stop: asyncio.Event) -> None:
     configure_observability(settings)
     engine = create_engine(settings.database_url)
     sessions = create_session_factory(engine)
+    http = httpx.AsyncClient(
+        timeout=settings.extraction_timeout_seconds,
+        trust_env=settings.extraction_trust_env,
+        limits=httpx.Limits(max_connections=8, max_keepalive_connections=4),
+    )
+    extractor = build_extractor(settings, http)
     worker = ExtractionWorker(
         PostgresExtractionBackend(
             sessions,
             new_id=uuid4,
             now=lambda: datetime.now(UTC),
+            extractor_version=extractor.version,
         ),
-        build_extractor(settings),
+        extractor,
         now=lambda: datetime.now(UTC),
-        lease_duration=timedelta(seconds=30),
+        lease_duration=timedelta(seconds=settings.worker_lease_seconds),
     )
     try:
         while not stop.is_set():
             with correlation(request_id=str(uuid4()), tenant_id=args.tenant_id):
                 result = await worker.run_once(args.tenant_id, args.worker_id)
+            heartbeat(args.tenant_id, args.worker_id, "extraction", result.reason_code)
             print(format_worker_result(result))
             if args.once:
                 break
+            if args.command == "drain" and result.outcome == "no_job":
+                from agent_memory.infrastructure.queue_admin import PostgresQueueAdmin
+
+                status = await PostgresQueueAdmin(sessions, args.tenant_id).status(
+                    job_type="extract_event", version=extractor.version
+                )
+                counts = status["counts"]
+                if isinstance(counts, dict) and not any(
+                    counts.get(k, 0) for k in ("pending", "retry_wait", "running")
+                ):
+                    print(f"drain: outcome=finished dead_count={counts.get('dead', 0)}")
+                    break
             await _pause(stop, args.poll_seconds)
     finally:
+        await http.aclose()
         await engine.dispose()
 
 

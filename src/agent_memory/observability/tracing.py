@@ -15,10 +15,12 @@ from opentelemetry import trace
 from opentelemetry.sdk.resources import SERVICE_NAME, Resource
 from opentelemetry.sdk.trace import SpanProcessor, TracerProvider
 from opentelemetry.sdk.trace.export import (
+    BatchSpanProcessor,
     ConsoleSpanExporter,
     SimpleSpanProcessor,
     SpanExporter,
 )
+from opentelemetry.sdk.trace.sampling import ParentBased, TraceIdRatioBased
 from opentelemetry.trace import Span, StatusCode
 
 from agent_memory.observability.fields import sanitize
@@ -33,12 +35,15 @@ TRACER_NAME = "agent_memory"
 _provider: TracerProvider | None = None
 
 
-def configure_tracing(*, service_name: str, exporter: str) -> None:
+def configure_tracing(*, service_name: str, exporter: str, sample_ratio: float = 1) -> None:
     """Install a tracer provider.  ``exporter='none'`` keeps tracing inert."""
     if exporter == "none":
         set_tracer_provider(None)
         return
-    provider = TracerProvider(resource=Resource.create({SERVICE_NAME: service_name}))
+    provider = TracerProvider(
+        resource=Resource.create({SERVICE_NAME: service_name}),
+        sampler=ParentBased(TraceIdRatioBased(sample_ratio)),
+    )
     provider.add_span_processor(_processor(exporter))
     set_tracer_provider(provider)
 
@@ -50,6 +55,10 @@ def set_tracer_provider(provider: TracerProvider | None) -> None:
 
 
 def _processor(exporter: str) -> SpanProcessor:
+    if exporter == "otlp":
+        from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+
+        return BatchSpanProcessor(OTLPSpanExporter())
     exporters: dict[str, SpanExporter] = {"console": ConsoleSpanExporter()}
     if exporter not in exporters:
         raise ValueError(f"unknown trace exporter {exporter!r}")
@@ -65,7 +74,9 @@ def tracer() -> trace.Tracer:
 @contextmanager
 def span(name: str, **attributes: object) -> Iterator[Span]:
     """Start a span whose attributes are validated against the allow-list."""
-    with tracer().start_as_current_span(name, attributes=sanitize(attributes)) as current:
+    with tracer().start_as_current_span(
+        name, attributes=sanitize(attributes), record_exception=False, set_status_on_exception=False
+    ) as current:
         try:
             yield current
         except Exception as error:

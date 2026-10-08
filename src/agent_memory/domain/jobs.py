@@ -38,8 +38,7 @@ class Job:
 
     def claim(self, worker_id: str, now: datetime, lease_duration: timedelta) -> "Job":
         eligible = (
-            self.status in {JobStatus.PENDING, JobStatus.RETRY_WAIT}
-            and self.available_at <= now
+            self.status in {JobStatus.PENDING, JobStatus.RETRY_WAIT} and self.available_at <= now
         ) or (
             self.status is JobStatus.RUNNING
             and self.leased_until is not None
@@ -78,6 +77,7 @@ class Job:
         error_code: str,
         *,
         retryable: bool,
+        retry_after: timedelta | None = None,
     ) -> "Job":
         self._require_lease(worker_id, now)
         dead = not retryable or self.attempts >= self.max_attempts
@@ -85,7 +85,10 @@ class Job:
             self,
             status=JobStatus.DEAD if dead else JobStatus.RETRY_WAIT,
             available_at=(
-                now if dead else now + timedelta(seconds=min(2**self.attempts, 300))
+                now
+                if dead
+                else now
+                + max(timedelta(seconds=min(2**self.attempts, 300)), retry_after or timedelta(0))
             ),
             leased_until=None,
             lease_owner=None,

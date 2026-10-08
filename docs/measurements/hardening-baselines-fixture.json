@@ -1,0 +1,51 @@
+{
+  "benchmark": "synthetic-build-lifecycle-v1",
+  "environment": "PostgreSQL16+pgvector, native C++ compile and run",
+  "cases": [
+    {
+      "case": "active",
+      "success": {
+        "filtered_vector": true,
+        "no_memory": false,
+        "naive_vector": true,
+        "system": true
+      }
+    },
+    {
+      "case": "ordinary",
+      "success": {
+        "filtered_vector": true,
+        "no_memory": false,
+        "naive_vector": true,
+        "system": true
+      }
+    },
+    {
+      "case": "corrected",
+      "success": {
+        "filtered_vector": true,
+        "no_memory": false,
+        "naive_vector": false,
+        "system": true
+      }
+    },
+    {
+      "case": "deleted",
+      "success": {
+        "filtered_vector": true,
+        "no_memory": false,
+        "naive_vector": false,
+        "system": true
+      }
+    }
+  ],
+  "embedding": "fixed-vector-fixture",
+  "extraction": "M7 adapter with fixed JSON responses, then explicit user confirmation",
+  "successful_replays": {
+    "no_memory": 0,
+    "naive_vector": 2,
+    "filtered_vector": 4,
+    "system": 4
+  },
+  "limits": "4 constructed cases incl ordinary; filtered-vector ablation; not general model-quality evidence"
+}

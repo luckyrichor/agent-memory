@@ -2,7 +2,7 @@ from collections.abc import Callable
 from datetime import datetime, timedelta
 from uuid import UUID
 
-from sqlalchemy import and_, or_, select
+from sqlalchemy import and_, or_, select, true, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
@@ -77,8 +77,7 @@ class PostgresEventIngestionRepository:
                 )
             ).scalars()
             by_sequence = {
-                (row.session_id, row.sequence_number): row.idempotency_key
-                for row in sequence_rows
+                (row.session_id, row.sequence_number): row.idempotency_key for row in sequence_rows
             }
 
         results: list[EventIngestionResult] = []
@@ -137,9 +136,7 @@ class PostgresEventIngestionRepository:
             by_idempotency[draft.idempotency_key] = event_row
             by_sequence[sequence_key] = draft.idempotency_key
             new_rows.extend((event_row, outbox_row))
-            results.append(
-                EventIngestionResult(event_id, draft.idempotency_key, "accepted")
-            )
+            results.append(EventIngestionResult(event_id, draft.idempotency_key, "accepted"))
 
         self._session.add_all(new_rows)
         try:
@@ -189,9 +186,7 @@ class PostgresOutboxRepository:
             ).scalars()
         )
         for message in messages:
-            idempotency_key = (
-                f"extract_event:{message.aggregate_id}:{extractor_version}"
-            )
+            idempotency_key = f"extract_event:{message.aggregate_id}:{extractor_version}"
             await self._session.execute(
                 insert(JobRow)
                 .values(
@@ -213,9 +208,7 @@ class PostgresOutboxRepository:
                     created_at=now,
                     updated_at=now,
                 )
-                .on_conflict_do_nothing(
-                    index_elements=["tenant_id", "job_type", "idempotency_key"]
-                )
+                .on_conflict_do_nothing(index_elements=["tenant_id", "job_type", "idempotency_key"])
             )
             message.status = "published"
             message.attempts += 1
@@ -235,6 +228,7 @@ class PostgresJobQueue:
         now: datetime,
         lease_duration: timedelta,
         job_type: str = "extract_event",
+        extractor_version: str | None = None,
     ) -> Job | None:
         row = (
             await self._session.execute(
@@ -242,6 +236,9 @@ class PostgresJobQueue:
                 .where(
                     JobRow.tenant_id == tenant_id,
                     JobRow.job_type == job_type,
+                    JobRow.payload["extractor_version"].astext == extractor_version
+                    if extractor_version is not None
+                    else true(),
                     or_(
                         and_(
                             JobRow.status.in_(["pending", "retry_wait"]),
@@ -301,6 +298,7 @@ class PostgresJobQueue:
         error_code: str,
         *,
         retryable: bool,
+        retry_after: timedelta | None = None,
     ) -> Job:
         row = await self._locked_row(tenant_id, job_id)
         failed = self._to_domain(row).fail(
@@ -308,6 +306,7 @@ class PostgresJobQueue:
             now,
             error_code,
             retryable=retryable,
+            retry_after=retry_after,
         )
         self._apply(row, failed)
         await self._session.flush()
@@ -362,8 +361,10 @@ class PostgresExtractionBackend:
         *,
         new_id: Callable[[], UUID],
         now: Callable[[], datetime],
+        extractor_version: str | None = None,
     ) -> None:
         self._sessions = sessions
+        self._extractor_version = extractor_version
         self._new_id = new_id
         self._now = now
 
@@ -380,6 +381,7 @@ class PostgresExtractionBackend:
                 worker_id,
                 now,
                 lease_duration,
+                extractor_version=self._extractor_version,
             )
 
     async def load_event(self, tenant_id: UUID, event_id: UUID) -> Event:
@@ -450,6 +452,11 @@ class PostgresExtractionBackend:
                         created_at=now,
                     )
                 )
+            await session.execute(
+                update(JobRow)
+                .where(JobRow.tenant_id == tenant_id, JobRow.job_id == job.job_id)
+                .values(payload=dict(job.payload))
+            )
             await PostgresJobQueue(session).succeed(
                 tenant_id,
                 job.job_id,
@@ -466,6 +473,7 @@ class PostgresExtractionBackend:
         error_code: str,
         *,
         retryable: bool,
+        retry_after: timedelta | None = None,
     ) -> Job:
         async with session_for_principal(self._sessions, self._principal(tenant_id)) as session:
             return await PostgresJobQueue(session).fail(
@@ -475,6 +483,7 @@ class PostgresExtractionBackend:
                 now,
                 error_code,
                 retryable=retryable,
+                retry_after=retry_after,
             )
 
     @staticmethod

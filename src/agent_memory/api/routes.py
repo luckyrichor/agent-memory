@@ -9,9 +9,11 @@ from agent_memory.api.schemas import (
     DeletionRequest,
     DeletionResponse,
     LifecycleRequest,
+    LifecycleResponse,
     MemoryDetailResponse,
     MemoryResponse,
     RememberRequest,
+    SupersedeRequest,
     VersionListResponse,
     VersionResponse,
 )
@@ -100,17 +102,20 @@ def create_router(
         limit: Annotated[int, Query(ge=1, le=100)] = 20,
         offset: Annotated[int, Query(ge=0)] = 0,
     ) -> VersionListResponse:
-        record = await service.get_active(memory_id, principal)
+        versions, next_offset = await service.versions(memory_id, principal, limit, offset)
         return VersionListResponse(
             items=[
                 VersionResponse(
                     version_id=version.version_id,
                     version_number=version.version_number,
                     content=version.content,
+                    reason=version.reason,
                 )
-                for version in record.versions[offset:offset + limit]
-            ], limit=limit, offset=offset,
-            next_offset=offset + limit if offset + limit < len(record.versions) else None,
+                for version in versions
+            ],
+            limit=limit,
+            offset=offset,
+            next_offset=next_offset,
         )
 
     @router.post(
@@ -181,22 +186,85 @@ def create_router(
         service: Annotated[ExplicitMemoryService, Depends(service_dependency)],
     ) -> MemoryResponse:
         result = await service.disable(
-            DisableMemoryCommand(memory_id, body.expected_revision, MemoryStatus.ARCHIVED), principal,
+            DisableMemoryCommand(memory_id, body.expected_revision, MemoryStatus.ARCHIVED),
+            principal,
         )
-        return MemoryResponse(tenant_id=principal.tenant_id, memory_id=result.memory_id, version_id=result.version_id,
-            revision=result.revision, status=result.status)
+        return MemoryResponse(
+            tenant_id=principal.tenant_id,
+            memory_id=result.memory_id,
+            version_id=result.version_id,
+            revision=result.revision,
+            status=result.status,
+        )
 
     @router.post("/memories/{memory_id}/supersede", response_model=MemoryResponse)
     async def supersede_memory(
         memory_id: UUID,
-        body: LifecycleRequest,
+        body: SupersedeRequest,
         principal: Annotated[RequestPrincipal, Depends(principal_dependency)],
         service: Annotated[ExplicitMemoryService, Depends(service_dependency)],
     ) -> MemoryResponse:
         result = await service.disable(
-            DisableMemoryCommand(memory_id, body.expected_revision, MemoryStatus.SUPERSEDED), principal,
+            DisableMemoryCommand(
+                memory_id,
+                body.expected_revision,
+                MemoryStatus.SUPERSEDED,
+                successor_id=body.successor_id,
+            ),
+            principal,
         )
-        return MemoryResponse(tenant_id=principal.tenant_id, memory_id=result.memory_id, version_id=result.version_id,
-            revision=result.revision, status=result.status)
+        return MemoryResponse(
+            tenant_id=principal.tenant_id,
+            memory_id=result.memory_id,
+            version_id=result.version_id,
+            revision=result.revision,
+            status=result.status,
+        )
+
+    for action, target in (
+        ("invalidate", MemoryStatus.INVALIDATED),
+        ("restore", MemoryStatus.ACTIVE),
+    ):
+
+        def endpoint_for(target: MemoryStatus) -> Callable[..., Awaitable[MemoryResponse]]:
+            async def lifecycle(
+                memory_id: UUID,
+                body: LifecycleRequest,
+                principal: Annotated[RequestPrincipal, Depends(principal_dependency)],
+                service: Annotated[ExplicitMemoryService, Depends(service_dependency)],
+            ) -> MemoryResponse:
+                result = await service.disable(
+                    DisableMemoryCommand(memory_id, body.expected_revision, target), principal
+                )
+                return MemoryResponse(
+                    tenant_id=principal.tenant_id,
+                    memory_id=result.memory_id,
+                    version_id=result.version_id,
+                    revision=result.revision,
+                    status=result.status,
+                )
+
+            return lifecycle
+
+        router.add_api_route(
+            f"/memories/{{memory_id}}/{action}",
+            endpoint_for(target),
+            methods=["POST"],
+            response_model=MemoryResponse,
+        )
+
+    @router.get("/memories/{memory_id}/lifecycle", response_model=LifecycleResponse)
+    async def lifecycle_metadata(
+        memory_id: UUID,
+        principal: Annotated[RequestPrincipal, Depends(principal_dependency)],
+        service: Annotated[ExplicitMemoryService, Depends(service_dependency)],
+    ) -> LifecycleResponse:
+        memory = await service.lifecycle(memory_id, principal)
+        return LifecycleResponse(
+            memory_id=memory.memory_id,
+            status=memory.status,
+            revision=memory.revision,
+            successor_id=memory.successor_id,
+        )
 
     return router

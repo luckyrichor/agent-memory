@@ -1,0 +1,14 @@
+# Prometheus rules after connecting the Collector to a Prometheus exporter.
+# debug-only sample does not supply a Prometheus backend or dispatch alerts.
+groups:
+  - name: agent-memory
+    rules:
+      - alert: MemoryProviderCredentialsInvalid
+        expr: increase(agent_memory_worker_jobs_total{reason_code="PROVIDER_CONFIGURATION_ERROR"}[5m]) > 0
+        for: 0m
+      - alert: MemoryDeadJobs
+        expr: agent_memory_queue_depth{outcome="dead"} > 0
+        for: 5m
+      - alert: MemoryQueueStale
+        expr: agent_memory_queue_oldest_age > 300
+        for: 5m

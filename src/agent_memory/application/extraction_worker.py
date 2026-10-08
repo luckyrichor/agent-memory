@@ -1,11 +1,16 @@
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime, timedelta
 from typing import Literal, Protocol
 from uuid import UUID
 
 from agent_memory.application.extraction import MemoryExtractor
-from agent_memory.domain.errors import InvalidEvent, LeaseLost, RetryableExtractionError
+from agent_memory.domain.errors import (
+    ExtractorVersionMismatch,
+    InvalidEvent,
+    LeaseLost,
+    RetryableExtractionError,
+)
 from agent_memory.domain.events import Event, MemoryCandidate
 from agent_memory.domain.jobs import Job, JobStatus
 from agent_memory.observability import annotate, get_logger, record_job, span
@@ -104,12 +109,32 @@ class ExtractionWorker:
         try:
             event_id = UUID(str(job.payload["event_id"]))
             if job.payload.get("extractor_version") != self._extractor.version:
-                raise InvalidEvent("extractor version mismatch")
+                raise ExtractorVersionMismatch("EXTRACTOR_VERSION_MISMATCH")
             event = await self._backend.load_event(tenant_id, event_id)
-            candidates = await self._extractor.extract(event)
+            reason = "JOB_SUCCEEDED"
+            try:
+                candidates = await self._extractor.extract(event)
+            except RetryableExtractionError:
+                fallback = getattr(self._extractor, "fallback", None)
+                if job.attempts < job.max_attempts or fallback is None:
+                    raise
+                candidates = await fallback.extract(event)
+                if not candidates:
+                    raise
+                reason = "RULE_FALLBACK_EXHAUSTED"
             annotate(event_id=event_id, candidate_count=len(candidates))
             if any(candidate.scope != event.draft.scope for candidate in candidates):
                 raise InvalidEvent("candidate scope expansion")
+            if reason == "JOB_SUCCEEDED":
+                reason = getattr(self._extractor, "last_reason", reason)
+            job = replace(
+                job,
+                payload={
+                    **job.payload,
+                    "extraction_reason": reason,
+                    "extraction_failure": getattr(self._extractor, "last_failure", "NONE"),
+                },
+            )
             await self._backend.commit_candidates(
                 tenant_id,
                 job,
@@ -118,29 +143,29 @@ class ExtractionWorker:
                 candidates,
                 self._now(),
             )
-            return WorkerResult(job.job_id, "succeeded", "JOB_SUCCEEDED")
+            return WorkerResult(job.job_id, "succeeded", reason)
         except LeaseLost:
             return WorkerResult(job.job_id, "lease_lost", "LEASE_LOST")
-        except (InvalidEvent, KeyError, TypeError, ValueError):
-            await self._backend.fail_job(
-                tenant_id,
-                job.job_id,
-                worker_id,
-                self._now(),
-                "INVALID_EVENT_FOR_EXTRACTION",
-                retryable=False,
+        except (InvalidEvent, KeyError, TypeError, ValueError) as error:
+            code = (
+                "EXTRACTOR_VERSION_MISMATCH"
+                if isinstance(error, ExtractorVersionMismatch)
+                else "INVALID_EVENT_FOR_EXTRACTION"
             )
-            return WorkerResult(job.job_id, "dead", "INVALID_EVENT_FOR_EXTRACTION")
-        except RetryableExtractionError:
+            return await self._failure(job, tenant_id, worker_id, code, retryable=False)
+        except RetryableExtractionError as error:
+            return await self._failure(job, tenant_id, worker_id, error.code, retryable=True)
+
+    async def _failure(
+        self, job: Job, tenant_id: UUID, worker_id: str, code: str, *, retryable: bool
+    ) -> WorkerResult:
+        try:
             failed = await self._backend.fail_job(
-                tenant_id,
-                job.job_id,
-                worker_id,
-                self._now(),
-                "EXTRACTION_FAILED",
-                retryable=True,
+                tenant_id, job.job_id, worker_id, self._now(), code, retryable=retryable
             )
-            outcome: Literal["retry_wait", "dead"] = (
-                "dead" if failed.status is JobStatus.DEAD else "retry_wait"
-            )
-            return WorkerResult(job.job_id, outcome, "EXTRACTION_FAILED")
+        except LeaseLost:
+            return WorkerResult(job.job_id, "lease_lost", "LEASE_LOST")
+        outcome: Literal["dead", "retry_wait"] = (
+            "dead" if failed.status is JobStatus.DEAD else "retry_wait"
+        )
+        return WorkerResult(job.job_id, outcome, code)

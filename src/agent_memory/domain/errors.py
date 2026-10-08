@@ -31,6 +31,18 @@ class InvalidEvent(MemoryError):
 
 
 class RetryableExtractionError(MemoryError):
+    def __init__(self, code: str = "EXTRACTION_FAILED") -> None:
+        import re
+
+        self.code = code if re.fullmatch(r"[A-Z][A-Z0-9_]{0,63}", code) else "EXTRACTION_FAILED"
+        super().__init__(code)
+
+
+class ExtractorVersionMismatch(InvalidEvent):
+    pass
+
+
+class ContentRejected(MemoryError):
     pass
 
 

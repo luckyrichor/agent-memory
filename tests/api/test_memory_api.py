@@ -30,10 +30,14 @@ def signing_material() -> tuple[str, str]:
         serialization.PrivateFormat.PKCS8,
         serialization.NoEncryption(),
     ).decode()
-    public_pem = private_key.public_key().public_bytes(
-        serialization.Encoding.PEM,
-        serialization.PublicFormat.SubjectPublicKeyInfo,
-    ).decode()
+    public_pem = (
+        private_key.public_key()
+        .public_bytes(
+            serialization.Encoding.PEM,
+            serialization.PublicFormat.SubjectPublicKeyInfo,
+        )
+        .decode()
+    )
     return private_pem, public_pem
 
 
@@ -46,7 +50,15 @@ def bearer_token(private_key: str, *, issuer: str = "memory-test") -> str:
             "sub": str(USER_ID),
             "tenant_id": str(TENANT_ID),
             "roles": ["developer"],
-            "permissions": ["memory:read", "memory:write", "memory:delete"],
+            "permissions": [
+                "memory:read",
+                "memory:write",
+                "memory:delete",
+                "memory:archive",
+                "memory:supersede",
+                "memory:restore",
+                "memory:invalidate",
+            ],
             "allowed_workspace_ids": ["project-a"],
             "iat": now,
             "exp": now + timedelta(minutes=5),
@@ -196,40 +208,164 @@ async def test_sdk_full_lifecycle_and_delete_replays(app_database_url: str) -> N
     from agent_memory.sdk import MemoryAPIError, MemoryClient
 
     private, public = signing_material()
-    app = create_app(Settings(database_url=app_database_url, jwt_public_key=public,
-                              jwt_issuer="memory-test", jwt_audience="memory-api"))
+    app = create_app(
+        Settings(
+            database_url=app_database_url,
+            jwt_public_key=public,
+            jwt_issuer="memory-test",
+            jwt_audience="memory-api",
+        )
+    )
     try:
         async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as http:
             sdk = MemoryClient(http, token=bearer_token(private))
             scope = MemoryScope(ScopeKind.WORKSPACE, "project-a", None)
-            created = await sdk.remember("original", MemoryType.SEMANTIC, scope,
-                                         idempotency_key="sdk-m2-create")
+            created = await sdk.remember(
+                "original", MemoryType.SEMANTIC, scope, idempotency_key="sdk-m2-create"
+            )
             assert (await sdk.get(created.memory_id)).content == "original"
             corrected = await sdk.correct(created.memory_id, expected_revision=1, content="new")
             assert corrected.revision == 2
             assert (await sdk.get(created.memory_id)).content == "new"
-            deletes = await asyncio.gather(*[
-                sdk.delete(created.memory_id, expected_revision=2, idempotency_key="sdk-delete")
-                for _ in range(3)])
+            deletes = await asyncio.gather(
+                *[
+                    sdk.delete(created.memory_id, expected_revision=2, idempotency_key="sdk-delete")
+                    for _ in range(3)
+                ]
+            )
             assert deletes[0] == deletes[1] == deletes[2]
-            assert await sdk.delete(created.memory_id, expected_revision=2,
-                                    idempotency_key="sdk-delete") == deletes[0]
+            assert (
+                await sdk.delete(
+                    created.memory_id, expected_revision=2, idempotency_key="sdk-delete"
+                )
+                == deletes[0]
+            )
             with pytest.raises(MemoryAPIError) as conflict:
-                await sdk.delete(created.memory_id, expected_revision=3,
-                                 idempotency_key="sdk-delete")
+                await sdk.delete(
+                    created.memory_id, expected_revision=3, idempotency_key="sdk-delete"
+                )
             assert conflict.value.status_code == 409
             with pytest.raises(MemoryAPIError) as missing:
                 await sdk.get(created.memory_id)
             assert missing.value.status_code == 404
             for action in ("archive", "supersede"):
-                m = await sdk.remember(action, MemoryType.SEMANTIC, scope,
-                                       idempotency_key=f"sdk-{action}")
-                result = await getattr(sdk, action)(m.memory_id, expected_revision=1)
-                assert result.status.value == {"archive": "archived", "supersede": "superseded"}[action]
+                m = await sdk.remember(
+                    action, MemoryType.SEMANTIC, scope, idempotency_key=f"sdk-{action}"
+                )
+                kwargs = {}
+                if action == "supersede":
+                    replacement = await sdk.remember(
+                        "replacement", MemoryType.SEMANTIC, scope, idempotency_key="sdk-successor"
+                    )
+                    kwargs["successor_id"] = replacement.memory_id
+                result = await getattr(sdk, action)(m.memory_id, expected_revision=1, **kwargs)
+                assert (
+                    result.status.value
+                    == {"archive": "archived", "supersede": "superseded"}[action]
+                )
                 with pytest.raises(MemoryAPIError):
                     await sdk.get(m.memory_id)
                 with pytest.raises(MemoryAPIError) as stale:
-                    await getattr(sdk, action)(m.memory_id, expected_revision=1)
+                    await getattr(sdk, action)(m.memory_id, expected_revision=1, **kwargs)
                 assert stale.value.status_code == 409
     finally:
         await app.state.engine.dispose()
+
+
+async def test_sdk_covers_all_business_routes_and_pagination(app_database_url: str) -> None:
+    from uuid import uuid4
+
+    from agent_memory.api.event_schemas import EventBatchRequest
+    from agent_memory.api.schemas import SearchRequest
+    from agent_memory.domain.enums import MemoryType, ScopeKind
+    from agent_memory.domain.models import MemoryScope
+    from agent_memory.sdk import MemoryClient
+
+    private, public = signing_material()
+    app = create_app(
+        Settings(
+            database_url=app_database_url,
+            jwt_public_key=public,
+            jwt_issuer="memory-test",
+            jwt_audience="memory-api",
+        )
+    )
+    called = set()
+
+    def record(request):
+        import re
+
+        path = re.sub(
+            r"[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}", "{memory_id}", request.url.path
+        )
+        called.add((request.method, path))
+
+    try:
+        async with AsyncClient(
+            transport=ASGITransport(app=app),
+            base_url="http://test",
+            event_hooks={"request": [_async_hook(record)]},
+        ) as http:
+            sdk = MemoryClient(http, token=bearer_token(private))
+            m = await sdk.remember(
+                "SDK contract Java17",
+                MemoryType.SEMANTIC,
+                MemoryScope(ScopeKind.WORKSPACE, "project-a", None),
+                idempotency_key=str(uuid4()),
+            )
+            await sdk.get(m.memory_id)
+            await sdk.correct(
+                m.memory_id, expected_revision=1, content="SDK contract Java21", reason="upgrade"
+            )
+            versions = [v async for v in sdk.iter_versions(m.memory_id, page_size=1)]
+            assert [v.reason for v in versions] == [None, "upgrade"]
+            await sdk.archive(m.memory_id, expected_revision=2)
+            await sdk.restore(m.memory_id, expected_revision=3)
+            await sdk.invalidate(m.memory_id, expected_revision=4)
+            successor = await sdk.remember(
+                "successor",
+                MemoryType.SEMANTIC,
+                MemoryScope(ScopeKind.WORKSPACE, "project-a", None),
+                idempotency_key=str(uuid4()),
+            )
+            await sdk.supersede(m.memory_id, expected_revision=5, successor_id=successor.memory_id)
+            assert (await sdk.lifecycle(m.memory_id)).successor_id == successor.memory_id
+            await sdk.delete(m.memory_id, expected_revision=6, idempotency_key=str(uuid4()))
+            assert [v async for v in sdk.iter_search(SearchRequest(query="successor"))]
+            event = EventBatchRequest.model_validate(
+                {
+                    "events": [
+                        {
+                            "idempotency_key": str(uuid4()),
+                            "session_id": str(uuid4()),
+                            "sequence_number": 1,
+                            "event_type": "tool.result",
+                            "agent_id": "sdk",
+                            "occurred_at": datetime.now(UTC).isoformat(),
+                            "scope": {"kind": "workspace", "workspace_id": "project-a"},
+                            "payload": {
+                                "tool_name": "build",
+                                "exit_code": 0,
+                                "summary": "build completed",
+                            },
+                        }
+                    ]
+                }
+            )
+            assert len((await sdk.ingest_events(event)).items) == 1
+        routes = {
+            (method.upper(), path)
+            for path, operations in app.openapi()["paths"].items()
+            for method in operations
+            if path.startswith("/v1/")
+        }
+        assert called == routes
+    finally:
+        await app.state.engine.dispose()
+
+
+def _async_hook(callback):
+    async def hook(request):
+        callback(request)
+
+    return hook

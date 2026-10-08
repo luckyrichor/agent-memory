@@ -18,13 +18,16 @@ from agent_memory.application.ports import (
     MemoryRecord,
     MemoryRepository,
 )
+from agent_memory.domain.content_policy import validate_content
 from agent_memory.domain.enums import MemoryStatus, MemoryType, ScopeKind
 from agent_memory.domain.errors import (
+    ContentRejected,
     IdempotencyConflict,
+    MemoryError,
     MemoryNotFound,
     MemoryScopeForbidden,
 )
-from agent_memory.domain.models import Memory, MemoryScope
+from agent_memory.domain.models import Memory, MemoryScope, MemoryVersion
 from agent_memory.domain.principal import RequestPrincipal
 from agent_memory.observability import annotate, get_logger, record_operation, span
 
@@ -71,6 +74,7 @@ class ExplicitMemoryService:
     ) -> MemoryResult:
         try:
             self._authorize_scope(principal, command.scope, "memory:write")
+            validate_content(command.content)
             await self._idempotency.lock(principal.tenant_id, command.idempotency_key)
             existing = await self._idempotency.get(principal.tenant_id, command.idempotency_key)
             if existing is not None:
@@ -130,10 +134,12 @@ class ExplicitMemoryService:
                 memory_status=memory.status.value,
             )
             return result
-        except (IdempotencyConflict, MemoryScopeForbidden) as error:
+        except (IdempotencyConflict, MemoryScopeForbidden, ContentRejected) as error:
             reason = (
                 "IDEMPOTENCY_CONFLICT"
                 if isinstance(error, IdempotencyConflict)
+                else "CONTENT_POLICY_REJECTED"
+                if isinstance(error, ContentRejected)
                 else "MEMORY_SCOPE_FORBIDDEN"
             )
             await self._record_audit(
@@ -169,6 +175,23 @@ class ExplicitMemoryService:
             )
             return record
 
+    async def lifecycle(self, memory_id: UUID, principal: RequestPrincipal) -> Memory:
+        record = await self._required_record(memory_id, principal)
+        self._authorize_scope(principal, record.memory.scope, "memory:read")
+        if record.memory.status is MemoryStatus.DELETED:
+            raise MemoryNotFound(str(memory_id))
+        return record.memory
+
+    async def versions(
+        self, memory_id: UUID, principal: RequestPrincipal, limit: int, offset: int
+    ) -> tuple[tuple[MemoryVersion, ...], int | None]:
+        record = await self._required_record(memory_id, principal)
+        self._authorize_scope(principal, record.memory.scope, "memory:read")
+        if record.memory.status is MemoryStatus.DELETED:
+            raise MemoryNotFound(str(memory_id))
+        rows = await self._memories.versions(principal.tenant_id, memory_id, limit + 1, offset)
+        return rows[:limit], offset + limit if len(rows) > limit else None
+
     async def correct(
         self,
         command: CorrectMemoryCommand,
@@ -182,7 +205,11 @@ class ExplicitMemoryService:
             memory_id=command.memory_id,
             revision=command.expected_revision,
         ):
-            return await self._correct(command, principal)
+            try:
+                return await self._correct(command, principal)
+            except MemoryError as error:
+                self._observe("memory.correct", "deny", type(error).__name__.upper())
+                raise
 
     async def _correct(
         self,
@@ -191,11 +218,14 @@ class ExplicitMemoryService:
     ) -> MemoryResult:
         record = await self._required_record(command.memory_id, principal)
         self._authorize_scope(principal, record.memory.scope, "memory:write")
+        validate_content(command.content)
+        validate_content(command.reason, max_length=512)
         updated, version = record.memory.add_version(
             version_id=self._new_id(),
             content=command.content,
             expected_revision=command.expected_revision,
             now=self._now(),
+            reason=command.reason,
         )
         await self._memories.append_version(
             principal.tenant_id,
@@ -209,6 +239,7 @@ class ExplicitMemoryService:
             "allow",
             "MEMORY_VERSION_CREATED",
             updated.memory_id,
+            reason=command.reason,
         )
         self._observe(
             "memory.correct",
@@ -238,33 +269,66 @@ class ExplicitMemoryService:
             memory_id=command.memory_id,
             memory_status=command.status.value,
         ):
-            return await self._disable(command, principal)
+            try:
+                return await self._disable(command, principal)
+            except MemoryError as error:
+                self._observe("memory.disable", "deny", type(error).__name__.upper())
+                raise
 
     async def _disable(
         self,
         command: DisableMemoryCommand,
         principal: RequestPrincipal,
     ) -> MemoryResult:
-        request_hash = hashlib.sha256(json.dumps({
-            "operation": "disable", "memory_id": str(command.memory_id),
-            "expected_revision": command.expected_revision, "status": command.status.value,
-        }, sort_keys=True).encode()).hexdigest()
+        request_hash = hashlib.sha256(
+            json.dumps(
+                {
+                    "operation": "disable",
+                    "memory_id": str(command.memory_id),
+                    "expected_revision": command.expected_revision,
+                    "status": command.status.value,
+                    "successor_id": str(command.successor_id) if command.successor_id else None,
+                },
+                sort_keys=True,
+            ).encode()
+        ).hexdigest()
         existing: IdempotencyRecord | None = None
         if command.idempotency_key is not None:
             await self._idempotency.lock(principal.tenant_id, command.idempotency_key)
             existing = await self._idempotency.get(principal.tenant_id, command.idempotency_key)
         record = await self._required_record(
-            existing.result.memory_id if existing is not None else command.memory_id, principal,
+            existing.result.memory_id if existing is not None else command.memory_id,
+            principal,
         )
-        self._authorize_scope(principal, record.memory.scope, "memory:delete")
+        permission = {
+            MemoryStatus.DELETED: "memory:delete",
+            MemoryStatus.ARCHIVED: "memory:archive",
+            MemoryStatus.SUPERSEDED: "memory:supersede",
+            MemoryStatus.INVALIDATED: "memory:invalidate",
+            MemoryStatus.ACTIVE: "memory:restore",
+        }.get(command.status)
+        if permission is None:
+            from agent_memory.domain.errors import InvalidStatusTransition
+
+            raise InvalidStatusTransition("unsupported lifecycle action")
+        self._authorize_scope(principal, record.memory.scope, permission)
         if existing is not None:
             if existing.request_hash != request_hash:
                 raise IdempotencyConflict(command.idempotency_key or "")
-            await self._record_audit(principal, "memory.disable", "allow", "IDEMPOTENT_REPLAY",
-                                     existing.result.memory_id)
+            await self._record_audit(
+                principal, "memory.disable", "allow", "IDEMPOTENT_REPLAY", existing.result.memory_id
+            )
             self._observe("memory.disable", "allow", "IDEMPOTENT_REPLAY")
             return existing.result
-        updated = record.memory.disable(command.status, self._now())
+        if command.status is MemoryStatus.SUPERSEDED:
+            if command.successor_id is None or command.successor_id == command.memory_id:
+                from agent_memory.domain.errors import InvalidStatusTransition
+
+                raise InvalidStatusTransition("distinct successor required")
+            successor = await self.get_active(command.successor_id, principal)
+            if successor.memory.scope != record.memory.scope:
+                raise MemoryScopeForbidden("successor scope mismatch")
+        updated = record.memory.disable(command.status, self._now(), command.successor_id)
         await self._memories.disable(
             principal.tenant_id,
             updated,
@@ -276,6 +340,7 @@ class ExplicitMemoryService:
             "allow",
             f"MEMORY_{command.status.value.upper()}",
             command.memory_id,
+            successor_id=command.successor_id,
         )
         self._observe(
             "memory.disable",
@@ -285,11 +350,16 @@ class ExplicitMemoryService:
             memory_status=updated.status.value,
         )
         result = MemoryResult(
-            updated.memory_id, updated.current_version_id, updated.revision, updated.status,
+            updated.memory_id,
+            updated.current_version_id,
+            updated.revision,
+            updated.status,
         )
         if command.idempotency_key is not None:
             await self._idempotency.save(
-                principal.tenant_id, command.idempotency_key, IdempotencyRecord(request_hash, result),
+                principal.tenant_id,
+                command.idempotency_key,
+                IdempotencyRecord(request_hash, result),
             )
         return result
 
@@ -363,6 +433,8 @@ class ExplicitMemoryService:
         decision: str,
         reason_code: str,
         resource_id: UUID | None,
+        reason: str | None = None,
+        successor_id: UUID | None = None,
     ) -> None:
         await self._audit.record(
             AuditEntry(
@@ -372,5 +444,7 @@ class ExplicitMemoryService:
                 decision=decision,
                 reason_code=reason_code,
                 resource_id=resource_id,
+                reason=reason,
+                successor_id=successor_id,
             )
         )

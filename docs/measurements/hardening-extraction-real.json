@@ -1,0 +1,117 @@
+{
+  "generated_at": "2026-10-08T02:14:57.841426+00:00",
+  "model": "doubao-seed-2-0-mini-260428",
+  "cases": [
+    {
+      "id": "deployment",
+      "expected_candidate": true,
+      "candidate_count": 1,
+      "reason": "LLM_EXTRACTED",
+      "last_transient_error": null,
+      "scope_preserved": true,
+      "term_coverage": true
+    },
+    {
+      "id": "database",
+      "expected_candidate": true,
+      "candidate_count": 1,
+      "reason": "LLM_EXTRACTED",
+      "last_transient_error": null,
+      "scope_preserved": true,
+      "term_coverage": true
+    },
+    {
+      "id": "cache",
+      "expected_candidate": true,
+      "candidate_count": 1,
+      "reason": "LLM_EXTRACTED",
+      "last_transient_error": null,
+      "scope_preserved": true,
+      "term_coverage": true
+    },
+    {
+      "id": "retry",
+      "expected_candidate": true,
+      "candidate_count": 1,
+      "reason": "LLM_EXTRACTED",
+      "last_transient_error": null,
+      "scope_preserved": true,
+      "term_coverage": true
+    },
+    {
+      "id": "lease",
+      "expected_candidate": true,
+      "candidate_count": 1,
+      "reason": "LLM_EXTRACTED",
+      "last_transient_error": null,
+      "scope_preserved": true,
+      "term_coverage": true
+    },
+    {
+      "id": "tenant",
+      "expected_candidate": true,
+      "candidate_count": 1,
+      "reason": "LLM_EXTRACTED",
+      "last_transient_error": null,
+      "scope_preserved": true,
+      "term_coverage": true
+    },
+    {
+      "id": "chinese",
+      "expected_candidate": true,
+      "candidate_count": 2,
+      "reason": "LLM_EXTRACTED",
+      "last_transient_error": null,
+      "scope_preserved": true,
+      "term_coverage": true
+    },
+    {
+      "id": "empty",
+      "expected_candidate": false,
+      "candidate_count": 0,
+      "reason": "LLM_EXTRACTED",
+      "last_transient_error": null,
+      "scope_preserved": true,
+      "term_coverage": true
+    },
+    {
+      "id": "sensitive-key",
+      "expected_candidate": false,
+      "candidate_count": 0,
+      "reason": "INPUT_POLICY_REJECTED",
+      "last_transient_error": null,
+      "scope_preserved": true,
+      "term_coverage": true
+    },
+    {
+      "id": "sensitive-email",
+      "expected_candidate": false,
+      "candidate_count": 0,
+      "reason": "INPUT_POLICY_REJECTED",
+      "last_transient_error": null,
+      "scope_preserved": true,
+      "term_coverage": true
+    },
+    {
+      "id": "sensitive-id",
+      "expected_candidate": false,
+      "candidate_count": 0,
+      "reason": "INPUT_POLICY_REJECTED",
+      "last_transient_error": null,
+      "scope_preserved": true,
+      "term_coverage": true
+    },
+    {
+      "id": "sensitive-card",
+      "expected_candidate": false,
+      "candidate_count": 0,
+      "reason": "INPUT_POLICY_REJECTED",
+      "last_transient_error": null,
+      "scope_preserved": true,
+      "term_coverage": true
+    }
+  ],
+  "limits": "12 synthetic labeled samples; exact term coverage heuristic, not human score",
+  "candidate_presence_correct": 12,
+  "term_coverage_passed": 12
+}
