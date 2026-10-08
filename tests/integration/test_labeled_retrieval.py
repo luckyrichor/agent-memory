@@ -17,7 +17,7 @@ from agent_memory.infrastructure.retrieval import PostgresCandidateProvider
 
 
 async def test_labeled_chinese_retrieval_recall_and_top_k(app_database_url):
-    data = json.loads(Path("evals/datasets/retrieval-zh-v1.json").read_text())
+    data = json.loads(Path("evals/datasets/retrieval-zh-v2.json").read_text())
     engine = create_engine(app_database_url)
     sessions = create_session_factory(engine)
     who = principal()
@@ -55,7 +55,7 @@ async def test_labeled_chinese_retrieval_recall_and_top_k(app_database_url):
                 else:
                     assert found == []
         report = {
-            "dataset": "retrieval-zh-v1",
+            "dataset": "retrieval-zh-v2",
             "queries": len(data["queries"]),
             "channel": "PostgreSQL Chinese bigram lexical, no vector provider",
             "recall_at_3": sum(s["recall_at_3"] for s in scores) / len(scores),
@@ -63,7 +63,7 @@ async def test_labeled_chinese_retrieval_recall_and_top_k(app_database_url):
             "limits": "small constructed keyword dataset; no general semantic-quality claim",
             "cases": scores,
         }
-        Path("docs/measurements/hardening-retrieval-zh.json").write_text(
+        Path("docs/measurements/followup-retrieval-zh.json").write_text(
             json.dumps(report, indent=2, ensure_ascii=False) + "\n"
         )
     finally:

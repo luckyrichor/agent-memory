@@ -4,7 +4,9 @@ import re
 import unicodedata
 
 _PATTERN = re.compile(
-    r"(?i)(api[_ -]?key|password|passwd|secret|bearer|密码|密钥)"
+    r"(?i)(?P<secret>(?<!\w)(?:api[_ -]?key|password|passwd|secret)(?!\w)"
+    r"\s*[\"']?\s*[:=]\s*[\"']?\S+|\bBearer\s+[a-z0-9._-]{8,}"
+    r"|(?:密码|密钥)(?:\s*[:=：]\s*|\s+)\S+)"
     r"|(?:sk|ark|ghp|github_pat|xox[baprs])[-_][a-z0-9_-]{8,}"
     r"|AKIA[A-Z0-9]{16}|eyJ[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+"
     r"|[\w.+-]+@[\w.-]+\.[a-z]{2,}"
@@ -34,5 +36,19 @@ def sensitive(text: str) -> bool:
 def validate_content(text: str, *, max_length: int = 20000) -> None:
     from agent_memory.domain.errors import ContentRejected
 
-    if not text.strip() or len(text) > max_length or sensitive(text):
-        raise ContentRejected("CONTENT_POLICY_REJECTED")
+    if not text.strip():
+        raise ContentRejected("CONTENT_EMPTY")
+    if len(text) > max_length:
+        raise ContentRejected("CONTENT_TOO_LONG")
+    if sensitive(text):
+        normalized = unicodedata.normalize("NFKC", text)
+        normalized = "".join(c for c in normalized if unicodedata.category(c) != "Cf")
+        match = _PATTERN.search(normalized)
+        reason = (
+            "CONTENT_SECRET_VALUE"
+            if match and match.lastgroup == "secret"
+            else "CONTENT_TOKEN_OR_CONTACT"
+            if match
+            else "CONTENT_NUMERIC_IDENTIFIER"
+        )
+        raise ContentRejected(reason)

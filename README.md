@@ -332,3 +332,8 @@ docker compose down
 ## 2026-10-01 W2–W4 本地更新
 
 历史W2–W4来源 agent-memory@5b9ee55 + 当时未提交修改，随后已推送并通过远端CI。当前W6 M4工作树的接口与结果见 [docs/retrieval.md](docs/retrieval.md) 和 docs/progress.md。SDK 入口 `agent_memory.sdk.MemoryClient`；worker方式见 [docs/embedding-worker.md](docs/embedding-worker.md)。每次可用 `bash scripts/check.sh` 跑四道门；真实模型5条语义改写初验通过。
+
+
+### 第二轮记忆评审（2026-10-08）
+
+当前生命周期禁止失效/被取代再归档或恢复；中文关键词 OR 片段召回后排序；敏感拒绝提供 API/SDK 原因码；异常向量最多两次重试；查询缓存命中不占并发名额。操作契约、脱敏建议、历史数据限制及 208 测试验收见 [第二轮修复说明](docs/review-followup-2026-10-08.md)。

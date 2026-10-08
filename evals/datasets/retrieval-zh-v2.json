@@ -1,0 +1,108 @@
+{
+  "description": "人工标注构造集v2，补中文改写，片段OR不代表同义理解",
+  "memories": [
+    {
+      "id": "deploy",
+      "content": "部署失败时先检查配置文件"
+    },
+    {
+      "id": "java",
+      "content": "项目编译使用 Java 21"
+    },
+    {
+      "id": "database",
+      "content": "数据库连接超时先检查连接池"
+    },
+    {
+      "id": "cache",
+      "content": "缓存更新需要失效旧缓存"
+    },
+    {
+      "id": "queue",
+      "content": "任务限流后应退避重试"
+    },
+    {
+      "id": "lease",
+      "content": "任务租约到期后可以重新领取"
+    }
+  ],
+  "queries": [
+    {
+      "query": "配置文件",
+      "relevant": [
+        "deploy"
+      ]
+    },
+    {
+      "query": "Java 21",
+      "relevant": [
+        "java"
+      ]
+    },
+    {
+      "query": "连接池",
+      "relevant": [
+        "database"
+      ]
+    },
+    {
+      "query": "旧缓存",
+      "relevant": [
+        "cache"
+      ]
+    },
+    {
+      "query": "退避重试",
+      "relevant": [
+        "queue"
+      ]
+    },
+    {
+      "query": "租约到期",
+      "relevant": [
+        "lease"
+      ]
+    },
+    {
+      "query": "任务",
+      "relevant": [
+        "queue",
+        "lease"
+      ]
+    },
+    {
+      "query": "不存在的关键词",
+      "relevant": []
+    },
+    {
+      "query": "怎么处理部署报错",
+      "relevant": [
+        "deploy"
+      ]
+    },
+    {
+      "query": "如何保证缓存更新一致",
+      "relevant": [
+        "cache"
+      ]
+    },
+    {
+      "query": "请求被限流了应该怎么办",
+      "relevant": [
+        "queue"
+      ]
+    },
+    {
+      "query": "租约过期如何继续执行",
+      "relevant": [
+        "lease"
+      ]
+    },
+    {
+      "query": "数据库不响应如何处理",
+      "relevant": [
+        "database"
+      ]
+    }
+  ]
+}

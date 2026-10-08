@@ -18,7 +18,7 @@
 | 10 worker | 提取 worker 原本已有 SIGTERM；向量 worker 补齐。退出前完成当前任务；原子心跳文件、PID/年龄/配置错误健康检查 | 每进程一租户；采用显式租户清单 + supervisor，无自动租户发现 |
 | 11 租约 | 校验外部调用总超时 + 5 秒持久化余量严格小于租约；调用使用总时间预算；写入继续受租约 fencing 保护 | 不实现无限长操作续租；数据库拥塞超出租约会失败并等待重新领取 |
 | 12 查询向量 | 每进程租户隔离 LRU/TTL 缓存，默认 256 项/60 秒；并发 8；排队 + 调用总预算 3 秒；降级指标 | 不是集群限流或全 API 配额 |
-| 13 生命周期 | invalidate、restore、supersede successor_id 与读取生命周期接口；拆分权限；继任者必须可读、有效、同 scope | 只能恢复普通归档；被取代后再归档不能绕过状态恢复；deleted 终态 |
+| 13 生命周期 | invalidate、restore、supersede successor_id 与读取生命周期接口；拆分权限；继任者必须可读、有效、同 scope | 后续修订：invalidated/superseded 只能删除，普通 archived 可恢复；旧归档前态未知，见第二轮说明 |
 | 14 SDK | 事件批量写入、版本列表、版本/搜索迭代、生命周期方法；SDK 对所有业务 OpenAPI 路由的真实契约测试 | 新 supersede 请求必须传 successor_id |
 | 15 观测 | correct/disable 拒绝指标、无 SQL 文本的语句 span、OTLP HTTP 导出、采样、collector 与告警示例 | collector 示例仅 debug 导出；生产存储、看板、通知与 Prometheus 接线未启用 |
 | 16 公平评测 | 增加朴素向量 + 生命周期过滤基线、普通案例；标注中文检索集与真实模型提取独立评测 | 小型构造集，不能推断生产质量或融合检索优于过滤向量 |
@@ -100,3 +100,6 @@ docker compose -f deploy/observability/compose.yaml up -d
 - `hardening-extraction-real.json`：真实已配置 API key 调用 `doubao-seed-2-0-mini-260428`，12 个构造事件（7 个正例、寒暄负例及 4 个敏感负例）。候选有无和预设关键词覆盖均 12/12；候选 scope 均由服务端保留。这是提取初验，未持久化这些评测候选，关键词覆盖不等于人工质量评分。
 
 待完成：生产 OTLP 存储与通知、监督进程实际部署、自动清理/快照采集计划、大规模真实标注评测及更完整敏感检测。没有把这些待办标为完成。
+
+
+后续行为修订与对应验收见 [第二轮评审](review-followup-2026-10-08.md)。本报告测量文件保留第一轮来源；中文 OR、异常向量有界重试等以第二轮说明为准。

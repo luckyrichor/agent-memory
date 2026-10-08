@@ -42,8 +42,17 @@ class PostgresCandidateProvider:
             document = func.to_tsvector(
                 "simple", func.memory_lexical_tokens(v.content) if chinese else v.content
             )
-            terms = func.plainto_tsquery(
-                "simple", func.memory_lexical_tokens(query.text) if chinese else query.text
+            # Tokenizer yields only CJK/ASCII word lexemes, never tsquery operators.
+            # OR broadens Chinese paraphrases; PostgreSQL ranks overlap afterwards.
+            terms = (
+                func.to_tsquery(
+                    "simple",
+                    func.regexp_replace(
+                        func.trim(func.memory_lexical_tokens(query.text)), r"\s+", " | ", "g"
+                    ),
+                )
+                if chinese
+                else func.plainto_tsquery("simple", query.text)
             )
             score = func.ts_rank_cd(document, terms)
             rows = await self.session.execute(

@@ -28,6 +28,11 @@ class QueryVectors:
                 (s.embedding_endpoint + "\0" + s.embedding_model + "\0" + text).encode()
             ).hexdigest(),
         )
+        hit = self._cache.get(key)
+        if hit is not None and hit[0] > time.monotonic():
+            self._cache.move_to_end(key)
+            return list(hit[1]), "cache"
+        self._cache.pop(key, None)
         async with asyncio.timeout(s.query_embedding_timeout_seconds):
             async with self._slots:
                 hit = self._cache.get(key)

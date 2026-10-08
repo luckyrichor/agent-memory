@@ -72,7 +72,7 @@ async def test_sensitive_input_never_calls_provider(summary: str) -> None:
 
 
 async def test_sensitive_output_rejected() -> None:
-    model = extractor({"memories": [{"content": "password abc"}]})
+    model = extractor({"memories": [{"content": "password=abc"}]})
     assert await model.extract(event()) == ()
     assert model.last_reason == "OUTPUT_POLICY_REJECTED"
 

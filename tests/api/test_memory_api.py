@@ -279,7 +279,7 @@ async def test_sdk_covers_all_business_routes_and_pagination(app_database_url: s
     from agent_memory.api.schemas import SearchRequest
     from agent_memory.domain.enums import MemoryType, ScopeKind
     from agent_memory.domain.models import MemoryScope
-    from agent_memory.sdk import MemoryClient
+    from agent_memory.sdk import MemoryAPIError, MemoryClient
 
     private, public = signing_material()
     app = create_app(
@@ -328,9 +328,21 @@ async def test_sdk_covers_all_business_routes_and_pagination(app_database_url: s
                 MemoryScope(ScopeKind.WORKSPACE, "project-a", None),
                 idempotency_key=str(uuid4()),
             )
-            await sdk.supersede(m.memory_id, expected_revision=5, successor_id=successor.memory_id)
-            assert (await sdk.lifecycle(m.memory_id)).successor_id == successor.memory_id
-            await sdk.delete(m.memory_id, expected_revision=6, idempotency_key=str(uuid4()))
+            for operation in (sdk.archive, sdk.restore):
+                with pytest.raises(MemoryAPIError) as failure:
+                    await operation(m.memory_id, expected_revision=5)
+                assert failure.value.code == "INVALID_STATUS_TRANSITION"
+            source = await sdk.remember(
+                "old source",
+                MemoryType.SEMANTIC,
+                MemoryScope(ScopeKind.WORKSPACE, "project-a", None),
+                idempotency_key=str(uuid4()),
+            )
+            await sdk.supersede(
+                source.memory_id, expected_revision=1, successor_id=successor.memory_id
+            )
+            assert (await sdk.lifecycle(source.memory_id)).successor_id == successor.memory_id
+            await sdk.delete(m.memory_id, expected_revision=5, idempotency_key=str(uuid4()))
             assert [v async for v in sdk.iter_search(SearchRequest(query="successor"))]
             event = EventBatchRequest.model_validate(
                 {
@@ -369,3 +381,55 @@ def _async_hook(callback):
         callback(request)
 
     return hook
+
+
+@pytest.mark.parametrize(
+    ("content", "reason_code"),
+    [
+        ("password=credential_example", "CONTENT_SECRET_VALUE"),
+        ("订单编号 6222021234567890", "CONTENT_NUMERIC_IDENTIFIER"),
+    ],
+)
+async def test_content_rejection_exposes_safe_reason_to_api_and_sdk(
+    app_database_url: str, content: str, reason_code: str
+) -> None:
+    from agent_memory.domain.enums import MemoryType, ScopeKind
+    from agent_memory.domain.models import MemoryScope
+    from agent_memory.sdk import MemoryAPIError, MemoryClient
+
+    private, public = signing_material()
+    app = create_app(
+        Settings(
+            database_url=app_database_url,
+            jwt_public_key=public,
+            jwt_issuer="memory-test",
+            jwt_audience="memory-api",
+        )
+    )
+    token = bearer_token(private)
+    scope = MemoryScope(ScopeKind.WORKSPACE, workspace_id="project-a", subject_user_id=None)
+    try:
+        async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
+            response = await client.post(
+                "/v1/memories",
+                headers={"Authorization": f"Bearer {token}", "Idempotency-Key": "rejected-api"},
+                json={
+                    "content": content,
+                    "memory_type": "semantic",
+                    "scope": {"kind": "workspace", "workspace_id": "project-a"},
+                },
+            )
+            assert response.status_code == 422
+            error = response.json()["error"]
+            assert error["code"] == "CONTENT_POLICY_REJECTED"
+            assert error["reason_code"] == reason_code
+            assert error["message"]
+            assert content not in response.text
+            sdk = MemoryClient(client, token=token)
+            with pytest.raises(MemoryAPIError) as failure:
+                await sdk.remember(
+                    content, MemoryType.SEMANTIC, scope, idempotency_key="rejected-sdk"
+                )
+            assert failure.value.reason_code == reason_code
+    finally:
+        await app.state.engine.dispose()

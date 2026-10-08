@@ -162,14 +162,29 @@ class Memory:
     def disable(
         self, status: MemoryStatus, now: datetime, successor_id: UUID | None = None
     ) -> "Memory":
-        allowed = {
-            MemoryStatus.SUPERSEDED,
-            MemoryStatus.INVALIDATED,
-            MemoryStatus.ARCHIVED,
-            MemoryStatus.DELETED,
+        transitions = {
+            MemoryStatus.ACTIVE: {
+                MemoryStatus.ARCHIVED,
+                MemoryStatus.INVALIDATED,
+                MemoryStatus.SUPERSEDED,
+                MemoryStatus.DELETED,
+            },
+            MemoryStatus.ARCHIVED: {
+                MemoryStatus.ACTIVE,
+                MemoryStatus.INVALIDATED,
+                MemoryStatus.SUPERSEDED,
+                MemoryStatus.DELETED,
+            },
+            MemoryStatus.INVALIDATED: {MemoryStatus.DELETED},
+            MemoryStatus.SUPERSEDED: {MemoryStatus.DELETED},
+            MemoryStatus.CANDIDATE: {MemoryStatus.DELETED},
+            MemoryStatus.NEEDS_REVIEW: {MemoryStatus.DELETED},
+            MemoryStatus.REJECTED: {MemoryStatus.DELETED},
         }
         if self.status is MemoryStatus.DELETED:
             raise InvalidStatusTransition("deleted memory is terminal")
+        if status not in transitions.get(self.status, set()):
+            raise InvalidStatusTransition("transition not allowed")
         if status is MemoryStatus.ACTIVE and self.status is MemoryStatus.ARCHIVED:
             if self.successor_id is not None:
                 raise InvalidStatusTransition("superseded memory cannot be restored")
@@ -178,8 +193,6 @@ class Memory:
             )
         if status is MemoryStatus.SUPERSEDED and successor_id is None:
             raise InvalidStatusTransition("successor required")
-        if status not in allowed:
-            raise InvalidStatusTransition(f"cannot disable memory with status {status.value}")
         return replace(
             self,
             status=status,

@@ -89,6 +89,9 @@ class EmbeddingWorker:
                 try:
                     finished = at if now is not None else datetime.now(UTC)
                     code, retryable, delay = classify(error, finished)
+                    if code == "INVALID_EMBEDDING":
+                        # Bad 200 payloads may be transient: at most two retries.
+                        retryable = job.attempts < 3
                     failed = await self.backend.fail(
                         job, worker, finished, code=code, retryable=retryable, retry_after=delay
                     )

@@ -393,7 +393,7 @@ def test_retry_after_http_date_and_transport_classification():
     )
 
 
-def test_superseded_link_survives_archive_and_cannot_restore():
+def test_superseded_link_survives_and_archive_restore_are_rejected():
     from agent_memory.domain.enums import MemoryStatus
     from agent_memory.domain.errors import InvalidStatusTransition
     from agent_memory.domain.models import Memory
@@ -412,12 +412,12 @@ def test_superseded_link_survives_archive_and_cannot_restore():
         updated_at=now,
     )
     successor = uuid4()
-    archived = memory.disable(MemoryStatus.SUPERSEDED, now, successor).disable(
-        MemoryStatus.ARCHIVED, now
-    )
-    assert archived.successor_id == successor
+    superseded = memory.disable(MemoryStatus.SUPERSEDED, now, successor)
+    assert superseded.successor_id == successor
     with pytest.raises(InvalidStatusTransition):
-        archived.disable(MemoryStatus.ACTIVE, now)
+        superseded.disable(MemoryStatus.ARCHIVED, now)
+    with pytest.raises(InvalidStatusTransition):
+        superseded.disable(MemoryStatus.ACTIVE, now)
 
 
 async def test_queue_admin_does_not_requeue_migrated_provenance():
@@ -437,15 +437,17 @@ async def test_model_rebuild_memory_adapter_is_tenant_scoped():
 
     tenant, foreign, version, other_version = (uuid4() for _ in range(4))
     jobs = {}
-    admin = InMemoryQueueAdmin(jobs, tenant, embeddings={
-        (tenant, version): 'old', (foreign, other_version): 'old'})
-    assert await admin.rebuild_model('old', 'operation') == 1
-    assert await admin.rebuild_model('old', 'operation') == 0
-    assert all(j.tenant_id == tenant and j.payload['version_id'] == str(version)
-               for j in jobs.values())
+    admin = InMemoryQueueAdmin(
+        jobs, tenant, embeddings={(tenant, version): "old", (foreign, other_version): "old"}
+    )
+    assert await admin.rebuild_model("old", "operation") == 1
+    assert await admin.rebuild_model("old", "operation") == 0
+    assert all(
+        j.tenant_id == tenant and j.payload["version_id"] == str(version) for j in jobs.values()
+    )
 
 
-@pytest.mark.parametrize('status', ['archived', 'superseded', 'invalidated', 'active'])
+@pytest.mark.parametrize("status", ["archived", "superseded", "invalidated", "active"])
 async def test_delete_permission_does_not_grant_other_lifecycle_actions(status):
     from test_explicit_memory import make_service, principal, workspace_command
 
@@ -458,3 +460,29 @@ async def test_delete_permission_does_not_grant_other_lifecycle_actions(status):
     created = await service.remember(workspace_command(), who)
     with pytest.raises(MemoryScopeForbidden):
         await service.disable(DisableMemoryCommand(created.memory_id, 1, MemoryStatus(status)), who)
+
+
+async def test_cached_vector_returns_while_all_provider_slots_are_busy():
+    cache = QueryVectors(
+        Settings(
+            embedding_model="m",
+            embedding_endpoint="https://test.invalid/e",
+            query_embedding_concurrency=1,
+            query_embedding_timeout_seconds=0.1,
+        )
+    )
+    cache._client = httpx.AsyncClient(
+        transport=httpx.MockTransport(
+            lambda _: httpx.Response(200, json={"data": [{"embedding": [1.0] * 1024}]})
+        )
+    )
+    tenant = uuid4()
+    try:
+        await cache.embed(tenant, "warm")
+        await cache._slots.acquire()
+        try:
+            assert (await asyncio.wait_for(cache.embed(tenant, "warm"), 0.05))[1] == "cache"
+        finally:
+            cache._slots.release()
+    finally:
+        await cache.aclose()

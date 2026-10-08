@@ -1,0 +1,70 @@
+{
+  "dataset": "retrieval-zh-v2",
+  "queries": 13,
+  "channel": "PostgreSQL Chinese bigram lexical, no vector provider",
+  "recall_at_3": 1.0,
+  "hit_at_1": 1.0,
+  "limits": "small constructed keyword dataset; no general semantic-quality claim",
+  "cases": [
+    {
+      "query": "配置文件",
+      "recall_at_3": 1.0,
+      "hit_at_1": 1
+    },
+    {
+      "query": "Java 21",
+      "recall_at_3": 1.0,
+      "hit_at_1": 1
+    },
+    {
+      "query": "连接池",
+      "recall_at_3": 1.0,
+      "hit_at_1": 1
+    },
+    {
+      "query": "旧缓存",
+      "recall_at_3": 1.0,
+      "hit_at_1": 1
+    },
+    {
+      "query": "退避重试",
+      "recall_at_3": 1.0,
+      "hit_at_1": 1
+    },
+    {
+      "query": "租约到期",
+      "recall_at_3": 1.0,
+      "hit_at_1": 1
+    },
+    {
+      "query": "任务",
+      "recall_at_3": 1.0,
+      "hit_at_1": 1
+    },
+    {
+      "query": "怎么处理部署报错",
+      "recall_at_3": 1.0,
+      "hit_at_1": 1
+    },
+    {
+      "query": "如何保证缓存更新一致",
+      "recall_at_3": 1.0,
+      "hit_at_1": 1
+    },
+    {
+      "query": "请求被限流了应该怎么办",
+      "recall_at_3": 1.0,
+      "hit_at_1": 1
+    },
+    {
+      "query": "租约过期如何继续执行",
+      "recall_at_3": 1.0,
+      "hit_at_1": 1
+    },
+    {
+      "query": "数据库不响应如何处理",
+      "recall_at_3": 1.0,
+      "hit_at_1": 1
+    }
+  ]
+}

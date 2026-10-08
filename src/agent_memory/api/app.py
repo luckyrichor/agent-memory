@@ -1,3 +1,4 @@
+import json
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime
@@ -131,7 +132,20 @@ def create_app(settings: Settings) -> FastAPI:
 
     @app.exception_handler(ContentRejected)
     async def content_rejected(request: Request, error: ContentRejected) -> JSONResponse:
-        return domain_error_response(request, "CONTENT_POLICY_REJECTED", "Content rejected.", 422)
+        reason = str(error)
+        hints = {
+            "CONTENT_EMPTY": "Provide nonempty content.",
+            "CONTENT_TOO_LONG": "Shorten the content.",
+            "CONTENT_SECRET_VALUE": "Remove credential assignments before writing.",
+            "CONTENT_TOKEN_OR_CONTACT": "Remove tokens or contact information before writing.",
+            "CONTENT_NUMERIC_IDENTIFIER": "Remove or mask long numeric identifiers before writing.",
+        }
+        response = domain_error_response(
+            request, "CONTENT_POLICY_REJECTED", hints.get(reason, "Content rejected."), 422
+        )
+        payload = json.loads(bytes(response.body))
+        payload["error"]["reason_code"] = reason if reason in hints else "CONTENT_POLICY_REJECTED"
+        return JSONResponse(status_code=422, content=payload)
 
     @app.exception_handler(MemoryNotFound)
     async def memory_not_found(request: Request, error: MemoryNotFound) -> JSONResponse:

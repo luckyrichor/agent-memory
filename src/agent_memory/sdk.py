@@ -22,9 +22,10 @@ from agent_memory.domain.models import MemoryScope
 
 
 class MemoryAPIError(Exception):
-    def __init__(self, status_code: int, code: str) -> None:
+    def __init__(self, status_code: int, code: str, *, reason_code: str | None = None) -> None:
         self.status_code = status_code
         self.code = code
+        self.reason_code = reason_code
         super().__init__(f"Memory API {status_code}: {code}")
 
 
@@ -48,11 +49,15 @@ class MemoryClient:
         response = await self._client.request(method, path, json=body, headers=headers)
         if response.is_error:
             code = "HTTP_ERROR"
+            reason_code = None
             try:
-                code = str(response.json()["error"]["code"])
+                error = response.json()["error"]
+                code = str(error["code"])
+                reason = error.get("reason_code")
+                reason_code = reason if isinstance(reason, str) else None
             except (ValueError, KeyError, TypeError):
                 pass
-            raise MemoryAPIError(response.status_code, code)
+            raise MemoryAPIError(response.status_code, code, reason_code=reason_code)
         return response.json()
 
     async def remember(

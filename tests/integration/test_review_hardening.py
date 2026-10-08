@@ -244,20 +244,70 @@ async def test_postgres_worker_claim_only_matches_configured_extractor(app_datab
     who, now = principal(), datetime.now(UTC)
     try:
         async with session_for_principal(sessions, who) as session:
-            for version in ('old', 'new'):
-                session.add(JobRow(tenant_id=who.tenant_id, job_id=uuid4(), job_type='extract_event',
-                    idempotency_key=version, payload={'event_id': str(uuid4()), 'extractor_version': version},
-                    status='pending', attempts=0, max_attempts=5, available_at=now,
-                    created_at=now, updated_at=now))
+            for version in ("old", "new"):
+                session.add(
+                    JobRow(
+                        tenant_id=who.tenant_id,
+                        job_id=uuid4(),
+                        job_type="extract_event",
+                        idempotency_key=version,
+                        payload={"event_id": str(uuid4()), "extractor_version": version},
+                        status="pending",
+                        attempts=0,
+                        max_attempts=5,
+                        available_at=now,
+                        created_at=now,
+                        updated_at=now,
+                    )
+                )
         async with session_for_principal(sessions, who) as session:
             queue = PostgresJobQueue(session)
-            claimed = await queue.claim(who.tenant_id, 'worker', now, timedelta(seconds=30),
-                                        extractor_version='new')
-            assert claimed is not None and claimed.payload['extractor_version'] == 'new'
-            assert await queue.claim(who.tenant_id, 'worker', now, timedelta(seconds=30),
-                                     extractor_version='new') is None
-            old = await session.scalar(select(JobRow).where(JobRow.tenant_id == who.tenant_id,
-                                                           JobRow.idempotency_key == 'old'))
-            assert old.status == 'pending' and old.attempts == 0
+            claimed = await queue.claim(
+                who.tenant_id, "worker", now, timedelta(seconds=30), extractor_version="new"
+            )
+            assert claimed is not None and claimed.payload["extractor_version"] == "new"
+            assert (
+                await queue.claim(
+                    who.tenant_id, "worker", now, timedelta(seconds=30), extractor_version="new"
+                )
+                is None
+            )
+            old = await session.scalar(
+                select(JobRow).where(
+                    JobRow.tenant_id == who.tenant_id, JobRow.idempotency_key == "old"
+                )
+            )
+            assert old.status == "pending" and old.attempts == 0
+    finally:
+        await engine.dispose()
+
+
+async def test_chinese_paraphrase_hits_without_requiring_every_bigram(app_database_url):
+    engine = create_engine(app_database_url)
+    sessions = create_session_factory(engine)
+    who = principal()
+    try:
+        async with session_for_principal(sessions, who) as session:
+            await service(session, who, datetime.now(UTC)).remember(
+                RememberMemoryCommand(
+                    "依赖冲突导致构建失败，检查版本配置",
+                    MemoryType.SEMANTIC,
+                    MemoryScope(ScopeKind.TENANT, None, None),
+                    "paraphrase",
+                ),
+                who,
+            )
+            old_match = await session.scalar(
+                text(
+                    "SELECT to_tsvector('simple', memory_lexical_tokens(:doc)) @@ plainto_tsquery('simple', memory_lexical_tokens(:q))"
+                ),
+                {"doc": "依赖冲突导致构建失败，检查版本配置", "q": "怎么修复依赖问题"},
+            )
+            assert old_match is False
+            for query in ("怎么修复依赖问题", "构建出错该检查什么", "版本不兼容如何处理"):
+                hits = await PostgresCandidateProvider(session).candidates(
+                    RetrievalQuery(query), who
+                )
+                assert hits and all(h.channel == "lexical" for h in hits)
     finally:
         await engine.dispose()

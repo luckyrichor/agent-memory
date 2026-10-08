@@ -1,6 +1,6 @@
 # AGENTS.md
 
-最后更新：2026-10-07（北京时间）
+最后更新：2026-10-08（北京时间）
 
 本文件为在本仓库工作的编码 agent 提供指引（Claude Code 读 `CLAUDE.md`、Codex 读 `AGENTS.md`，两者都指向这里）。
 
@@ -185,3 +185,8 @@ M7真实LLM候选提炼与M5三组基线工程初验通过。真实模型、敏�
 ## 2026-10-08 评审后状态补充
 
 历史说明保留为当时记录。当前能力和边界以 README 与 docs/review-hardening-2026-10-08.md 为准：提取临时故障先重试；显式命令幂等保留 7 天；0007 提供中文 bigram、纠正 reason、successor 关系；队列 admin 和共享 HTTP、查询缓存、OTLP/采样已实现。生产常驻服务与报警仍未部署。新生命周期权限必须单独授予，supersede 必须传 successor_id；版本历史必须 SQL 分页，不退回全量读取。
+
+
+## 第二轮评审当前约束（2026-10-08）
+
+当前细节见 docs/review-followup-2026-10-08.md：invalidated/superseded 只能继续 deleted，不准经 archive 绕过；中文 bigram OR 排序，不代表同义语义；ContentRejected 使用固定规则码，API 保留原错误码并附 reason_code，SDK 同步；异常向量第三次失败 dead，缓存先于 semaphore 检查。四道门 208 测试通过，旧报告是历史证据。
