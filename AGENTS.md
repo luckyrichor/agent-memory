@@ -110,7 +110,7 @@ evals/        用内存适配器跑的场景评估，不碰数据库
 **第一梯队**（岗位 01 直接考 + 被 `agent-ops-platform` 依赖）
 
 - **混合检索**：PG 全文 + pgvector 向量 + 结构化过滤三路候选，可解释融合与重排。含 **embedding worker**（M3 已有生成/落库/重建/重试管道，真实模型语义改写初验通过，生产规模质量评估未做）。
-- **Context Builder + Token 预算**：spec 10.5 的 Memory Context Packet，未实现。
+- **Context Builder + Token 预算**：M6已实现API/SDK与可测试预算裁剪，保守UTF8计数及证据/冲突边界见docs/context-builder.md。
 - **可观测性**：M1 已完成地基 —— 全链路 trace、JSON 结构化日志、四个基础指标（2026-09-20）。**未完成**：没接任何后端（只有 console 导出器，无 OTLP／采样／告警／看板），spec 第 17 节的四层评测仍然全空。
 - **基线对比评测**：spec 验收标准第 10 条要求对比 No Memory 和 Naive Vector 两条基线，未实现。
 - **Python SDK**：M2 已实现 HTTP SDK；`agent-ops-platform` 要调用本服务。
@@ -179,7 +179,7 @@ M2/M3 与 W4 CI 的最新实际验收见 docs/progress.md（历史 103 tests 基
 
 ## 2026-10-07状态补充
 
-M7真实LLM候选提炼与M5三组基线工程初验通过。真实模型、敏感检查边界及样本限制见docs/llm-extraction-and-baselines.md；四道门139测试通过。M6未做，未新增常驻服务。
+M7真实LLM候选提炼与M5三组基线工程初验通过。真实模型、敏感检查边界及样本限制见docs/llm-extraction-and-baselines.md；四道门139测试通过。M6现已完成，见docs/context-builder.md；未新增常驻服务。
 
 
 ## 2026-10-08 评审后状态补充

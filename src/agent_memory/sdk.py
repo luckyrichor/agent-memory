@@ -7,6 +7,8 @@ import httpx
 
 from agent_memory.api.event_schemas import EventBatchRequest, EventBatchResponse
 from agent_memory.api.schemas import (
+    ContextRequest,
+    ContextResponse,
     DeletionResponse,
     LifecycleResponse,
     MemoryDetailResponse,
@@ -90,6 +92,11 @@ class MemoryClient:
     async def search(self, query: SearchRequest) -> SearchResponse:
         return SearchResponse.model_validate(
             await self._request("POST", "/v1/memories/search", body=query.model_dump(mode="json"))
+        )
+
+    async def context(self, query: ContextRequest) -> ContextResponse:
+        return ContextResponse.model_validate(
+            await self._request("POST", "/v1/memories/context", body=query.model_dump(mode="json"))
         )
 
     async def correct(

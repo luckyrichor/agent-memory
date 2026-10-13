@@ -146,3 +146,7 @@ M5：真实数据库、固定M7响应与同一应用身份下，对No Memory / N
 基线 bb09ed0 + 本轮修改；精确源码与测试 SHA256 见 measurements/review-followup-source-2026-10-08.json。先复现 invalidated 允许 archive、中文改写在旧 AND 查询中无候选两项失败，再修复。失效/被取代只允许删除，中文 OR 候选排序，英文敏感术语按边界与赋值检测并提供 API/SDK reason_code，异常向量最多两次重试，缓存命中绕过并发排队。旧归档前状态不可反推、长数字仍保守拦截。
 
 最终四道门：**208 passed in 11.47s**、ruff 通过、strict mypy **66 文件**、foundation **8/8**，零租户泄漏/删除命中。扩展中文构造集：13 查询（12 正例+1负例），正例 Recall@3/Hit@1=1.0、负例为空；不外推通用语义质量。无真实模型调用、无迁移或服务部署。详见 review-followup-2026-10-08.md。
+
+## 2026-10-13 M6 Context Builder（Codex）
+
+来源 870afeb + 本轮修改；实现API/SDK和独立预算构建器，212测试、ruff、strict mypy67文件、foundation8/8通过。完整JSON包装计预算、UTF8保守单位、版本引用、按价值裁剪、跨租户/workspace/删除隔离均有测试。初次全量211通过/1失败为SDK路由覆盖漏调用，补测试后全量通过；边界见context-builder.md。

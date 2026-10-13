@@ -1,11 +1,19 @@
 from collections.abc import AsyncIterator, Awaitable, Callable
+from dataclasses import asdict
 from typing import Annotated
 
 import httpx
 from fastapi import APIRouter, Depends, HTTPException
 
-from agent_memory.api.schemas import SearchHit, SearchRequest, SearchResponse
-from agent_memory.application.retrieval import MemoryRetriever, RetrievalQuery
+from agent_memory.api.schemas import (
+    ContextRequest,
+    ContextResponse,
+    SearchHit,
+    SearchRequest,
+    SearchResponse,
+)
+from agent_memory.application.context_builder import MemoryContextBuilder
+from agent_memory.application.retrieval import MemoryRetriever, RetrievalHit, RetrievalQuery
 from agent_memory.config import Settings
 from agent_memory.domain.errors import MemoryScopeForbidden
 from agent_memory.domain.principal import RequestPrincipal
@@ -76,5 +84,18 @@ def create_retrieval_router(
             offset=query.offset,
             next_offset=page.next_offset,
         )
+
+    @router.post("/memories/context", response_model=ContextResponse)
+    async def context(
+        body: ContextRequest,
+        principal: Annotated[RequestPrincipal, Depends(principal_dependency)],
+        service: Annotated[MemoryRetriever, Depends(service_dependency)],
+    ) -> ContextResponse:
+        response = await search(body, principal, service)
+        hits = tuple(RetrievalHit(item.memory_id, item.version_id, item.content,
+                                 item.score, item.ranks, item.raw_scores)
+                     for item in response.items)
+        packet = MemoryContextBuilder().build(hits, body.token_budget)
+        return ContextResponse.model_validate(asdict(packet))
 
     return router

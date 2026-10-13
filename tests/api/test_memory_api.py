@@ -276,7 +276,7 @@ async def test_sdk_covers_all_business_routes_and_pagination(app_database_url: s
     from uuid import uuid4
 
     from agent_memory.api.event_schemas import EventBatchRequest
-    from agent_memory.api.schemas import SearchRequest
+    from agent_memory.api.schemas import ContextRequest, SearchRequest
     from agent_memory.domain.enums import MemoryType, ScopeKind
     from agent_memory.domain.models import MemoryScope
     from agent_memory.sdk import MemoryAPIError, MemoryClient
@@ -344,6 +344,7 @@ async def test_sdk_covers_all_business_routes_and_pagination(app_database_url: s
             assert (await sdk.lifecycle(source.memory_id)).successor_id == successor.memory_id
             await sdk.delete(m.memory_id, expected_revision=5, idempotency_key=str(uuid4()))
             assert [v async for v in sdk.iter_search(SearchRequest(query="successor"))]
+            assert (await sdk.context(ContextRequest(query="successor"))).rendered
             event = EventBatchRequest.model_validate(
                 {
                     "events": [

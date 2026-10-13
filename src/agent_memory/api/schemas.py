@@ -131,3 +131,18 @@ class LifecycleRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     expected_revision: int
+
+
+class ContextRequest(SearchRequest):
+    token_budget: int = Field(default=2000, ge=0, le=100000)
+    offset: int = Field(default=0, ge=0, le=0)
+
+
+class ContextResponse(BaseModel):
+    rendered: str
+    used_tokens: int
+    budget: int
+    selected_version_ids: tuple[str, ...]
+    omitted: int
+    truncated: int
+    counter: str
