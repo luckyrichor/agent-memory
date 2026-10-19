@@ -11,6 +11,18 @@ from zoneinfo import ZoneInfo
 
 from agent_memory.evals.labeling import review_pack
 
+
+def assert_aggregate_only(value):
+    if isinstance(value, dict):
+        if {"source", "candidate", "subject", "human_label", "human_reason"} & value.keys():
+            raise ValueError("raw review fields must not enter aggregate report")
+        for child in value.values():
+            assert_aggregate_only(child)
+    elif isinstance(value, list):
+        for child in value:
+            assert_aggregate_only(child)
+
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--output", type=Path, required=True)
 a = parser.parse_args()
@@ -107,19 +119,19 @@ for name, items_path, model_a, path_a, model_b, path_b in [
                     writer.writeheader()
                     for original in records:
                         frozen = {k: v for k, v in original.items() if not k.startswith("human_")}
-                        row = {k: original.get(k, "") for k in fields}
-                        if not isinstance(row["source"], str):
-                            row["source"] = json.dumps(row["source"], ensure_ascii=False)
-                        row["record_sha256"] = hashlib.sha256(
+                        csv_row = {k: original.get(k, "") for k in fields}
+                        if not isinstance(csv_row["source"], str):
+                            csv_row["source"] = json.dumps(csv_row["source"], ensure_ascii=False)
+                        csv_row["record_sha256"] = hashlib.sha256(
                             json.dumps(frozen, ensure_ascii=False, sort_keys=True).encode()
                         ).hexdigest()
-                        row["human_label"], row["human_reason"] = "", ""
-                        for key, value in row.items():
+                        csv_row["human_label"], csv_row["human_reason"] = "", ""
+                        for key, value in csv_row.items():
                             if isinstance(value, str) and value.startswith(
                                 ("=", "+", "-", "@", "\t", "\r")
                             ):
-                                row[key] = "'" + value
-                        writer.writerow(row)
+                                csv_row[key] = "'" + value
+                        writer.writerow(csv_row)
         # IDs/text stay in restricted artifacts, aggregate counts only in Git.
         row["agreement"] = {
             k: v for k, v in metric.items() if k not in ("arbitration_ids", "audit_ids")
@@ -137,6 +149,7 @@ report["limitations"] = [
     "Public Chinese question generation/type coverage and other phase1 gates remain unaccepted.",
     "Original phase1 delivery and B0 tag remain historical, unchanged artifacts.",
 ]
+assert_aggregate_only(report)
 (a.output / "report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n")
 lines = [
     "# agent-memory 阶段1：模型迁移与标注交接",
