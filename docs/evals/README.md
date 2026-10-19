@@ -138,3 +138,9 @@ with-ark uv run python scripts/with-phase1-runtime.py COMMAND [ARGS ...]
 标注的`--deduplicate-sources`必须配合annotation-v4：完整来源只在sources表出现一次，source_ref逐条关联，无摘要/截断。它改变请求序列化与提示词版本，新运行须冻结新清单。显式`--retry-invalid-cache`保留每次原始失败响应，另存新响应；缓存回放不重复计用量。HTTP失败不能写成负标签。
 
 若标注吞吐不足，可显式使用`--shards 2`等有界协程。它保持每个请求的批次边界和缓存键，仅改变调度次序；新父目录保存并发清单。必须全部子任务完成、ID精确覆盖才生成父COMPLETE。重复启动应使用新输出目录和原缓存，不能覆盖历史结果；取消时在途调用的未知用量须在报告列出。
+
+## 负责人真实回填后的校验
+
+收到负责人填写的CSV或原始JSONL后，使用`python -m agent_memory.evals.human_review`，必填`--items --left --right --pack --arbitration --audit --reviewer --threshold --output`。threshold必须采用负责人明确批准的0~1比例，没有默认值；输出必须在.local新目录。
+
+接收端验证完整ID覆盖、原文/候选不变、数据/模型散列、seed42审核集合、真实人工字段均已填。先以“模型共同标签+负责人仲裁”作为冻结参照计算盲审一致率，再写人工修正后的版本；两版均保留。不能用修正后的标签证明与人工100%一致。程序不会认证reviewer身份，操作人仍须核对实际回填文件来源；禁止助手代签。数据规模与其他阶段闸门不会由这个一致率报告自动判通过。

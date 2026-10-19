@@ -44,6 +44,8 @@ report = {
     ).hexdigest(),
     "preflight": [],
     "datasets": [],
+    "excluded_exploratory_models": ["kimi-k3"],
+    "eligibility_audit_reference": "docs/reports/phase1-2026-10-19/model-eligibility-audit-v1.json",
 }
 for directory, model in [
     ("preflight-ark-pro21-v2", "doubao-seed-2-1-pro-260915"),
