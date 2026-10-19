@@ -1,0 +1,15 @@
+{
+  "model": "doubao-seed-2-1-pro-260915",
+  "calls": 106,
+  "format_valid": 100,
+  "format_n": 100,
+  "consistent_5": true,
+  "preflight_pass": true,
+  "latency_ms": {
+    "n": 106,
+    "p50": 2216.513699502684,
+    "p95": 3393.961860507261,
+    "p99": 4539.137110032607
+  },
+  "http_429": 0
+}

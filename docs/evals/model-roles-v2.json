@@ -17,14 +17,37 @@
     "model": "doubao-embedding-vision-251215",
     "dimensions": 1024
   },
-  "public_chinese_annotation_a": {"provider": "TokenHub", "model": "glm-5.2", "vendor": "Z.ai"},
-  "annotation_b_candidate": {"provider": "TokenHub", "model": "minimax-m2.7", "vendor": "MiniMax"},
-  "judge_candidate": {"provider": "TokenHub", "model": "kimi-k3", "vendor": "Moonshot"},
+  "public_chinese_annotation_a": {
+    "provider": "TokenHub",
+    "model": "glm-5.2",
+    "vendor": "Z.ai"
+  },
   "notes": [
     "Role assignment does not imply preflight passed or human calibration complete.",
     "Completed synthetic annotation A retains deepseek-v4.1-flash and annotation-v1; do not relabel it as a newer model.",
     "Historical partial runs remain separate. Do not mix partial model versions into a frozen full dataset.",
     "B0 source tag remains unchanged; phase2 must establish all quantitative baselines using the same newly frozen runtime profile.",
-    "Changing runtime model does not change embedding vectors or require rebuilding the existing embedding space."
-  ]
+    "Changing runtime model does not change embedding vectors or require rebuilding the existing embedding space.",
+    "Judge must be distinct from annotation vendors within each evaluation; dataset-specific roles must be frozen separately and human-calibrated."
+  ],
+  "public_chinese_annotation_b": {
+    "provider": "TokenHub",
+    "model": "kimi-k3",
+    "vendor": "Moonshot"
+  },
+  "synthetic_annotation_b": {
+    "provider": "TokenHub",
+    "model": "minimax-m2.7",
+    "vendor": "MiniMax"
+  },
+  "judge_candidates_by_dataset": {
+    "public_chinese": {
+      "model": "minimax-m2.7",
+      "vendor": "MiniMax"
+    },
+    "synthetic_timeline": {
+      "model": "kimi-k3",
+      "vendor": "Moonshot"
+    }
+  }
 }

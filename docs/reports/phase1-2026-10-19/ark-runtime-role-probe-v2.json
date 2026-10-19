@@ -1,0 +1,23 @@
+{
+  "model": "doubao-seed-2-1-pro-260915",
+  "at": "2026-10-19T07:35:42.069989+00:00",
+  "scope": "synthetic runtime extraction role probe; not quality calibration",
+  "http_status": 200,
+  "response_sha256": "3b6c8f16781d1e7b48f24d8ae5bcc2b9218b79a4f1c69dc55fb836753eecc6bf",
+  "usage": {
+    "completion_tokens": 45,
+    "prompt_tokens": 254,
+    "total_tokens": 299,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    }
+  },
+  "candidate_count": 1,
+  "scope_preserved": true,
+  "last_reason": "LLM_EXTRACTED",
+  "last_failure": "NONE",
+  "latency_ms": 4360.51
+}
