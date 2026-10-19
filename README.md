@@ -350,3 +350,8 @@ API/SDK、计数口径与验收见[Context Builder](docs/context-builder.md)。
 新增conversation.message示例payload为`{"role":"user","summary":"公开或合成的对话消息"}`，event_type与payload必须匹配；message仍需JWT、scope和幂等字段，通过`POST /v1/events:batch`提交。tool.result保持兼容；不接受system角色。部署此API前先用管理员运行`uv run alembic upgrade head`到0008；本轮只迁移临时测试DB，未部署常驻服务。有对话数据时downgrade拒绝丢失历史，不能为回滚直接删生产记录。
 
 设置`MEMORY_MAX_REQUEST_BODY_BYTES`控制完整HTTP正文上限（默认1048576，配置范围1024–8388608字节），实际chunk累计同样检查。事件仍有单payload/批次数量边界，总正文上限优先；版本列表offset最高10000，搜索query最多2000字符/offset2900保持。限额修复不等同完整抗DoS、租户配额或全局并发控制。
+
+
+## 新完善方案：阶段1评测工程
+
+2026-10-19起按用户提供的[完善方案](docs/agent-memory面试级完善方案.md)推进，本轮只做阶段1，之后等待确认，不进入阶段2。评测命令、公开数据来源/协议、模型预检、重放账本和人工标注流程见[评测说明](docs/evals/README.md)。**阶段1尚未通过全部人工/数据闸门，不能称完整B0已测或优化已完成。** B0标签仍为阶段0修复后源码。

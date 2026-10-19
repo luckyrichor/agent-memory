@@ -1,0 +1,13 @@
+{
+  "base_url": "http://127.0.0.1:8000",
+  "token_env": "MEMORY_EVAL_TOKEN",
+  "workspaces": {
+    "example-conversation": "dedicated-eval-workspace"
+  },
+  "tenant_id": null,
+  "observer_user_id": null,
+  "database_url_env": "MEMORY_EVAL_DATABASE_URL",
+  "extractor_version": null,
+  "worker_wait_seconds": 120,
+  "poll_seconds": 2
+}

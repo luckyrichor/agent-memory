@@ -1,0 +1,592 @@
+[
+  {
+    "id": "EX1",
+    "name": "抽取精确率",
+    "definition": "抽出的记忆中“正确且有保存价值”的条数 / 抽出总条数",
+    "data": "人工标注对话抽样，详见第 5 节",
+    "kind": "标准",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "EX2",
+    "name": "抽取召回率",
+    "definition": "标注者认定应记住的信息中，被抽出的比例",
+    "data": "同上",
+    "kind": "标准",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "EX3",
+    "name": "F1",
+    "definition": "EX1 与 EX2 的调和平均",
+    "data": "同上",
+    "kind": "标准",
+    "formula_family": "experiment",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "EX4",
+    "name": "误抽率",
+    "definition": "闲聊、临时信息、助手自述被记成用户记忆的条数 / 抽出总条数",
+    "data": "标注集需包含负样本对话",
+    "kind": "自定义",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "EX5",
+    "name": "归属错误率",
+    "definition": "把他人的事记成用户的、类型或范围标错的条数 / 抽出总条数",
+    "data": "同上",
+    "kind": "自定义",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "EX6",
+    "name": "敏感漏放率",
+    "definition": "应被拦截的敏感样本中仍被写入的比例（输入侧与输出侧分开统计）",
+    "data": "自建敏感样本集（手机号、证件、密钥、健康等，含变体写法）",
+    "kind": "自定义",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "EX7",
+    "name": "敏感误拦率",
+    "definition": "不该拦的正常内容被拦的比例",
+    "data": "同上加正常对照样本",
+    "kind": "自定义",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "EX8",
+    "name": "抽取失败与回退率",
+    "definition": "模型调用失败或输出不合法、回退到规则抽取的比例",
+    "data": "运行日志",
+    "kind": "自定义",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "EX9",
+    "name": "单事件抽取延迟与用量",
+    "definition": "每个事件抽取的 p50/p95/p99 耗时、输入输出 token",
+    "data": "运行日志",
+    "kind": "标准",
+    "formula_family": "latency",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "LC1",
+    "name": "去重率",
+    "definition": "被识别为重复并合并的记忆条数 / 标注的重复条数",
+    "data": "构造“同义重复”对并人工标注",
+    "kind": "自定义",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "LC2",
+    "name": "误合并率",
+    "definition": "不同记忆被错并的对数 / 合并总对数",
+    "data": "同上，需含“相似但不同”的难例",
+    "kind": "自定义",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "LC3",
+    "name": "冲突处理准确率",
+    "definition": "新旧记忆矛盾时，系统最终采用正确版本的比例",
+    "data": "LongMemEval 的知识更新题 + 自建中文冲突集",
+    "kind": "自定义",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "LC4",
+    "name": "过期记忆泄漏率",
+    "definition": "已被取代、失效、归档的记忆仍出现在检索结果里的查询比例",
+    "data": "在评测中主动制造状态变更",
+    "kind": "自定义",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "LC5",
+    "name": "状态转换合法率",
+    "definition": "非法转换请求被正确拒绝的比例（应为 100%）",
+    "data": "针对转换表的穷举测试",
+    "kind": "自定义",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "LC6",
+    "name": "记忆库增长曲线",
+    "definition": "随对话量增长，记忆条数、版本数、存储体积",
+    "data": "大规模导入过程中采样",
+    "kind": "标准",
+    "formula_family": "experiment",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "LC7",
+    "name": "删除完整性",
+    "definition": "删除后在正文、向量、索引、事件、备份中仍能找到的副本数（应为 0）",
+    "data": "删除演练",
+    "kind": "自定义",
+    "formula_family": "counts",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "RT1",
+    "name": "Recall@k（k=1,3,5,10）",
+    "definition": "前 k 条包含至少一条正确记忆的查询比例，多证据题按证据覆盖率计算另报",
+    "data": "基准的证据标注",
+    "kind": "标准 / 基准",
+    "formula_family": "experiment",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "RT2",
+    "name": "Precision@k",
+    "definition": "前 k 条中正确记忆占比",
+    "data": "同上",
+    "kind": "标准",
+    "formula_family": "experiment",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "RT3",
+    "name": "MRR",
+    "definition": "首个正确结果排名的倒数的平均值",
+    "data": "同上",
+    "kind": "标准",
+    "formula_family": "experiment",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "RT4",
+    "name": "nDCG@k",
+    "definition": "按相关度分级的排序质量",
+    "data": "需有分级标注（自建中文集提供）",
+    "kind": "标准",
+    "formula_family": "experiment",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "RT5",
+    "name": "分题型指标",
+    "definition": "按单会话、跨会话、时间推理、知识更新、偏好、拒答分别统计 RT1 到 RT4",
+    "data": "LongMemEval 题型标签",
+    "kind": "基准",
+    "formula_family": "experiment",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "RT6",
+    "name": "拒答正确率",
+    "definition": "无相关记忆的查询中，系统返回空或低置信的比例",
+    "data": "拒答题 + 自建负样本",
+    "kind": "基准",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "RT7",
+    "name": "通道消融",
+    "definition": "关闭词法、向量、结构化各通道后的 RT1 到 RT4 变化",
+    "data": "同一评测集",
+    "kind": "实验方法",
+    "formula_family": "experiment",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "RT8",
+    "name": "融合参数敏感性",
+    "definition": "权重、RRF 常数变化对指标的影响曲线",
+    "data": "同上",
+    "kind": "实验方法",
+    "formula_family": "experiment",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "RT9",
+    "name": "向量模型对比",
+    "definition": "不同向量模型下的 RT1 到 RT4（Ark 当前模型与腾讯云 kinfra-text-embedding-0.6b（均 1024 维，见 O10））",
+    "data": "同一评测集",
+    "kind": "实验方法",
+    "formula_family": "experiment",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "RT10",
+    "name": "过滤正确性",
+    "definition": "跨租户、跨用户、跨工作区返回的条数（应为 0）",
+    "data": "对抗性查询集",
+    "kind": "自定义",
+    "formula_family": "counts",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "RT11",
+    "name": "分页一致性",
+    "definition": "翻页期间数据变化导致的重复、遗漏条数",
+    "data": "并发写入下的翻页测试",
+    "kind": "自定义",
+    "formula_family": "counts",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "CX1",
+    "name": "预算利用率",
+    "definition": "实际用量 / 预算",
+    "data": "评测时记录",
+    "kind": "自定义",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "CX2",
+    "name": "计数器误差",
+    "definition": "字节估算 与 目标模型真实 token 的差异与浪费率",
+    "data": "用模型分词器对照",
+    "kind": "自定义",
+    "formula_family": "experiment",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "CX3",
+    "name": "关键信息保留率",
+    "definition": "预算受限时，回答所需的证据仍在上下文中的比例",
+    "data": "基准的证据标注，在多种预算下测",
+    "kind": "自定义",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "CX4",
+    "name": "截断损失率",
+    "definition": "被截短的记忆里，关键信息被截掉的比例",
+    "data": "同上",
+    "kind": "自定义",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "CX5",
+    "name": "冗余率",
+    "definition": "上下文中重复或与问题无关的条数占比",
+    "data": "裁判模型加人工抽检",
+    "kind": "自定义",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "CX6",
+    "name": "注入防御成功率",
+    "definition": "带恶意指令的记忆被注入后，模型仍维持原行为的比例",
+    "data": "自建注入样本集（第 9 节）",
+    "kind": "自定义",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "E1",
+    "name": "问答准确率",
+    "definition": "裁判判定正确的题数 / 总题数，按题型拆分",
+    "data": "LongMemEval、LoCoMo",
+    "kind": "基准",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "E2",
+    "name": "有无记忆对比",
+    "definition": "同一批题，“无记忆”“全文塞入”“朴素向量”“本系统”四组的 E1 差异",
+    "data": "同上",
+    "kind": "实验方法",
+    "formula_family": "experiment",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "E3",
+    "name": "单位正确答案 token 数",
+    "definition": "总 token 数 / 答对题数，用于和“全文塞入”比 token 消耗",
+    "data": "调用日志",
+    "kind": "自定义",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "E4",
+    "name": "幻觉率",
+    "definition": "回答中没有记忆依据的陈述比例",
+    "data": "裁判模型加人工抽检",
+    "kind": "标准",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "E5",
+    "name": "个性化命中率",
+    "definition": "偏好类题中正确利用用户偏好的比例",
+    "data": "LongMemEval 偏好题",
+    "kind": "基准",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "E6",
+    "name": "模型上限对照",
+    "definition": "用 oracle 设置（只给证据）得到的 E1，说明系统距上限的差距",
+    "data": "LongMemEval oracle",
+    "kind": "基准",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "PF1",
+    "name": "搜索延迟",
+    "definition": "检索接口端到端 p50/p95/p99，拆分各阶段（查询向量化、各通道召回、融合、取正文）",
+    "data": "合成压测数据",
+    "kind": "标准",
+    "formula_family": "latency",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "PF2",
+    "name": "写入延迟",
+    "definition": "写入接口 p50/p95/p99",
+    "data": "同上",
+    "kind": "标准",
+    "formula_family": "latency",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "PF3",
+    "name": "上下文接口延迟",
+    "definition": "上下文接口 p50/p95/p99",
+    "data": "同上",
+    "kind": "标准",
+    "formula_family": "latency",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "PF4",
+    "name": "吞吐",
+    "definition": "延迟不超过目标时的最大 QPS，读写混合比例分档",
+    "data": "同上",
+    "kind": "标准",
+    "formula_family": "experiment",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "PF5",
+    "name": "规模曲线",
+    "definition": "记忆条数为 1 万、10 万、100 万、500 万时的 PF1 到 PF4",
+    "data": "同上",
+    "kind": "标准",
+    "formula_family": "experiment",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "PF6",
+    "name": "向量索引权衡",
+    "definition": "精确扫描与近似索引的召回率、延迟、建索引耗时、索引体积",
+    "data": "同上",
+    "kind": "标准",
+    "formula_family": "experiment",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "PF7",
+    "name": "数据新鲜度",
+    "definition": "从写入请求返回到该记忆能被向量检索命中的时延 p50/p95/p99",
+    "data": "写入后按固定间隔轮询",
+    "kind": "自定义",
+    "formula_family": "latency",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "PF8",
+    "name": "队列健康",
+    "definition": "任务积压量、处理延迟、重试率、死信率",
+    "data": "内部指标",
+    "kind": "标准",
+    "formula_family": "experiment",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "PF9",
+    "name": "资源占用",
+    "definition": "CPU、内存、磁盘、数据库连接数、索引体积",
+    "data": "系统监控",
+    "kind": "标准",
+    "formula_family": "experiment",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "PF10",
+    "name": "多租户公平性",
+    "definition": "一个租户高负载时，其他租户 p99 的恶化倍数",
+    "data": "多租户并发压测",
+    "kind": "自定义",
+    "formula_family": "experiment",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "RL1",
+    "name": "幂等正确性",
+    "definition": "重复请求产生重复数据的次数（应为 0），同键不同参数应返回 409",
+    "data": "并发重放测试",
+    "kind": "自定义",
+    "formula_family": "counts",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "RL2",
+    "name": "并发修改正确性",
+    "definition": "并发修改同一记忆时丢失更新的次数（应为 0）",
+    "data": "并发测试",
+    "kind": "自定义",
+    "formula_family": "counts",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "RL3",
+    "name": "租约有效性",
+    "definition": "过期 worker 覆盖新结果的次数（应为 0）",
+    "data": "故障注入：人为让 worker 暂停到租约过期",
+    "kind": "自定义",
+    "formula_family": "counts",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "RL4",
+    "name": "任务最终完成率",
+    "definition": "故障注入下最终成功的任务比例与重试次数分布",
+    "data": "故障注入",
+    "kind": "自定义",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "RL5",
+    "name": "故障恢复时间",
+    "definition": "数据库重启、模型接口超时、worker 崩溃后，服务恢复到基线的耗时",
+    "data": "故障注入",
+    "kind": "标准",
+    "formula_family": "latency",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "RL6",
+    "name": "备份恢复",
+    "definition": "恢复耗时与数据完整性校验（行数、校验和、抽样检索）",
+    "data": "恢复演练",
+    "kind": "标准",
+    "formula_family": "experiment",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "RL7",
+    "name": "不可用率",
+    "definition": "压测与演练期间错误响应（5xx）占比",
+    "data": "网关日志",
+    "kind": "标准",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "SC1",
+    "name": "跨租户泄漏次数",
+    "definition": "对抗性测试下跨租户可读、可写的次数（应为 0）",
+    "data": "对抗性测试集，使用非属主角色连接",
+    "kind": "自定义",
+    "formula_family": "counts",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "SC2",
+    "name": "记忆污染抵抗",
+    "definition": "恶意写入对其他查询结果的影响（RT1 下降幅度）",
+    "data": "自建污染样本",
+    "kind": "自定义",
+    "formula_family": "experiment",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "SC3",
+    "name": "权限绕过率",
+    "definition": "无权限调用高权限操作成功的次数（应为 0）",
+    "data": "权限矩阵测试",
+    "kind": "自定义",
+    "formula_family": "counts",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "SC4",
+    "name": "日志内容泄漏",
+    "definition": "日志、链路、指标中出现记忆正文的次数（应为 0）",
+    "data": "全量日志扫描",
+    "kind": "自定义",
+    "formula_family": "counts",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "SC5",
+    "name": "每千次写入调用与 token 用量",
+    "definition": "抽取与向量化的调用次数、token 数，加存储占用",
+    "data": "调用日志",
+    "kind": "标准",
+    "formula_family": "experiment",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "SC6",
+    "name": "每千次检索调用与 token 用量",
+    "definition": "查询向量化的调用次数、token 数，加 CPU 占用",
+    "data": "同上",
+    "kind": "标准",
+    "formula_family": "experiment",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "SC7",
+    "name": "缓存命中率与节省",
+    "definition": "查询向量缓存命中率、节省的调用次数与 token 数",
+    "data": "运行日志",
+    "kind": "标准",
+    "formula_family": "ratio",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "SC8",
+    "name": "数据出境量",
+    "definition": "发送给第三方模型的文本条数与字节数",
+    "data": "调用日志",
+    "kind": "自定义",
+    "formula_family": "counts",
+    "status": "definition registered; observation adapter required"
+  },
+  {
+    "id": "OP1",
+    "name": "回滚耗时",
+    "definition": "从触发回滚命令到指标恢复到基线的秒数",
+    "formula_family": "latency",
+    "status": "definition registered; drill required"
+  },
+  {
+    "id": "OP2",
+    "name": "重建期间可用性",
+    "definition": "重建期间每分钟RT1和PF1及重建总时长",
+    "formula_family": "experiment",
+    "status": "definition registered; drill required"
+  }
+]
