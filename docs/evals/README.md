@@ -144,3 +144,5 @@ with-ark uv run python scripts/with-phase1-runtime.py COMMAND [ARGS ...]
 收到负责人填写的CSV或原始JSONL后，使用`python -m agent_memory.evals.human_review`，必填`--items --left --right --pack --arbitration --audit --reviewer --threshold --output`。threshold必须采用负责人明确批准的0~1比例，没有默认值；输出必须在.local新目录。
 
 接收端验证完整ID覆盖、原文/候选不变、数据/模型散列、seed42审核集合、真实人工字段均已填。先以“模型共同标签+负责人仲裁”作为冻结参照计算盲审一致率，再写人工修正后的版本；两版均保留。不能用修正后的标签证明与人工100%一致。程序不会认证reviewer身份，操作人仍须核对实际回填文件来源；禁止助手代签。数据规模与其他阶段闸门不会由这个一致率报告自动判通过。
+
+2026-10-19负责人已明确确认“盲审95%”，本轮human_review命令使用`--threshold 0.95`，配置冻结在human-review-policy-v1.json；模型κ≥0.7不变。先前“阈值待确认”描述保留为历史，当前不再询问同一阈值。

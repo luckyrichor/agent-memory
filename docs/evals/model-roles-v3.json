@@ -34,7 +34,7 @@
     "provider": "TokenHub",
     "model": "deepseek-v4-pro-0813",
     "vendor": "DeepSeek",
-    "status": "full preflight required before annotation"
+    "preflight_report": "../reports/phase1-2026-10-19/preflight-deepseek-pro0813-v2-summary.json"
   },
   "synthetic_annotation_b": {
     "provider": "TokenHub",

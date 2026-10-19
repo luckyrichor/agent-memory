@@ -38,6 +38,7 @@ report = {
     "phase": 1,
     "phase_gate_passed": False,
     "human_review_complete": False,
+    "human_review_policy": json.loads(Path("docs/evals/human-review-policy-v1.json").read_text()),
     "scope": "Model migration/preflight and candidate annotations; not approved gold or phase2 baseline.",
     "role_config_sha256": hashlib.sha256(
         Path("docs/evals/model-roles-v3.json").read_bytes()
@@ -193,7 +194,7 @@ for d in report["datasets"]:
 lines += [
     "",
     "两份盲审JSONL中的human_label/human_reason均为空，必须由负责人填写。",
-    "模型κ门槛仍为0.7；负责人10%盲审的一致率阈值尚需明确，不能由助手代定或代签。",
+    "模型κ门槛仍为0.7；负责人已明确批准10%盲审一致率至少95%；须用真实人工回填计算，不由助手代签。",
     "",
     "## 复现",
     "",

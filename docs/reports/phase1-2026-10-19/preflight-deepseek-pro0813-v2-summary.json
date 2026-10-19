@@ -1,0 +1,16 @@
+{
+  "model": "deepseek-v4-pro-0813",
+  "calls": 106,
+  "format_valid": 100,
+  "format_n": 100,
+  "consistent_5": true,
+  "preflight_pass": true,
+  "sampling_control_eligible": true,
+  "latency_ms": {
+    "n": 106,
+    "p50": 2307.3216774500906,
+    "p95": 2857.6952712610364,
+    "p99": 3605.692173587159
+  },
+  "http_429": 0
+}

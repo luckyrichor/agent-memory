@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "approved_by": "project owner in current conversation",
+  "approval_date_beijing": "2026-10-19",
+  "human_audit_min_agreement": 0.95,
+  "model_min_cohen_kappa": 0.7,
+  "audit_fraction": 0.1,
+  "audit_seed": 42,
+  "reference": "Frozen model consensus plus owner arbitration, before applying independent audit corrections",
+  "human_answers_required": true,
+  "note": "Threshold approval is not approval of any individual label or stage acceptance."
+}
