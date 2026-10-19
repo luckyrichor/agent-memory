@@ -120,3 +120,19 @@ B模型单独调用minimax-m3，不给它A的结果。每个模型先通过预�
 这些文件不自动变成CI质量金标。现有CI会执行新增公式/导入/账本回归与原有foundation安全闸门；完整质量回归需在人审金标冻结后接入，不能用模板自证。
 
 Ark预检记录区分“模型家族名”和实际调用ID。批量input收到HTTP200不代表返回多个独立向量；本轮两段文本仍收到单个1024维向量，不能据此实现独立文本的批量写入。接口与最大输入以[官方API](https://console.volcengine.com/ark/region:cn-beijing/docs/multimodal-vectorization-api)及[模型列表](https://docs.volcengine.com/docs/ark/model-list?lang=en)核验；SDK/聚合多模态接口不能混成同一种批量语义。
+
+## 2026-10-19 经用户确认的模型迁移
+
+当前角色配置见 [model-roles-v2.json](model-roles-v2.json)。用户已确认抽取/对话及端到端答题改用Ark `doubao-seed-2-1-pro-260915`；原始用户方案与旧404报告保持原样，B0源码标签不改。向量模型仍为`doubao-embedding-vision-251215`、1024维，不因对话模型变化重建向量空间。
+
+新模型须有完整预检报告；最小200不能代替100格式样本、5次一致性或真实任务校准。TokenHub模型耗尽时选择通过预检的其他模型，并保持标注、裁判厂商独立。不同模型/提示词的部分标签不拼接成同一个冻结实验。
+
+运行阶段1的抽取worker/API等命令时，可以显式使用新版配置：
+
+```bash
+with-ark uv run python scripts/with-phase1-runtime.py COMMAND [ARGS ...]
+```
+
+该入口从共享Ark授权环境读取密钥，仅给目标子进程设置`MEMORY_EXTRACTION_MODEL/ENDPOINT/TOKEN/TRUST_ENV`，不把密钥写入文件或输出，不自动启动服务。它覆盖目标进程的旧抽取配置；不改其他进程或历史B0记录。阶段2正式量化基线尚未建立，后续须用同一新配置重新测全部比较组，不把换模型后的结果直接与旧模型部分结果比较。
+
+标注的`--deduplicate-sources`必须配合annotation-v4：完整来源只在sources表出现一次，source_ref逐条关联，无摘要/截断。它改变请求序列化与提示词版本，新运行须冻结新清单。显式`--retry-invalid-cache`保留每次原始失败响应，另存新响应；缓存回放不重复计用量。HTTP失败不能写成负标签。

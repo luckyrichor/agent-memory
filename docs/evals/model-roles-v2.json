@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "authorization_date_beijing": "2026-10-19",
+  "scope": "phase1 and subsequent explicitly authorized evaluations; qualification reports required before use",
+  "runtime_extraction": {
+    "provider": "Ark",
+    "model": "doubao-seed-2-1-pro-260915",
+    "endpoint": "https://ark.cn-beijing.volces.com/api/v3/chat/completions",
+    "credential_env": "ARK_API_KEY"
+  },
+  "end_to_end_answer": {
+    "provider": "Ark",
+    "model": "doubao-seed-2-1-pro-260915"
+  },
+  "embedding": {
+    "provider": "Ark",
+    "model": "doubao-embedding-vision-251215",
+    "dimensions": 1024
+  },
+  "public_chinese_annotation_a": {"provider": "TokenHub", "model": "glm-5.2", "vendor": "Z.ai"},
+  "annotation_b_candidate": {"provider": "TokenHub", "model": "minimax-m2.7", "vendor": "MiniMax"},
+  "judge_candidate": {"provider": "TokenHub", "model": "kimi-k3", "vendor": "Moonshot"},
+  "notes": [
+    "Role assignment does not imply preflight passed or human calibration complete.",
+    "Completed synthetic annotation A retains deepseek-v4.1-flash and annotation-v1; do not relabel it as a newer model.",
+    "Historical partial runs remain separate. Do not mix partial model versions into a frozen full dataset.",
+    "B0 source tag remains unchanged; phase2 must establish all quantitative baselines using the same newly frozen runtime profile.",
+    "Changing runtime model does not change embedding vectors or require rebuilding the existing embedding space."
+  ]
+}

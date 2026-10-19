@@ -1,0 +1,22 @@
+[
+  {
+    "provider": "TokenHub",
+    "method": "POST",
+    "url": "https://tokenhub.tencentmaas.com/v1/chat/completions",
+    "model": "minimax-m3",
+    "at": "2026-10-19T07:20:03.839317+00:00",
+    "status": 402,
+    "sha256": "f350fd88d867e347c6d3261a39d66100831fab997d47f62a46106467eb1dac62",
+    "error": "{'type': 'permission_error', 'code': '401008', 'message': 'The free trial quota for the service has been exhausted and postpaid billing is not enabled, so the service cannot be accessed. Please go to Console > Online Inference Service to enable postpaid billing. See: https://console.cloud.tencent.com/tokenhub/inference', 'message_zh': '服务免费体验额度已耗尽，且未开启后付费，无法正常访问。请前往控制台 > 在线推理服务开启后付费，查看链接：https://console.cloud.tencent.com/tokenhub/inference', 'source': 'gateway', 'request_id': '86d45498-4508-47e6-8e41-f9c29cb3920b'}"
+  },
+  {
+    "provider": "TokenHub",
+    "method": "POST",
+    "url": "https://tokenhub.tencentmaas.com/v1/chat/completions",
+    "model": "hy3",
+    "at": "2026-10-19T07:20:05.081932+00:00",
+    "status": 402,
+    "sha256": "76e4de645fb5b4e69fea0e7286de8f3ba7f0b7f83b98f415e70d7a325e7b2ce9",
+    "error": "{'type': 'permission_error', 'code': '401008', 'message': 'The free trial quota for the service has been exhausted and postpaid billing is not enabled, so the service cannot be accessed. Please go to Console > Online Inference Service to enable postpaid billing. See: https://console.cloud.tencent.com/tokenhub/inference', 'message_zh': '服务免费体验额度已耗尽，且未开启后付费，无法正常访问。请前往控制台 > 在线推理服务开启后付费，查看链接：https://console.cloud.tencent.com/tokenhub/inference', 'source': 'gateway', 'request_id': 'cdfd4498-3f32-4ae8-92b6-6ddff1ce1489'}"
+  }
+]

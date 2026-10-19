@@ -1,0 +1,15 @@
+{
+  "model": "minimax-m2.7",
+  "calls": 106,
+  "format_valid": 100,
+  "format_n": 100,
+  "consistent_5": true,
+  "preflight_pass": true,
+  "latency_ms": {
+    "n": 106,
+    "p50": 3299.6440660208464,
+    "p95": 5606.636589218397,
+    "p99": 7002.115773374682
+  },
+  "http_429": 0
+}

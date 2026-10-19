@@ -21,6 +21,7 @@ from pydantic import BaseModel, ConfigDict
 from agent_memory.evals.metrics import latency
 
 MODELS = ("deepseek-v4.1-flash", "minimax-m3", "glm-5.2", "hy3", "kimi-k3", "minimax-m2.7")
+ARK_MODELS = ("doubao-seed-2-1-pro-260915",)
 
 
 class ProbeReply(BaseModel):
@@ -46,13 +47,24 @@ async def probe(
     body.update(
         {"reasoning_effort": "none"} if model == "hy3" else {"thinking": {"type": "disabled"}}
     )
-    base = os.environ.get("TENCENT_BASE_URL", "https://tokenhub.tencentmaas.com/v1").rstrip("/")
-    token = os.environ.get("TOKENHUB_API_KEY") or os.environ.get("TENCENT_API_KEY")
+    ark = model in ARK_MODELS
+    base = (
+        "https://ark.cn-beijing.volces.com/api/v3"
+        if ark
+        else os.environ.get("TENCENT_BASE_URL", "https://tokenhub.tencentmaas.com/v1").rstrip("/")
+    )
+    token = (
+        os.environ.get("ARK_API_KEY")
+        if ark
+        else (os.environ.get("TOKENHUB_API_KEY") or os.environ.get("TENCENT_API_KEY"))
+    )
     if not token:
-        raise ValueError("shared TokenHub credential missing; use with-tencent")
+        raise ValueError("shared provider credential missing; use with-ark or with-tencent")
     started = time.monotonic()
     record: dict[str, Any] = {
         "model": model,
+        "provider": "Ark" if ark else "TokenHub",
+        "base_url": base,
         "number": number,
         "repeated": repeated,
         "expected": expected,
@@ -175,7 +187,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--prompt", type=Path, default=Path("docs/evals/prompts/preflight-v1.txt"))
-    parser.add_argument("--models", nargs="+", choices=MODELS, default=list(MODELS))
+    parser.add_argument("--models", nargs="+", choices=MODELS + ARK_MODELS, default=list(MODELS))
     parser.add_argument("--interval", type=float, default=2.5)
     args = parser.parse_args()
     if ".local" not in args.output.resolve().parts:

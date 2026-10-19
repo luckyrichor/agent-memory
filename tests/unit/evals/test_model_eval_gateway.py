@@ -65,6 +65,26 @@ async def test_preflight_does_not_turn_http_error_into_negative_judgment(monkeyp
     assert "Authorization" not in json.dumps(raw)
 
 
+async def test_ark_preflight_uses_ark_route_and_credential_only(monkeypatch):
+    monkeypatch.setenv("ARK_API_KEY", "ark-unit-test-only")
+    monkeypatch.setenv("TOKENHUB_API_KEY", "tokenhub-unit-test-only")
+
+    def respond(request):
+        assert str(request.url) == "https://ark.cn-beijing.volces.com/api/v3/chat/completions"
+        assert request.headers["Authorization"] == "Bearer ark-unit-test-only"
+        body = json.loads(request.content)
+        assert body["model"] == "doubao-seed-2-1-pro-260915"
+        assert body["thinking"] == {"type": "disabled"}
+        return httpx.Response(
+            200, json={"choices": [{"message": {"content": '{"label":"same","reason":"一致"}'}}]}
+        )
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(respond)) as client:
+        record, raw = await probe(client, "doubao-seed-2-1-pro-260915", "prompt", 0, repeated=True)
+    assert record["provider"] == "Ark" and record["correct"]
+    assert "unit-test-only" not in json.dumps([record, raw])
+
+
 async def test_annotation_replay_and_failure_ledger_do_not_expose_credentials(
     tmp_path, monkeypatch
 ):
