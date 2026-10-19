@@ -13,6 +13,7 @@ import httpx
 from pydantic import BaseModel, ConfigDict, ValidationError
 
 from agent_memory.evals.labeling import Label
+from agent_memory.evals.model_preflight import MODELS
 
 
 class LabelBatch(BaseModel):
@@ -27,6 +28,23 @@ def validate_batch(data: dict[str, Any], expected: set[str]) -> LabelBatch:
     return parsed
 
 
+def shared_sources(batch: list[dict[str, Any]]) -> dict[str, Any]:
+    """Transmit identical sources once without shortening or merging distinct sources."""
+    sources: dict[str, Any] = {}
+    indices: dict[str, str] = {}
+    items = []
+    for row in batch:
+        item = dict(row)
+        source = item.pop("source")
+        encoded = json.dumps(source, sort_keys=True, ensure_ascii=False)
+        if encoded not in indices:
+            indices[encoded] = str(len(indices))
+            sources[indices[encoded]] = source
+        item["source_ref"] = indices[encoded]
+        items.append(item)
+    return {"sources": sources, "items": items}
+
+
 async def annotate(
     items: Path,
     output: Path,
@@ -37,6 +55,7 @@ async def annotate(
     cache: Path,
     interval: float = 3,
     retry_invalid_cache: bool = False,
+    deduplicate_sources: bool = False,
 ) -> None:
     if batch_size < 1 or batch_size > 50:
         raise ValueError("annotation batch must be 1..50")
@@ -64,7 +83,13 @@ async def annotate(
                 "response_format": {"type": "json_object"},
                 "messages": [
                     {"role": "system", "content": prompt},
-                    {"role": "user", "content": json.dumps(batch, ensure_ascii=False)},
+                    {
+                        "role": "user",
+                        "content": json.dumps(
+                            shared_sources(batch) if deduplicate_sources else batch,
+                            ensure_ascii=False,
+                        ),
+                    },
                 ],
             }
             body.update(
@@ -208,11 +233,10 @@ def main() -> None:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--cache", type=Path, required=True)
     parser.add_argument("--prompt", type=Path, default=Path("docs/evals/prompts/annotation-v1.txt"))
-    parser.add_argument(
-        "--model", choices=("deepseek-v4.1-flash", "minimax-m3", "glm-5.2", "hy3"), required=True
-    )
+    parser.add_argument("--model", choices=MODELS, required=True)
     parser.add_argument("--batch-size", type=int, default=25)
     parser.add_argument("--retry-invalid-cache", action="store_true")
+    parser.add_argument("--deduplicate-sources", action="store_true")
     args = parser.parse_args()
     for path in (args.output, args.cache):
         if ".local" not in path.resolve().parts:
@@ -226,6 +250,7 @@ def main() -> None:
             cache=args.cache,
             batch_size=args.batch_size,
             retry_invalid_cache=args.retry_invalid_cache,
+            deduplicate_sources=args.deduplicate_sources,
         )
     )
 

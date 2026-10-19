@@ -20,7 +20,7 @@ from pydantic import BaseModel, ConfigDict
 
 from agent_memory.evals.metrics import latency
 
-MODELS = ("deepseek-v4.1-flash", "minimax-m3", "glm-5.2", "hy3")
+MODELS = ("deepseek-v4.1-flash", "minimax-m3", "glm-5.2", "hy3", "kimi-k3", "minimax-m2.7")
 
 
 class ProbeReply(BaseModel):
@@ -115,10 +115,18 @@ async def run(
                 record["attempts"] = attempts
                 records.append(record)
                 raw_records.append(raw)
+                (output / "progress.json").write_text(json.dumps(records, indent=2))
+                raw_progress = output / "raw-local-only.json"
+                raw_progress.write_text(json.dumps(raw_records, ensure_ascii=False))
+                raw_progress.chmod(0o600)
                 if number % 25 == 0:
                     print(
                         json.dumps({"progress_model": model, "completed": number + 1}), flush=True
                     )
+                if record.get("http_status") in (401, 402, 403, 404):
+                    # Repeating quota/auth failures cannot qualify a model. Retain
+                    # the failed probe and continue with the next eligible model.
+                    break
             model_rows = [r for r in records if r["model"] == model]
             repeated = model_rows[1:6]
             formatted = model_rows[6:]

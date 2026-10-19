@@ -4,7 +4,52 @@ import httpx
 import pytest
 
 from agent_memory.evals import annotate as module
+from agent_memory.evals import model_preflight
 from agent_memory.evals.model_preflight import probe
+
+
+def test_shared_sources_is_lossless_and_preserves_source_attribution():
+    source_a = [{"role": "user", "text": "完整原文，包括标点。"}]
+    source_b = [{"role": "assistant", "text": "完整原文，包括标点。"}]
+    rows = [
+        {"item_id": "a", "candidate": "one", "source": source_a},
+        {"item_id": "b", "candidate": "two", "source": source_a},
+        {"item_id": "c", "candidate": "three", "source": source_b},
+    ]
+    before = json.dumps(rows, ensure_ascii=False)
+    packed = module.shared_sources(rows)
+    assert len(packed["sources"]) == 2
+    reconstructed = []
+    for row in packed["items"]:
+        item = dict(row)
+        item["source"] = packed["sources"][item.pop("source_ref")]
+        reconstructed.append(item)
+    assert reconstructed == rows
+    assert json.dumps(rows, ensure_ascii=False) == before
+
+
+async def test_preflight_stops_quota_failures_and_retains_incomplete_evidence(
+    tmp_path, monkeypatch
+):
+    monkeypatch.setenv("TOKENHUB_API_KEY", "unit-test-only")
+    original, calls = httpx.AsyncClient, []
+
+    def respond(request):
+        calls.append(request)
+        return httpx.Response(402, json={"error": {"message": "quota exhausted"}})
+
+    monkeypatch.setattr(
+        model_preflight.httpx,
+        "AsyncClient",
+        lambda **kw: original(**kw, transport=httpx.MockTransport(respond)),
+    )
+    prompt = tmp_path / "prompt"
+    prompt.write_text("synthetic prompt")
+    await model_preflight.run(tmp_path / "out", prompt, models=("kimi-k3",), interval=0)
+    summary = json.loads((tmp_path / "out/kimi-k3-summary.json").read_text())
+    assert len(calls) == 1 and not summary["preflight_pass"] and summary["format_n"] == 0
+    assert len(json.loads((tmp_path / "out/progress.json").read_text())) == 1
+    assert "unit-test-only" not in (tmp_path / "out/report.json").read_text()
 
 
 async def test_preflight_does_not_turn_http_error_into_negative_judgment(monkeypatch):
