@@ -164,3 +164,26 @@ async def test_event_api_returns_stable_conflict_for_changed_replay(
     assert conflict.status_code == 409
     assert conflict.json()["error"]["code"] == "EVENT_IDEMPOTENCY_CONFLICT"
     await app.state.engine.dispose()
+
+
+async def test_conversation_event_ingestion_replay_and_scope_isolation(app_database_url):
+    private, public = signing_material()
+    app = create_app(Settings(database_url=app_database_url, jwt_public_key=public,
+                              jwt_issuer='memory-test', jwt_audience='memory-api'))
+    body = event_body()
+    item = body['events'][0]
+    item.update(idempotency_key='conversation-fixture', session_id='conversation-fixture',
+                event_type='conversation.message', payload={'role':'user', 'summary':'fixture preference'})
+    try:
+        async with AsyncClient(transport=ASGITransport(app=app), base_url='http://test') as client:
+            auth = {'Authorization': f'Bearer {token(private)}'}
+            first = await client.post('/v1/events:batch', headers=auth, json=body)
+            replay = await client.post('/v1/events:batch', headers=auth, json=body)
+            item['scope'] = {'kind':'workspace', 'workspace_id':'forbidden'}
+            forbidden = await client.post('/v1/events:batch', headers=auth, json=body)
+        assert first.status_code == replay.status_code == 202
+        assert first.json()['items'][0]['event_id'] == replay.json()['items'][0]['event_id']
+        assert replay.json()['items'][0]['disposition'] == 'duplicate'
+        assert forbidden.status_code == 403
+    finally:
+        await app.state.engine.dispose()

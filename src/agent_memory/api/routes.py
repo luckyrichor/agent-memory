@@ -41,7 +41,7 @@ def create_router(
     )
     async def remember(
         body: RememberRequest,
-        idempotency_key: Annotated[str, Header(alias="Idempotency-Key")],
+        idempotency_key: Annotated[str, Header(alias="Idempotency-Key", min_length=1, max_length=255)],
         principal: Annotated[RequestPrincipal, Depends(principal_dependency)],
         service: Annotated[
             ExplicitMemoryService,
@@ -100,7 +100,7 @@ def create_router(
             Depends(service_dependency),
         ],
         limit: Annotated[int, Query(ge=1, le=100)] = 20,
-        offset: Annotated[int, Query(ge=0)] = 0,
+        offset: Annotated[int, Query(ge=0, le=10000)] = 0,
     ) -> VersionListResponse:
         versions, next_offset = await service.versions(memory_id, principal, limit, offset)
         return VersionListResponse(
@@ -156,7 +156,7 @@ def create_router(
     )
     async def delete_memory(
         body: DeletionRequest,
-        idempotency_key: Annotated[str, Header(alias="Idempotency-Key")],
+        idempotency_key: Annotated[str, Header(alias="Idempotency-Key", min_length=1, max_length=255)],
         principal: Annotated[RequestPrincipal, Depends(principal_dependency)],
         service: Annotated[
             ExplicitMemoryService,

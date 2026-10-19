@@ -9,7 +9,7 @@ class ScopeRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     kind: ScopeKind
-    workspace_id: str | None = None
+    workspace_id: str | None = Field(default=None, min_length=1, max_length=512)
     subject_user_id: UUID | None = None
 
 

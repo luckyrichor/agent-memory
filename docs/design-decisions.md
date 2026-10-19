@@ -118,3 +118,13 @@ M7输出只是一条未经验证的候选，不允许模型指定权限/权威�
 ## 2026-10-13 M6 上下文构建
 
 Retriever与Builder分离：Builder只消费已授权候选，完整JSON计入预算，按得分优先而非按长度排序；字符二分裁剪避免中文破坏。默认保守字节单位避免无模型情况下编造精确token数量。Context API与SDK共享原检索鉴权/向量降级，不建立绕开RLS的第二检索路径。缺失证据和冲突明确标未评估，不扩大当前领域模型。
+
+## 2026-10-19 阶段0：只修正确性，不先优化
+
+- InvalidScope保持在纯领域层校验；HTTP边界映射422/INVALID_SCOPE，不回显异常正文。评测case边界捕普通Exception以形成完整失败报告，不捕BaseException取消信号。
+- 对话采用新conversation.message，而不把真实对话伪装tool.result。payload角色只接受user/assistant，不承诺其可信；LLM仍只消费受限summary并提议候选，范围/权限由服务决定。0008只扩展事件约束，有数据拒绝有损downgrade。
+- PG租约使用clock_timestamp而不是应用时钟或PG now()（后者是事务起点）。领取在查询中筛选，拿锁后再读wall clock；renew/succeed/fail也在行锁后核验。为了统一队列ready时间，Outbox转Job和重建/admin调度同步用DB时钟。领域与内存适配器保留注入时钟。代价是额外DB读钟往返，收益是时差不再由worker选择，不称性能提升。
+- 请求正文在ASGI边界有界缓冲，过大在解析/依赖/写入前拒绝，不能只信Content-Length。原有事件单条限制与总batch上限并用；版本offset新增上限不改现有搜索评分或索引。Body上限可配置且配置本身有界，并非完整抗DoS方案。
+- 旧PG租约测试用未来应用时间模拟过期，修复后改操纵临时DB的期限/ready字段。旧迁移roundtrip在共享session库销毁表，新增对话后被保护拒绝；迁移破坏性测试移到独立容器，另测有数据拒绝降级。不是删除安全断言换取通过。
+- 依赖按PyPI公告扫描，PyJWT/urllib3修运行依赖，pytest/pytest-asyncio升开发主版本以修已报公告，原件与锁文件前后hash保留。扫描0只表示那个时点已知公告，不等于未知漏洞或跨平台均安全。官方来源：[PyJWT options公告](https://github.com/jpadilla/pyjwt/security/advisories/GHSA-gvp8-978c-rx2q)、[urllib3公告](https://github.com/urllib3/urllib3/security/advisories/GHSA-vxq7-64xx-v4gw)。不采用不安全decode后复用options的调用模式。
+- 原方案§2在阶段0修完冻结B0源码，§11阶段2才测全指标：本次标签只固定修复后运行代码，框架和全指标测量明确留后续。按照§13.5负责人验收后再进入下一阶段，不把独立复核状态编造成已通过。

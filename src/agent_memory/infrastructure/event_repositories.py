@@ -2,7 +2,7 @@ from collections.abc import Callable
 from datetime import datetime, timedelta
 from uuid import UUID
 
-from sqlalchemy import and_, or_, select, true, update
+from sqlalchemy import and_, func, or_, select, true, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
@@ -20,7 +20,7 @@ from agent_memory.domain.events import Event, EventDraft, EventType, MemoryCandi
 from agent_memory.domain.jobs import Job, JobStatus
 from agent_memory.domain.models import Memory, MemoryScope
 from agent_memory.domain.principal import RequestPrincipal
-from agent_memory.infrastructure.db import session_for_principal
+from agent_memory.infrastructure.db import database_now, session_for_principal
 from agent_memory.infrastructure.orm import (
     EventRow,
     EvidenceRow,
@@ -169,7 +169,7 @@ class PostgresOutboxRepository:
         batch_size: int,
         extractor_version: str,
     ) -> int:
-        now = self._now()
+        now = await database_now(self._session)
         messages = list(
             (
                 await self._session.execute(
@@ -242,11 +242,11 @@ class PostgresJobQueue:
                     or_(
                         and_(
                             JobRow.status.in_(["pending", "retry_wait"]),
-                            JobRow.available_at <= now,
+                            JobRow.available_at <= func.clock_timestamp(),
                         ),
                         and_(
                             JobRow.status == "running",
-                            JobRow.leased_until <= now,
+                            JobRow.leased_until <= func.clock_timestamp(),
                         ),
                     ),
                 )
@@ -257,6 +257,7 @@ class PostgresJobQueue:
         ).scalar_one_or_none()
         if row is None:
             return None
+        now = await database_now(self._session)
         claimed = self._to_domain(row).claim(worker_id, now, lease_duration)
         self._apply(row, claimed)
         await self._session.flush()
@@ -271,6 +272,7 @@ class PostgresJobQueue:
         lease_duration: timedelta,
     ) -> Job:
         row = await self._locked_row(tenant_id, job_id)
+        now = await database_now(self._session)
         renewed = self._to_domain(row).renew(worker_id, now, lease_duration)
         self._apply(row, renewed)
         await self._session.flush()
@@ -284,6 +286,7 @@ class PostgresJobQueue:
         now: datetime,
     ) -> Job:
         row = await self._locked_row(tenant_id, job_id)
+        now = await database_now(self._session)
         succeeded = self._to_domain(row).succeed(worker_id, now)
         self._apply(row, succeeded)
         await self._session.flush()
@@ -301,6 +304,7 @@ class PostgresJobQueue:
         retry_after: timedelta | None = None,
     ) -> Job:
         row = await self._locked_row(tenant_id, job_id)
+        now = await database_now(self._session)
         failed = self._to_domain(row).fail(
             worker_id,
             now,

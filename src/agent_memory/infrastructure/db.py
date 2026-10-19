@@ -1,9 +1,10 @@
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from datetime import datetime
 from typing import Any
 
 from opentelemetry.trace import Span, StatusCode
-from sqlalchemy import event, text
+from sqlalchemy import event, func, select, text
 from sqlalchemy.engine import Connection, ExceptionContext
 from sqlalchemy.engine.interfaces import ExecutionContext
 from sqlalchemy.ext.asyncio import (
@@ -75,3 +76,11 @@ async def session_for_principal(
                 {"tenant_id": str(principal.tenant_id)},
             )
             yield session
+
+
+async def database_now(session: AsyncSession) -> datetime:
+    """PostgreSQL wall clock, including time elapsed after transaction start/lock waits."""
+    value = await session.scalar(select(func.clock_timestamp()))
+    if not isinstance(value, datetime):
+        raise TypeError("database clock unavailable")
+    return value

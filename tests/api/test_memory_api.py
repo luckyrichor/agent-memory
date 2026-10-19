@@ -434,3 +434,57 @@ async def test_content_rejection_exposes_safe_reason_to_api_and_sdk(
             assert failure.value.reason_code == reason_code
     finally:
         await app.state.engine.dispose()
+
+
+@pytest.mark.parametrize('scope', [
+    {'kind': 'workspace'}, {'kind': 'tenant', 'workspace_id': 'project-a'},
+    {'kind': 'user_global'},
+])
+async def test_invalid_scope_returns_stable_422_not_500(app_database_url, scope):
+    private, public = signing_material()
+    app = create_app(Settings(database_url=app_database_url, jwt_public_key=public,
+                              jwt_issuer='memory-test', jwt_audience='memory-api'))
+    try:
+        async with AsyncClient(transport=ASGITransport(app=app, raise_app_exceptions=False),
+                               base_url='http://test') as client:
+            result = await client.post('/v1/memories', headers={
+                'Authorization': f'Bearer {bearer_token(private)}', 'Idempotency-Key': 'bad-scope'},
+                json={'content': 'scope fixture', 'memory_type': 'semantic', 'scope': scope})
+        assert result.status_code == 422
+        assert result.json()['error']['code'] == 'INVALID_SCOPE'
+        assert result.json()['error']['request_id'] == result.headers['X-Request-Id']
+    finally:
+        await app.state.engine.dispose()
+
+
+@pytest.mark.parametrize('chunked', [False, True])
+async def test_body_limit_before_parsing_without_echoing_payload(app_database_url, chunked):
+    app = create_app(Settings(database_url=app_database_url, max_request_body_bytes=1024))
+    async def chunks():
+        for _ in range(5):
+            yield b'private-body-marker' * 20
+    content = chunks() if chunked else b'private-body-marker' * 100
+    try:
+        async with AsyncClient(transport=ASGITransport(app=app), base_url='http://test') as client:
+            result = await client.post('/v1/memories', content=content)
+        assert result.status_code == 413
+        assert result.json()['error']['code'] == 'REQUEST_BODY_TOO_LARGE'
+        assert result.json()['error']['request_id'] == result.headers['X-Request-Id']
+        assert 'private-body-marker' not in result.text
+    finally:
+        await app.state.engine.dispose()
+
+
+async def test_extreme_version_offset_and_oversized_idempotency_key_are_rejected(app_database_url):
+    private, public = signing_material()
+    app = create_app(Settings(database_url=app_database_url, jwt_public_key=public,
+                              jwt_issuer='memory-test', jwt_audience='memory-api'))
+    try:
+        async with AsyncClient(transport=ASGITransport(app=app), base_url='http://test') as client:
+            auth = {'Authorization': f'Bearer {bearer_token(private)}'}
+            page = await client.get(f'/v1/memories/{UUID(int=1)}/versions?offset=10001', headers=auth)
+            key = await client.post('/v1/memories', headers={**auth, 'Idempotency-Key': 'x'*256},
+                json={'content': 'fixture', 'memory_type': 'semantic', 'scope': {'kind':'tenant'}})
+        assert page.status_code == key.status_code == 422
+    finally:
+        await app.state.engine.dispose()

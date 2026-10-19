@@ -4,6 +4,7 @@ import pytest
 from alembic import command
 from alembic.config import Config
 from sqlalchemy import Engine, create_engine, inspect, text
+from testcontainers.community.postgres import PostgresContainer
 
 PIPELINE_TABLES = {"events", "outbox_messages", "jobs", "evidence"}
 
@@ -67,20 +68,17 @@ def test_event_pipeline_schema_has_tenant_keys_constraints_and_rls(
     assert all(row.relrowsecurity and row.relforcerowsecurity for row in rls_rows)
 
 
-def test_event_pipeline_migration_round_trip(database_url: str) -> None:
-    config = Config("alembic.ini")
-    config.set_main_option("sqlalchemy.url", database_url)
-
-    command.downgrade(config, "0002_current_version_integrity")
-    engine = create_engine(database_url)
-    try:
-        assert PIPELINE_TABLES.isdisjoint(inspect(engine).get_table_names())
-    finally:
-        engine.dispose()
-
-    command.upgrade(config, "head")
-    engine = create_engine(database_url)
-    try:
-        assert PIPELINE_TABLES <= set(inspect(engine).get_table_names())
-    finally:
-        engine.dispose()
+def test_event_pipeline_migration_round_trip() -> None:
+    # Schema rollback must not destroy other tests' session-scoped data.
+    with PostgresContainer("pgvector/pgvector:pg16", driver="psycopg") as postgres:
+        config = Config("alembic.ini")
+        config.set_main_option("sqlalchemy.url", postgres.get_connection_url())
+        command.upgrade(config, "head")
+        command.downgrade(config, "0002_current_version_integrity")
+        engine = create_engine(postgres.get_connection_url())
+        try:
+            assert PIPELINE_TABLES.isdisjoint(inspect(engine).get_table_names())
+            command.upgrade(config, "head")
+            assert PIPELINE_TABLES <= set(inspect(engine).get_table_names())
+        finally:
+            engine.dispose()

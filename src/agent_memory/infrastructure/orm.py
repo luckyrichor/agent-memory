@@ -150,7 +150,7 @@ class EventRow(Base):
     __table_args__ = (
         CheckConstraint("sequence_number > 0", name="ck_events_positive_sequence"),
         CheckConstraint(
-            "event_type IN ('tool.result', 'task.completed', 'user.confirmed')",
+            "event_type IN ('tool.result', 'task.completed', 'user.confirmed', 'conversation.message')",
             name="ck_events_type",
         ),
         CheckConstraint(

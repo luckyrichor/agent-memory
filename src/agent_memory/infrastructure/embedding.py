@@ -12,7 +12,7 @@ from agent_memory.application.embedding import DIMENSIONS
 from agent_memory.domain.errors import MemoryNotFound
 from agent_memory.domain.jobs import Job
 from agent_memory.domain.principal import RequestPrincipal
-from agent_memory.infrastructure.db import session_for_principal
+from agent_memory.infrastructure.db import database_now, session_for_principal
 from agent_memory.infrastructure.event_repositories import PostgresJobQueue
 from agent_memory.infrastructure.orm import JobRow, MemoryEmbeddingRow, MemoryVersionRow
 
@@ -141,6 +141,7 @@ class PostgresEmbeddingBackend:
         # New request key permits rebuilding succeeded/dead jobs; replay is deduplicated.
         await self.load_content(tenant, version)
         async with session_for_principal(self.sessions, self.principal(tenant)) as session:
+            now = await database_now(session)
             await session.execute(
                 insert(JobRow)
                 .values(

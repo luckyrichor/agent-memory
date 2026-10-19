@@ -2,7 +2,7 @@ from datetime import UTC, datetime, timedelta
 from uuid import uuid4
 
 import pytest
-from sqlalchemy import func, select
+from sqlalchemy import func, select, text, update
 
 from agent_memory.application.commands import RememberMemoryCommand
 from agent_memory.application.embedding import EmbeddingWorker
@@ -54,6 +54,11 @@ async def test_transactional_embedding_retry_restart_rebuild_and_rls(app_databas
         worker = EmbeddingWorker(backend, FailingProvider())
         assert (await worker.run_once(tenant, "w1", now=at + timedelta(seconds=1))).outcome == "retry_wait"
         assert (await worker.run_once(tenant, "w1", now=at + timedelta(seconds=2))).outcome == "no_job"
+        # Advance persisted readiness, not application time: PG owns the queue clock.
+        async with session_for_principal(sessions, principal) as session:
+            await session.execute(update(JobRow).where(JobRow.tenant_id == tenant,
+                JobRow.status == 'retry_wait').values(
+                    available_at=func.clock_timestamp()-text("interval '1 second'")))
         # New backend/worker simulates process restart; state remains in Postgres.
         restarted = PostgresEmbeddingBackend(sessions)
         ok = EmbeddingWorker(restarted, FixtureEmbeddingProvider())
@@ -70,6 +75,9 @@ async def test_transactional_embedding_retry_restart_rebuild_and_rls(app_databas
         # Claim and abandon; expired lease recovers to another worker.
         job = await backend.claim(tenant, "abandoned", at + timedelta(seconds=5), timedelta(seconds=1))
         assert job is not None
+        async with session_for_principal(sessions, principal) as session:
+            await session.execute(update(JobRow).where(JobRow.job_id == job.job_id).values(
+                leased_until=func.clock_timestamp()-text("interval '1 second'")))
         assert (await ok.run_once(tenant, "recovered", now=at + timedelta(seconds=7))).outcome == "succeeded"
         with pytest.raises(LeaseLost):
             await backend.complete(job, "abandoned", "invalid", [0.0]*1024, at + timedelta(seconds=8))

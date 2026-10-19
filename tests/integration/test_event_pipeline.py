@@ -3,7 +3,7 @@ from datetime import UTC, datetime, timedelta
 from uuid import UUID
 
 import pytest
-from sqlalchemy import func, select
+from sqlalchemy import func, select, text, update
 
 from agent_memory.domain.enums import ScopeKind
 from agent_memory.domain.errors import (
@@ -243,6 +243,10 @@ async def test_postgres_job_lease_blocks_steal_and_recovers_after_expiry(
         )
     assert blocked is None
 
+    # Expiry is now a PostgreSQL fact, not a caller-supplied future timestamp.
+    async with session_for_principal(sessions, principal(LEASE_TENANT_ID)) as session:
+        await session.execute(update(JobRow).where(JobRow.job_id == claimed.job_id).values(
+            leased_until=func.clock_timestamp() - text("interval '1 second'")))
     async with session_for_principal(sessions, principal(LEASE_TENANT_ID)) as session:
         queue = PostgresJobQueue(session)
         reclaimed = await queue.claim(
@@ -269,6 +273,6 @@ async def test_postgres_job_lease_blocks_steal_and_recovers_after_expiry(
             NOW + timedelta(seconds=32),
             timedelta(seconds=30),
         )
-        assert renewed.leased_until == NOW + timedelta(seconds=62)
+        assert renewed.leased_until == renewed.updated_at + timedelta(seconds=30)
 
     await engine.dispose()

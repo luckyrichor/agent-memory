@@ -10,6 +10,7 @@ from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from agent_memory.api.auth import JwtPrincipalResolver
+from agent_memory.api.body_limit import RequestBodyLimit
 from agent_memory.api.errors import AuthenticationRequired
 from agent_memory.api.event_routes import create_event_router
 from agent_memory.api.middleware import observe_request
@@ -26,6 +27,7 @@ from agent_memory.domain.errors import (
     EventSequenceConflict,
     IdempotencyConflict,
     InvalidEvent,
+    InvalidScope,
     InvalidStatusTransition,
     MemoryNotFound,
     MemoryScopeForbidden,
@@ -61,6 +63,7 @@ def create_app(settings: Settings) -> FastAPI:
             await engine.dispose()
 
     app = FastAPI(title="Agent Memory", version="1.0.0", lifespan=lifespan)
+    app.add_middleware(RequestBodyLimit, max_bytes=settings.max_request_body_bytes)
     app.add_middleware(BaseHTTPMiddleware, dispatch=observe_request)
     engine = create_engine(settings.database_url)
     sessions = create_session_factory(engine)
@@ -212,6 +215,12 @@ def create_app(settings: Settings) -> FastAPI:
             "EVENT_SEQUENCE_CONFLICT",
             "The session sequence number is already occupied.",
             409,
+        )
+
+    @app.exception_handler(InvalidScope)
+    async def invalid_scope(request: Request, error: InvalidScope) -> JSONResponse:
+        return domain_error_response(
+            request, "INVALID_SCOPE", "The scope fields do not form a valid scope.", 422
         )
 
     @app.exception_handler(InvalidEvent)

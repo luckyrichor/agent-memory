@@ -19,7 +19,6 @@ from agent_memory.application.outbox_dispatcher import OutboxDispatcher
 from agent_memory.domain.enums import MemoryStatus, MemoryType, ScopeKind
 from agent_memory.domain.errors import (
     InvalidScope,
-    MemoryError,
     MemoryNotFound,
     RevisionConflict,
 )
@@ -299,7 +298,7 @@ async def run_foundation_evaluation() -> tuple[EvaluationResult, ...]:
                     deleted_memory_hit=case_id == "deleted_memory_exclusion" and not passed,
                 )
             )
-        except (MemoryError, RuntimeError, ValueError) as error:
+        except Exception as error:  # noqa: BLE001 - isolate cases; cancellation still propagates
             results.append(
                 EvaluationResult(
                     case_id,

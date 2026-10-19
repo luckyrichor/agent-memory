@@ -77,3 +77,33 @@ def test_report_emits_eight_case_summary() -> None:
         "Foundation evaluator: total=8 passed=8 failed=0 "
         "tenant_leaks=0 deleted_memory_hits=0"
     ) in output.getvalue()
+
+
+@pytest.mark.parametrize('error', [KeyError('private-body'), TypeError('private-body'),
+                                   AssertionError('private-body'), OSError('private-body')])
+async def test_unexpected_case_errors_are_redacted_and_other_cases_continue(monkeypatch, error):
+    from agent_memory.evals import foundation_runner
+
+    async def broken():
+        raise error
+
+    monkeypatch.setattr(foundation_runner, '_valid_workspace_memory', broken)
+    results = await run_foundation_evaluation()
+    assert len(results) == 8
+    assert results[0].reason_code == 'EVALUATION_ERROR'
+    assert results[0].diagnostic == type(error).__name__
+    assert all(r.passed for r in results[1:])
+    output = StringIO()
+    assert report_results(results, stream=output) == 1
+    assert 'private-body' not in output.getvalue()
+
+
+async def test_foundation_does_not_swallow_cancellation(monkeypatch):
+    from agent_memory.evals import foundation_runner
+
+    async def cancelled():
+        raise asyncio.CancelledError
+
+    monkeypatch.setattr(foundation_runner, '_valid_workspace_memory', cancelled)
+    with pytest.raises(asyncio.CancelledError):
+        await run_foundation_evaluation()

@@ -8,7 +8,7 @@ from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from agent_memory.domain.principal import RequestPrincipal
-from agent_memory.infrastructure.db import session_for_principal
+from agent_memory.infrastructure.db import database_now, session_for_principal
 from agent_memory.infrastructure.orm import (
     AuditLogRow,
     IdempotencyRecordRow,
@@ -113,7 +113,7 @@ class PostgresQueueAdmin:
                     .with_for_update(skip_locked=True)
                 )
             )
-            now = datetime.now(UTC)
+            now = await database_now(session)
             for row in rows:
                 # Keep old jobs for provenance; new version gets a distinct durable job.
                 if new_version:
@@ -172,7 +172,7 @@ class PostgresQueueAdmin:
                 .order_by(MemoryVersionRow.memory_version_id)
                 .limit(limit)
             )
-            now = datetime.now(UTC)
+            now = await database_now(session)
             count = 0
             for version in versions:
                 result = await session.execute(
@@ -203,7 +203,7 @@ class PostgresQueueAdmin:
         if not 1 <= limit <= 1000:
             raise ValueError("limit must be 1..1000")
         async with session_for_principal(self.sessions, self.principal) as session:
-            now = datetime.now(UTC)
+            now = await database_now(session)
             # Advisory locks match writers; lock expiry deletion and replay atomically.
             keys = list(
                 await session.scalars(

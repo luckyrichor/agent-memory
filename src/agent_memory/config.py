@@ -41,6 +41,8 @@ class Settings(BaseSettings):
             raise ValueError("provider total timeout plus persistence margin must be below lease")
         return self
 
+    max_request_body_bytes: int = Field(default=1_048_576, ge=1024, le=8_388_608)
+
     service_name: str = "agent-memory"
     log_level: str = "INFO"
     log_json: bool = True

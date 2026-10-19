@@ -1,8 +1,8 @@
 from datetime import datetime
-from typing import Literal
+from typing import Literal, Self
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from agent_memory.api.schemas import ScopeRequest
 
@@ -16,17 +16,30 @@ class ToolResultPayloadRequest(BaseModel):
     error_code: str | None = Field(default=None, max_length=255)
 
 
+class ConversationPayloadRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    role: Literal["user", "assistant"]
+    # Bounded single-message text, using the extractor's existing untrusted summary input.
+    summary: str = Field(min_length=1, max_length=4000)
+
+
 class EventRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     idempotency_key: str = Field(min_length=1, max_length=255)
     session_id: str = Field(min_length=1, max_length=255)
     sequence_number: int = Field(ge=1)
-    event_type: Literal["tool.result"]
+    event_type: Literal["tool.result", "conversation.message"]
     agent_id: str = Field(min_length=1, max_length=255)
     occurred_at: datetime
     scope: ScopeRequest
-    payload: ToolResultPayloadRequest
+    payload: ToolResultPayloadRequest | ConversationPayloadRequest
+
+    @model_validator(mode="after")
+    def payload_matches_event_type(self) -> Self:
+        if (self.event_type == "tool.result") != isinstance(self.payload, ToolResultPayloadRequest):
+            raise ValueError("payload does not match event type")
+        return self
 
 
 class EventBatchRequest(BaseModel):

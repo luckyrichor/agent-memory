@@ -190,3 +190,12 @@ M7真实LLM候选提炼与M5三组基线工程初验通过。真实模型、敏�
 ## 第二轮评审当前约束（2026-10-08）
 
 当前细节见 docs/review-followup-2026-10-08.md：invalidated/superseded 只能继续 deleted，不准经 archive 绕过；中文 bigram OR 排序，不代表同义语义；ContentRejected 使用固定规则码，API 保留原错误码并附 reason_code，SDK 同步；异常向量第三次失败 dead，缓存先于 semaphore 检查。四道门 208 测试通过，旧报告是历史证据。
+
+
+## 2026-10-19 用户新方案与阶段闸门
+
+用户原件docs/agent-memory面试级完善方案.md已原样保存，优先按其任务卡推进；不自行改指标、切分、阈值。每阶段交付代码、报告、命令、环境指纹与遗留，负责人确认验收才进入下一阶段（方案§13.5）。本轮阶段0只修错/核实；B0标签是修复后源码，阶段2全指标报告仍待后续。开发记录docs/devlog/每任务一份，数字引用自动生成报告，署名如实保留Codex、具体模型版本未核实；不声称用户写代码或已经独立复核。
+
+PG租约以数据库clock_timestamp为准，拿锁后再读时间，不用应用now或事务起点now判租约；内存适配器可注入时钟仅用于测试。HTTP支持conversation.message（user/assistant + bounded summary），仍是不可信事件，scope/JWT/RLS/提取验证保持。升级需要0008迁移；有对话历史时禁止有损降级，不为过测试删除生产数据。
+
+整体HTTP正文默认1MiB，实际流量累计后才解析；超限413。版本offset上限10000，搜索offset2900等边界不取消。pip-audit使用冻结锁文件导出版本，原始前后扫描保留；不把一次0已知公告说成完全无漏洞。下游agent-ops-platform仍固定1e2730c，联调迁移源码须取其对应干净checkout，不自动升级其SDK pin。

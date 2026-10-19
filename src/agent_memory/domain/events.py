@@ -21,15 +21,20 @@ MAX_PAYLOAD_DEPTH = 4
 
 class EventType(str, Enum):
     TOOL_RESULT = "tool.result"
+    CONVERSATION_MESSAGE = "conversation.message"
     TASK_COMPLETED = "task.completed"
     USER_CONFIRMED = "user.confirmed"
 
 
-def _container_depth(value: object) -> int:
+def _container_depth(value: object, level: int = 0) -> int:
     if isinstance(value, Mapping):
-        return 1 + max((_container_depth(item) for item in value.values()), default=0)
+        if level >= MAX_PAYLOAD_DEPTH:
+            return 1
+        return 1 + max((_container_depth(item, level + 1) for item in value.values()), default=0)
     if isinstance(value, (list, tuple)):
-        return 1 + max((_container_depth(item) for item in value), default=0)
+        if level >= MAX_PAYLOAD_DEPTH:
+            return 1
+        return 1 + max((_container_depth(item, level + 1) for item in value), default=0)
     return 0
 
 
