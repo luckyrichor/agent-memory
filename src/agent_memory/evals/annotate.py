@@ -122,6 +122,7 @@ async def annotate(
                         json.dumps({"request": body, "response": data}, ensure_ascii=False)
                     )
                     cachefile.chmod(0o600)
+                current["usage"] = data.get("usage") if not replayed else None
                 parsed = LabelBatch.model_validate_json(data["choices"][0]["message"]["content"])
                 expected = {row["item_id"] for row in batch}
                 if (

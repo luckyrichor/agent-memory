@@ -75,6 +75,19 @@ def run(args):
         directory = root / folder
         ledger = read(directory / "ledger.json") or []
         labels = directory / "labels.jsonl"
+        known_usages = []
+        unknown_usage_batches = 0
+        for entry in ledger:
+            if entry.get("replayed"):
+                continue
+            usage = entry.get("usage")
+            if usage is None:
+                cached = read(root / "annotation-cache" / (entry["batch_hash"] + ".json"))
+                usage = cached.get("response", {}).get("usage") if cached else None
+            if usage is None:
+                unknown_usage_batches += 1
+            else:
+                known_usages.append(usage)
         annotations[folder] = {
             "complete": (directory / "COMPLETE").exists(),
             "labels": sum(1 for _ in labels.open()) if labels.exists() else 0,
@@ -82,10 +95,11 @@ def run(args):
             "failed_batches": sum(x.get("status") == "failed" for x in ledger),
             "unknown_or_inflight_batches": sum(x.get("status") == "started" for x in ledger),
             "replay_batches": sum(bool(x.get("replayed")) for x in ledger),
-            "logged_usage": {
-                field: sum((x.get("usage") or {}).get(field, 0) for x in ledger)
+            "known_usage_only": {
+                field: sum(u.get(field, 0) for u in known_usages) if known_usages else None
                 for field in ["prompt_tokens", "completion_tokens", "total_tokens"]
             },
+            "unknown_usage_batches": unknown_usage_batches,
             "labels_sha256": hashlib.sha256(labels.read_bytes()).hexdigest()
             if labels.exists()
             else None,
@@ -223,7 +237,7 @@ def run(args):
         )
     text += [
         "",
-        "请负责人填写盲审材料的human_label与human_reason，不能由助手代签。公开与合成分别报告，候选数量不当作金标数量。",
+        "配对标注尚未完成，最终盲审材料待续跑后生成；届时由负责人填写human_label与human_reason，不能由助手代签。公开与合成分别报告，候选数量不当作金标数量。",
         "",
         "## 需要负责人决定/完成",
         "",
