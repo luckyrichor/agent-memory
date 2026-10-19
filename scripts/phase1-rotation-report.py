@@ -1,6 +1,7 @@
 """Export aggregate migration evidence and restricted, genuinely unfilled human review packs."""
 
 import argparse
+import csv
 import hashlib
 import json
 import subprocess
@@ -84,6 +85,41 @@ for name, items_path, model_a, path_a, model_b, path_b in [
         elif json.loads((pack / "provenance.json").read_text()) != provenance:
             raise ValueError("existing review pack provenance does not match frozen labels")
         metric = json.loads((pack / "model-agreement.json").read_text())
+        for task in ("arbitration", "audit"):
+            records = [
+                json.loads(line)
+                for line in (pack / (task + "-blind.jsonl")).read_text().splitlines()
+            ]
+            csv_path = pack / (task + "-blind.csv")
+            if not csv_path.exists():
+                with csv_path.open("w", encoding="utf-8-sig", newline="") as stream:
+                    fields = [
+                        "item_id",
+                        "conversation_id",
+                        "subject",
+                        "candidate",
+                        "source",
+                        "record_sha256",
+                        "human_label",
+                        "human_reason",
+                    ]
+                    writer = csv.DictWriter(stream, fieldnames=fields)
+                    writer.writeheader()
+                    for original in records:
+                        frozen = {k: v for k, v in original.items() if not k.startswith("human_")}
+                        row = {k: original.get(k, "") for k in fields}
+                        if not isinstance(row["source"], str):
+                            row["source"] = json.dumps(row["source"], ensure_ascii=False)
+                        row["record_sha256"] = hashlib.sha256(
+                            json.dumps(frozen, ensure_ascii=False, sort_keys=True).encode()
+                        ).hexdigest()
+                        row["human_label"], row["human_reason"] = "", ""
+                        for key, value in row.items():
+                            if isinstance(value, str) and value.startswith(
+                                ("=", "+", "-", "@", "\t", "\r")
+                            ):
+                                row[key] = "'" + value
+                        writer.writerow(row)
         # IDs/text stay in restricted artifacts, aggregate counts only in Git.
         row["agreement"] = {
             k: v for k, v in metric.items() if k not in ("arbitration_ids", "audit_ids")
@@ -133,7 +169,11 @@ lines += [
 ]
 for d in report["datasets"]:
     metric = d["agreement"]
-    value = json.dumps(metric, ensure_ascii=False) if metric else "尚未完整配对，不计算部分样本κ"
+    value = (
+        f"κ={metric['kappa']:.3f}；分歧{metric['conflict_count']}；盲审{metric['audit_count']}；待人工"
+        if metric and metric.get("kappa") is not None
+        else "尚未完整配对或κ不可定义，不报告部分结果"
+    )
     lines.append(f"| {d['name']} | {d['candidate_count']} | {d['complete']} | {value} |")
 lines += [
     "",
