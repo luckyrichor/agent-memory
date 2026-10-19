@@ -1,0 +1,170 @@
+{
+  "selected": {
+    "deepseek-v4.1-flash": {
+      "model": "deepseek-v4.1-flash",
+      "calls": 106,
+      "format_valid": 100,
+      "format_n": 100,
+      "consistent_5": true,
+      "preflight_pass": true,
+      "latency_ms": {
+        "n": 106,
+        "p50": 1674.9550965614617,
+        "p95": 2508.9643907849677,
+        "p99": 2768.400568701327
+      },
+      "http_429": 0
+    },
+    "minimax-m3": {
+      "model": "minimax-m3",
+      "calls": 106,
+      "format_valid": 99,
+      "format_n": 100,
+      "consistent_5": true,
+      "preflight_pass": true,
+      "latency_ms": {
+        "n": 106,
+        "p50": 1798.0796454939991,
+        "p95": 3181.8387752282433,
+        "p99": 3692.8475256660026
+      },
+      "http_429": 0
+    },
+    "glm-5.2": {
+      "model": "glm-5.2",
+      "calls": 106,
+      "format_valid": 100,
+      "format_n": 100,
+      "consistent_5": true,
+      "preflight_pass": true,
+      "latency_ms": {
+        "n": 106,
+        "p50": 1847.0471305772662,
+        "p95": 3693.018979683984,
+        "p99": 5827.8071743669025
+      },
+      "http_429": 0
+    },
+    "hy3": {
+      "model": "hy3",
+      "calls": 106,
+      "format_valid": 100,
+      "format_n": 100,
+      "consistent_5": true,
+      "preflight_pass": true,
+      "latency_ms": {
+        "n": 106,
+        "p50": 1865.177183994092,
+        "p95": 2252.120575227309,
+        "p99": 2478.8220172398724
+      },
+      "http_429": 0
+    }
+  },
+  "ark": {
+    "family_id": [
+      {
+        "name": "embedding-one",
+        "model": "doubao-embedding-vision-251215",
+        "http_status": 200,
+        "latency_ms": 408.0807869322598,
+        "usage": {
+          "prompt_tokens": 27,
+          "prompt_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 27
+          },
+          "total_tokens": 27
+        },
+        "response_model": "doubao-embedding-vision-251215",
+        "error_code": null,
+        "data_type": "dict",
+        "embedding_length": 1024,
+        "response_sha256": "29337f9139086acaf48f1fa16cec4d5c475e340d2edd54108d20bee244e1c406"
+      },
+      {
+        "name": "embedding-two",
+        "model": "doubao-embedding-vision-251215",
+        "http_status": 200,
+        "latency_ms": 179.75590797141194,
+        "usage": {
+          "prompt_tokens": 35,
+          "prompt_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 35
+          },
+          "total_tokens": 35
+        },
+        "response_model": "doubao-embedding-vision-251215",
+        "error_code": null,
+        "data_type": "dict",
+        "embedding_length": 1024,
+        "response_sha256": "efe6a29de3dd8007779e3ab0a1e1b43d6f99da17b5681ab636b380c90818d817"
+      },
+      {
+        "name": "chat",
+        "model": "doubao-seed-2-0-pro",
+        "http_status": 404,
+        "latency_ms": 68.541478831321,
+        "usage": null,
+        "response_model": null,
+        "error_code": "InvalidEndpointOrModel.NotFound",
+        "data_type": "NoneType",
+        "format_ok": false,
+        "response_sha256": "2ca3952dc7ece3b57ceb25bdf928c514b038ff19c538690144f29ff7b9509238"
+      }
+    ],
+    "versioned_id": [
+      {
+        "name": "embedding-one",
+        "model": "doubao-embedding-vision-251215",
+        "http_status": 200,
+        "latency_ms": 154.38000508584082,
+        "usage": {
+          "prompt_tokens": 27,
+          "prompt_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 27
+          },
+          "total_tokens": 27
+        },
+        "response_model": "doubao-embedding-vision-251215",
+        "error_code": null,
+        "data_type": "dict",
+        "embedding_length": 1024,
+        "response_sha256": "d2de6d7be24bd4d8239b0d9e8828ae5462a6c4f3f6e35e51d4a4607f2793e23b"
+      },
+      {
+        "name": "embedding-two",
+        "model": "doubao-embedding-vision-251215",
+        "http_status": 200,
+        "latency_ms": 127.90996581315994,
+        "usage": {
+          "prompt_tokens": 35,
+          "prompt_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 35
+          },
+          "total_tokens": 35
+        },
+        "response_model": "doubao-embedding-vision-251215",
+        "error_code": null,
+        "data_type": "dict",
+        "embedding_length": 1024,
+        "response_sha256": "d0bee454685033a5981d5140cbf45ffddd786e706bed4ee2195c3c8f68114ddd"
+      },
+      {
+        "name": "chat",
+        "model": "doubao-seed-2-0-pro-260215",
+        "http_status": 404,
+        "latency_ms": 131.50720787234604,
+        "usage": null,
+        "response_model": null,
+        "error_code": "InvalidEndpointOrModel.NotFound",
+        "data_type": "NoneType",
+        "format_ok": false,
+        "response_sha256": "63fb3dbf9b42483c861b72b5af031ae182b2fcca36a388b08d640f9ad5d959ef"
+      }
+    ]
+  }
+}

@@ -1,0 +1,301 @@
+{
+  "public": [
+    {
+      "dataset": "longmemeval_oracle",
+      "source_url": "https://huggingface.co/datasets/xiaowu0162/longmemeval-cleaned",
+      "license": "MIT",
+      "raw_files": [
+        {
+          "name": "longmemeval_oracle.json",
+          "bytes": 15388478,
+          "sha256": "821a2034d219ab45846873dd14c14f12cfe7776e73527a483f9dac095d38620c"
+        }
+      ],
+      "normalized_sha256": "7548a44f09bcb15adedcff249e9a02b9ef0e2f5a7535da7963efb8b7aca24a65",
+      "split_sha256": "331d2ca3c9cf370e7099004e3f87eb6b36e28da9535c29f253f61a596e08795f",
+      "split_counts": {
+        "dev": 150,
+        "test": 350
+      },
+      "seed": 42,
+      "counts": {
+        "conversations": 500,
+        "documents": 10960,
+        "questions": 500,
+        "type:temporal-reasoning": 127,
+        "type:abstention": 30,
+        "type:multi-session": 121,
+        "type:knowledge-update": 72,
+        "type:single-session-preference": 30,
+        "type:single-session-assistant": 56,
+        "type:single-session-user": 64
+      },
+      "unresolved_evidence": [],
+      "scope": "public corpus normalization only; no system quality run"
+    },
+    {
+      "dataset": "longmemeval_s",
+      "source_url": "https://huggingface.co/datasets/xiaowu0162/longmemeval-cleaned",
+      "license": "MIT",
+      "raw_files": [
+        {
+          "name": "longmemeval_s_cleaned.json",
+          "bytes": 277383467,
+          "sha256": "d6f21ea9d60a0d56f34a05b609c79c88a451d2ae03597821ea3d5a9678c3a442"
+        }
+      ],
+      "normalized_sha256": "1bf7442f458afe20c0418ee2567e2816858a2ecdf0fb71fa83717c26aeaa8164",
+      "split_sha256": "331d2ca3c9cf370e7099004e3f87eb6b36e28da9535c29f253f61a596e08795f",
+      "split_counts": {
+        "dev": 150,
+        "test": 350
+      },
+      "seed": 42,
+      "counts": {
+        "conversations": 500,
+        "documents": 246750,
+        "questions": 500,
+        "type:single-session-user": 64,
+        "type:abstention": 30,
+        "type:multi-session": 121,
+        "type:single-session-preference": 30,
+        "type:temporal-reasoning": 127,
+        "type:knowledge-update": 72,
+        "type:single-session-assistant": 56
+      },
+      "unresolved_evidence": [],
+      "scope": "public corpus normalization only; no system quality run"
+    },
+    {
+      "dataset": "locomo",
+      "source_url": "https://github.com/snap-research/locomo",
+      "license": "CC-BY-NC-4.0",
+      "raw_files": [
+        {
+          "name": "locomo10.json",
+          "bytes": 2805274,
+          "sha256": "79fa87e90f04081343b8c8debecb80a9a6842b76a7aa537dc9fdf651ea698ff4"
+        }
+      ],
+      "normalized_sha256": "7f9672088cd079572353be859d50d00c7e8d118a3e40fb1f99d17058512cfcad",
+      "split_sha256": "44b025602d7bee65bc9ef51471018d837ac80659a3a2d59a00c333abade39bc9",
+      "split_counts": {
+        "dev": 3,
+        "test": 7
+      },
+      "seed": 42,
+      "counts": {
+        "conversations": 10,
+        "documents": 5882,
+        "questions": 1986,
+        "type:2": 321,
+        "type:3": 96,
+        "type:1": 282,
+        "type:4": 841,
+        "type:5": 446
+      },
+      "unresolved_evidence": [
+        {
+          "conversation_id": "locomo:conv-26",
+          "unresolved_reference_ids": [
+            "D8:6; D9:17"
+          ]
+        },
+        {
+          "conversation_id": "locomo:conv-42",
+          "unresolved_reference_ids": [
+            "D",
+            "D10:19"
+          ]
+        },
+        {
+          "conversation_id": "locomo:conv-43",
+          "unresolved_reference_ids": [
+            "D:11:26"
+          ]
+        },
+        {
+          "conversation_id": "locomo:conv-47",
+          "unresolved_reference_ids": [
+            "D4:36"
+          ]
+        },
+        {
+          "conversation_id": "locomo:conv-49",
+          "unresolved_reference_ids": [
+            "D21:18 D21:22 D11:15 D11:19",
+            "D22:1 D22:2 D9:10 D9:11",
+            "D9:1 D4:4 D4:6"
+          ]
+        },
+        {
+          "conversation_id": "locomo:conv-50",
+          "unresolved_reference_ids": [
+            "D30:05"
+          ]
+        }
+      ],
+      "scope": "public corpus normalization only; no system quality run",
+      "source_commit": "3eb6f2c585f5e1699204e3c3bdf7adc5c28cb376"
+    },
+    {
+      "dataset": "perltqa_zh",
+      "source_url": "https://github.com/Elvin-Yiming-Du/PerLTQA",
+      "license": "CC-BY-NC-4.0",
+      "raw_files": [
+        {
+          "name": "perltmem.json",
+          "bytes": 8989686,
+          "sha256": "5869ee39e944cf835af5c163c5213723bd2d30c44eb6705271031a644ee0ab7b"
+        },
+        {
+          "name": "perltqa.json",
+          "bytes": 8634508,
+          "sha256": "aa19a0623312b5ffe1153ee5d04e20e0d054ba27eccc4f35baa9710a6e8ca9bd"
+        }
+      ],
+      "normalized_sha256": "37cbda77157247b19b2d876332828bf8c1df6b838cb35f92b164373895eaffcc",
+      "split_sha256": "a5c34e5ce0efc421979015cf8a58b2c67d34086673d344204ae843d07beee3e3",
+      "split_counts": {
+        "dev": 42,
+        "test": 99
+      },
+      "seed": 42,
+      "counts": {
+        "conversations": 141,
+        "documents": 9414,
+        "questions": 8593,
+        "type:profile": 357,
+        "type:social_relationship": 897,
+        "type:events": 4501,
+        "type:dialogues": 2838
+      },
+      "unresolved_evidence": [],
+      "scope": "public corpus normalization only; no system quality run",
+      "source_commit": "8d9e19868e239740ef701e603ec205cd581f221b"
+    },
+    {
+      "dataset": "dulemon",
+      "source_url": "https://github.com/PaddlePaddle/Research/tree/master/NLP/ACL2022-DuLeMon",
+      "license": "parent repository Apache-2.0; archive has no separate license",
+      "raw_files": [
+        {
+          "name": "DuLeMon.zip",
+          "bytes": 11967824,
+          "sha256": "797680b350dcb401cbe6255362c84e32c37363c983ffccaa0c0000bc75e3bde3"
+        }
+      ],
+      "normalized_sha256": "b63647a83749aa45f432f412984f3645b48d6d50d6377808c5ae68ad6f4bd1d0",
+      "split_sha256": "77f79f9a3a69fe8ef7b344ada6668b77352297fbc7652ad1611f221e69412874",
+      "split_counts": {
+        "dev": 8250,
+        "test": 19251
+      },
+      "seed": 42,
+      "counts": {
+        "conversations": 27501,
+        "documents": 448977,
+        "questions": 0
+      },
+      "unresolved_evidence": [],
+      "scope": "public corpus normalization only; no system quality run"
+    }
+  ],
+  "timeline": {
+    "name": "customer-timeline-v1",
+    "synthetic": true,
+    "seed": 42,
+    "conversations": 430,
+    "designed_negative_conversations": 130,
+    "negative_ratio": 0.3023255813953488,
+    "candidate_facts_positive_design": 1500,
+    "questions": 1500,
+    "question_counts": {
+      "single-session": 250,
+      "multi-session": 250,
+      "temporal-reasoning": 250,
+      "knowledge-update": 250,
+      "preference": 250,
+      "abstention": 250
+    },
+    "human_review_complete": false,
+    "model_labels_complete": false,
+    "gold_status": "synthetic timeline truth, NOT human-approved extraction gold",
+    "files": {
+      "timeline-local.json": "0655b5baf01079eb68466518a410c037e1f4776918bd48d190685d07e831fade",
+      "items.jsonl": "98b50d7f29c8955b7df1d5f0947773e39007c1ffb2bc88a9d7bcc9cc279ed1ae",
+      "split.json": "60b0060ac2ccdf1a05f38f4c51eb85203e95a357cd93e128894c68150e8ecdf3",
+      "corpus.jsonl": "4e6a840fece9ad3148e426b9306423c4de3cb711747e55deeeed1dc4d783e36d"
+    }
+  },
+  "public_chinese_candidates": {
+    "name": "dulemon-both-review-v1",
+    "source_archive_sha256": "797680b350dcb401cbe6255362c84e32c37363c983ffccaa0c0000bc75e3bde3",
+    "seed": 42,
+    "original_conversations": 340,
+    "original_user_persona_candidates": 1502,
+    "derived_assistant_only_negatives": 146,
+    "combined_conversations": 486,
+    "negative_derivative_ratio": 0.3004115226337449,
+    "items": 1648,
+    "license": "parent repository Apache-2.0; archive no separate license",
+    "human_confirmed": false,
+    "model_labels_complete": false,
+    "limits": "original segmented text; source personas are candidates; assistant-only derivatives are not natural full negative conversations",
+    "files": {
+      "items.jsonl": "19d498a000469c454dbd9b139f504422fa2c8b9bae98638c502e3c54e80915e5",
+      "split.json": "012abe34208caf5ce053f340f174586669c1c768af3bcfbc31772ac0ff344922",
+      "corpus.jsonl": "fae41b047de2eb26ce059025f1dfd21d4d04aacca317f9a424d46ef128b59ec7"
+    }
+  },
+  "specialist_candidates": [
+    {
+      "dataset": "conflict",
+      "n": 300,
+      "sha256": "f01253f8faeb7c6c139c9591f7082e2f49617ecb9725e2d98d77eb11d8ee55ed",
+      "synthetic": true,
+      "status": "candidate review only; NOT validated gold or experiment result",
+      "limits": "template based; limited linguistic diversity; all proposed labels need review"
+    },
+    {
+      "dataset": "dedup",
+      "n": 500,
+      "sha256": "494e24d0e4c1082c10b1c9c25fa1317b6c0d07dc8a11be8fce48c81975ddc3d8",
+      "synthetic": true,
+      "status": "candidate review only; NOT validated gold or experiment result",
+      "limits": "template based; limited linguistic diversity; all proposed labels need review"
+    },
+    {
+      "dataset": "sensitive",
+      "n": 500,
+      "sha256": "f8ee57eb216005f497cb2c5b6d9e4e16a37fc5d8bfea405a5c3b6faa2fde4671",
+      "synthetic": true,
+      "status": "candidate review only; NOT validated gold or experiment result",
+      "limits": "template based; limited linguistic diversity; all proposed labels need review"
+    },
+    {
+      "dataset": "injection",
+      "n": 200,
+      "sha256": "00b3576f661198383358e4def4f886a5b66380f2f77bb04ccbee783419314b75",
+      "synthetic": true,
+      "status": "candidate review only; NOT validated gold or experiment result",
+      "limits": "template based; limited linguistic diversity; all proposed labels need review"
+    },
+    {
+      "dataset": "pollution",
+      "n": 100,
+      "sha256": "ce1afa36f6f6a5709b0b134343b7b773843d9791bb1466c50742d8baede1aacd",
+      "synthetic": true,
+      "status": "candidate review only; NOT validated gold or experiment result",
+      "limits": "template based; limited linguistic diversity; all proposed labels need review"
+    },
+    {
+      "dataset": "isolation",
+      "n": 100,
+      "sha256": "bbe2354f2a3ec23d8c7ee94b90ddd4724254434b34da7ec632903a2003d29694",
+      "synthetic": true,
+      "status": "candidate review only; NOT validated gold or experiment result",
+      "limits": "template based; limited linguistic diversity; all proposed labels need review"
+    }
+  ]
+}
