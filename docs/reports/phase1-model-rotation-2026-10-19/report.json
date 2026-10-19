@@ -1,0 +1,205 @@
+{
+  "generated_at": "2026-10-19T07:57:25.353670+00:00",
+  "generated_date_beijing": "2026-10-19",
+  "source_commit": "db3f26426061e39e4761e66d11d1b92a50bc9449",
+  "working_tree_modified": false,
+  "phase": 1,
+  "phase_gate_passed": false,
+  "human_review_complete": false,
+  "human_review_policy": {
+    "version": 1,
+    "approved_by": "project owner in current conversation",
+    "approval_date_beijing": "2026-10-19",
+    "human_audit_min_agreement": 0.95,
+    "model_min_cohen_kappa": 0.7,
+    "audit_fraction": 0.1,
+    "audit_seed": 42,
+    "reference": "Frozen model consensus plus owner arbitration, before applying independent audit corrections",
+    "human_answers_required": true,
+    "note": "Threshold approval is not approval of any individual label or stage acceptance."
+  },
+  "scope": "Model migration/preflight and candidate annotations; not approved gold or phase2 baseline.",
+  "role_config_sha256": "3b40908681fcd379776b181bc1f17f720072ce5bf0f97039c1eda556667ac9dc",
+  "preflight": [
+    {
+      "model": "doubao-seed-2-1-pro-260915",
+      "calls": 106,
+      "format_valid": 100,
+      "format_n": 100,
+      "consistent_5": true,
+      "preflight_pass": true,
+      "latency_ms": {
+        "n": 106,
+        "p50": 2216.513699502684,
+        "p95": 3393.961860507261,
+        "p99": 4539.137110032607
+      },
+      "http_429": 0
+    },
+    {
+      "model": "deepseek-v4-pro-0813",
+      "calls": 106,
+      "format_valid": 100,
+      "format_n": 100,
+      "consistent_5": true,
+      "preflight_pass": true,
+      "sampling_control_eligible": true,
+      "latency_ms": {
+        "n": 106,
+        "p50": 2307.3216774500906,
+        "p95": 2857.6952712610364,
+        "p99": 3605.692173587159
+      },
+      "http_429": 0
+    },
+    {
+      "model": "minimax-m2.7",
+      "calls": 106,
+      "format_valid": 100,
+      "format_n": 100,
+      "consistent_5": true,
+      "preflight_pass": true,
+      "latency_ms": {
+        "n": 106,
+        "p50": 3299.6440660208464,
+        "p95": 5606.636589218397,
+        "p99": 7002.115773374682
+      },
+      "http_429": 0
+    }
+  ],
+  "datasets": [
+    {
+      "name": "synthetic-timeline",
+      "candidate_count": 1630,
+      "items_sha256": "98b50d7f29c8955b7df1d5f0947773e39007c1ffb2bc88a9d7bcc9cc279ed1ae",
+      "models": [
+        "deepseek-v4.1-flash",
+        "minimax-m2.7"
+      ],
+      "complete": true,
+      "agreement": {
+        "n": 1630,
+        "agreement": 0.9889570552147239,
+        "kappa": 0.9292432354217911,
+        "matrix": [
+          {
+            "left": "discard",
+            "right": "discard",
+            "n": 130
+          },
+          {
+            "left": "keep",
+            "right": "discard",
+            "n": 18
+          },
+          {
+            "left": "keep",
+            "right": "keep",
+            "n": 1482
+          }
+        ],
+        "conflict_count": 18,
+        "audit_count": 163,
+        "seed": 42,
+        "human_review_complete": false,
+        "human_agreement": null,
+        "items_sha256": "98b50d7f29c8955b7df1d5f0947773e39007c1ffb2bc88a9d7bcc9cc279ed1ae"
+      },
+      "labels_sha256": [
+        "1be7aaa577fd073b89a5883c4c58a5751c4e3f1472afb27da0637135e9121516",
+        "0bead3aabe75aabbda5c6af97ea5ace205ca9db6b23341ef94aec7d6493ac879"
+      ],
+      "human_review_directory": ".local/phase1/human-review-synthetic-timeline-rotation-v2"
+    },
+    {
+      "name": "public-chinese",
+      "candidate_count": 1648,
+      "items_sha256": "19d498a000469c454dbd9b139f504422fa2c8b9bae98638c502e3c54e80915e5",
+      "models": [
+        "glm-5.2",
+        "deepseek-v4-pro-0813"
+      ],
+      "complete": true,
+      "agreement": {
+        "n": 1648,
+        "agreement": 0.9308252427184466,
+        "kappa": 0.8477046505237098,
+        "matrix": [
+          {
+            "left": "discard",
+            "right": "discard",
+            "n": 1023
+          },
+          {
+            "left": "discard",
+            "right": "keep",
+            "n": 79
+          },
+          {
+            "left": "keep",
+            "right": "discard",
+            "n": 30
+          },
+          {
+            "left": "keep",
+            "right": "keep",
+            "n": 511
+          },
+          {
+            "left": "uncertain",
+            "right": "keep",
+            "n": 5
+          }
+        ],
+        "conflict_count": 114,
+        "audit_count": 165,
+        "seed": 42,
+        "human_review_complete": false,
+        "human_agreement": null,
+        "items_sha256": "19d498a000469c454dbd9b139f504422fa2c8b9bae98638c502e3c54e80915e5"
+      },
+      "labels_sha256": [
+        "e177b018a746a14140bc9ed70949fc566cb317cb38c0f49864639285be5e6f41",
+        "6e047996fa4ec8f97f2e818202dfa520cc96a30b94e2488cd60897652036c421"
+      ],
+      "human_review_directory": ".local/phase1/human-review-public-chinese-rotation-v2"
+    }
+  ],
+  "excluded_exploratory_models": [
+    "kimi-k3"
+  ],
+  "eligibility_audit_reference": "docs/reports/phase1-2026-10-19/model-eligibility-audit-v1.json",
+  "runtime_role_probe": {
+    "model": "doubao-seed-2-1-pro-260915",
+    "at": "2026-10-19T07:35:42.069989+00:00",
+    "scope": "synthetic runtime extraction role probe; not quality calibration",
+    "http_status": 200,
+    "response_sha256": "3b6c8f16781d1e7b48f24d8ae5bcc2b9218b79a4f1c69dc55fb836753eecc6bf",
+    "usage": {
+      "completion_tokens": 45,
+      "prompt_tokens": 254,
+      "total_tokens": 299,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "candidate_count": 1,
+    "scope_preserved": true,
+    "last_reason": "LLM_EXTRACTED",
+    "last_failure": "NONE",
+    "latency_ms": 4360.51
+  },
+  "limitations": [
+    "Human arbitration/audit and judge calibration are not performed by the assistant.",
+    "Synthetic templates are not evidence of real Chinese task quality.",
+    "Public Chinese candidates are not approved gold; final accepted facts may be below target.",
+    "Known failed/cancelled historical calls remain in .local; unknown delivery/usage is not zero.",
+    "Model roles/prompts/batch sizes differ across datasets and are frozen separately.",
+    "Public Chinese question generation/type coverage and other phase1 gates remain unaccepted.",
+    "Original phase1 delivery and B0 tag remain historical, unchanged artifacts."
+  ]
+}

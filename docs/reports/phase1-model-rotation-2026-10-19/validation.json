@@ -1,0 +1,10 @@
+{
+  "tested_runtime_commit": "a2a8422",
+  "tests_ran_with_uncommitted_changes_later_committed": true,
+  "pytest_passed": 319,
+  "pytest_seconds": 16.1,
+  "ruff": "All checks passed!",
+  "mypy": "Success: no issues found in 79 source files",
+  "foundation": "Foundation evaluator: total=8 passed=8 failed=0 tenant_leaks=0 deleted_memory_hits=0",
+  "current_runtime_matches_tested_commit": true
+}
