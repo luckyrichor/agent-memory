@@ -14,7 +14,7 @@ if len(sys.argv) < 2:
 if not os.environ.get("ARK_API_KEY"):
     raise SystemExit("shared Ark credential missing; invoke through with-ark")
 profile = json.loads(
-    (Path(__file__).resolve().parents[1] / "docs/evals/model-roles-v2.json").read_text()
+    (Path(__file__).resolve().parents[1] / "docs/evals/model-roles-v3.json").read_text()
 )["runtime_extraction"]
 child_env = dict(os.environ)
 child_env.update(

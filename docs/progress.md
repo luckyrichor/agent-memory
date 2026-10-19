@@ -192,3 +192,9 @@ Ark同一共享密钥调用新版Pro260915和Mini260428成功，旧Pro260215仍4
 用户确认“改用新版doubao-seed-2-1-pro-260915”，已提供阶段1显式runtime profile及子进程注入入口，保留旧报告/原始方案/B0。新Ark、Kimi-K3、MiniMax-M2.7完整预检摘要在阶段1报告目录；新Ark实际LLMExtractor合成角色请求200、LLM_EXTRACTED、scope正确、4.36秒，不等于抽取质量测量。原语料/调用结果只留.local；密钥不落盘。
 
 公开中文GLM完整标签1648条生成；MiniMax-M2.7公开批次出现schema失败和120秒ReadTimeout，保留失败/未知用量后改Kimi完整独立重跑，试批50条有效。合成集沿用MiniMax-M2.7继续与已完整DeepSeek配对。不同数据集裁判需与本数据集标注厂商独立，角色分别冻结，人工校准仍待完成。阶段1未验收，不进入阶段2。
+
+## 2026-10-19 Kimi资格纠错（撤回此前角色资格结论）
+
+回查原方案§7及腾讯云当前Kimi指南，Kimi-K3温度固定、不能关闭思考。此前把“100格式+5次一致”当完整资格的判断有误：API接受temperature=0/thinking.disabled不证明生效。已停止Kimi并将全部Kimi部分标签排除于正式标注/盲审/一致性结果；历史原件不删改。原preflight摘要保留为当时机械预检记录，资格审计model-eligibility-audit-v1.json明确role_eligible=false。当前模型角色用v3，v2保留历史。
+
+修复预检资格闸门与标注入口，新增回归：即便Kimi全部格式/一致性通过，仍不能通过固定采样策略；不允许其发起正式标注。314 tests通过（15.91s）、ruff、strict mypy78文件、foundation8/8。合成集1630双标注完整仍有效：DeepSeek4.1与MiniMax2.7 κ=0.9292432354，18分歧、163盲审；人工字段全空，未验收。公开中文GLM1648完整标签仍有效，第二份将由符合参数要求的新候选模型完整生成，不拼接Kimi部分结果。已开始deepseek-v4-pro-0813完整预检，官方TokenHub DeepSeek指南支持温度0及关闭思考，使用不同于已耗尽4.1Flash的服务ID。

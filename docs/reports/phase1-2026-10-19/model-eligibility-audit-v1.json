@@ -1,0 +1,14 @@
+{
+  "model": "kimi-k3",
+  "date_beijing": "2026-10-19",
+  "role_eligible": false,
+  "format_valid": 100,
+  "format_n": 100,
+  "consistent_5": true,
+  "sampling_control_eligible": false,
+  "thinking_control_eligible": false,
+  "reason": "Original plan section 7 explicitly excludes Kimi; provider documents fixed temperature and non-disableable thinking. Earlier preflight_pass=true assessed format/consistency only and was incorrectly treated as role eligibility.",
+  "provider_source": "https://intl.cloud.tencent.com/zh/document/product/1300/80635",
+  "original_preflight_summary_sha256": "044512f349d6453bb1668b6cfb2c106dbbd404f3ca5da2ffd2d3ef5fdea2ff51",
+  "handling": "Stopped Kimi annotations. Historical partial labels/raw results remain restricted and excluded from accepted dataset, agreement and human review."
+}

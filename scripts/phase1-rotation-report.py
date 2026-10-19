@@ -27,14 +27,14 @@ report = {
     "human_review_complete": False,
     "scope": "Model migration/preflight and candidate annotations; not approved gold or phase2 baseline.",
     "role_config_sha256": hashlib.sha256(
-        Path("docs/evals/model-roles-v2.json").read_bytes()
+        Path("docs/evals/model-roles-v3.json").read_bytes()
     ).hexdigest(),
     "preflight": [],
     "datasets": [],
 }
 for directory, model in [
     ("preflight-ark-pro21-v2", "doubao-seed-2-1-pro-260915"),
-    ("preflight-kimi-k3-v2", "kimi-k3"),
+    ("preflight-deepseek-pro0813-v2", "deepseek-v4-pro-0813"),
     ("preflight-minimax-m27-v2", "minimax-m2.7"),
 ]:
     report["preflight"].append(
@@ -55,8 +55,8 @@ for name, items_path, model_a, path_a, model_b, path_b in [
         "public-chinese-v1/items.jsonl",
         "glm-5.2",
         "public-labels-glm-v4",
-        "kimi-k3",
-        "public-labels-kimi-v4-shards4",
+        "deepseek-v4-pro-0813",
+        "public-labels-deepseekpro-v4-shards4",
     ),
 ]:
     items = root / items_path

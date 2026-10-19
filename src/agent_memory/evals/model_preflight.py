@@ -20,7 +20,15 @@ from pydantic import BaseModel, ConfigDict
 
 from agent_memory.evals.metrics import latency
 
-MODELS = ("deepseek-v4.1-flash", "minimax-m3", "glm-5.2", "hy3", "kimi-k3", "minimax-m2.7")
+MODELS = (
+    "deepseek-v4.1-flash",
+    "minimax-m3",
+    "glm-5.2",
+    "hy3",
+    "minimax-m2.7",
+    "deepseek-v4-pro-0813",
+)
+EXPERIMENTAL_MODELS = ("kimi-k3",)
 ARK_MODELS = ("doubao-seed-2-1-pro-260915",)
 
 
@@ -155,7 +163,9 @@ async def run(
                 "consistent_5": consistent,
                 "preflight_pass": valid >= 99
                 and consistent
-                and bool(model_rows[0].get("format_valid")),
+                and bool(model_rows[0].get("format_valid"))
+                and model not in EXPERIMENTAL_MODELS,
+                "sampling_control_eligible": model not in EXPERIMENTAL_MODELS,
                 "latency_ms": latency([r["latency_ms"] for r in model_rows]),
                 "http_429": sum(
                     a.get("http_status") == 429 for r in model_rows for a in r["attempts"]
@@ -187,7 +197,12 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--prompt", type=Path, default=Path("docs/evals/prompts/preflight-v1.txt"))
-    parser.add_argument("--models", nargs="+", choices=MODELS + ARK_MODELS, default=list(MODELS))
+    parser.add_argument(
+        "--models",
+        nargs="+",
+        choices=MODELS + ARK_MODELS + EXPERIMENTAL_MODELS,
+        default=list(MODELS),
+    )
     parser.add_argument("--interval", type=float, default=2.5)
     args = parser.parse_args()
     if ".local" not in args.output.resolve().parts:

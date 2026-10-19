@@ -145,6 +145,8 @@ async def annotate(
     retry_invalid_cache: bool = False,
     deduplicate_sources: bool = False,
 ) -> None:
+    if model not in MODELS:
+        raise ValueError("model is not eligible under the frozen sampling policy")
     if batch_size < 1 or batch_size > 50:
         raise ValueError("annotation batch must be 1..50")
     rows = [json.loads(line) for line in items.read_text().splitlines() if line.strip()]

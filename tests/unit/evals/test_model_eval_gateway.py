@@ -305,3 +305,41 @@ async def test_explicit_invalid_cache_retry_preserves_original_and_replays_valid
     assert retry["usage"]["total_tokens"] == 7 and not retry["replayed"]
     assert replay["usage"] is None and replay["replayed"]
     assert len(replay["invalid_cached_replies"]) == 1
+
+
+async def test_format_success_does_not_override_fixed_sampling_exclusion(tmp_path, monkeypatch):
+    monkeypatch.setenv("TOKENHUB_API_KEY", "unit-test-only")
+    original = httpx.AsyncClient
+
+    def respond(request):
+        payload = json.loads(json.loads(request.content)["messages"][1]["content"])
+        label = "same" if payload["candidate"] == payload["reference"] else "different"
+        return httpx.Response(
+            200,
+            json={
+                "choices": [
+                    {"message": {"content": json.dumps({"label": label, "reason": "synthetic"})}}
+                ]
+            },
+        )
+
+    monkeypatch.setattr(
+        model_preflight.httpx,
+        "AsyncClient",
+        lambda **kw: original(**kw, transport=httpx.MockTransport(respond)),
+    )
+    prompt = tmp_path / "prompt"
+    prompt.write_text("synthetic prompt")
+    await model_preflight.run(tmp_path / "out", prompt, models=("kimi-k3",), interval=0)
+    result = json.loads((tmp_path / "out/kimi-k3-summary.json").read_text())
+    assert result["format_valid"] == 100 and result["consistent_5"]
+    assert not result["preflight_pass"] and not result["sampling_control_eligible"]
+    with pytest.raises(ValueError, match="not eligible"):
+        await module.annotate(
+            tmp_path / "unused",
+            tmp_path / "labels",
+            prompt,
+            model="kimi-k3",
+            cache=tmp_path / "cache",
+        )
+    assert not (tmp_path / "labels").exists()
