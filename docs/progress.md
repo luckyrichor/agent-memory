@@ -150,3 +150,15 @@ M5：真实数据库、固定M7响应与同一应用身份下，对No Memory / N
 ## 2026-10-13 M6 Context Builder（Codex）
 
 来源 870afeb + 本轮修改；实现API/SDK和独立预算构建器，212测试、ruff、strict mypy67文件、foundation8/8通过。完整JSON包装计预算、UTF8保守单位、版本引用、按价值裁剪、跨租户/workspace/删除隔离均有测试。初次全量211通过/1失败为SDK路由覆盖漏调用，补测试后全量通过；边界见context-builder.md。
+
+## 2026-10-19 面试级完善方案阶段0（Codex）
+
+用户原件80744字节原样入docs/agent-memory面试级完善方案.md，保留@sh6_apple署名；任务按§2阶段0与§13逐阶段交接执行。源码固定1e9d6f3，报告脚本在该干净提交运行，源文件/测试/迁移/锁文件散列已回查。每任务开发记录见docs/devlog/INDEX.md；报告、环境、命令、漏洞扫描原件在docs/reports/phase0-2026-10-19。
+
+修InvalidScope为422/INVALID_SCOPE；foundation逐case捕普通异常并继续，不吞取消。核实原HTTP只收tool.result，新增conversation.message的user/assistant受限summary与0008约束迁移，真实API验收幂等/scope隔离，拒绝有数据时有损downgrade。租约原用应用now，PG现以clock_timestamp筛选并拿锁后重新读wall clock；renew/succeed/fail和队列ready调度对齐DB时间；内存与domain单测仍可注入时钟。整体HTTP正文有界缓冲，检查声明长度和实际流量，补版本offset/key/workspace等边界及深嵌套早停。
+
+初始212测试通过。修复后首次全量232通过/1失败，原因旧迁移测试在共享库回滚碰到有对话数据保护；保留安全拒绝，迁移roundtrip改独立容器并新增有数据降级拒绝覆盖。PG旧过期测试不再靠应用未来时间造过期，改临时库期限/ready字段；领域测试不变。最终自动报告234通过0skip、ruff、strict mypy68文件、foundation8/8/0泄漏/0删除命中。指纹PG16/pgvector0.8.6、0008、仍无ANN索引；只用临时库，未动持久业务数据或常驻部署。
+
+冻结锁文件all-groups导出后pip-audit扫描，前19报告项（18去重公告，3个包），后56个本机有效依赖0已知公告。PyJWT2.13.0→2.15.1、urllib32.7.0→2.8.0，开发pytest8.4.2→9.1.1/pytest-asyncio0.26.0→1.4.0；升级后的四门通过。保留原始JSON与工具版本，不等同未知漏洞/跨平台安全保证。Ruff最初指出DB时钟类型错误宜抛TypeError，统一helper后通过。没有安排真实模型评测调用。
+
+下游ops SDK仍固定1e2730c，不擅自改pin；用对应干净worktree复验真实memory联调用例1通过，ops README同步说明迁移来源匹配。B0只冻结修复后运行源码；阶段2全指标报告尚未做。负责人验收和独立复核抽查尚未完成，按方案§13.5停在阶段0交接，不进入阶段1。

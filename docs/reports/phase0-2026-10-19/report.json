@@ -1,0 +1,492 @@
+{
+  "generated_at_utc": "2026-10-19T01:02:39.496131+00:00",
+  "date_beijing": "2026-10-19",
+  "source": {
+    "commit": "1e9d6f3b25b58c85792344000d7e1b5a71a79737",
+    "dirty": ""
+  },
+  "source_sha256": {
+    "src/agent_memory/sdk.py": "df5c7ef9d4e4b93b51943585d980a6b65639782de74e2b06647a757c140b1c3b",
+    "src/agent_memory/__init__.py": "a1981ed495d4a1f81ac886c9c2206eca346a9e4a4ef61131cc09ed9351fb592f",
+    "src/agent_memory/config.py": "4b908dfc0eb1f3c3a0f83111192a4ee370c5d3ef91dcdbd328ec9da107496ba5",
+    "src/agent_memory/evals/schema.py": "e5ac616b397e54346216915c01bf3346bed1c1a2fb6b2d1357525f3d904e6b5b",
+    "src/agent_memory/evals/foundation_runner.py": "5cd018d58b588933a9149addac4536f1231c86d2b03ce432ed46acb91cbd8d9b",
+    "src/agent_memory/evals/__init__.py": "6220208d96c1302ce442bb906a51d3f95100d2a6f114d3e987cfb28fea9679db",
+    "src/agent_memory/api/retrieval_routes.py": "50ac372661ba9822fd9d4a73e3a79527b745ce5e6ecd43f85f3b5a873ceb00b4",
+    "src/agent_memory/api/middleware.py": "788502faed3bac1aa5420de44d6b3b844162fc8b9bb988e171dda645e0be0b81",
+    "src/agent_memory/api/app.py": "c1f18d0a891651336db2c1fb596797c21bb4546aaf18c401ce7b5d5a1a77ec0f",
+    "src/agent_memory/api/body_limit.py": "e41a21849254040ccd5e3ea0a137dcfb355a794d32fef22e03454d8434284ae7",
+    "src/agent_memory/api/routes.py": "faa05425157f3efd780bbf489d52a558f6a382f9a170e74e336e087a737e3958",
+    "src/agent_memory/api/event_routes.py": "2b29e6f66e0b80c89718b261f8700f887805533bc211c26c3aec6411263c8363",
+    "src/agent_memory/api/auth.py": "271bda9fe929b5e40a90d5e847467811d5d854391fecc024fec1988a95da5a48",
+    "src/agent_memory/api/schemas.py": "47f0bb352cd85c56b640fac43481d17034b8d44d7b82b35eae66090d32f84a9e",
+    "src/agent_memory/api/event_schemas.py": "1d6f6bf567d20dd25b8ec4855a35c14a4a9dbf8d2e2b1571efe87b04402c530e",
+    "src/agent_memory/api/errors.py": "485336696b14b8f3662b94217067926cd3c313a928adb3bf9ea145f5230ff687",
+    "src/agent_memory/api/__init__.py": "0d0450b0d641ccdaf61c99a3e43742018ba6ac4368a60708b7ebc0425fde938a",
+    "src/agent_memory/workers/extraction.py": "078563dcaaacc11879b52bf4bd108a1d859643f469536d8872c534f4940ee267",
+    "src/agent_memory/workers/embedding.py": "626e8475a5c4b881424515e536b34cb578941d08b12c4fdefb790515578eaa4b",
+    "src/agent_memory/workers/health.py": "9ecce87187f654afdbc394014fe244f9f59a081a957f84efe2937c47b842d930",
+    "src/agent_memory/workers/admin.py": "061a5ed98605d40d8d49463fc906678cf6537647c207cbbbbf10948ccfbc53fb",
+    "src/agent_memory/workers/__init__.py": "f8bc83e7545373ef4cc6e3cd9102bdd85b8226b20131f8eaee2ec834ca4a21ae",
+    "src/agent_memory/domain/principal.py": "54b98868e5e68ed25008270f803d1b21dfa2e66dd39d5aac18c9156f8b684a34",
+    "src/agent_memory/domain/jobs.py": "79ae0b6c1cbabc30408ce6c46be55a0540692701d050ba823b41ec36144f3f44",
+    "src/agent_memory/domain/enums.py": "ee2163689dd19df14bb66b70865dacc841ad6f255864f59ba228e0a522053042",
+    "src/agent_memory/domain/models.py": "c1ec07a3dabf6834c5d4b2cb4a0503ae3f4ca567af5ea5abc80d716d8db57942",
+    "src/agent_memory/domain/events.py": "738707986c0a0c40f6d72ecb37a054957e96c3ec137837b79ad2950481d3328b",
+    "src/agent_memory/domain/lexical.py": "4c1fbc9dac5bded0cb43bd4a7b42ed50e9eee2559d7f284e026a5111fc8ffad2",
+    "src/agent_memory/domain/errors.py": "d218247d8d2c457c0515ad33d8874aac9185590aab4d29ae17cb3ad2f0c38859",
+    "src/agent_memory/domain/__init__.py": "95718812b60b194a9bff74c239abdec16e603c5b3a5dddaaccb467688251d8d5",
+    "src/agent_memory/domain/content_policy.py": "05e88db4498d6f1fe1544d631d669b39f1268132b038088e3d22188632d0f9d1",
+    "src/agent_memory/observability/setup.py": "b1ad0a3ca9b48de9125d1d9d9885849360c0d5764dcad26da9a99e799e205bfc",
+    "src/agent_memory/observability/fields.py": "7525fa17414b66b4bdcfe935a9d1616c653f4bf222d4143c2dad3428c83c6629",
+    "src/agent_memory/observability/logging.py": "42596b440a7e1b32a7635cf4bacf3e3bbd69ea40ff6964ffe596bbb50c76a6e8",
+    "src/agent_memory/observability/metrics.py": "1ee731096d14bcf35b50c56c6681adc1a2aa3eb7f9101398b6f389cdb6347825",
+    "src/agent_memory/observability/context.py": "1e3b3680696e44c5e2d56c19322bb7ad0ae13b56dcef41edad6014330672f4f0",
+    "src/agent_memory/observability/tracing.py": "c3e163f2b3775f13ad6501df94c10087e9818d0a128850fe681347da079799a5",
+    "src/agent_memory/observability/__init__.py": "72ccc1dc6c60207e46ef6009f861e38372b6ebe553612bbb4f56db2024961caa",
+    "src/agent_memory/application/extraction_worker.py": "9ddabfc2e008266396c4b91f9ed29f3c85254ba1aa215d7352e3a58acc30051c",
+    "src/agent_memory/application/retrieval.py": "23e44ce413a60d0ae7df859bfdb3e271c4d6d62f34d9143caef9b6e94e3be480",
+    "src/agent_memory/application/ports.py": "0ec7c2f71e53facd9ec5a525940fd082bd9bc99c6bbf7fbcd4f28d114267da3e",
+    "src/agent_memory/application/queue_ports.py": "c843faeb2d727a667d05654c09ca834a7f9284256c321a7bc6c2681a7c847596",
+    "src/agent_memory/application/provider_errors.py": "3277d21d313955044e94a4398f01a9dd18a59c846e101f5e20f87a0c53bafccb",
+    "src/agent_memory/application/event_commands.py": "1791725cd93a6414f5412158fc5d45434acd6d838172c562e8951d002ff78c14",
+    "src/agent_memory/application/event_ports.py": "50440aeddc86ee2ba85a79c57fbcc65ed7c682efc6dc1a449e587b94a9eecd8c",
+    "src/agent_memory/application/event_ingestion.py": "7b081e9a28b206740ead8f471194536b106915c153f3eb502f4d24a3138492e6",
+    "src/agent_memory/application/extraction.py": "92b70036e96f00558e936737916cabe9faca7070b4eb39f0d5365cc4a3b4e772",
+    "src/agent_memory/application/context_builder.py": "bf1728fde8168fc992bcb33fed0542e86e7cfde208a5655cd37ddabeb3aaa0d3",
+    "src/agent_memory/application/embedding.py": "956a0268d57182c45f11fd8967c01851c149ee2f7fe8384a06c501cdd63f824a",
+    "src/agent_memory/application/outbox_dispatcher.py": "fad71e8f2bf13ca78a8888d8de0914b1902658c4fbd4270da209e1dfc2e2f186",
+    "src/agent_memory/application/__init__.py": "963cdb872a3f9a65383213656d375c28d13cb105aeec35bd40bbb1c328b3ff72",
+    "src/agent_memory/application/commands.py": "cf7929f505bfc16410a4806f60da28bad2b210207b9f6720e3b0e409072eda67",
+    "src/agent_memory/application/explicit_memory.py": "183cfdef95cda8927cee3d4d7c4eed0b4070fe40c5bbd26752c126c359d205aa",
+    "src/agent_memory/infrastructure/retrieval.py": "053418316b30101e30e4583bd3b6019ca727c9b185a9d55b7f16fbeeda0911ff",
+    "src/agent_memory/infrastructure/llm_extractor.py": "2ac07d757fd070277e237ccaeb6a0d6be72c13ca0a053f69ee79b6e04e4bb835",
+    "src/agent_memory/infrastructure/orm.py": "054a45c64a8ff7c8c8b47716e9941f7b8078ff709030799fc48f7d33722812cd",
+    "src/agent_memory/infrastructure/in_memory_events.py": "5e4a7debe8bcf81a7ea065886770a6be4f4f7675d7b729e1b25af227a7696959",
+    "src/agent_memory/infrastructure/db.py": "3c9cd67b67572cec1458d33fc81d9ed3f71d9d143400ece9144e4525a8fb232f",
+    "src/agent_memory/infrastructure/query_vectors.py": "e5da325721923e49b85976d925388bf832fc8fa331c1e4d3680a1372dd70f4e6",
+    "src/agent_memory/infrastructure/in_memory.py": "66a1a197590a5c783fc57556bd4d911f11131708bf281b82faa6896e3a81c52b",
+    "src/agent_memory/infrastructure/in_memory_embedding.py": "8bf3e7398c537639780a27ecdca8b0a5abf578d27b5398f2242ccf356f705351",
+    "src/agent_memory/infrastructure/in_memory_queue_admin.py": "163307cef57ff6a66a2f3619baba399e8df271b5706275b30eb734b341e7fa2f",
+    "src/agent_memory/infrastructure/in_memory_retrieval.py": "45fd0476eb1774fcab44c9c55e4cb97035c5ab31faca5671da1a6400b2f5f33d",
+    "src/agent_memory/infrastructure/queue_admin.py": "c8f1afb44a86c28165cd3e99e0ea133aef85cf052e17b428bf6fa3f3f34c785a",
+    "src/agent_memory/infrastructure/embedding.py": "b1fd887b0ffae21eec0481dae3d629e2569a9944096f8117b27757034567d062",
+    "src/agent_memory/infrastructure/repositories.py": "4468414002c35fb1165bf669a1e9aad0cbb6e26ac324ffefbc7f717880f9167b",
+    "src/agent_memory/infrastructure/event_repositories.py": "1f957e7afc14c8da97fccf4dbda34ba28eec20164abb9f0fa2c789c403ef166d",
+    "src/agent_memory/infrastructure/__init__.py": "d7d62cc84972303c97aa81c75ff56ed698ab0deb20eb9a41ff0e459dc9c10200",
+    "tests/conftest.py": "69304541ca89613cf8b7f707cc658032ebd30d44aedb94d67252157a69eacb0b",
+    "tests/api/test_event_api.py": "6954e62a566bcaff3387b2cae4994db038a9cebf006937b5b4ec3f7f3a7c9938",
+    "tests/api/test_context_api.py": "f562045bec41b0211f1a2d3f6d55bbd6a5724fd18249e6dff0ea05a8df61da2d",
+    "tests/api/test_observability_api.py": "a013a2920aac6b37ee5147a2ff97c4a82fcac0372297ba6fbc91b5bd176b96bf",
+    "tests/api/test_retrieval_api.py": "3fb5e53f01f61f34841704e70597a1c32f464c446101c3e766247adc2242fb58",
+    "tests/api/test_retrieval_isolation.py": "27ac137a6631c8f75c22510de26ac38fedb829068447fde690024833ee6feeff",
+    "tests/api/ark_validation.py": "448bde7342dc5dc516734950d6a264ee2d0a533854d18cb7b4b5e4ee65e25546",
+    "tests/api/test_memory_api.py": "f119cf7cf0dc1db01768e09c42dfeda0d78a19344ac4007708a388fc7080d87b",
+    "tests/e2e/test_automatic_memory_pipeline.py": "7486e5bdb56eb99c48afeaf9aa09cb09c8493f84d31f70615cd80e73491d6931",
+    "tests/integration/test_embedding_pipeline.py": "bb9198bc0a13c0d597419707c052159468f73955e7600fa403b859b41754851d",
+    "tests/integration/test_event_pipeline_schema.py": "dcced2dbb968e4f526a1b0ce60ecbb1d32ddab5284865ed14c4e1742a7bcb2af",
+    "tests/integration/test_postgres_repository.py": "8ae41039a7dcee4b57a040f75e67a5ba3492dabea9de77b2fa85f9504c38eefc",
+    "tests/integration/test_review_hardening.py": "784c7dfdc26848e5cd6e90698d7ab497cea153c23fc9475e54dc6abc77fd61ce",
+    "tests/integration/test_tenant_isolation.py": "ccdaaf0fc7f55e9a6b16ae551c9c45c2c1787298fbb14a40ef34447f1071a5b2",
+    "tests/integration/test_conversation_migration.py": "1bb613419af46c6555a30a41bb9f97da771048ee5cf52a2a4aac2cdfcfa880ac",
+    "tests/integration/test_migration_logging.py": "1a8666c52c145d4d57475da36d8fcc9daa92b9ae338f886628f1768bfa84ec86",
+    "tests/integration/test_embedding_dimension_migration.py": "4cc5fbd9ecb37ef451630500d36dd3d385536c4400ce952a0456010574653a38",
+    "tests/integration/test_database_clock.py": "4383596f8580eeced22a6939f97f84aa93aea290d3690aa30553d0d097372b67",
+    "tests/integration/test_baseline_comparison.py": "8876561fbba983368349242517d5e5752f6a1b2a73594ad4b40b381d9aebba52",
+    "tests/integration/test_labeled_retrieval.py": "3adbf69eb8f454f2924bc597731666c33b005d88f52a7d58d109cd8e7f39a315",
+    "tests/integration/test_event_pipeline.py": "e40383c5cdb4a8ec26b0a27bb056620492ccb9cb74e077f7312a4f7e5ffee781",
+    "tests/integration/test_llm_pipeline.py": "06f5775c98b73e315eeb60744cf233874a91764fcc98f92c8291405e351b670f",
+    "tests/unit/evals/test_foundation_runner.py": "93f30edaf38185dc244c18f06f92029602a4b9acfab9555458f3bbe5dd391b93",
+    "tests/unit/workers/test_extraction_cli.py": "f1f4fe0d508a6d06a8e8b983d28d7ed93e7d0a71f5cb6d76cfe384467b54ddf3",
+    "tests/unit/workers/test_worker_health.py": "4f60ba98e6c5cfa0ed227e06c2d81c8635b71806e6b7b52b7bd7fff50fd22b6a",
+    "tests/unit/domain/test_content_policy.py": "10d0ecaf2766c5bf638ae8d32b07812df974467fab0467509e469259e26d4ef1",
+    "tests/unit/domain/test_jobs.py": "52cf095242ff1779690ae68a840ac897467d1c9fbe1906ce22222b497b38d37e",
+    "tests/unit/domain/test_review_followup.py": "0d8f0b1920c1bd7be096e5b33dc48f1facdd17e0f13ff1a7f6967194f01656ad",
+    "tests/unit/domain/test_phase0_bounds.py": "dd19f39deb41d178f0499df491ec5e24d6123798964374f8bc55f9c06199232c",
+    "tests/unit/domain/test_events.py": "0259b6b31c6bf6099f2d019eda4c53d388984e80d8a3852d55b02250b597ccf1",
+    "tests/unit/domain/test_memory.py": "c013889e8f793864cb05d205eb7cd0783626726c04c0df93a02716214d356fd5",
+    "tests/unit/observability/test_worker_instrumentation.py": "6440bf8b6893a0863f4a6c539e84729b89b8be903705a0c40e2889e2bc52ceed",
+    "tests/unit/observability/test_otlp_export.py": "49742d47b57359dddcfbeafc3f1e99132250edb2791883d082cd2f28d7031864",
+    "tests/unit/observability/test_fields.py": "a661d13422e723e0fdafb5e95275a236177b4ac447b9d692f610bb3a4c9278a7",
+    "tests/unit/observability/test_no_logging_bypass.py": "fdafbaf37942ef1195a86841e2d2d9a66919d8545a040070dd7ddb522daf97d1",
+    "tests/unit/observability/test_metrics.py": "87473e0279d88fd6fc850c301307fd87fe8bf5ffd963880328bae8a966da4aca",
+    "tests/unit/observability/test_logging.py": "b50089cd8e14b75883bd745ff263ef10456a2ea5a4c35acc1d97602e57156155",
+    "tests/unit/application/test_explicit_memory.py": "0332c237b649a3e3559923064e54941f1ffd4db01c47ebfbc2176e23d452c0a0",
+    "tests/unit/application/test_outbox_dispatcher.py": "9eba1590b1b7e0f6eafb17717215918175498153360ca85b6eb658f2ad0e3eac",
+    "tests/unit/application/test_embedding.py": "8cdc89ed56d91b99f24394e59226a4042a5f2f1ede0599604a51dd055cb11526",
+    "tests/unit/application/test_context_builder.py": "b2d34185a878ea17183ab5e1e8086829c39f452680fbc4fb89ecaf3410a312ce",
+    "tests/unit/application/test_extraction_worker.py": "a321ae712f7092996b553d3833706ea5579b1ca4e116e24fb554b00f335651ae",
+    "tests/unit/application/test_retrieval.py": "0578d4f759886b62e94885c236e57fdbba05bb53caea5a65d0adb44c3cb2f054",
+    "tests/unit/application/test_extraction.py": "ede03348b8a881193313b64217cee3e33d3f33b3ac969feb46136c1380f988aa",
+    "tests/unit/application/test_review_regressions.py": "c5767c149e758fcd821d68ac27b3d77782c0b26229ea167eb6815304842dec7c",
+    "tests/unit/application/test_llm_extractor.py": "af6e3d9971de91d33706b13151399a648f8b5eca4dfc670b27377fb1925795c5",
+    "tests/unit/application/test_event_ingestion.py": "a993ed929af339b850c153f4bed4bcf0bd1e8692114d4ecf6fe9107991cb3b0e",
+    "migrations/env.py": "6931314367ec08a953a0ee44f911f5074b515bf6d8fd154749ebbcafedc18df2",
+    "migrations/versions/0007_review_hardening.py": "b086125ed5ab24946a202ec9ffe82102f7955b84f854d4bb60d02441970fd20e",
+    "migrations/versions/0005_lexical_index.py": "76d192318e273d877fbca6b137827ae228616386c75a6c5da7e5b0f2bb94ef6a",
+    "migrations/versions/0006_embedding_1024.py": "0256e13dc920e5465f2074cbedde396da52ddd844571d65520f745f361e58fbd",
+    "migrations/versions/0008_conversation_events.py": "43414254cbcc6322812be5007425094d1d1a98d07fde594f0ccb922e470eb555",
+    "migrations/versions/0001_memory_foundation.py": "c266ea4465f5ef8874107194c4c748c966e30fe854c8f4d333340e6bf13fc732",
+    "migrations/versions/0003_event_pipeline.py": "447cb30afa9605c77bd64d19e9c7ea753a776d7d7983f77f489e6bee23f940cc",
+    "migrations/versions/0002_current_version_integrity.py": "3d2050da7de8cfdc966e8401e97e5bc5e1d479eaf5bd0efd7fb9e623a0415ee7",
+    "migrations/versions/0004_embedding_jobs.py": "9acf5866fca736479448d102b66902f05d5306c5ae8f0108edb7725151b92aa2",
+    "pyproject.toml": "bcc9e18cae4a9c2c58eb23c0139148c33ab6ef8446d93f051c755bdeb983f699",
+    "uv.lock": "4720221b17f876e708cd39508f9bd6a7bb6ec4ba89d01025c4c6677388fc57aa",
+    "scripts/phase0-evidence.py": "d70611bfd4af1383faf95e815ed3485cfe22564000f2a31065161baaef58def9",
+    "scripts/check.sh": "23d5f07b423558fb8ecd2314602735f06335fc61c3cb948aac125a384eccb906"
+  },
+  "source_document": {
+    "path": "docs/agent-memory面试级完善方案.md",
+    "bytes": 80744,
+    "sha256": "9cb312cd94e11eeaf9ca6b816f4a15b37d061d22986eba8263cf4160dbe73d2e",
+    "message_id": "om_x100b62797c9004a4dd38ee4fc3fdb0e"
+  },
+  "environment": {
+    "os": "Linux-6.8.0-139-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "cpus": 4,
+    "affinity": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "meminfo": {
+      "MemTotal": "7869640 kB",
+      "MemAvailable": "6170616 kB"
+    },
+    "cpu": "AMD EPYC 7K62 48-Core Processor",
+    "docker": "29.8.1",
+    "packages": {
+      "certifi": "2026.7.22",
+      "python-dotenv": "1.2.3",
+      "charset-normalizer": "3.5.1",
+      "urllib3": "2.8.0",
+      "requests": "2.34.2",
+      "opentelemetry-proto": "1.44.0",
+      "uvicorn": "0.52.4",
+      "annotated-doc": "0.0.5",
+      "packaging": "26.3",
+      "typing_extensions": "4.16.0",
+      "psycopg": "3.3.4",
+      "iniconfig": "2.3.0",
+      "fastapi": "0.141.1",
+      "pydantic_core": "2.46.5",
+      "idna": "3.19",
+      "ruff": "0.16.5",
+      "pytest": "9.1.1",
+      "pathspec": "1.1.1",
+      "annotated-types": "0.8.0",
+      "psycopg-binary": "3.3.4",
+      "opentelemetry-sdk": "1.44.0",
+      "pgvector": "0.5.0",
+      "opentelemetry-semantic-conventions": "0.65b0",
+      "anyio": "4.14.2",
+      "pytest-asyncio": "1.4.0",
+      "googleapis-common-protos": "1.75.5",
+      "mypy_extensions": "1.1.0",
+      "httpcore": "1.0.9",
+      "httpx": "0.28.1",
+      "typing-inspection": "0.4.4",
+      "SQLAlchemy": "2.0.52",
+      "h11": "0.16.0",
+      "cryptography": "50.0.1",
+      "librt": "0.15.0",
+      "docker": "7.2.0",
+      "Mako": "1.4.1",
+      "protobuf": "7.36.2",
+      "starlette": "1.6.0",
+      "wrapt": "2.3.0",
+      "agent-memory": "0.1.0",
+      "opentelemetry-exporter-otlp-proto-http": "1.44.0",
+      "pydantic": "2.13.5",
+      "MarkupSafe": "3.0.3",
+      "Pygments": "2.21.0",
+      "opentelemetry-exporter-otlp-proto-common": "1.44.0",
+      "opentelemetry-api": "1.44.0",
+      "pycparser": "3.0",
+      "click": "8.5.0",
+      "pydantic-settings": "2.15.0",
+      "testcontainers": "4.15.0",
+      "psycopg-pool": "3.3.1",
+      "alembic": "1.19.1",
+      "cffi": "2.1.1",
+      "pluggy": "1.6.0",
+      "PyJWT": "2.15.1",
+      "mypy": "1.20.2",
+      "greenlet": "3.5.5"
+    }
+  },
+  "database": {
+    "server_version": "PostgreSQL 16.15 (Debian 16.15-1.pgdg12+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit",
+    "pgvector_version": "0.8.6",
+    "migration": "0008_conversation_events",
+    "embedding_indexes": [
+      "CREATE UNIQUE INDEX memory_embeddings_pkey ON public.memory_embeddings USING btree (tenant_id, memory_version_id)"
+    ],
+    "app_role": {
+      "rolname": "agent_memory_app",
+      "rolsuper": false,
+      "rolbypassrls": false
+    },
+    "rls": [
+      {
+        "relname": "audit_logs",
+        "relrowsecurity": true,
+        "relforcerowsecurity": true
+      },
+      {
+        "relname": "events",
+        "relrowsecurity": true,
+        "relforcerowsecurity": true
+      },
+      {
+        "relname": "evidence",
+        "relrowsecurity": true,
+        "relforcerowsecurity": true
+      },
+      {
+        "relname": "idempotency_records",
+        "relrowsecurity": true,
+        "relforcerowsecurity": true
+      },
+      {
+        "relname": "jobs",
+        "relrowsecurity": true,
+        "relforcerowsecurity": true
+      },
+      {
+        "relname": "memories",
+        "relrowsecurity": true,
+        "relforcerowsecurity": true
+      },
+      {
+        "relname": "memory_embeddings",
+        "relrowsecurity": true,
+        "relforcerowsecurity": true
+      },
+      {
+        "relname": "memory_versions",
+        "relrowsecurity": true,
+        "relforcerowsecurity": true
+      },
+      {
+        "relname": "outbox_messages",
+        "relrowsecurity": true,
+        "relforcerowsecurity": true
+      }
+    ],
+    "scope": "disposable Testcontainers migrated DB only; not the persistent deployment",
+    "image_id": "sha256:ccc6e83d6e35e931dc7c5def2022729d5a6c370318d099181995567ff1fb4d6b"
+  },
+  "gates": {
+    "pytest": {
+      "command": [
+        "/home/ubuntu/project/WorkPlan/agent-memory/.venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "--junitxml",
+        "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase0/validated.junit.xml"
+      ],
+      "exit_code": 0,
+      "tests": 234,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "ruff": {
+      "command": [
+        "uv",
+        "run",
+        "ruff",
+        "check",
+        "src",
+        "tests",
+        "migrations"
+      ],
+      "exit_code": 0
+    },
+    "mypy": {
+      "command": [
+        "uv",
+        "run",
+        "mypy",
+        "--strict",
+        "src"
+      ],
+      "exit_code": 0,
+      "source_files": 68
+    },
+    "foundation": {
+      "command": [
+        "/home/ubuntu/project/WorkPlan/agent-memory/.venv/bin/python",
+        "-m",
+        "agent_memory.evals.foundation_runner"
+      ],
+      "exit_code": 0,
+      "total": 8,
+      "passed": 8,
+      "failed": 0,
+      "tenant_leaks": 0,
+      "deleted_memory_hits": 0
+    }
+  },
+  "resource_bounds": {
+    "body_bytes": 1048576,
+    "search": {
+      "query": {
+        "maxLength": 2000,
+        "minLength": 1,
+        "title": "Query",
+        "type": "string"
+      },
+      "vector": {
+        "anyOf": [
+          {
+            "items": {
+              "type": "number"
+            },
+            "maxItems": 1024,
+            "minItems": 1024,
+            "type": "array"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Vector"
+      },
+      "model": {
+        "anyOf": [
+          {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Model"
+      },
+      "memory_type": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/MemoryType"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null
+      },
+      "workspace_id": {
+        "anyOf": [
+          {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Workspace Id"
+      },
+      "limit": {
+        "default": 20,
+        "maximum": 100,
+        "minimum": 1,
+        "title": "Limit",
+        "type": "integer"
+      },
+      "offset": {
+        "default": 0,
+        "maximum": 2900,
+        "minimum": 0,
+        "title": "Offset",
+        "type": "integer"
+      }
+    },
+    "scope": {
+      "kind": {
+        "$ref": "#/$defs/ScopeKind"
+      },
+      "workspace_id": {
+        "anyOf": [
+          {
+            "maxLength": 512,
+            "minLength": 1,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Workspace Id"
+      },
+      "subject_user_id": {
+        "anyOf": [
+          {
+            "format": "uuid",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Subject User Id"
+      }
+    },
+    "events_per_batch": 100,
+    "event_types": [
+      "tool.result",
+      "conversation.message"
+    ],
+    "payload_bytes": 65536,
+    "payload_container_depth": 4,
+    "version_offset_schema": {
+      "type": "integer",
+      "maximum": 10000,
+      "minimum": 0,
+      "default": 0,
+      "title": "Offset"
+    }
+  },
+  "audit": {
+    "before": {
+      "packages_scanned": 56,
+      "findings": 19,
+      "unique_advisories": 18,
+      "affected_packages": [
+        "pyjwt",
+        "pytest",
+        "urllib3"
+      ]
+    },
+    "after": {
+      "packages_scanned": 56,
+      "findings": 0,
+      "unique_advisories": 0,
+      "affected_packages": []
+    },
+    "tool_version": "pip-audit 2.10.1",
+    "mode": "PyPI advisory service; frozen all-groups requirements, Linux environment markers; resolved exact versions; no-deps/disable-pip, not arbitrary re-resolution",
+    "lock_before_sha256": "a9baba0ea45d79b0b1a120858d8fedbf2237b5e22b98c07ff3e5d888d95f3454",
+    "lock_after_sha256": "4720221b17f876e708cd39508f9bd6a7bb6ec4ba89d01025c4c6677388fc57aa"
+  },
+  "runtime_model_calls": 0,
+  "runtime_model_tokens": 0,
+  "ai": {
+    "tool": "Codex",
+    "exact_model_version": "unverified",
+    "user_review": "pending"
+  },
+  "gate_status": "engineering checks passed; owner and independent review pending; stage1 not started"
+}
