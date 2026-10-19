@@ -28,6 +28,65 @@ def test_shared_sources_is_lossless_and_preserves_source_attribution():
     assert json.dumps(rows, ensure_ascii=False) == before
 
 
+def test_partition_keeps_serial_request_boundaries():
+    lines = [str(i) for i in range(13)]
+    parts = module.partition_batches(lines, 3, 2)
+    serial = [lines[i : i + 3] for i in range(0, len(lines), 3)]
+    actual = [part[i : i + 3] for part in parts for i in range(0, len(part), 3)]
+    assert sorted(actual) == sorted(serial)
+    assert sorted(x for part in parts for x in part) == sorted(lines)
+
+
+@pytest.mark.parametrize("fail", [False, True])
+async def test_shard_completion_requires_all_children_and_preserves_input_order(
+    tmp_path, monkeypatch, fail
+):
+    items, prompt = tmp_path / "items", tmp_path / "prompt"
+    ids = ["c", "a", "b"]
+    items.write_text("".join(json.dumps({"item_id": key}) + "\n" for key in ids))
+    prompt.write_text("fixed")
+
+    async def fake_annotate(source, destination, prompt, **kwargs):
+        rows = [json.loads(line) for line in source.read_text().splitlines()]
+        destination.mkdir()
+        if fail and rows[0]["item_id"] == "a":
+            raise RuntimeError("simulated incomplete worker")
+        (destination / "labels.jsonl").write_text(
+            "".join(
+                json.dumps({"item_id": row["item_id"], "label": "keep", "reason": "supported"})
+                + "\n"
+                for row in rows
+            )
+        )
+        (destination / "ledger.json").write_text("[]")
+        (destination / "COMPLETE").write_text("test")
+
+    monkeypatch.setattr(module, "annotate", fake_annotate)
+    task = module.annotate_sharded(
+        items,
+        tmp_path / "out",
+        prompt,
+        model="minimax-m2.7",
+        batch_size=1,
+        cache=tmp_path / "cache",
+        shards=2,
+        retry_invalid_cache=True,
+        deduplicate_sources=False,
+    )
+    if fail:
+        with pytest.raises(RuntimeError, match="shard incomplete"):
+            await task
+        assert not (tmp_path / "out/COMPLETE").exists()
+    else:
+        await task
+        assert (tmp_path / "out/COMPLETE").exists()
+        actual = [
+            json.loads(line)["item_id"]
+            for line in (tmp_path / "out/labels.jsonl").read_text().splitlines()
+        ]
+        assert actual == ids
+
+
 async def test_preflight_stops_quota_failures_and_retains_incomplete_evidence(
     tmp_path, monkeypatch
 ):

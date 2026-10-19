@@ -136,3 +136,5 @@ with-ark uv run python scripts/with-phase1-runtime.py COMMAND [ARGS ...]
 该入口从共享Ark授权环境读取密钥，仅给目标子进程设置`MEMORY_EXTRACTION_MODEL/ENDPOINT/TOKEN/TRUST_ENV`，不把密钥写入文件或输出，不自动启动服务。它覆盖目标进程的旧抽取配置；不改其他进程或历史B0记录。阶段2正式量化基线尚未建立，后续须用同一新配置重新测全部比较组，不把换模型后的结果直接与旧模型部分结果比较。
 
 标注的`--deduplicate-sources`必须配合annotation-v4：完整来源只在sources表出现一次，source_ref逐条关联，无摘要/截断。它改变请求序列化与提示词版本，新运行须冻结新清单。显式`--retry-invalid-cache`保留每次原始失败响应，另存新响应；缓存回放不重复计用量。HTTP失败不能写成负标签。
+
+若标注吞吐不足，可显式使用`--shards 2`等有界协程。它保持每个请求的批次边界和缓存键，仅改变调度次序；新父目录保存并发清单。必须全部子任务完成、ID精确覆盖才生成父COMPLETE。重复启动应使用新输出目录和原缓存，不能覆盖历史结果；取消时在途调用的未知用量须在报告列出。

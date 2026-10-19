@@ -45,6 +45,94 @@ def shared_sources(batch: list[dict[str, Any]]) -> dict[str, Any]:
     return {"sources": sources, "items": items}
 
 
+def partition_batches(lines: list[str], batch_size: int, shards: int) -> list[list[str]]:
+    """Keep request boundaries identical to serial execution for cache replay."""
+    if not 1 <= batch_size <= 50 or not 1 <= shards <= 4:
+        raise ValueError("batch must be 1..50 and shards 1..4")
+    parts: list[list[str]] = [[] for _ in range(shards)]
+    for index, offset in enumerate(range(0, len(lines), batch_size)):
+        parts[index % shards].extend(lines[offset : offset + batch_size])
+    return parts
+
+
+async def annotate_sharded(
+    items: Path,
+    output: Path,
+    prompt: Path,
+    *,
+    model: str,
+    batch_size: int,
+    cache: Path,
+    shards: int,
+    retry_invalid_cache: bool,
+    deduplicate_sources: bool,
+) -> None:
+    lines = [line for line in items.read_text().splitlines() if line.strip()]
+    ids = [json.loads(line)["item_id"] for line in lines]
+    if len(set(ids)) != len(ids):
+        raise ValueError("duplicate annotation input ID")
+    parts = partition_batches(lines, batch_size, shards)
+    output.mkdir(parents=True, exist_ok=False)
+    output.chmod(0o700)
+    jobs = []
+    directories = []
+    for number, part in enumerate(parts):
+        if not part:
+            continue
+        source = output / f"input-{number}.jsonl"
+        source.write_text("\n".join(part) + "\n")
+        source.chmod(0o600)
+        destination = output / f"shard-{number}"
+        directories.append(destination)
+        jobs.append(
+            annotate(
+                source,
+                destination,
+                prompt,
+                model=model,
+                batch_size=batch_size,
+                cache=cache,
+                retry_invalid_cache=retry_invalid_cache,
+                deduplicate_sources=deduplicate_sources,
+            )
+        )
+    results = await asyncio.gather(*jobs, return_exceptions=True)
+    (output / "manifest.json").write_text(
+        json.dumps(
+            {
+                "model": model,
+                "batch_size": batch_size,
+                "shards": shards,
+                "items_sha256": hashlib.sha256(items.read_bytes()).hexdigest(),
+                "prompt_sha256": hashlib.sha256(prompt.read_bytes()).hexdigest(),
+                "errors": [type(x).__name__ for x in results if isinstance(x, BaseException)],
+                "note": "Same request batches as serial; scheduling order/concurrency differ.",
+            },
+            indent=2,
+        )
+    )
+    if any(isinstance(x, BaseException) for x in results):
+        raise RuntimeError("annotation shard incomplete; restricted child evidence retained")
+    labels: list[Label] = []
+    ledger: list[dict[str, Any]] = []
+    for directory in directories:
+        if not (directory / "COMPLETE").exists():
+            raise RuntimeError("annotation shard completion missing")
+        labels.extend(
+            Label.model_validate_json(line)
+            for line in (directory / "labels.jsonl").read_text().splitlines()
+        )
+        ledger.extend(json.loads((directory / "ledger.json").read_text()))
+    indexed = {label.item_id: label for label in labels}
+    if len(labels) != len(ids) or indexed.keys() != set(ids):
+        raise ValueError("combined annotation ID coverage invalid")
+    (output / "labels.jsonl").write_text(
+        "".join(indexed[key].model_dump_json() + "\n" for key in ids)
+    )
+    (output / "ledger.json").write_text(json.dumps(ledger, indent=2))
+    (output / "COMPLETE").write_text(hashlib.sha256(items.read_bytes()).hexdigest() + "\n")
+
+
 async def annotate(
     items: Path,
     output: Path,
@@ -237,10 +325,26 @@ def main() -> None:
     parser.add_argument("--batch-size", type=int, default=25)
     parser.add_argument("--retry-invalid-cache", action="store_true")
     parser.add_argument("--deduplicate-sources", action="store_true")
+    parser.add_argument("--shards", type=int, default=1)
     args = parser.parse_args()
     for path in (args.output, args.cache):
         if ".local" not in path.resolve().parts:
             parser.error("raw annotation and cache must stay in ignored .local/")
+    if args.shards != 1:
+        asyncio.run(
+            annotate_sharded(
+                args.items,
+                args.output,
+                args.prompt,
+                model=args.model,
+                batch_size=args.batch_size,
+                cache=args.cache,
+                shards=args.shards,
+                retry_invalid_cache=args.retry_invalid_cache,
+                deduplicate_sources=args.deduplicate_sources,
+            )
+        )
+        return
     asyncio.run(
         annotate(
             args.items,
