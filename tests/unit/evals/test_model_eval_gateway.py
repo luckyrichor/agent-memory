@@ -129,3 +129,55 @@ async def test_invalid_model_json_is_retained_locally_but_not_in_exception(tmp_p
     assert (
         json.loads((tmp_path / "run/ledger.json").read_text())[0]["error_type"] == "ValidationError"
     )
+
+
+async def test_explicit_invalid_cache_retry_preserves_original_and_replays_valid_reply(
+    tmp_path, monkeypatch
+):
+    monkeypatch.setenv("TOKENHUB_API_KEY", "unit-test-only")
+    items, prompt, cache = tmp_path / "items", tmp_path / "prompt", tmp_path / "cache"
+    items.write_text('{"item_id":"a"}\n')
+    prompt.write_text("fixed prompt")
+    original, calls = httpx.AsyncClient, []
+
+    def respond(request):
+        body = json.loads(request.content)
+        assert body["reasoning_effort"] == "none" and "thinking" not in body
+        calls.append(body)
+        content = (
+            "INVALID"
+            if len(calls) == 1
+            else json.dumps({"labels": [{"item_id": "a", "label": "keep", "reason": "supported"}]})
+        )
+        return httpx.Response(
+            200, json={"usage": {"total_tokens": 7}, "choices": [{"message": {"content": content}}]}
+        )
+
+    monkeypatch.setattr(
+        module.httpx,
+        "AsyncClient",
+        lambda **kw: original(**kw, transport=httpx.MockTransport(respond)),
+    )
+    with pytest.raises(TypeError, match="format invalid"):
+        await module.annotate(
+            items, tmp_path / "failed", prompt, model="hy3", cache=cache, interval=0
+        )
+    raw = next(cache.glob("*.json"))
+    original_bytes = raw.read_bytes()
+    for name in ("retry", "replay"):
+        await module.annotate(
+            items,
+            tmp_path / name,
+            prompt,
+            model="hy3",
+            cache=cache,
+            interval=0,
+            retry_invalid_cache=True,
+        )
+    assert len(calls) == 2 and raw.read_bytes() == original_bytes
+    assert len(list(cache.glob("*.json"))) == 2
+    retry = json.loads((tmp_path / "retry/ledger.json").read_text())[0]
+    replay = json.loads((tmp_path / "replay/ledger.json").read_text())[0]
+    assert retry["usage"]["total_tokens"] == 7 and not retry["replayed"]
+    assert replay["usage"] is None and replay["replayed"]
+    assert len(replay["invalid_cached_replies"]) == 1

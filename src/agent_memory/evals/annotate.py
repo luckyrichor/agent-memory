@@ -20,6 +20,13 @@ class LabelBatch(BaseModel):
     labels: list[Label]
 
 
+def validate_batch(data: dict[str, Any], expected: set[str]) -> LabelBatch:
+    parsed = LabelBatch.model_validate_json(data["choices"][0]["message"]["content"])
+    if len(parsed.labels) != len(expected) or {x.item_id for x in parsed.labels} != expected:
+        raise ValueError("annotation response ID coverage invalid")
+    return parsed
+
+
 async def annotate(
     items: Path,
     output: Path,
@@ -29,6 +36,7 @@ async def annotate(
     batch_size: int = 25,
     cache: Path,
     interval: float = 3,
+    retry_invalid_cache: bool = False,
 ) -> None:
     if batch_size < 1 or batch_size > 50:
         raise ValueError("annotation batch must be 1..50")
@@ -54,15 +62,43 @@ async def annotate(
                 "temperature": 0,
                 "max_tokens": 8192,
                 "response_format": {"type": "json_object"},
-                "thinking": {"type": "disabled"},
                 "messages": [
                     {"role": "system", "content": prompt},
                     {"role": "user", "content": json.dumps(batch, ensure_ascii=False)},
                 ],
             }
+            body.update(
+                {"reasoning_effort": "none"}
+                if model == "hy3"
+                else {"thinking": {"type": "disabled"}}
+            )
             encoded = json.dumps(body, sort_keys=True, ensure_ascii=False).encode()
             key = hashlib.sha256(base.encode() + b"\x00" + encoded).hexdigest()
             cachefile = cache / (key + ".json")
+            expected = {row["item_id"] for row in batch}
+            invalid_cached: list[dict[str, Any]] = []
+            if retry_invalid_cache:
+                # Preserve every original reply. A retry has a separate immutable file;
+                # replay validation never repairs labels or incurs another token charge.
+                for retry in range(4):
+                    cachefile = cache / (key + (f".retry-{retry}" if retry else "") + ".json")
+                    if not cachefile.exists():
+                        break
+                    cached = json.loads(cachefile.read_text())
+                    try:
+                        validate_batch(cached["response"], expected)
+                        break
+                    except (ValidationError, ValueError, KeyError, TypeError, IndexError):
+                        invalid_cached.append(
+                            {
+                                "file": cachefile.name,
+                                "sha256": hashlib.sha256(cachefile.read_bytes()).hexdigest(),
+                                "status": "invalid_cached_reply",
+                                "new_usage": None,
+                            }
+                        )
+                else:
+                    raise RuntimeError("invalid cached reply retry limit reached")
             replayed = cachefile.exists()
             current: dict[str, Any] = {
                 "model": model,
@@ -72,6 +108,7 @@ async def annotate(
                 "status": "started",
                 "attempts": [],
                 "prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest(),
+                "invalid_cached_replies": invalid_cached,
             }
             ledger.append(current)
             (output / "ledger.json").write_text(json.dumps(ledger, indent=2))
@@ -123,13 +160,7 @@ async def annotate(
                     )
                     cachefile.chmod(0o600)
                 current["usage"] = data.get("usage") if not replayed else None
-                parsed = LabelBatch.model_validate_json(data["choices"][0]["message"]["content"])
-                expected = {row["item_id"] for row in batch}
-                if (
-                    len(parsed.labels) != len(expected)
-                    or {x.item_id for x in parsed.labels} != expected
-                ):
-                    raise ValueError("annotation response ID coverage invalid")
+                parsed = validate_batch(data, expected)
                 labels.extend(parsed.labels)
             except Exception as exc:
                 current.update(status="failed", error_type=type(exc).__name__, attempts=attempts)
@@ -177,12 +208,26 @@ def main() -> None:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--cache", type=Path, required=True)
     parser.add_argument("--prompt", type=Path, default=Path("docs/evals/prompts/annotation-v1.txt"))
-    parser.add_argument("--model", choices=("deepseek-v4.1-flash", "minimax-m3"), required=True)
+    parser.add_argument(
+        "--model", choices=("deepseek-v4.1-flash", "minimax-m3", "glm-5.2", "hy3"), required=True
+    )
+    parser.add_argument("--batch-size", type=int, default=25)
+    parser.add_argument("--retry-invalid-cache", action="store_true")
     args = parser.parse_args()
     for path in (args.output, args.cache):
         if ".local" not in path.resolve().parts:
             parser.error("raw annotation and cache must stay in ignored .local/")
-    asyncio.run(annotate(args.items, args.output, args.prompt, model=args.model, cache=args.cache))
+    asyncio.run(
+        annotate(
+            args.items,
+            args.output,
+            args.prompt,
+            model=args.model,
+            cache=args.cache,
+            batch_size=args.batch_size,
+            retry_invalid_cache=args.retry_invalid_cache,
+        )
+    )
 
 
 if __name__ == "__main__":

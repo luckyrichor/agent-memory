@@ -1,0 +1,258 @@
+{
+  "generated_at": "2026-10-19T07:09:56.233135+00:00",
+  "source_parent": "e7d13f74cd97ecd7236538fbaddebe04aee5162d",
+  "working_tree_modified": true,
+  "note": "GET model lists are catalog visibility, not proof of invocation entitlement; POST success confirms only that minimal request, not quality or remaining quota. Duplicate diagnostic run interrupted after MiniMax success; no error inferred from interruption.",
+  "requests": [
+    {
+      "provider": "TokenHub",
+      "method": "GET",
+      "url": "https://tokenhub.tencentmaas.com/v1/models",
+      "model": null,
+      "at": "2026-10-19T07:05:33.687662+00:00",
+      "status": 200,
+      "sha256": "c447c984102a233e37b8c6d37eaeba41aed7ea97dbdf50433805ca41c52bea12",
+      "models": [
+        {
+          "id": "hy3",
+          "status": "online",
+          "owned_by": null
+        },
+        {
+          "id": "glm-5.2",
+          "status": "online",
+          "owned_by": null
+        },
+        {
+          "id": "minimax-m3",
+          "status": "online",
+          "owned_by": null
+        }
+      ],
+      "listed_model_count": 121
+    },
+    {
+      "provider": "Ark",
+      "method": "GET",
+      "url": "https://ark.cn-beijing.volces.com/api/v3/models",
+      "model": null,
+      "at": "2026-10-19T07:05:35.609951+00:00",
+      "status": 200,
+      "sha256": "7e5fa313d51061554f2e5587a1d07b32364294a1cfac58118ee6dc9e904a1756",
+      "models": [
+        {
+          "id": "doubao-seed-2-0-pro-260215",
+          "status": "Retiring",
+          "owned_by": null
+        },
+        {
+          "id": "doubao-seed-2-0-mini-260428",
+          "status": null,
+          "owned_by": null
+        },
+        {
+          "id": "doubao-seed-2-1-pro-260915",
+          "status": null,
+          "owned_by": null
+        }
+      ],
+      "listed_model_count": 136
+    },
+    {
+      "provider": "TokenHub",
+      "method": "POST",
+      "url": "https://tokenhub.tencentmaas.com/v1/chat/completions",
+      "model": "minimax-m3",
+      "at": "2026-10-19T07:05:35.876042+00:00",
+      "status": 200,
+      "sha256": "505e00099a890fff2918a98e386e2051d1dd44cbc49cb05f7301caf9b6134969",
+      "response_model": "minimax-m3",
+      "usage": {
+        "prompt_tokens": 166,
+        "completion_tokens": 3,
+        "total_tokens": 169,
+        "prompt_tokens_details": {
+          "cached_tokens": 128
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "has_answer": true
+    },
+    {
+      "provider": "TokenHub",
+      "method": "POST",
+      "url": "https://tokenhub.tencentmaas.com/v1/chat/completions",
+      "model": "glm-5.2",
+      "at": "2026-10-19T07:05:42.229368+00:00",
+      "status": 200,
+      "sha256": "ec7b12f86c342ae6dae2d58922a4cc337aea40f485f2543f4291e53ff22d76a2",
+      "response_model": "glm-5.2",
+      "usage": {
+        "prompt_tokens": 9,
+        "completion_tokens": 3,
+        "total_tokens": 12,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "has_answer": true
+    },
+    {
+      "provider": "TokenHub",
+      "method": "POST",
+      "url": "https://tokenhub.tencentmaas.com/v1/chat/completions",
+      "model": "hy3",
+      "at": "2026-10-19T07:05:47.445512+00:00",
+      "status": 200,
+      "sha256": "5d9e5eb2c230d19eeda5409ae0b91b5164040ddf1776373382b3a770f4120f05",
+      "response_model": "hy3",
+      "usage": {
+        "prompt_tokens": 18,
+        "completion_tokens": 3,
+        "total_tokens": 21,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "has_answer": true
+    },
+    {
+      "provider": "TokenHub",
+      "method": "GET",
+      "url": "https://tokenhub.tencentmaas.com/v1/models",
+      "model": null,
+      "at": "2026-10-19T07:06:02.091825+00:00",
+      "status": 200,
+      "sha256": "c447c984102a233e37b8c6d37eaeba41aed7ea97dbdf50433805ca41c52bea12",
+      "models": [
+        {
+          "id": "hy3",
+          "status": "online",
+          "owned_by": null
+        },
+        {
+          "id": "glm-5.2",
+          "status": "online",
+          "owned_by": null
+        },
+        {
+          "id": "minimax-m3",
+          "status": "online",
+          "owned_by": null
+        }
+      ],
+      "listed_model_count": 121
+    },
+    {
+      "provider": "Ark",
+      "method": "GET",
+      "url": "https://ark.cn-beijing.volces.com/api/v3/models",
+      "model": null,
+      "at": "2026-10-19T07:06:05.310709+00:00",
+      "status": 200,
+      "sha256": "7e5fa313d51061554f2e5587a1d07b32364294a1cfac58118ee6dc9e904a1756",
+      "models": [
+        {
+          "id": "doubao-seed-2-0-pro-260215",
+          "status": "Retiring",
+          "owned_by": null
+        },
+        {
+          "id": "doubao-seed-2-0-mini-260428",
+          "status": null,
+          "owned_by": null
+        },
+        {
+          "id": "doubao-seed-2-1-pro-260915",
+          "status": null,
+          "owned_by": null
+        }
+      ],
+      "listed_model_count": 136
+    },
+    {
+      "provider": "TokenHub",
+      "method": "POST",
+      "url": "https://tokenhub.tencentmaas.com/v1/chat/completions",
+      "model": "minimax-m3",
+      "at": "2026-10-19T07:06:05.687752+00:00",
+      "status": 200,
+      "sha256": "3e985555d13bd6b3f732256ebac6f688632006bb61db0fba5c4b87a6fe9d3feb",
+      "response_model": "minimax-m3",
+      "usage": {
+        "prompt_tokens": 166,
+        "completion_tokens": 3,
+        "total_tokens": 169,
+        "prompt_tokens_details": {
+          "cached_tokens": 128
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "has_answer": true
+    },
+    {
+      "provider": "Ark",
+      "method": "POST",
+      "url": "https://ark.cn-beijing.volces.com/api/v3/chat/completions",
+      "model": "doubao-seed-2-0-pro-260215",
+      "at": "2026-10-19T07:06:09.765506+00:00",
+      "status": 404,
+      "sha256": "8b38435a707bc4b776ff2acb455711cb0119afd32ee1ab58c677664b14ce0095",
+      "error": "{'code': 'InvalidEndpointOrModel.NotFound', 'message': 'The model or endpoint doubao-seed-2-0-pro-260215 does not exist or you do not have access to it. Request id: 0217923935698550b63b37cbca791937f2f41fb0469576db04251', 'param': '', 'type': 'Not Found'}"
+    },
+    {
+      "provider": "Ark",
+      "method": "POST",
+      "url": "https://ark.cn-beijing.volces.com/api/v3/chat/completions",
+      "model": "doubao-seed-2-1-pro-260915",
+      "at": "2026-10-19T07:06:11.913773+00:00",
+      "status": 200,
+      "sha256": "18701c220f1669ad3734ee2d67741e3b797706ec0300a4730842d7c803c767eb",
+      "response_model": "doubao-seed-2-1-pro-260915",
+      "usage": {
+        "completion_tokens": 19,
+        "prompt_tokens": 49,
+        "total_tokens": 68,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 17
+        }
+      },
+      "has_answer": true
+    },
+    {
+      "provider": "Ark",
+      "method": "POST",
+      "url": "https://ark.cn-beijing.volces.com/api/v3/chat/completions",
+      "model": "doubao-seed-2-0-mini-260428",
+      "at": "2026-10-19T07:06:16.319782+00:00",
+      "status": 200,
+      "sha256": "432306fcde6af3976b59d42caddf922ff1fcec06886f18a5277678a0c3e0dc0a",
+      "response_model": "doubao-seed-2-0-mini-260428",
+      "usage": {
+        "completion_tokens": 33,
+        "prompt_tokens": 36,
+        "total_tokens": 69,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 31
+        }
+      },
+      "has_answer": true
+    }
+  ]
+}
