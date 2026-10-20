@@ -1,0 +1,60 @@
+{
+  "source_commit": "8191c138de2e9935213eb96c07ed0a65c50a0f65",
+  "tests_ran_before_commit": true,
+  "tested_file_hashes_match_commit": true,
+  "pytest_summary": "329 passed in 16.18s",
+  "pytest_passed": 329,
+  "mypy_summary": "Success: no issues found in 81 source files",
+  "foundation_summary": "Foundation evaluator: total=8 passed=8 failed=0 tenant_leaks=0 deleted_memory_hits=0",
+  "commands": [
+    {
+      "name": "pytest",
+      "command": [
+        "uv",
+        "run",
+        "pytest",
+        "-q"
+      ],
+      "exit_code": 0,
+      "seconds": 17.448869782034308
+    },
+    {
+      "name": "ruff",
+      "command": [
+        "uv",
+        "run",
+        "ruff",
+        "check",
+        "src",
+        "tests",
+        "migrations"
+      ],
+      "exit_code": 0,
+      "seconds": 0.020821755984798074
+    },
+    {
+      "name": "mypy",
+      "command": [
+        "uv",
+        "run",
+        "mypy",
+        "--strict",
+        "src"
+      ],
+      "exit_code": 0,
+      "seconds": 0.26829093508422375
+    },
+    {
+      "name": "foundation",
+      "command": [
+        "uv",
+        "run",
+        "python",
+        "-m",
+        "agent_memory.evals.foundation_runner"
+      ],
+      "exit_code": 0,
+      "seconds": 0.22978588193655014
+    }
+  ]
+}
