@@ -1,0 +1,60 @@
+{
+  "version": 4,
+  "authorization_date_beijing": "2026-10-20",
+  "scope": "phase1 Chinese source expansion; no phase2",
+  "annotation_models": [
+    "deepseek-v4-pro",
+    "mimo-v2.6-flash"
+  ],
+  "replacement_requires_owner_confirmation": false,
+  "temperature": 0,
+  "thinking": {
+    "type": "disabled"
+  },
+  "annotation_prompt": "prompts/annotation-v5.txt",
+  "model_kappa_minimum": 0.7,
+  "owner_audit_fraction": 0.1,
+  "owner_audit_minimum": 0.95,
+  "sample_seed": 42,
+  "split_policy": "Inherit existing canonical source conversation splits; preserve old artifacts, no reassignments. New ECD contexts use frozen conversation_split seed42, 30%/70%.",
+  "dulemon": {
+    "sample_count": 400,
+    "exclude_previous_annotation_conversations": true,
+    "references": "Use user_said_persona=keep and user_no_said_persona=discard directly; noisy native references require owner audit. Models compare references, never filter them.",
+    "negative_conversation_policy": "No-said personas do not make the whole conversation negative. Assistant-only derivatives excluded from original-negative-conversation counts."
+  },
+  "perltqa": {
+    "native_labels_only": true,
+    "source_origin": "GPT-3.5 generated and author-manually-revised benchmark",
+    "count_toward_real_chinese": false,
+    "license": "CC BY-NC 4.0; noncommercial; attribute authors and modifications"
+  },
+  "ecd": {
+    "sample_count": 400,
+    "archive_expected_bytes": 54000633,
+    "crc_required": true,
+    "sample_unit": "Unique positive-response context from train; reservoir seed42, not response-ranking negatives",
+    "candidate_method": "All original utterances, no model prefilter or rewrite",
+    "speaker_policy": "Unknown source roles stay unknown; do not infer user/assistant by parity",
+    "license": "Unknown; source and review text stay local; public reports contain metadata/methods/metrics only"
+  },
+  "real_chinese_memory_target": 1500,
+  "real_original_conversation_target": 300,
+  "negative_original_conversation_fraction_target": 0.3,
+  "human_answers_required": true,
+  "supersedes": "chinese-expansion-policy-v3.json",
+  "automatic_replacement_authorized": true,
+  "authorization": "用户：换模型继续，以后遇到类似的问题都这样做",
+  "qualification_required": "Official sampling controls; actual response guard; 100 format samples >=99 valid and five repeated consistent; freeze new pair and fully annotate fixed inputs.",
+  "no_paid_billing": true,
+  "replacement_reason": "Full guide-v2 campaign returned HTTP402 for both DeepSeek Pro202606 and MiMo2.6Pro; qualify alternative API IDs before full independent reannotation. Old partial labels remain separate.",
+  "model_documentation": {
+    "deepseek-v4-pro": "https://intl.cloud.tencent.com/zh/document/product/1300/80633",
+    "mimo-v2.6-flash": "https://intl.cloud.tencent.com/zh/document/product/1300/84216"
+  },
+  "guide": "labeling-guide-v2.md",
+  "guide_clarification": "Dev-only clarification of source attribution, explicit confirmation and decision precedence, with positive/negative examples; original semantic retention requirements unchanged.",
+  "model_identity_limit": "deepseek-v4-pro is an unversioned service ID; record returned model field and actual call dates, do not claim a verified underlying weight version.",
+  "qualification_artifacts": ".local/phase1/chinese-guide-v2-replacement",
+  "execution": "run-chinese-rotation.py validates each model summary and all106 actual probes before freezing full campaign; no labels accepted while qualification pending."
+}
