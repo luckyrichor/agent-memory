@@ -1,5 +1,9 @@
 # 进展记录
 
+## 2026-10-20 阶段1真实中文补量与完整重标（Codex）
+
+完整双标、开发集指南验证、替代模型预检及审核包更新已完成；ECD一致性仍未达标，人工审核未回填，阶段1未验收、不进入阶段2。数字和具体边界见 [自动报告](reports/phase1-chinese-guide-v2-full-2026-10-20/delivery.md) 与 [开发记录](devlog/phase1-chinese-guide-v2-2026-10-20.md)。
+
 ## 2026-10-02 火山1024维适配与M4真实初验（Codex）
 
 来源agent-memory@462ec1a + 本次工作树修改。统一API/校验/ORM/夹具为1024维；增加Ark协议，worker/API统一Settings。0006清旧向量并排重建，保留记忆版本；新增两租户迁移验证。120 tests、ruff、strict mypy56、foundation8/8通过。

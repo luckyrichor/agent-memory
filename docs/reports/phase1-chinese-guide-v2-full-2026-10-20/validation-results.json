@@ -1,0 +1,51 @@
+[
+  {
+    "name": "pytest",
+    "command": [
+      "uv",
+      "run",
+      "pytest",
+      "-q"
+    ],
+    "exit_code": 0,
+    "seconds": 18.4264919529669
+  },
+  {
+    "name": "ruff",
+    "command": [
+      "uv",
+      "run",
+      "ruff",
+      "check",
+      "src",
+      "tests",
+      "migrations"
+    ],
+    "exit_code": 0,
+    "seconds": 0.020315867848694324
+  },
+  {
+    "name": "mypy",
+    "command": [
+      "uv",
+      "run",
+      "mypy",
+      "--strict",
+      "src"
+    ],
+    "exit_code": 0,
+    "seconds": 0.29741248511709273
+  },
+  {
+    "name": "foundation",
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "-m",
+      "agent_memory.evals.foundation_runner"
+    ],
+    "exit_code": 0,
+    "seconds": 0.24132118094712496
+  }
+]
