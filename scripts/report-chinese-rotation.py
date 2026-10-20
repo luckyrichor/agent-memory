@@ -113,7 +113,9 @@ for name in ("dulemon", "ecd"):
             }
             for model, labels in zip(models, (left, right))
         ]
-        summary["native_negative_conversations"] = 0
+        summary["native_negative_conversations"] = json.loads(
+            (data / name / "manifest-inherited-split.json").read_text()
+        )["reference_negative_conversations"]
         summary["native_gold_not_filtered_by_models"] = True
     report["datasets"].append(summary)
 
