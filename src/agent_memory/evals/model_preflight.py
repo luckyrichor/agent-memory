@@ -29,6 +29,7 @@ MODELS = (
     "minimax-m2.7",
     "deepseek-v4-pro-0813",
     "deepseek-v4-pro-202606",
+    "deepseek-v4-pro",
     "mimo-v2.6-pro",
     "mimo-v2.6-flash",
     "mimo-v2.5-pro",

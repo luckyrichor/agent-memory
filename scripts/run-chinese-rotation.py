@@ -11,6 +11,8 @@ from pathlib import Path
 parser = argparse.ArgumentParser()
 parser.add_argument("--root", type=Path, default=Path(".local/phase1/chinese-rotation-v1"))
 parser.add_argument("--second-model", default="glm-5.2")
+parser.add_argument("--first-model", default="deepseek-v4-pro-202606")
+parser.add_argument("--first-vendor", default="DeepSeek")
 parser.add_argument("--second-vendor", default="Z.ai")
 parser.add_argument("--second-preflight", type=Path)
 parser.add_argument("--first-preflight", type=Path)
@@ -21,7 +23,7 @@ ROOT = args.root
 ROOT.mkdir(parents=True, exist_ok=True)
 DATA = args.data_root
 PAIR = (
-    ("deepseek-v4-pro-202606", "DeepSeek", "preflight-deepseek"),
+    (args.first_model, args.first_vendor, "preflight-deepseek"),
     (args.second_model, args.second_vendor, "preflight-glm"),
 )
 

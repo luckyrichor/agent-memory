@@ -209,8 +209,62 @@ if previous != root:
     report["previous_rotation"] = {
         "directory": str(previous),
         "models": previous_stats,
-        "note": "Completed same-version DeepSeek side replayed through identical request cache; failed partial GLM side excluded. This is complete single-model reuse, never mixing different models into one label file.",
+        "note": "Historical request ledger only. Only identical model, prompt and input requests can replay. No partial results from other models are merged into this report's pair.",
     }
+report["prior_campaigns"] = []
+for previous_root in (
+    Path(".local/phase1/chinese-rotation-v2"),
+    Path(".local/phase1/chinese-guide-v2-full"),
+):
+    if previous_root == root or not (previous_root / "frozen-run.json").exists():
+        continue
+    old_frozen = json.loads((previous_root / "frozen-run.json").read_text())
+    attempts = []
+    for q in old_frozen["qualifications"]:
+        model = q["model"]
+        for name in ("dulemon", "ecd"):
+            directory = previous_root / name / ("labels-" + model + "-run1")
+            entries = [
+                r for p in directory.glob("shard-*/ledger.json") for r in json.loads(p.read_text())
+            ]
+            attempts.append(
+                {
+                    "model": model,
+                    "dataset": name,
+                    "complete": (directory / "COMPLETE").exists(),
+                    "partial_label_count": sum(
+                        len(p.read_text().splitlines())
+                        for p in directory.glob("shard-*/labels.jsonl")
+                    ),
+                    "http_statuses": dict(
+                        Counter(
+                            str(a["http_status"])
+                            for r in entries
+                            for a in r.get("attempts", [])
+                            if "http_status" in a
+                        )
+                    ),
+                    "known_tokens": {
+                        key: sum(
+                            (r.get("usage") or {}).get(key, 0)
+                            for r in entries
+                            if not r.get("replayed")
+                        )
+                        for key in ("prompt_tokens", "completion_tokens", "total_tokens")
+                    },
+                    "unknown_usage_batches": sum(
+                        not r.get("replayed") and not r.get("usage") for r in entries
+                    ),
+                }
+            )
+    report["prior_campaigns"].append(
+        {
+            "directory": str(previous_root),
+            "frozen_sha256": file_hash(previous_root / "frozen-run.json"),
+            "attempts": attempts,
+            "not_current_pair_results": True,
+        }
+    )
 report["open_items"] = [
     "owner native-reference audit, ECD arbitration and blind audit",
     "human-verified >=30% original negative conversations",
@@ -278,6 +332,27 @@ lines += [
     f"模型κ门槛≥0.7：{report['model_kappa_gates_passed']}。不得因为共同保留数较少就降低门槛；低于门槛时报告失败，并只分析开发集的规则理解/来源问题。",
     "",
     f"DuLeMon原生应记 {dule['native_reference_keep']}、不应记 {dule['native_reference_discard']}，应记参照含 {dule['reference_keep_unique_texts']} 种去重文字；模型共同保留数不能替代或筛除这些原生标注。模型对原生标签的比较：",
+    "",
+]
+lines += [
+    "",
+    "## 原候选诊断",
+    "",
+    "按旧模型原因码归类，分歧优先；不是人工确认的错误真值。",
+    "",
+    "|原因|条数|",
+    "|---|---:|",
+]
+for category, counts in report["diagnosis"]["categories"].items():
+    lines.append(f"|{category}|{counts['count']}|")
+lines += [
+    "",
+    "候选表述不通顺未单独测量，不能将此类0解释为全部流畅，也不编造代表例子；其余类别的原始代表例子见仅本地及授权审核包中的诊断附件。",
+    "",
+]
+per = report["perltqa"]
+lines += [
+    f"PerLTQA：原生对话 {per['conversations']}、原生记忆记录 {per['native_memory_records']}；共同保留数与κ为不适用（按原生标注使用，未经双模型筛选）。它是作者模型生成并修订的独立基准，真实中文贡献 {per['real_chinese_count_contribution']}。记忆记录非原子事实，不与真实中文记忆点直接相加。",
     "",
 ]
 for comparison in dule["comparisons_against_native"]:

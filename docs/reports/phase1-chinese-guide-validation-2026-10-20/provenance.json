@@ -1,0 +1,5 @@
+{
+  "source_commit": "0b2081e53ba0123b970b3bc0532b3d62c4dab453",
+  "working_tree_modified": true,
+  "scope": "Full four-gate validation after fallback model registration and report/package scripts; source_files.json hashes bind tested Python files."
+}
