@@ -61,6 +61,8 @@ readme = """# 阶段1真实中文审核包 v2
 
 本包替换此前只有原生参照的旧交接报告，记录最新全量双标结果；阶段1未验收。
 只填写 human_label 与 human_reason，不改候选、来源、ID、记录哈希。
+human_label填写keep（应记）、discard（不应记）或uncertain（不能确定）；human_reason用自己的话写判断依据。
+请先读来源，再独立判断候选，不把模型共同结论当人工答案。只回传自己实际完成的审核文件，未完成项保持空白。
 DuLeMon-native-reference：按原生参照执行10%抽检。若manifest显示audit未变，旧版已填写结果仍可按冻结哈希校验，不要求重做同一抽检。
 DuLeMon-model-comparison：模型分歧仅作对照，不能筛除或自动改写原生金标；与原生抽检相同的任务无需重复填。
 PerLTQA-native-reference：保留旧版原生基准抽检，单列模型生成来源，不计真实中文规模。

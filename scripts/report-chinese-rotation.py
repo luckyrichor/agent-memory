@@ -17,6 +17,7 @@ p = argparse.ArgumentParser()
 p.add_argument("--root", type=Path, default=Path(".local/phase1/chinese-rotation-v1"))
 p.add_argument("--output", type=Path, required=True)
 p.add_argument("--guide-pilot", type=Path)
+p.add_argument("--prior-root", type=Path, action="append", default=[])
 a = p.parse_args()
 root = a.root
 data = Path(".local/phase1/chinese-expansion-v2")
@@ -215,6 +216,7 @@ report["prior_campaigns"] = []
 for previous_root in (
     Path(".local/phase1/chinese-rotation-v2"),
     Path(".local/phase1/chinese-guide-v2-full"),
+    *a.prior_root,
 ):
     if previous_root == root or not (previous_root / "frozen-run.json").exists():
         continue
@@ -263,6 +265,11 @@ for previous_root in (
             "frozen_sha256": file_hash(previous_root / "frozen-run.json"),
             "attempts": attempts,
             "not_current_pair_results": True,
+            "same_pair_prompt_inputs": (
+                [q["model"] for q in old_frozen["qualifications"]] == models
+                and old_frozen["prompt_sha256"] == frozen["prompt_sha256"]
+                and old_frozen["data"] == frozen["data"]
+            ),
         }
     )
 report["open_items"] = [
