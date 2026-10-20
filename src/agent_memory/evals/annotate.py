@@ -13,22 +13,13 @@ import httpx
 from pydantic import BaseModel, ConfigDict, ValidationError
 
 from agent_memory.evals.labeling import Label
+from agent_memory.evals.model_policy import require_disabled_thinking
 from agent_memory.evals.model_preflight import MODELS
 
 
 class LabelBatch(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
     labels: list[Label]
-
-
-def require_disabled_thinking(data: dict[str, Any]) -> None:
-    """Request acceptance alone does not prove the provider disabled reasoning."""
-    message = data["choices"][0]["message"]
-    reasoning = message.get("reasoning_content")
-    details = (data.get("usage") or {}).get("completion_tokens_details") or {}
-    tokens = details.get("reasoning_tokens")
-    if reasoning or (isinstance(tokens, (int, float)) and tokens > 0):
-        raise RuntimeError("provider returned reasoning despite frozen disabled-thinking policy")
 
 
 def validate_batch(data: dict[str, Any], expected: set[str]) -> LabelBatch:
@@ -55,6 +46,36 @@ def shared_sources(batch: list[dict[str, Any]]) -> dict[str, Any]:
     return {"sources": sources, "items": items}
 
 
+def compact_identifiers(
+    batch: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], dict[str, str], dict[str, str]]:
+    """Reversible wire aliases; retain candidate, subject, text and role verbatim.
+
+    Hash-like corpus IDs need not be repeated in the model context. Original IDs
+    remain authoritative in input files, output labels, split and human packs.
+    """
+    original_items: dict[str, str] = {}
+    original_sessions: dict[str, str] = {}
+    session_aliases: dict[str, str] = {}
+    result = json.loads(json.dumps(batch, ensure_ascii=False))
+    for index, row in enumerate(result):
+        alias = f"i{index}"
+        original_items[alias] = row["item_id"]
+        row["item_id"] = alias
+        session = row.get("conversation_id")
+        if session is not None and session not in session_aliases:
+            short = f"c{len(session_aliases)}"
+            session_aliases[session] = short
+            original_sessions[short] = session
+    for row in result:
+        if "conversation_id" in row:
+            row["conversation_id"] = session_aliases[row["conversation_id"]]
+        for document in row["source"]:
+            if document.get("session_id") in session_aliases:
+                document["session_id"] = session_aliases[document["session_id"]]
+    return result, original_items, original_sessions
+
+
 def partition_batches(lines: list[str], batch_size: int, shards: int) -> list[list[str]]:
     """Keep request boundaries identical to serial execution for cache replay."""
     if not 1 <= batch_size <= 50 or not 1 <= shards <= 4:
@@ -76,6 +97,7 @@ async def annotate_sharded(
     shards: int,
     retry_invalid_cache: bool,
     deduplicate_sources: bool,
+    compact_ids: bool = False,
 ) -> None:
     lines = [line for line in items.read_text().splitlines() if line.strip()]
     ids = [json.loads(line)["item_id"] for line in lines]
@@ -104,6 +126,7 @@ async def annotate_sharded(
                 cache=cache,
                 retry_invalid_cache=retry_invalid_cache,
                 deduplicate_sources=deduplicate_sources,
+                compact_ids=compact_ids,
             )
         )
     results = await asyncio.gather(*jobs, return_exceptions=True)
@@ -117,6 +140,7 @@ async def annotate_sharded(
                 "prompt_sha256": hashlib.sha256(prompt.read_bytes()).hexdigest(),
                 "errors": [type(x).__name__ for x in results if isinstance(x, BaseException)],
                 "note": "Same request batches as serial; scheduling order/concurrency differ.",
+                "compact_identifiers": compact_ids,
             },
             indent=2,
         )
@@ -154,11 +178,14 @@ async def annotate(
     interval: float = 3,
     retry_invalid_cache: bool = False,
     deduplicate_sources: bool = False,
+    compact_ids: bool = False,
 ) -> None:
     if model not in MODELS:
         raise ValueError("model is not eligible under the frozen sampling policy")
     if batch_size < 1 or batch_size > 50:
         raise ValueError("annotation batch must be 1..50")
+    if compact_ids and not deduplicate_sources:
+        raise ValueError("compact identifiers require shared source tables")
     rows = [json.loads(line) for line in items.read_text().splitlines() if line.strip()]
     if len({r["item_id"] for r in rows}) != len(rows):
         raise ValueError("duplicate annotation input ID")
@@ -176,6 +203,22 @@ async def annotate(
     async with httpx.AsyncClient(timeout=120, trust_env=False) as client:
         for offset in range(0, len(rows), batch_size):
             batch = rows[offset : offset + batch_size]
+            original_batch = batch
+            original_ids: dict[str, str] = {}
+            if compact_ids:
+                batch, original_ids, _ = compact_identifiers(original_batch)
+            payload = shared_sources(batch) if deduplicate_sources else batch
+            if compact_ids:
+                # Bind a cache request to the original batch even if two distinct
+                # batches have identical text and short aliases.
+                if not isinstance(payload, dict):
+                    raise ValueError("compact identifiers require source table payload")
+                payload = {
+                    **payload,
+                    "identity_context_sha256": hashlib.sha256(
+                        json.dumps(original_batch, sort_keys=True, ensure_ascii=False).encode()
+                    ).hexdigest(),
+                }
             body: dict[str, Any] = {
                 "model": model,
                 "temperature": 0,
@@ -185,10 +228,7 @@ async def annotate(
                     {"role": "system", "content": prompt},
                     {
                         "role": "user",
-                        "content": json.dumps(
-                            shared_sources(batch) if deduplicate_sources else batch,
-                            ensure_ascii=False,
-                        ),
+                        "content": json.dumps(payload, ensure_ascii=False),
                     },
                 ],
             }
@@ -234,6 +274,7 @@ async def annotate(
                 "attempts": [],
                 "prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest(),
                 "invalid_cached_replies": invalid_cached,
+                "compact_identifiers": compact_ids,
             }
             ledger.append(current)
             (output / "ledger.json").write_text(json.dumps(ledger, indent=2))
@@ -287,7 +328,12 @@ async def annotate(
                 current["usage"] = data.get("usage") if not replayed else None
                 require_disabled_thinking(data)
                 parsed = validate_batch(data, expected)
-                labels.extend(parsed.labels)
+                labels.extend(
+                    label.model_copy(update={"item_id": original_ids[label.item_id]})
+                    if compact_ids
+                    else label
+                    for label in parsed.labels
+                )
             except Exception as exc:
                 current.update(status="failed", error_type=type(exc).__name__, attempts=attempts)
                 (output / "ledger.json").write_text(json.dumps(ledger, indent=2))
@@ -339,6 +385,7 @@ def main() -> None:
     parser.add_argument("--retry-invalid-cache", action="store_true")
     parser.add_argument("--deduplicate-sources", action="store_true")
     parser.add_argument("--shards", type=int, default=1)
+    parser.add_argument("--compact-identifiers", action="store_true")
     args = parser.parse_args()
     for path in (args.output, args.cache):
         if ".local" not in path.resolve().parts:
@@ -355,6 +402,7 @@ def main() -> None:
                 shards=args.shards,
                 retry_invalid_cache=args.retry_invalid_cache,
                 deduplicate_sources=args.deduplicate_sources,
+                compact_ids=args.compact_identifiers,
             )
         )
         return
@@ -368,6 +416,7 @@ def main() -> None:
             batch_size=args.batch_size,
             retry_invalid_cache=args.retry_invalid_cache,
             deduplicate_sources=args.deduplicate_sources,
+            compact_ids=args.compact_identifiers,
         )
     )
 

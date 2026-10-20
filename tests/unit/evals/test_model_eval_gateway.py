@@ -28,6 +28,102 @@ def test_shared_sources_is_lossless_and_preserves_source_attribution():
     assert json.dumps(rows, ensure_ascii=False) == before
 
 
+def test_wire_ids_are_fully_reversible_without_changing_source_text_or_subject():
+    rows = [
+        {
+            "item_id": "long-id:original:1",
+            "conversation_id": "original-session",
+            "subject": "客户归属未确认",
+            "candidate": "原始候选原文",
+            "source": [
+                {
+                    "source_id": "turn:0",
+                    "session_id": "original-session",
+                    "role": "source",
+                    "text": "完整来源，不得改写。",
+                }
+            ],
+        }
+    ]
+    frozen = json.dumps(rows, ensure_ascii=False)
+    wire, original_ids, original_sessions = module.compact_identifiers(rows)
+    assert wire[0]["item_id"] == "i0" and wire[0]["conversation_id"] == "c0"
+    reconstructed = json.loads(json.dumps(wire))
+    for row in reconstructed:
+        row["item_id"] = original_ids[row["item_id"]]
+        row["conversation_id"] = original_sessions[row["conversation_id"]]
+        for source in row["source"]:
+            source["session_id"] = original_sessions[source["session_id"]]
+    assert reconstructed == rows and json.dumps(rows, ensure_ascii=False) == frozen
+
+
+async def test_compact_annotation_validates_wire_ids_then_restores_original_ids(
+    tmp_path, monkeypatch
+):
+    monkeypatch.setenv("TOKENHUB_API_KEY", "unit-only")
+    original = httpx.AsyncClient
+
+    def respond(request):
+        payload = json.loads(json.loads(request.content)["messages"][1]["content"])
+        assert payload["items"][0]["item_id"] == "i0"
+        assert payload["items"][0]["subject"] == "user"
+        assert payload["sources"]["0"][0]["text"] == "original source"
+        assert "identity_context_sha256" in payload
+        return httpx.Response(
+            200,
+            json={
+                "choices": [
+                    {
+                        "message": {
+                            "content": json.dumps(
+                                {
+                                    "labels": [
+                                        {"item_id": "i0", "label": "keep", "reason": "supported"}
+                                    ]
+                                }
+                            )
+                        }
+                    }
+                ],
+                "usage": {"total_tokens": 7},
+            },
+        )
+
+    monkeypatch.setattr(
+        module.httpx,
+        "AsyncClient",
+        lambda **kw: original(**kw, transport=httpx.MockTransport(respond)),
+    )
+    items, prompt = tmp_path / "items", tmp_path / "prompt"
+    items.write_text(
+        json.dumps(
+            {
+                "item_id": "original:item",
+                "conversation_id": "original:conv",
+                "subject": "user",
+                "candidate": "unchanged",
+                "source": [
+                    {"role": "user", "session_id": "original:conv", "text": "original source"}
+                ],
+            }
+        )
+        + "\n"
+    )
+    prompt.write_text("fixed fixture")
+    await module.annotate(
+        items,
+        tmp_path / "out",
+        prompt,
+        model="glm-5.2",
+        cache=tmp_path / "cache",
+        interval=0,
+        deduplicate_sources=True,
+        compact_ids=True,
+    )
+    assert json.loads((tmp_path / "out/labels.jsonl").read_text())["item_id"] == "original:item"
+    assert (tmp_path / "out/COMPLETE").exists()
+
+
 def test_partition_keeps_serial_request_boundaries():
     lines = [str(i) for i in range(13)]
     parts = module.partition_batches(lines, 3, 2)
@@ -122,6 +218,36 @@ async def test_preflight_does_not_turn_http_error_into_negative_judgment(monkeyp
     assert record["http_status"] == 429 and not record["format_valid"]
     assert "label" not in record and "provider error" not in json.dumps(record)
     assert "Authorization" not in json.dumps(raw)
+
+
+@pytest.mark.parametrize("violating_call", [1, 106])
+async def test_preflight_rejects_observed_thinking_even_when_format_is_valid(
+    tmp_path, monkeypatch, violating_call
+):
+    monkeypatch.setenv("TOKENHUB_API_KEY", "unit-test-only")
+    original = httpx.AsyncClient
+    calls = []
+
+    def respond(request):
+        calls.append(request)
+        payload = json.loads(json.loads(request.content)["messages"][1]["content"])
+        label = "same" if payload["candidate"] == payload["reference"] else "different"
+        message = {"content": json.dumps({"label": label, "reason": "fixture"})}
+        if len(calls) == violating_call:
+            message["reasoning_content"] = "unit-test-only reasoning"
+        return httpx.Response(200, json={"choices": [{"message": message}]})
+
+    monkeypatch.setattr(
+        model_preflight.httpx,
+        "AsyncClient",
+        lambda **kw: original(**kw, transport=httpx.MockTransport(respond)),
+    )
+    prompt = tmp_path / "prompt"
+    prompt.write_text("fixed unit prompt")
+    await model_preflight.run(tmp_path / "out", prompt, models=("glm-5.2",), interval=0)
+    result = json.loads((tmp_path / "out/glm-5.2-summary.json").read_text())
+    assert len(calls) == violating_call
+    assert not result["preflight_pass"] and not result["observed_disabled_thinking"]
 
 
 async def test_ark_preflight_uses_ark_route_and_credential_only(monkeypatch):

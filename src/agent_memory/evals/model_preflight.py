@@ -19,6 +19,7 @@ import httpx
 from pydantic import BaseModel, ConfigDict
 
 from agent_memory.evals.metrics import latency
+from agent_memory.evals.model_policy import require_disabled_thinking
 
 MODELS = (
     "deepseek-v4.1-flash",
@@ -27,6 +28,7 @@ MODELS = (
     "hy3",
     "minimax-m2.7",
     "deepseek-v4-pro-0813",
+    "deepseek-v4-pro-202606",
 )
 EXPERIMENTAL_MODELS = ("kimi-k3",)
 ARK_MODELS = ("doubao-seed-2-1-pro-260915",)
@@ -92,6 +94,11 @@ async def probe(
             raw["response"] = data
             record["usage"] = data.get("usage")
             record["response_model"] = data.get("model")
+            try:
+                require_disabled_thinking(data)
+                record["observed_disabled_thinking"] = True
+            except RuntimeError:
+                record["observed_disabled_thinking"] = False
             parsed = ProbeReply.model_validate_json(content)
             record["format_valid"] = parsed.label in ("same", "different")
             record["label"] = parsed.label
@@ -143,7 +150,10 @@ async def run(
                     print(
                         json.dumps({"progress_model": model, "completed": number + 1}), flush=True
                     )
-                if record.get("http_status") in (401, 402, 403, 404):
+                if (
+                    record.get("http_status") in (400, 401, 402, 403, 404)
+                    or record.get("observed_disabled_thinking") is False
+                ):
                     # Repeating quota/auth failures cannot qualify a model. Retain
                     # the failed probe and continue with the next eligible model.
                     break
@@ -152,7 +162,8 @@ async def run(
             formatted = model_rows[6:]
             valid = sum(bool(r.get("format_valid")) for r in formatted)
             consistent = (
-                all(r.get("format_valid") for r in repeated)
+                len(repeated) == 5
+                and all(r.get("format_valid") for r in repeated)
                 and len({r.get("label") for r in repeated}) == 1
             )
             summary = {
@@ -161,10 +172,15 @@ async def run(
                 "format_valid": valid,
                 "format_n": len(formatted),
                 "consistent_5": consistent,
-                "preflight_pass": valid >= 99
+                "preflight_pass": len(formatted) == 100
+                and valid >= 99
                 and consistent
                 and bool(model_rows[0].get("format_valid"))
-                and model not in EXPERIMENTAL_MODELS,
+                and model not in EXPERIMENTAL_MODELS
+                and all(r.get("observed_disabled_thinking") for r in model_rows),
+                "observed_disabled_thinking": all(
+                    r.get("observed_disabled_thinking") for r in model_rows
+                ),
                 "sampling_control_eligible": model not in EXPERIMENTAL_MODELS,
                 "latency_ms": latency([r["latency_ms"] for r in model_rows]),
                 "http_429": sum(
