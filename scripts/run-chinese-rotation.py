@@ -1,5 +1,6 @@
 """Freeze a qualified replacement pair, then annotate each fixed dataset in full."""
 
+import argparse
 import asyncio
 import hashlib
 import json
@@ -7,11 +8,18 @@ import subprocess
 from datetime import UTC, datetime
 from pathlib import Path
 
-ROOT = Path(".local/phase1/chinese-rotation-v1")
+parser = argparse.ArgumentParser()
+parser.add_argument("--root", type=Path, default=Path(".local/phase1/chinese-rotation-v1"))
+parser.add_argument("--second-model", default="glm-5.2")
+parser.add_argument("--second-vendor", default="Z.ai")
+parser.add_argument("--second-preflight", type=Path)
+args = parser.parse_args()
+ROOT = args.root
+ROOT.mkdir(parents=True, exist_ok=True)
 DATA = Path(".local/phase1/chinese-expansion-v2")
 PAIR = (
     ("deepseek-v4-pro-202606", "DeepSeek", "preflight-deepseek"),
-    ("glm-5.2", "Z.ai", "preflight-glm"),
+    (args.second_model, args.second_vendor, "preflight-glm"),
 )
 
 
@@ -31,7 +39,11 @@ async def main():
         raise ValueError("independent annotation vendors required")
     qualifications = []
     for model, vendor, directory in PAIR:
-        path = ROOT / directory
+        path = (
+            args.second_preflight
+            if model == args.second_model and args.second_preflight
+            else ROOT / directory
+        )
         summary_path = path / (model + "-summary.json")
         while not summary_path.exists():
             await asyncio.sleep(3)
@@ -56,6 +68,14 @@ async def main():
                 "records_sha256": sha(path / "progress.json"),
             }
         )
+        if path.parent != ROOT:
+            # Copy only qualification metadata, not raw provider replies; record
+            # its actual origin without calling the provider a second time.
+            copied = ROOT / ("preflight-" + model)
+            copied.mkdir(exist_ok=False)
+            (copied / summary_path.name).write_bytes(summary_path.read_bytes())
+            (copied / "progress.json").write_bytes((path / "progress.json").read_bytes())
+            qualifications[-1]["qualification_origin"] = str(path)
     source_commit, dirty = await asyncio.to_thread(git_state)
     frozen = {
         "generated_at": datetime.now(UTC).isoformat(),

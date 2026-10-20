@@ -157,6 +157,47 @@ report["annotation_usage"] = {
     "unknown_usage_batches": unknown,
     "scope": "Child ledgers only; parent aggregate ledgers not summed twice. Preflights, previous failed models excluded from this subtotal; not account-wide billing.",
 }
+previous = Path(".local/phase1/chinese-rotation-v1")
+if previous != root:
+    previous_stats = []
+    for model in ("deepseek-v4-pro-202606", "glm-5.2"):
+        totals = Counter()
+        states = []
+        for name in ("dulemon", "ecd"):
+            directory = previous / name / ("labels-" + model + "-run1")
+            entries = [
+                r
+                for path in directory.glob("shard-*/ledger.json")
+                for r in json.loads(path.read_text())
+            ]
+            for entry in entries:
+                if not entry.get("replayed"):
+                    for key in ("prompt_tokens", "completion_tokens", "total_tokens"):
+                        totals[key] += (entry.get("usage") or {}).get(key, 0)
+            states.append(
+                {
+                    "dataset": name,
+                    "complete": (directory / "COMPLETE").exists(),
+                    "partial_labels": sum(
+                        len(path.read_text().splitlines())
+                        for path in directory.glob("shard-*/labels.jsonl")
+                    ),
+                    "http_statuses": dict(
+                        Counter(
+                            str(a["http_status"])
+                            for r in entries
+                            for a in r.get("attempts", [])
+                            if "http_status" in a
+                        )
+                    ),
+                }
+            )
+        previous_stats.append({"model": model, "known_usage": dict(totals), "datasets": states})
+    report["previous_rotation"] = {
+        "directory": str(previous),
+        "models": previous_stats,
+        "note": "Completed same-version DeepSeek side replayed through identical request cache; failed partial GLM side excluded. This is complete single-model reuse, never mixing different models into one label file.",
+    }
 report["open_items"] = [
     "owner native-reference audit, ECD arbitration and blind audit",
     "human-verified >=30% original negative conversations",
@@ -201,7 +242,7 @@ lines += [
     "",
     "指南语义、提示词、原始候选/来源、原生参照、切分和阈值保持。内部编号仅在传输中使用可逆短别名，输出恢复原ID；来源、角色和记忆主体文本逐字保留。新请求缓存与旧请求不混同。预检只验证可访问性/格式/重复一致性/响应参数行为，不冒充裁判人工校准。",
     "",
-    "[DeepSeek官方指南](https://intl.cloud.tencent.com/zh/document/product/1300/80633)、[GLM官方指南](https://cloud.tencent.com/document/product/1823/132061)。",
+    "[DeepSeek官方指南](https://intl.cloud.tencent.com/zh/document/product/1300/80633)、[GLM官方指南](https://cloud.tencent.com/document/product/1823/132061)、[MiMo官方指南](https://intl.cloud.tencent.com/zh/document/product/1300/84216)。GLM-5.2在首轮完整标注中也遇到402，部分结果留档；GLM-5.3系列官方不支持关闭思考，未进入正式候选。已完成的同版本DeepSeek整侧通过相同请求缓存验证复用，另一厂商完整独立重标。",
     "",
     "## 数据与一致性",
     "",
