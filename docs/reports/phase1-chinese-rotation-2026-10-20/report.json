@@ -1,0 +1,439 @@
+{
+  "generated_at": "2026-10-20T06:57:24.724343+00:00",
+  "date_beijing": "2026-10-20",
+  "source_commit": "21eeaaada760cf36f396a698c797fa74b051bfbb",
+  "working_tree_modified": false,
+  "phase_gate_passed": false,
+  "human_review_complete": false,
+  "replacement_authorized": true,
+  "models": [
+    "deepseek-v4-pro-202606",
+    "mimo-v2.6-pro"
+  ],
+  "scope": "Full independent replacement annotations of unchanged phase1 source samples",
+  "frozen": {
+    "generated_at": "2026-10-20T06:51:04.668114+00:00",
+    "source_commit_before_run": "74d61d1e4cfc97a5baff43bef41962914fc6eb20",
+    "working_tree_modified": false,
+    "qualifications": [
+      {
+        "model": "deepseek-v4-pro-202606",
+        "vendor": "DeepSeek",
+        "summary_sha256": "28b00a11a779936d284e62b7e49f94f2e78039b6a9865152ce71cb7a93d0a7b0",
+        "records_sha256": "56795e17cc2ef159057f1be389781c2892e4ebac580bf34cb23799e8736428a7"
+      },
+      {
+        "model": "mimo-v2.6-pro",
+        "vendor": "Xiaomi",
+        "summary_sha256": "783eaa1e1e70bedc762a9f3b6c30443148c27a9fc48bd35ae2c6e22e6308dae2",
+        "records_sha256": "0f3e8b7b6bf50a0c148c5893077b54003b2d8984cce031501ea3d7907ba6680d",
+        "qualification_origin": ".local/phase1/chinese-rotation-v1/preflight-mimo26pro"
+      }
+    ],
+    "batch_size": 50,
+    "shards_per_dataset_model": 2,
+    "compact_identifiers": true,
+    "shared_sources": true,
+    "prompt": "docs/evals/prompts/annotation-v4.txt",
+    "prompt_sha256": "728faee1ec119e608f9fcacc61d1ecdf23720355af1571127417ed787e882b8d",
+    "data": {
+      "dulemon": {
+        "items_sha256": "41dd160364690ffedf45d49f038cf33bde3e65cb996b4804cf9c3a9552f91279",
+        "split_sha256": "8afee30dc4562c7bb68e07a8d46732dad1b7c41337e98ef0746945ade95afbf8"
+      },
+      "ecd": {
+        "items_sha256": "35f4e64cd6eb6d3a36d9fcde3516e5978d64ba9cb9762368fd671babd48014ad",
+        "split_sha256": "12ea5989fccea2991b6e40efa090668d9af5b78b3c706baa6660c0ff29472a8d"
+      }
+    },
+    "source_files": {
+      "src/agent_memory/evals/model_preflight.py": "bb207b75090ba2987e43884cb0e7e03dc9c142bc700b96aa9a75d78dffa64068",
+      "src/agent_memory/evals/schema.py": "e5ac616b397e54346216915c01bf3346bed1c1a2fb6b2d1357525f3d904e6b5b",
+      "src/agent_memory/evals/evidence_observer.py": "256b63b26027ddb071cd78301d956f4358c1e712d55022831e3b000856fed7b4",
+      "src/agent_memory/evals/model_policy.py": "7b03d24ed62026db8da812c028f3803c2a8a5f3c6150f7a51f505dd4e612dd9b",
+      "src/agent_memory/evals/runner.py": "e390ba24d0c8cff495d985ea1c3fd0786185cbcb7885811db995677722c72940",
+      "src/agent_memory/evals/api_import.py": "bbde855987018099884769f6abc0cb553609bf9d4810da7199381c74582caa54",
+      "src/agent_memory/evals/datasets.py": "83dbfe226b66fb8397f5f6fe54635c15dc8fda4ba53ed2b6a555cda3e448b38e",
+      "src/agent_memory/evals/metrics.py": "d772a80c84cbe0f6e636631051bf04a045a8694ad2361a5f797c0c71e15b4c81",
+      "src/agent_memory/evals/labeling.py": "d32e43cb4663b68fcce8ab876aabecd6d02a836dedab6af07fec6feeb195940f",
+      "src/agent_memory/evals/chinese_expansion.py": "4513c48b90cf0fc4059d4051bc63990908176374e3ab132815b04e5a2df1c701",
+      "src/agent_memory/evals/reference_review.py": "e67669e15c62c629b2645447ee29d60fc1bc0d84c9df2af6f0ceee9d7bf6f864",
+      "src/agent_memory/evals/foundation_runner.py": "5cd018d58b588933a9149addac4536f1231c86d2b03ce432ed46acb91cbd8d9b",
+      "src/agent_memory/evals/human_review.py": "b251520ea3682ac1e611ee52b2c02979bc8563867761fc6c091a27cc59e17aad",
+      "src/agent_memory/evals/__init__.py": "6220208d96c1302ce442bb906a51d3f95100d2a6f114d3e987cfb28fea9679db",
+      "src/agent_memory/evals/experiment.py": "040f2216d18c49f93adc4d6fc22c74cb53d388c7d3cfaeb7fa420bb67253ad95",
+      "src/agent_memory/evals/annotate.py": "e4f336d2e5cfcd25b2660b12a756c8ff3f7d03163fd0513969a09bba4d450f7c",
+      "src/agent_memory/evals/measurement_formulas.py": "c5215b60ccc0ea08e948bc620a248df6b757bb7e21894fc6d1de71256b8c9d86"
+    },
+    "note": "New pair only, full datasets; old partial annotations never merged. Native references are not filtered by model votes. No human answers generated."
+  },
+  "datasets": [
+    {
+      "name": "dulemon",
+      "conversations": 400,
+      "candidates": 2291,
+      "models": [
+        "deepseek-v4-pro-202606",
+        "mimo-v2.6-pro"
+      ],
+      "label_files_sha256": [
+        "617a31ad802c6cfa3ea545ea25890165d11d6aa40a77686ebe196373ed9a2376",
+        "e467aba10e60ecf17975a99fd30be547fb45685d10d2f4e3003826b17c8fe480"
+      ],
+      "joint_keep": 655,
+      "joint_discard": 1296,
+      "model_agreement": {
+        "n": 2291,
+        "agreement": 0.8515931907463989,
+        "kappa": 0.6872519453905456,
+        "matrix": [
+          {
+            "left": "discard",
+            "right": "discard",
+            "n": 1296
+          },
+          {
+            "left": "discard",
+            "right": "keep",
+            "n": 7
+          },
+          {
+            "left": "discard",
+            "right": "uncertain",
+            "n": 1
+          },
+          {
+            "left": "keep",
+            "right": "discard",
+            "n": 318
+          },
+          {
+            "left": "keep",
+            "right": "keep",
+            "n": 655
+          },
+          {
+            "left": "keep",
+            "right": "uncertain",
+            "n": 14
+          }
+        ],
+        "conflict_count": 340,
+        "audit_count": 230,
+        "seed": 42,
+        "human_review_complete": false,
+        "human_agreement": null,
+        "items_sha256": "41dd160364690ffedf45d49f038cf33bde3e65cb996b4804cf9c3a9552f91279"
+      },
+      "kappa_passed": false,
+      "model_disagreement_arbitration": 340,
+      "audit_count": 230,
+      "all_candidate_consensus_discard_conversations": 10,
+      "owner_approved_gold": 0,
+      "human_agreement": null,
+      "native_reference_keep": 1746,
+      "native_reference_discard": 545,
+      "reference_keep_unique_texts": 1288,
+      "comparisons_against_native": [
+        {
+          "model": "deepseek-v4-pro-202606",
+          "matches": 934,
+          "agreement": 0.4076822348319511,
+          "matrix": {
+            "keep/keep": 688,
+            "discard/keep": 299,
+            "keep/discard": 1058,
+            "discard/discard": 246
+          }
+        },
+        {
+          "model": "mimo-v2.6-pro",
+          "matches": 701,
+          "agreement": 0.30597992143168923,
+          "matrix": {
+            "keep/keep": 410,
+            "keep/discard": 1323,
+            "discard/keep": 252,
+            "discard/discard": 291,
+            "keep/uncertain": 13,
+            "discard/uncertain": 2
+          }
+        }
+      ],
+      "native_negative_conversations": 0,
+      "native_gold_not_filtered_by_models": true
+    },
+    {
+      "name": "ecd",
+      "conversations": 400,
+      "candidates": 2720,
+      "models": [
+        "deepseek-v4-pro-202606",
+        "mimo-v2.6-pro"
+      ],
+      "label_files_sha256": [
+        "64ff516495ac773356bf8b316705e9a44a2a0692ed9b45f49cf36b119a177d9a",
+        "7d8e92e8315a3e93d2e94a3beeb1243d5da13d5857239f69ef31146509c38450"
+      ],
+      "joint_keep": 0,
+      "joint_discard": 1496,
+      "model_agreement": {
+        "n": 2720,
+        "agreement": 0.5643382352941176,
+        "kappa": 0.04736177258333661,
+        "matrix": [
+          {
+            "left": "discard",
+            "right": "discard",
+            "n": 1496
+          },
+          {
+            "left": "discard",
+            "right": "keep",
+            "n": 1
+          },
+          {
+            "left": "discard",
+            "right": "uncertain",
+            "n": 937
+          },
+          {
+            "left": "keep",
+            "right": "discard",
+            "n": 120
+          },
+          {
+            "left": "keep",
+            "right": "uncertain",
+            "n": 116
+          },
+          {
+            "left": "uncertain",
+            "right": "discard",
+            "n": 11
+          },
+          {
+            "left": "uncertain",
+            "right": "uncertain",
+            "n": 39
+          }
+        ],
+        "conflict_count": 1224,
+        "audit_count": 272,
+        "seed": 42,
+        "human_review_complete": false,
+        "human_agreement": null,
+        "items_sha256": "35f4e64cd6eb6d3a36d9fcde3516e5978d64ba9cb9762368fd671babd48014ad"
+      },
+      "kappa_passed": false,
+      "model_disagreement_arbitration": 1224,
+      "audit_count": 272,
+      "all_candidate_consensus_discard_conversations": 170,
+      "owner_approved_gold": 0,
+      "human_agreement": null
+    }
+  ],
+  "preflights": [
+    {
+      "model": "deepseek-v4-pro-202606",
+      "calls": 106,
+      "format_valid": 100,
+      "format_n": 100,
+      "consistent_5": true,
+      "preflight_pass": true,
+      "observed_disabled_thinking": true,
+      "sampling_control_eligible": true,
+      "latency_ms": {
+        "n": 106,
+        "p50": 2245.9501745179296,
+        "p95": 2926.098844734952,
+        "p99": 3324.2338264244618
+      },
+      "http_429": 0
+    },
+    {
+      "model": "mimo-v2.6-pro",
+      "calls": 106,
+      "format_valid": 100,
+      "format_n": 100,
+      "consistent_5": true,
+      "preflight_pass": true,
+      "observed_disabled_thinking": true,
+      "sampling_control_eligible": true,
+      "latency_ms": {
+        "n": 106,
+        "p50": 2308.693561470136,
+        "p95": 3431.1247777659446,
+        "p99": 5013.154917128853
+      },
+      "http_429": 0
+    }
+  ],
+  "source_files_match_frozen": true,
+  "diagnosis": {
+    "candidate_count": 1648,
+    "joint_keep": 511,
+    "not_joint_keep": 1137,
+    "categories": {
+      "归属错误": {
+        "count": 20,
+        "example_ids": [
+          "dulemon-both-train:0246:persona:3",
+          "dulemon-both-train:2284:persona:0",
+          "dulemon-both-train:2015:persona:1"
+        ]
+      },
+      "无长期价值": {
+        "count": 7,
+        "example_ids": [
+          "dulemon-both-train:2117:persona:2",
+          "dulemon-both-train:0560:persona:1",
+          "dulemon-both-train:0560:persona:2"
+        ]
+      },
+      "两个模型分歧": {
+        "count": 114,
+        "example_ids": [
+          "dulemon-both-train:0195:persona:0",
+          "dulemon-both-train:1524:persona:1",
+          "dulemon-both-train:1524:persona:3"
+        ]
+      },
+      "候选表述不通顺": {
+        "count": 0,
+        "example_ids": []
+      },
+      "其他": {
+        "count": 996,
+        "example_ids": [
+          "dulemon-both-train:2003:persona:1",
+          "dulemon-both-train:2003:persona:3",
+          "dulemon-both-train:1606:persona:1"
+        ]
+      }
+    },
+    "reason_pairs": {
+      "attribution/attribution": 9,
+      "attribution/missing": 8,
+      "attribution/supported": 6,
+      "attribution/temporary": 1,
+      "missing/attribution": 2,
+      "missing/missing": 996,
+      "missing/supported": 68,
+      "supported/attribution": 13,
+      "supported/missing": 17,
+      "temporary/missing": 5,
+      "temporary/supported": 5,
+      "temporary/temporary": 2,
+      "uncertain/supported": 5
+    },
+    "fluency_assessed": false,
+    "category_basis": "Existing model reasons only, disagreement first; not human truth.",
+    "decision": "Source/evidence mismatch dominates; keep semantic annotation guide unchanged.",
+    "input_sha256": {
+      "items": "19d498a000469c454dbd9b139f504422fa2c8b9bae98638c502e3c54e80915e5",
+      "left": "e177b018a746a14140bc9ed70949fc566cb317cb38c0f49864639285be5e6f41",
+      "right": "6e047996fa4ec8f97f2e818202dfa520cc96a30b94e2488cd60897652036c421"
+    }
+  },
+  "thresholds": {
+    "model_kappa": 0.7,
+    "human_agreement": 0.95,
+    "audit_fraction": 0.1,
+    "seed": 42
+  },
+  "real_chinese": {
+    "original_conversations": 800,
+    "candidates": 5011,
+    "native_dulemon_keep_unreviewed": 1746,
+    "ecd_consensus_keep_unreviewed": 0,
+    "provisional_keep_occurrences": 1746,
+    "reference_gap_to_1500": 0,
+    "owner_approved_keep": 0,
+    "owner_approved_gap": 1500,
+    "negative_original_conversations_provisional": 170,
+    "negative_fraction_provisional": 0.2125,
+    "negative_fraction_target": 0.3,
+    "negative_fraction_human_verified": false,
+    "model_disagreements_total": 1564,
+    "ecd_required_arbitration": 1224,
+    "audit_samples": 502,
+    "note": "DuLeMon native references used directly, models only compared; ECD consensus requires owner arbitration/audit. PerLTQA and synthetic timelines excluded. A whole negative conversation requires all original-utterance candidates jointly discarded; any uncertain item prevents negative classification."
+  },
+  "model_kappa_gates_passed": false,
+  "annotation_usage": {
+    "known_tokens": {
+      "prompt_tokens": 753173,
+      "completion_tokens": 77816,
+      "total_tokens": 830989
+    },
+    "unknown_usage_batches": 0,
+    "scope": "Child ledgers only; parent aggregate ledgers not summed twice. Preflights, previous failed models excluded from this subtotal; not account-wide billing."
+  },
+  "previous_rotation": {
+    "directory": ".local/phase1/chinese-rotation-v1",
+    "models": [
+      {
+        "model": "deepseek-v4-pro-202606",
+        "known_usage": {
+          "prompt_tokens": 744472,
+          "completion_tokens": 110562,
+          "total_tokens": 855034
+        },
+        "datasets": [
+          {
+            "dataset": "dulemon",
+            "complete": true,
+            "partial_labels": 2291,
+            "http_statuses": {
+              "200": 46
+            }
+          },
+          {
+            "dataset": "ecd",
+            "complete": true,
+            "partial_labels": 2720,
+            "http_statuses": {
+              "200": 55
+            }
+          }
+        ]
+      },
+      {
+        "model": "glm-5.2",
+        "known_usage": {
+          "prompt_tokens": 203552,
+          "completion_tokens": 19355,
+          "total_tokens": 222907
+        },
+        "datasets": [
+          {
+            "dataset": "dulemon",
+            "complete": false,
+            "partial_labels": 750,
+            "http_statuses": {
+              "200": 15,
+              "402": 2
+            }
+          },
+          {
+            "dataset": "ecd",
+            "complete": false,
+            "partial_labels": 600,
+            "http_statuses": {
+              "200": 12,
+              "402": 2
+            }
+          }
+        ]
+      }
+    ],
+    "note": "Completed same-version DeepSeek side replayed through identical request cache; failed partial GLM side excluded. This is complete single-model reuse, never mixing different models into one label file."
+  },
+  "open_items": [
+    "owner native-reference audit, ECD arbitration and blind audit",
+    "human-verified >=30% original negative conversations",
+    "judge human calibration",
+    "Chinese queries and per-type coverage"
+  ]
+}

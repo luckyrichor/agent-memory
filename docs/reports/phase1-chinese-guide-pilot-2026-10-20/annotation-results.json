@@ -1,0 +1,30 @@
+[
+  {
+    "dataset": "dulemon",
+    "model": "deepseek-v4-pro-202606",
+    "exit_code": 0,
+    "complete": true,
+    "directory": ".local/phase1/chinese-guide-v2-pilot/dulemon/labels-deepseek-v4-pro-202606-run1"
+  },
+  {
+    "dataset": "dulemon",
+    "model": "mimo-v2.6-pro",
+    "exit_code": 0,
+    "complete": true,
+    "directory": ".local/phase1/chinese-guide-v2-pilot/dulemon/labels-mimo-v2.6-pro-run1"
+  },
+  {
+    "dataset": "ecd",
+    "model": "deepseek-v4-pro-202606",
+    "exit_code": 0,
+    "complete": true,
+    "directory": ".local/phase1/chinese-guide-v2-pilot/ecd/labels-deepseek-v4-pro-202606-run1"
+  },
+  {
+    "dataset": "ecd",
+    "model": "mimo-v2.6-pro",
+    "exit_code": 0,
+    "complete": true,
+    "directory": ".local/phase1/chinese-guide-v2-pilot/ecd/labels-mimo-v2.6-pro-run1"
+  }
+]

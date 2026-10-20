@@ -1,0 +1,94 @@
+{
+  "dulemon": {
+    "before": {
+      "n": 105,
+      "agreement": 0.8476190476190476,
+      "kappa": 0.6781609195402298,
+      "matrix": [
+        {
+          "left": "discard",
+          "right": "discard",
+          "n": 60
+        },
+        {
+          "left": "keep",
+          "right": "discard",
+          "n": 15
+        },
+        {
+          "left": "keep",
+          "right": "keep",
+          "n": 29
+        },
+        {
+          "left": "keep",
+          "right": "uncertain",
+          "n": 1
+        }
+      ]
+    },
+    "after": {
+      "n": 105,
+      "agreement": 0.9238095238095239,
+      "kappa": 0.8244147157190637,
+      "matrix": [
+        {
+          "left": "discard",
+          "right": "discard",
+          "n": 68
+        },
+        {
+          "left": "keep",
+          "right": "discard",
+          "n": 8
+        },
+        {
+          "left": "keep",
+          "right": "keep",
+          "n": 29
+        }
+      ]
+    }
+  },
+  "ecd": {
+    "before": {
+      "n": 100,
+      "agreement": 0.59,
+      "kappa": 0.012524084778419996,
+      "matrix": [
+        {
+          "left": "discard",
+          "right": "discard",
+          "n": 59
+        },
+        {
+          "left": "discard",
+          "right": "uncertain",
+          "n": 27
+        },
+        {
+          "left": "keep",
+          "right": "discard",
+          "n": 9
+        },
+        {
+          "left": "keep",
+          "right": "uncertain",
+          "n": 5
+        }
+      ]
+    },
+    "after": {
+      "n": 100,
+      "agreement": 1.0,
+      "kappa": null,
+      "matrix": [
+        {
+          "left": "discard",
+          "right": "discard",
+          "n": 100
+        }
+      ]
+    }
+  }
+}

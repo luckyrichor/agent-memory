@@ -1,0 +1,59 @@
+{
+  "generated_at": "2026-10-20T07:21:41.387631+00:00",
+  "source_commit_before_run": "21eeaaada760cf36f396a698c797fa74b051bfbb",
+  "working_tree_modified": true,
+  "qualifications": [
+    {
+      "model": "deepseek-v4-pro-202606",
+      "vendor": "DeepSeek",
+      "summary_sha256": "28b00a11a779936d284e62b7e49f94f2e78039b6a9865152ce71cb7a93d0a7b0",
+      "records_sha256": "56795e17cc2ef159057f1be389781c2892e4ebac580bf34cb23799e8736428a7",
+      "qualification_origin": ".local/phase1/chinese-rotation-v1/preflight-deepseek"
+    },
+    {
+      "model": "mimo-v2.6-pro",
+      "vendor": "Xiaomi",
+      "summary_sha256": "783eaa1e1e70bedc762a9f3b6c30443148c27a9fc48bd35ae2c6e22e6308dae2",
+      "records_sha256": "0f3e8b7b6bf50a0c148c5893077b54003b2d8984cce031501ea3d7907ba6680d",
+      "qualification_origin": ".local/phase1/chinese-rotation-v1/preflight-mimo26pro"
+    }
+  ],
+  "batch_size": 50,
+  "shards_per_dataset_model": 2,
+  "compact_identifiers": true,
+  "shared_sources": true,
+  "prompt": "docs/evals/prompts/annotation-v5.txt",
+  "prompt_sha256": "a91e974ed3cdeb854f6931b447155547b8f80d895f94df5b9f15f7b4de8b92f6",
+  "data_root": ".local/phase1/chinese-guide-v2-pilot-data",
+  "selection_manifest_sha256": "1384460634c7eb9ebe56491d577050793c56b067f5789034cfb15154e57f5758",
+  "data": {
+    "dulemon": {
+      "items_sha256": "e728e163ad7c5d9e9a5b940ac648b5646cd704e6b7d5f4b9625addab0811b3ec",
+      "split_sha256": "8afee30dc4562c7bb68e07a8d46732dad1b7c41337e98ef0746945ade95afbf8"
+    },
+    "ecd": {
+      "items_sha256": "a46171be485ea6070a69da3964cb0d7f7e8ec501ba741c762b65cf7cba1514fc",
+      "split_sha256": "12ea5989fccea2991b6e40efa090668d9af5b78b3c706baa6660c0ff29472a8d"
+    }
+  },
+  "source_files": {
+    "src/agent_memory/evals/model_preflight.py": "bb207b75090ba2987e43884cb0e7e03dc9c142bc700b96aa9a75d78dffa64068",
+    "src/agent_memory/evals/schema.py": "e5ac616b397e54346216915c01bf3346bed1c1a2fb6b2d1357525f3d904e6b5b",
+    "src/agent_memory/evals/evidence_observer.py": "256b63b26027ddb071cd78301d956f4358c1e712d55022831e3b000856fed7b4",
+    "src/agent_memory/evals/model_policy.py": "7b03d24ed62026db8da812c028f3803c2a8a5f3c6150f7a51f505dd4e612dd9b",
+    "src/agent_memory/evals/runner.py": "e390ba24d0c8cff495d985ea1c3fd0786185cbcb7885811db995677722c72940",
+    "src/agent_memory/evals/api_import.py": "bbde855987018099884769f6abc0cb553609bf9d4810da7199381c74582caa54",
+    "src/agent_memory/evals/datasets.py": "83dbfe226b66fb8397f5f6fe54635c15dc8fda4ba53ed2b6a555cda3e448b38e",
+    "src/agent_memory/evals/metrics.py": "d772a80c84cbe0f6e636631051bf04a045a8694ad2361a5f797c0c71e15b4c81",
+    "src/agent_memory/evals/labeling.py": "d32e43cb4663b68fcce8ab876aabecd6d02a836dedab6af07fec6feeb195940f",
+    "src/agent_memory/evals/chinese_expansion.py": "4513c48b90cf0fc4059d4051bc63990908176374e3ab132815b04e5a2df1c701",
+    "src/agent_memory/evals/reference_review.py": "e67669e15c62c629b2645447ee29d60fc1bc0d84c9df2af6f0ceee9d7bf6f864",
+    "src/agent_memory/evals/foundation_runner.py": "5cd018d58b588933a9149addac4536f1231c86d2b03ce432ed46acb91cbd8d9b",
+    "src/agent_memory/evals/human_review.py": "b251520ea3682ac1e611ee52b2c02979bc8563867761fc6c091a27cc59e17aad",
+    "src/agent_memory/evals/__init__.py": "6220208d96c1302ce442bb906a51d3f95100d2a6f114d3e987cfb28fea9679db",
+    "src/agent_memory/evals/experiment.py": "040f2216d18c49f93adc4d6fc22c74cb53d388c7d3cfaeb7fa420bb67253ad95",
+    "src/agent_memory/evals/annotate.py": "e4f336d2e5cfcd25b2660b12a756c8ff3f7d03163fd0513969a09bba4d450f7c",
+    "src/agent_memory/evals/measurement_formulas.py": "c5215b60ccc0ea08e948bc620a248df6b757bb7e21894fc6d1de71256b8c9d86"
+  },
+  "note": "New pair only, full datasets; old partial annotations never merged. Native references are not filtered by model votes. No human answers generated."
+}

@@ -16,6 +16,7 @@ from agent_memory.evals.reference_review import export_csv, make_reference_pack
 p = argparse.ArgumentParser()
 p.add_argument("--root", type=Path, default=Path(".local/phase1/chinese-rotation-v1"))
 p.add_argument("--output", type=Path, required=True)
+p.add_argument("--guide-pilot", type=Path)
 a = p.parse_args()
 root = a.root
 data = Path(".local/phase1/chinese-expansion-v2")
@@ -45,6 +46,15 @@ report = {
     "diagnosis": json.loads((data / "diagnosis.json").read_text()),
     "thresholds": {"model_kappa": 0.7, "human_agreement": 0.95, "audit_fraction": 0.1, "seed": 42},
 }
+if a.guide_pilot:
+    report["guide_clarification"] = {
+        "guide": "docs/evals/labeling-guide-v2.md",
+        "guide_sha256": file_hash(Path("docs/evals/labeling-guide-v2.md")),
+        "pilot": json.loads((a.guide_pilot / "comparison.json").read_text()),
+        "pilot_frozen": json.loads((a.guide_pilot / "frozen-run.json").read_text()),
+        "previous_full_report": "docs/reports/phase1-chinese-rotation-2026-10-20/report.json",
+        "reason": "Dev-only attribution and decision-precedence clarification; semantic retention requirements, metric formulas, source splits and acceptance thresholds unchanged. ECD all-discard pilot has undefined kappa, never treated as a pass.",
+    }
 packs = root / "human-review-v1"
 packs.mkdir(exist_ok=False)
 packs.chmod(0o700)
@@ -143,6 +153,7 @@ report["real_chinese"] = {
     "note": "DuLeMon native references used directly, models only compared; ECD consensus requires owner arbitration/audit. PerLTQA and synthetic timelines excluded. A whole negative conversation requires all original-utterance candidates jointly discarded; any uncertain item prevents negative classification.",
 }
 report["model_kappa_gates_passed"] = all(d["kappa_passed"] for d in report["datasets"])
+report["perltqa"] = json.loads((data / "perltqa" / "manifest.json").read_text())
 usage = Counter()
 unknown = 0
 for path in sorted(root.glob("**/shard-*/ledger.json")):
@@ -206,6 +217,8 @@ report["open_items"] = [
     "judge human calibration",
     "Chinese queries and per-type coverage",
 ]
+if not report["model_kappa_gates_passed"]:
+    report["open_items"].insert(0, "model kappa threshold unmet or undefined; not waived")
 
 
 def no_source(value):
@@ -242,9 +255,14 @@ for pre in report["preflights"]:
     )
 lines += [
     "",
-    "指南语义、提示词、原始候选/来源、原生参照、切分和阈值保持。内部编号仅在传输中使用可逆短别名，输出恢复原ID；来源、角色和记忆主体文本逐字保留。新请求缓存与旧请求不混同。预检只验证可访问性/格式/重复一致性/响应参数行为，不冒充裁判人工校准。",
+    (
+        "依据冻结开发集诊断澄清证据归属及判断顺序，采用labeling-guide-v2与annotation-v5；原始保留要求、候选/来源、原生参照、切分和阈值保持。开发集小批对照结果见guide_clarification，ECD全舍弃导致κ未定义，不计通过。旧版全量结果保留，未反复按测试集个案调指南。"
+        if a.guide_pilot
+        else "指南语义、提示词、原始候选/来源、原生参照、切分和阈值保持。"
+    )
+    + "内部编号仅在传输中使用可逆短别名，输出恢复原ID；来源、角色和记忆主体文本逐字保留。预检不冒充裁判人工校准。",
     "",
-    "[DeepSeek官方指南](https://intl.cloud.tencent.com/zh/document/product/1300/80633)、[GLM官方指南](https://cloud.tencent.com/document/product/1823/132061)、[MiMo官方指南](https://intl.cloud.tencent.com/zh/document/product/1300/84216)。GLM-5.2在首轮完整标注中也遇到402，部分结果留档；GLM-5.3系列官方不支持关闭思考，未进入正式候选。已完成的同版本DeepSeek整侧通过相同请求缓存验证复用，另一厂商完整独立重标。",
+    "[DeepSeek官方指南](https://intl.cloud.tencent.com/zh/document/product/1300/80633)、[GLM官方指南](https://cloud.tencent.com/document/product/1823/132061)、[MiMo官方指南](https://intl.cloud.tencent.com/zh/document/product/1300/84216)。GLM-5.2此前遇到402，部分结果留档；GLM-5.3系列官方不支持关闭思考，未进入正式候选。仅完整且请求完全相同的缓存可以复用；提示词变化会生成新请求，不复用旧提示词标签。",
     "",
     "## 数据与一致性",
     "",

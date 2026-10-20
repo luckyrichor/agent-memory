@@ -13,10 +13,13 @@ parser.add_argument("--root", type=Path, default=Path(".local/phase1/chinese-rot
 parser.add_argument("--second-model", default="glm-5.2")
 parser.add_argument("--second-vendor", default="Z.ai")
 parser.add_argument("--second-preflight", type=Path)
+parser.add_argument("--first-preflight", type=Path)
+parser.add_argument("--data-root", type=Path, default=Path(".local/phase1/chinese-expansion-v2"))
+parser.add_argument("--prompt", type=Path, default=Path("docs/evals/prompts/annotation-v4.txt"))
 args = parser.parse_args()
 ROOT = args.root
 ROOT.mkdir(parents=True, exist_ok=True)
-DATA = Path(".local/phase1/chinese-expansion-v2")
+DATA = args.data_root
 PAIR = (
     ("deepseek-v4-pro-202606", "DeepSeek", "preflight-deepseek"),
     (args.second_model, args.second_vendor, "preflight-glm"),
@@ -39,11 +42,8 @@ async def main():
         raise ValueError("independent annotation vendors required")
     qualifications = []
     for model, vendor, directory in PAIR:
-        path = (
-            args.second_preflight
-            if model == args.second_model and args.second_preflight
-            else ROOT / directory
-        )
+        external = args.first_preflight if model == PAIR[0][0] else args.second_preflight
+        path = external or ROOT / directory
         summary_path = path / (model + "-summary.json")
         while not summary_path.exists():
             await asyncio.sleep(3)
@@ -86,8 +86,12 @@ async def main():
         "shards_per_dataset_model": 2,
         "compact_identifiers": True,
         "shared_sources": True,
-        "prompt": "docs/evals/prompts/annotation-v4.txt",
-        "prompt_sha256": sha(Path("docs/evals/prompts/annotation-v4.txt")),
+        "prompt": str(args.prompt),
+        "prompt_sha256": sha(args.prompt),
+        "data_root": str(DATA),
+        "selection_manifest_sha256": sha(DATA / "selection.json")
+        if (DATA / "selection.json").exists()
+        else None,
         "data": {
             name: {
                 "items_sha256": sha(DATA / name / "items.jsonl"),
