@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "scope": "phase1 round3 only; no phase2",
+  "authorization": "Owner instruction in current conversation; supersedes prior automatic annotation-model replacement",
+  "annotation_models": ["deepseek-v4-pro", "mimo-v2.6-flash"],
+  "annotation_replacement_requires_confirmation": true,
+  "annotation_replacement_requires_full_batch_relabel": true,
+  "ecd": {
+    "model_kappa_gate_applicable": false,
+    "negative_reference": "existing frozen dual-model joint discard; unverified by human",
+    "human_sample_size": 120,
+    "sample_seed": 42,
+    "stratum_definition": "source first-person personal-information regex hint vs no hint; anonymous roles make this provisional, owner confirms attribution",
+    "raw_text_distribution": "server .local and owner private package only; never group or Git",
+    "generate_616_arbitration": false
+  },
+  "owner_required_now": ["dulemon-native-reference/audit-blind:230"],
+  "owner_deferred": ["dulemon-model-comparison", "perltqa-native-reference", "ecd-small-manual-reference"],
+  "native_reference_audit_minimum": 0.95,
+  "below_threshold_gold_policy": "only human-confirmed subset; recompute actual Chinese gold count",
+  "judge_excluded_vendors": ["ByteDance", "DeepSeek", "Xiaomi"],
+  "judge_failover_unit": "entire comparison table; never mix judges within one table",
+  "judge_quota_order": "descending observed remaining quota, unknown is not zero or unlimited",
+  "judge_minimum_backups": 2,
+  "synthetic_relabel": "proposal and owner confirmation required; do not relabel automatically",
+  "unchanged": ["metrics", "data splits", "0.7 applicable kappa threshold", "95% owner audit threshold"]
+}
