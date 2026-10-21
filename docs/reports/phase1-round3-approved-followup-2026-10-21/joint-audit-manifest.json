@@ -1,0 +1,40 @@
+{
+  "seed": 20261022,
+  "joint_keep": 711,
+  "owner_rejected_removed": 1,
+  "remaining_pool": 710,
+  "prior_reviewed_in_remaining_pool": 19,
+  "eligible_unreviewed_pool": 691,
+  "sample": 72,
+  "previous_review_overlap": 0,
+  "conversations": 70,
+  "source_counts": {
+    "dulemon-both-train": 72
+  },
+  "topic_counts": {
+    "other": 41,
+    "preference": 15,
+    "family": 7,
+    "residence-origin": 4,
+    "work-education": 5
+  },
+  "topic_rule": "descriptive regex, first matching category; not human/model labels; absent from reviewer table",
+  "maximum_errors": 3,
+  "human_completed": false,
+  "passed": null,
+  "error_rate": null,
+  "confidence_interval_95": null,
+  "format_approved": true,
+  "format_authorization": "owner message om_x100b62bf9ec420a0c1f4c8e945cc40e",
+  "files": {
+    "audit-blind.csv": "24620c12a6f88a883d8615848612ac1bced3eec6d7c7c6435fdf8a5de47980c4",
+    "audit-blind.jsonl": "d21c068019fa7680f2bdd2642346e190da92c856c959190be91dec6a1c0fae37",
+    "opaque-map-private.json": "c807c9329903059bc770952d6d2c675f2d2a74418715480a001f89ddb5995755"
+  },
+  "inputs": {
+    ".local/phase1/chinese-expansion-v2/dulemon/items.jsonl": "41dd160364690ffedf45d49f038cf33bde3e65cb996b4804cf9c3a9552f91279",
+    ".local/phase1/chinese-guide-v2-full-fallback-resume1/dulemon/labels-deepseek-v4-pro-run1/labels.jsonl": "0931b3a0938746f4370ba32cad56ca7b9d75dfd1703cf7f2bb747d136c590e1a",
+    ".local/phase1/chinese-guide-v2-full-fallback-resume1/dulemon/labels-mimo-v2.6-flash-run1/labels.jsonl": "2f2866613cadd918b5f14ea815ffa209e363fedbd547e30663a61d0b70a16f66",
+    ".local/phase1/round3/owner-hardset/native-audit-final/adopted-labels.jsonl": "37c0925e2f41cc85e529ae7d448f0266fe502fdac3acdb60c9108ad298cc26b5"
+  }
+}

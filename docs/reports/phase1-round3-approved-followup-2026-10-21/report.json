@@ -1,0 +1,309 @@
+{
+  "created_at": "2026-10-21T13:35:03.139416+00:00",
+  "date_beijing": "2026-10-21",
+  "source_commit": "7c112c464c7ca0346d3b6997d78df4d1f0cfbcac",
+  "source_modified": false,
+  "phase1_accepted": false,
+  "phase2_started": false,
+  "plan": {
+    "new": "docs/plans/2026-10-21-agent-memory-interview-plan-v2.md",
+    "sha256": "da1126e8e77b5b91835cfc6b9849dd4915e1bdaba7524c7774c8fd09312c58e9",
+    "old": "docs/plans/2026-10-21-agent-memory-interview-plan.md",
+    "old_sha256": "a199f472d908a603df158e2452ce8b58ef36210e8ff9a308273327e41b5d299d",
+    "diff_hunks": 2,
+    "original_author_preserved": true
+  },
+  "plan_conflicts": [
+    "section7 old backup row still requires two; current explicit owner instruction and selection bullet require one",
+    "section7 heading/table still TokenHub-only but selection rule allows Ark; execute per-table vendor rule",
+    "section11 generic owner95% retained; this independent audit uses specifically approved at most3 errors in72"
+  ],
+  "joint_audit": {
+    "seed": 20261022,
+    "joint_keep": 711,
+    "owner_rejected_removed": 1,
+    "remaining_pool": 710,
+    "prior_reviewed_in_remaining_pool": 19,
+    "eligible_unreviewed_pool": 691,
+    "sample": 72,
+    "previous_review_overlap": 0,
+    "conversations": 70,
+    "source_counts": {
+      "dulemon-both-train": 72
+    },
+    "topic_counts": {
+      "other": 41,
+      "preference": 15,
+      "family": 7,
+      "residence-origin": 4,
+      "work-education": 5
+    },
+    "topic_rule": "descriptive regex, first matching category; not human/model labels; absent from reviewer table",
+    "maximum_errors": 3,
+    "human_completed": false,
+    "passed": null,
+    "error_rate": null,
+    "confidence_interval_95": null,
+    "format_approved": true,
+    "format_authorization": "owner message om_x100b62bf9ec420a0c1f4c8e945cc40e",
+    "files": {
+      "audit-blind.csv": "24620c12a6f88a883d8615848612ac1bced3eec6d7c7c6435fdf8a5de47980c4",
+      "audit-blind.jsonl": "d21c068019fa7680f2bdd2642346e190da92c856c959190be91dec6a1c0fae37",
+      "opaque-map-private.json": "c807c9329903059bc770952d6d2c675f2d2a74418715480a001f89ddb5995755"
+    },
+    "inputs": {
+      ".local/phase1/chinese-expansion-v2/dulemon/items.jsonl": "41dd160364690ffedf45d49f038cf33bde3e65cb996b4804cf9c3a9552f91279",
+      ".local/phase1/chinese-guide-v2-full-fallback-resume1/dulemon/labels-deepseek-v4-pro-run1/labels.jsonl": "0931b3a0938746f4370ba32cad56ca7b9d75dfd1703cf7f2bb747d136c590e1a",
+      ".local/phase1/chinese-guide-v2-full-fallback-resume1/dulemon/labels-mimo-v2.6-flash-run1/labels.jsonl": "2f2866613cadd918b5f14ea815ffa209e363fedbd547e30663a61d0b70a16f66",
+      ".local/phase1/round3/owner-hardset/native-audit-final/adopted-labels.jsonl": "37c0925e2f41cc85e529ae7d448f0266fe502fdac3acdb60c9108ad298cc26b5"
+    }
+  },
+  "human_return_received": false,
+  "audit_errors": null,
+  "audit_passed": null,
+  "error_rate_ci95": null,
+  "gold": {
+    "confirmed": 22,
+    "minimum": 700,
+    "target": 1500,
+    "minimum_gap": 678,
+    "target_gap": 1478,
+    "scale_ci": null,
+    "scale_ci_reason": "confirmed selected subset is a census of these adopted points, not a random estimate of full data; no new random-audit return yet"
+  },
+  "queries": {
+    "version": "chinese-queries-v2-hard",
+    "active": true,
+    "count": 2250,
+    "replaced_flow_only": 750,
+    "unchanged_others": 1500,
+    "categories": {
+      "abstention": 250,
+      "preference": 250,
+      "single-session": 1000,
+      "knowledge-update": 250,
+      "multi-session": 250,
+      "temporal-reasoning": 250
+    },
+    "by_source": {
+      "DuLeMon": 500,
+      "PerLTQA-zh": 1000,
+      "synthetic-hard-v1": 750
+    },
+    "registry": {
+      "version": "chinese-queries-v2-hard",
+      "active": true,
+      "owner_approved": true,
+      "previous_version": "chinese-queries-v1",
+      "same_set_comparison_allowed": false,
+      "flow_only_categories": [
+        "temporal-reasoning",
+        "knowledge-update",
+        "multi-session"
+      ],
+      "files": {
+        "queries": {
+          "path": ".local/phase1/round3/approved-followup/chinese-queries-v2/queries.jsonl",
+          "sha256": "a7a25b616c495988b2921f1d5981df4a1bc9d13c708c60452077020570dfb32a"
+        },
+        "contexts": {
+          "path": ".local/phase1/round3/approved-followup/chinese-queries-v2/contexts.jsonl",
+          "sha256": "76966e16e8053ec7902e4fd2d2c503f06983a06628309175b4a5b2f3add107af"
+        },
+        "split": {
+          "path": ".local/phase1/round3/approved-followup/chinese-queries-v2/split.json",
+          "sha256": "8bbbc1cef886db241e3c06b8582de3d408617b632f75b933864769dff8940437"
+        },
+        "manifest": {
+          "path": ".local/phase1/round3/approved-followup/chinese-queries-v2/manifest.json",
+          "sha256": "fda1abe689436f1caa5337410783c35b51ee3f181695c7f7bbdc96ed10bb0f0e"
+        }
+      }
+    },
+    "source_split_sha256": "e59bf98ce0c5025678d8282a835202e78f938eeff1e1f10762caf536a647d30e",
+    "old_queries_sha256": "a324460eee9248d1a0c271b20353cdd0fc58e64a527519267f92db129df55fd5",
+    "new_corpus_sha256": "2af07b8f1ef1f22264e25ed65dc5ff5d7a27e6119cdaba6a8ab3214baf9c783c",
+    "conversations": 745,
+    "same_set_comparison_allowed": false,
+    "hardset_owner_audit_deferred": true
+  },
+  "judge_pools": {
+    "public-chinese": {
+      "table_kind": "public-chinese",
+      "roles": {
+        "answer_vendor": "ByteDance",
+        "annotation_vendors": [
+          "DeepSeek",
+          "Xiaomi"
+        ],
+        "annotation_models": [
+          "deepseek-v4-pro",
+          "mimo-v2.6-flash"
+        ]
+      },
+      "policy_path": "docs/evals/phase1-round3-policy-v4.json",
+      "policy_sha256": "0ac08f2346b0b3fdb1ca27babcae5df30ef508e724e015b04c51808ac12b1304",
+      "judge_prompt_sha256": "30772f880cf2eefe3a53aa728a245597a651821d31a9a749f65c1683120ebb8e",
+      "selection": "passed preflight and successful actual calls; explicit preference; no quota ranking",
+      "candidates": [
+        {
+          "model": "glm-5-2-260617",
+          "provider": "Ark",
+          "vendor": "Zhipu",
+          "preflight": {
+            "path": "docs/reports/phase1-round3-followup-2026-10-21/glm-5-2-260617-preflight.json",
+            "sha256": "147bb4906e37dc31e3806948106c4f1fa1c52115996ddd5ce9a70c8e66a768a0"
+          },
+          "actual_call": {
+            "path": "docs/reports/phase1-round3-followup-2026-10-21/glm-5-2-260617-actual-call.json",
+            "sha256": "c053d8d183eda905e5e7718323eee3a26ead1816d2e13682052e1c4f2420421a"
+          },
+          "calibration": null
+        },
+        {
+          "model": "hy4-preview",
+          "provider": "TokenHub",
+          "vendor": "Tencent",
+          "preflight": {
+            "path": "docs/reports/phase1-round3-followup-2026-10-21/hy4-preview-preflight.json",
+            "sha256": "3cfda70885e6ac8c905a096beeb446faa3a1cd33e8e7712485e864871db91674"
+          },
+          "actual_call": {
+            "path": "docs/reports/phase1-round3-followup-2026-10-21/hy4-preview-actual-call.json",
+            "sha256": "23c6df7e7d0085754c74d46a40e4a6ba2df95f9521c616747a3b88b951ee4d6a"
+          },
+          "calibration": null
+        }
+      ],
+      "preflight_pool_frozen": true,
+      "formal_execution_ready": false,
+      "missing_backups": 0,
+      "blocked_reason": "owner calibration pending",
+      "data_scope_note": "public pool covers frozen DuLeMon dual-model labels; PerLTQA original label vendor unknown, requires separate role check before any judged table",
+      "workload_estimate": {
+        "questions": 2250,
+        "groups": 4,
+        "repeats": 3,
+        "answer_calls": 27000,
+        "judge_calls": 27000,
+        "combined_calls": 54000,
+        "judge_input_tokens_estimate": 27000000,
+        "judge_output_tokens_estimate": 2700000,
+        "judge_total_tokens_estimate": 29700000
+      },
+      "withdrawn_model": "TokenHub:glm-5v-turbo; historical preflight pass retained but pre-offline, not a stable backup",
+      "minimum_backups": 1
+    },
+    "synthetic-timeline": {
+      "table_kind": "synthetic-timeline",
+      "roles": {
+        "answer_vendor": "ByteDance",
+        "annotation_vendors": [
+          "DeepSeek",
+          "Tencent"
+        ],
+        "annotation_models": [
+          "deepseek-v4-pro-ga-260813",
+          "hy4-preview"
+        ]
+      },
+      "policy_path": "docs/evals/phase1-round3-policy-v4.json",
+      "policy_sha256": "0ac08f2346b0b3fdb1ca27babcae5df30ef508e724e015b04c51808ac12b1304",
+      "judge_prompt_sha256": "30772f880cf2eefe3a53aa728a245597a651821d31a9a749f65c1683120ebb8e",
+      "selection": "passed preflight and successful actual calls; explicit preference; no quota ranking",
+      "candidates": [
+        {
+          "model": "glm-5-2-260617",
+          "provider": "Ark",
+          "vendor": "Zhipu",
+          "preflight": {
+            "path": "docs/reports/phase1-round3-followup-2026-10-21/glm-5-2-260617-preflight.json",
+            "sha256": "147bb4906e37dc31e3806948106c4f1fa1c52115996ddd5ce9a70c8e66a768a0"
+          },
+          "actual_call": {
+            "path": "docs/reports/phase1-round3-followup-2026-10-21/glm-5-2-260617-actual-call.json",
+            "sha256": "c053d8d183eda905e5e7718323eee3a26ead1816d2e13682052e1c4f2420421a"
+          },
+          "calibration": null
+        }
+      ],
+      "preflight_pool_frozen": false,
+      "formal_execution_ready": false,
+      "missing_backups": 1,
+      "blocked_reason": "one stable backup missing; owner calibration pending",
+      "data_scope_note": "public pool covers frozen DuLeMon dual-model labels; PerLTQA original label vendor unknown, requires separate role check before any judged table",
+      "workload_estimate": {
+        "questions": 2250,
+        "groups": 4,
+        "repeats": 3,
+        "answer_calls": 27000,
+        "judge_calls": 27000,
+        "combined_calls": 54000,
+        "judge_input_tokens_estimate": 27000000,
+        "judge_output_tokens_estimate": 2700000,
+        "judge_total_tokens_estimate": 29700000
+      },
+      "withdrawn_model": "TokenHub:glm-5v-turbo; historical preflight pass retained but pre-offline, not a stable backup",
+      "minimum_backups": 1
+    }
+  },
+  "judge_new_failures": [
+    {
+      "model": "glm-4-5-air-20250728",
+      "provider": "Ark",
+      "http_status": [
+        404
+      ],
+      "calls": 1,
+      "preflight_pass": false,
+      "checked_at": "2026-10-21T13:27:33.499663+00:00",
+      "evidence_sha256": "e70c21d09468959a525ee4dbc23579ba9fdc9acf4acab7caec3dc97a29f0c48a"
+    },
+    {
+      "model": "mimo-v2.6-pro",
+      "provider": "TokenHub",
+      "http_status": [
+        402
+      ],
+      "calls": 1,
+      "preflight_pass": false,
+      "checked_at": "2026-10-21T13:27:32.761272+00:00",
+      "evidence_sha256": "e6dea8f2904ffec930c74ad2a9a74102e84c5cc16972475c78c7abae444d64b6"
+    }
+  ],
+  "model_calls": 2,
+  "reported_tokens": 0,
+  "error_usage_unknown": true,
+  "protected_hashes": {
+    ".local/phase1/round3/reviews/ecd-manual-120.csv": "c5e56d41c72194d7a56327e76b5fcc6051fcb397ef2dcdf4d120e1729686fb8a",
+    ".local/phase1/round3/reviews/dulemon-native-reference/audit-blind.csv": "5a5619eba70448eae9dbaead978ef8729e3936c561274fbc77b9b811901c08a3",
+    ".local/phase1/round3/reviews/ecd-manual-120.jsonl": "392b53fd6d21d9d47f17233a08bf2f39cc11c08b4a013753ddbc3148f1501927",
+    ".local/phase1/round3/reviews/ecd-negative-local.jsonl": "34072968d613f45a0bea699f64e0204da5a476cc4a7a890fc1b33ee6eb7f568b",
+    ".local/phase1/round3/reviews/dulemon-native-reference/audit-blind.jsonl": "aa001b678ce1f122775d69411c6e815643f08c430c6cd90ff237ac69834f5eb7"
+  },
+  "incremental_sampling_started": false,
+  "complete_negative_conversations_confirmed": false,
+  "format_approved": true,
+  "format_preview_superseded": true,
+  "private_audit_delivery_message": "om_x100b62bf9b49b0b0ce4f2a5a84ed1d3",
+  "environment": {
+    "python": "3.12.3",
+    "platform": "Linux-6.8.0-139-generic-x86_64-with-glibc2.39",
+    "httpx": "0.28.1",
+    "pydantic": "2.13.5"
+  },
+  "validation": {
+    "pytest": 367,
+    "seconds": 17.74,
+    "ruff": "pass",
+    "strict_mypy": "pass",
+    "foundation": "total=8 passed=8 failed=0 tenant_leaks=0 deleted_memory_hits=0",
+    "log_sha256": "abff28f376037c4acfd4668cdc5054f2980335aa056f4f9ad482e22675ffe416"
+  },
+  "commands": {
+    "audit": "uv run python scripts/prepare-approved-joint-audit.py --items .local/phase1/chinese-expansion-v2/dulemon/items.jsonl --left .local/phase1/chinese-guide-v2-full-fallback-resume1/dulemon/labels-deepseek-v4-pro-run1/labels.jsonl --right .local/phase1/chinese-guide-v2-full-fallback-resume1/dulemon/labels-mimo-v2.6-flash-run1/labels.jsonl --prior-human .local/phase1/round3/owner-hardset/native-audit-final/adopted-labels.jsonl --output .local/reproduction-joint72",
+    "queries": "uv run python scripts/materialize-current-chinese-queries.py --output .local/reproduction-queries-v2.jsonl",
+    "finalize": "uv run python scripts/finalize-approved-joint-audit.py --pack .local/phase1/round3/approved-followup/joint-audit-72-v1 --submitted OWNER_RETURN.csv --output .local/joint72-owner-result --reviewer OWNER_ID",
+    "checks": "bash scripts/check.sh"
+  }
+}
