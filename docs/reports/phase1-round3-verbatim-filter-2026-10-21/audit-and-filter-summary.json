@@ -1,0 +1,94 @@
+{
+  "input_return_sha256": "51485957ae64f0c8e0dadef785a9dcccba8d9678598a71411ca067dca3c5b4e4",
+  "previous_gold": 22,
+  "new_keep": 63,
+  "new_discard": 9,
+  "overlap": 0,
+  "confirmed_positive_points": 85,
+  "minimum": 700,
+  "target": 1500,
+  "minimum_gap": 615,
+  "target_gap": 1415,
+  "confirmed_positive_conversations": 80,
+  "human_checked_items": 229,
+  "audit_sample": 72,
+  "maximum_errors": 3,
+  "passed": false,
+  "sample_precision_cluster_ci95": {
+    "value": 0.875,
+    "n": 70,
+    "numerator": 63,
+    "denominator": 72,
+    "ci95": [
+      0.7916666666666666,
+      0.9436619718309859
+    ]
+  },
+  "remaining_pool_error_count_exact_ci95": [
+    43,
+    151
+  ],
+  "remaining_pool_error_rate_exact_ci95": [
+    0.06056338028169014,
+    0.21267605633802816
+  ],
+  "remaining_pool_precision_exact_ci95": [
+    0.7873239436619719,
+    0.9394366197183098
+  ],
+  "primary_error_types": {
+    "unsupported-detail-or-inference": 7,
+    "assistant-attribution": 2
+  },
+  "secondary_error_tags_overlapping": {
+    "unsupported-detail-or-inference": 9,
+    "assistant-attribution": 2
+  },
+  "filter_version": "verbatim-v2-detail-atoms",
+  "offline_error_recall": {
+    "numerator": 9,
+    "denominator": 9,
+    "value": 1.0
+  },
+  "offline_correct_harm": {
+    "numerator": 60,
+    "denominator": 63,
+    "value": 0.9523809523809523
+  },
+  "offline_correct_retained": 3,
+  "offline_validation_role": "development/tuning only; never acceptance evidence after fitting these rules",
+  "filter_owner_approved": false,
+  "offline_acceptance_claimed": false,
+  "global_joint_keep": 711,
+  "owner_rejected_in_joint": 10,
+  "remaining_after_known_rejects": 701,
+  "filter_supported": 51,
+  "filter_uncertain": 650,
+  "fresh_unreviewed_supported": 46,
+  "fresh_sample_target": 72,
+  "fresh_sample_deficit": 26,
+  "fresh_seed": 20261023,
+  "fresh_audit_created": false,
+  "fresh_audit_blocker": "not enough independent unreviewed literal-supported items; no sampling with replacement or reusing development rows",
+  "incremental_annotation_started": false,
+  "model_calls": 0,
+  "phase1_accepted": false,
+  "phase2_started": false,
+  "input_hashes": {
+    ".local/phase1/chinese-expansion-v2/dulemon/items.jsonl": "41dd160364690ffedf45d49f038cf33bde3e65cb996b4804cf9c3a9552f91279",
+    ".local/phase1/round3/owner-hardset/native-audit-final/adopted-labels.jsonl": "37c0925e2f41cc85e529ae7d448f0266fe502fdac3acdb60c9108ad298cc26b5",
+    ".local/phase1/chinese-guide-v2-full-fallback-resume1/dulemon/labels-deepseek-v4-pro-run1/labels.jsonl": "0931b3a0938746f4370ba32cad56ca7b9d75dfd1703cf7f2bb747d136c590e1a",
+    ".local/phase1/chinese-guide-v2-full-fallback-resume1/dulemon/labels-mimo-v2.6-flash-run1/labels.jsonl": "2f2866613cadd918b5f14ea815ffa209e363fedbd547e30663a61d0b70a16f66",
+    ".local/dulemon72-final.csv": "51485957ae64f0c8e0dadef785a9dcccba8d9678598a71411ca067dca3c5b4e4",
+    ".local/phase1/round3/approved-followup/joint-audit-72-v1/opaque-map-private.json": "c807c9329903059bc770952d6d2c675f2d2a74418715480a001f89ddb5995755"
+  },
+  "files": {
+    "fresh-eligible-private.json": "0b93b993cb91f01abe2831b7e0c78955d11d6605ed195a2e00c15f0a6d6d32db",
+    "human-confirmed-labels.jsonl": "8e2c7e032652e59ab304bedb49e58e99763adbb3119defb18cc805f704963099",
+    "human-confirmed-positive.csv": "89f61ab8b126671e4619e8ad6ecba20d4540d43e9ab5f3adda590a5021b7767c",
+    "human-positive-items.jsonl": "e8ad4806ea25c0e681b21b684d6e17af712e2f52b360764ac12676ab4dfd987f",
+    "human-positive-labels.jsonl": "71b07681cc981bcc39eb59f34d97bba71960dd6450a9ada6d00b3d058cc35580",
+    "offline-decisions-private.jsonl": "6ce560a3c804585eb528263d27215b3df3b8cc4b9d2b5936d3b6faaaa02b0d3d",
+    "pool-decisions-private.jsonl": "5bc371c1b874d78f45da62dd993349eaf44270a8efe0b83e04157b6a12b31fd0"
+  }
+}
