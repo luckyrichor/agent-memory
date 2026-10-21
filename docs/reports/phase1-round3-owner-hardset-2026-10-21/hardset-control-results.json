@@ -1,0 +1,66 @@
+[
+  {
+    "model": "deepseek-v4-pro-ga-260813",
+    "provider": "Ark",
+    "status": "complete",
+    "base_n": 16,
+    "base_expected_matches": 16,
+    "controls": {
+      "shuffle": {
+        "n": 16,
+        "constructor_expected_matches": 16,
+        "compared_with_base_label_changes": 0
+      },
+      "mask": {
+        "n": 16,
+        "constructor_expected_matches": 16,
+        "compared_with_base_label_changes": 8
+      },
+      "counterfactual": {
+        "n": 16,
+        "constructor_expected_matches": 16,
+        "compared_with_base_label_changes": 16
+      }
+    },
+    "calls": 4,
+    "reported_tokens": 56074,
+    "response_versions": [
+      "deepseek-v4-pro-ga-260813"
+    ],
+    "prompt_sha256": "a91e974ed3cdeb854f6931b447155547b8f80d895f94df5b9f15f7b4de8b92f6",
+    "input_sha256": "838d42e8027ed4417846af8f65773e0b79b55d4339f1c773825e3df6718e4913",
+    "ledger_sha256": "521012bdc4009a8a3e1856be95556feafefd6601e03b032c0fbab46ca7c51530"
+  },
+  {
+    "model": "hy4-preview",
+    "provider": "TokenHub",
+    "status": "complete",
+    "base_n": 16,
+    "base_expected_matches": 15,
+    "controls": {
+      "shuffle": {
+        "n": 16,
+        "constructor_expected_matches": 16,
+        "compared_with_base_label_changes": 1
+      },
+      "mask": {
+        "n": 16,
+        "constructor_expected_matches": 16,
+        "compared_with_base_label_changes": 9
+      },
+      "counterfactual": {
+        "n": 16,
+        "constructor_expected_matches": 16,
+        "compared_with_base_label_changes": 15
+      }
+    },
+    "calls": 4,
+    "reported_tokens": 57875,
+    "response_versions": [
+      "hy4-preview"
+    ],
+    "prompt_sha256": "a91e974ed3cdeb854f6931b447155547b8f80d895f94df5b9f15f7b4de8b92f6",
+    "input_sha256": "838d42e8027ed4417846af8f65773e0b79b55d4339f1c773825e3df6718e4913",
+    "ledger_sha256": "83e7fc4fb579bbaf6a31a2e8c032a329d8d2fa9823b35e0327062a2024edd451"
+  }
+]

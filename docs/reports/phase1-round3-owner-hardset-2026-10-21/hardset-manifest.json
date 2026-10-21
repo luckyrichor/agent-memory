@@ -1,0 +1,69 @@
+{
+  "name": "synthetic-hard-v1",
+  "seed": 20261021,
+  "conversations": 300,
+  "candidates": 1200,
+  "queries": 900,
+  "categories": {
+    "knowledge-update": 300,
+    "temporal-reasoning": 300,
+    "multi-session": 300
+  },
+  "controls": 3600,
+  "control_counts": {
+    "shuffle": 1200,
+    "mask": 1200,
+    "counterfactual": 1200
+  },
+  "expected_counterfactual_flips": 1200,
+  "label_counts": {
+    "keep": 600,
+    "discard": 600
+  },
+  "source_length_label_strata": [
+    {
+      "label": "discard",
+      "documents": 6,
+      "characters": 768,
+      "count": 300
+    },
+    {
+      "label": "discard",
+      "documents": 9,
+      "characters": 1152,
+      "count": 300
+    },
+    {
+      "label": "keep",
+      "documents": 6,
+      "characters": 768,
+      "count": 300
+    },
+    {
+      "label": "keep",
+      "documents": 9,
+      "characters": 1152,
+      "count": 300
+    }
+  ],
+  "owner_audit_proposed": 120,
+  "model_annotations": 0,
+  "model_control_runs": 0,
+  "owner_annotations": 0,
+  "quality_status": "流程验证，不作质量证据",
+  "provenance": "independent locally program-constructed synthetic; no public corpus copied",
+  "license": "no third-party dataset text; repository has no LICENSE; external redistribution license not established",
+  "frozen_data_modified": false,
+  "replacement_approved": false,
+  "files": {
+    "constructor-truth-private.jsonl": "5e4d0a51c0453710af94c2d9214b316a65d8f7f3e6cf13b19cbd6f41004c44f7",
+    "contexts.jsonl": "4694830dc4e110d9aec31f278f1b0a061a99d171102bf2314822db1884cb74d8",
+    "control-truth-private.jsonl": "1d64ac23e21fca0919f2e5d96ec58b08c0743d88ae336ad143c6faea3ba4d66d",
+    "controls.jsonl": "4976b1176c5de44fb218ffdaf237855ba0f62fa3e59a9f7b72cee34e5cc50763",
+    "items.jsonl": "35ac5488a1b3b019f8f5e97024bae15d7eb8985f7a9d5d9a50f1ad2a048d06e7",
+    "owner-audit-proposed.jsonl": "9d0447a83a715cc6cf67883448530a8936f3fe3d548131f1160758e5bc6aa6a3",
+    "queries-proposed.jsonl": "6b7439ae20bb63b995f75131c36028cf8b5f2fef4cbed9f83d9f5a0574981d43",
+    "split-proposed.json": "f83f4c9a37ae4e6629e827fe2888c24e0b0bdb8fbdffa970dc7e61f1d0b92f0f"
+  },
+  "artifact_digest": "253f9cbb5875da1d9cf225cffdbdcf092ab9ab41508b4b6fc9c8f294262f4c5b"
+}

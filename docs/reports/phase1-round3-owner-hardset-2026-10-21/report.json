@@ -1,0 +1,456 @@
+{
+  "date_beijing": "2026-10-21",
+  "generated_at": "2026-10-21T13:02:36.560052+00:00",
+  "source_commit": "9de5e3fb3d855b0f3d8482fa3cca5b93a7048751",
+  "working_tree_modified": false,
+  "phase1_accepted": false,
+  "phase2_started": false,
+  "owner_audit": {
+    "frozen_reference_agreement": 0.2484076433121019,
+    "matches": 39,
+    "audit_count": 157,
+    "frozen_sample_count": 230,
+    "unchecked_count": 73,
+    "full_sample_agreement_lower": 0.16956521739130434,
+    "full_sample_agreement_upper": 0.48695652173913045,
+    "bounds_interpretation": "deterministic bounds, not a confidence interval",
+    "human_confirmed_conversations": 130,
+    "coverage": 0.6826086956521739,
+    "sampling_limitation": "partial owner review; no assumption unchecked rows are representative",
+    "human_provenance": "owner-supplied file and reviewer assertion; never infer from Agent labels",
+    "threshold": 0.95,
+    "native_reference_accepted": false,
+    "gold_basis": "human-confirmed-subset-only",
+    "usable_positive_memory_points": 22,
+    "human_positive_memory_points": 22,
+    "submitted_sha256": "51ca7e40e56f0e43b7129bb97fa8a384a64faf9bcc4a5fd5f4a7b03c246dbc79",
+    "references_sha256": "bca6750b676484832d5cff4dae3ff34dbd8fb53f3ebe995c9ba7861eb470d300",
+    "phase_gate_passed": false
+  },
+  "selection": {
+    "provenance": "owner message, not inferred from Agent labels",
+    "old_agent_uncertain": 124,
+    "old_agent_discard": 3,
+    "old_agent_keep_random": 30,
+    "random_sample": false
+  },
+  "real_chinese_gold": {
+    "target": 1500,
+    "confirmed_positive_points": 22,
+    "gap": 1478,
+    "human_labels": {
+      "discard": 135,
+      "keep": 22
+    },
+    "reviewed_conversations": 130,
+    "positive_conversations": 20,
+    "full_negative_conversation_count": null,
+    "negative_conversation_ratio": null,
+    "native_source_candidates": 2291,
+    "native_source_conversations": 400,
+    "native_reference_counts": {
+      "keep": 1746,
+      "discard": 545
+    },
+    "prospective_joint_keep": 711,
+    "joint_known_owner_rejected": 1,
+    "joint_owner_positive_overlap": 19,
+    "prospective_union": 713,
+    "prospective_gap": 787,
+    "proposed_joint_audit_count": 72,
+    "proposal_adopted": false,
+    "confusion": [
+      {
+        "native": "discard",
+        "human": "discard",
+        "count": 25
+      },
+      {
+        "native": "discard",
+        "human": "keep",
+        "count": 8
+      },
+      {
+        "native": "keep",
+        "human": "discard",
+        "count": 110
+      },
+      {
+        "native": "keep",
+        "human": "keep",
+        "count": 14
+      }
+    ]
+  },
+  "query_source_by_category": {
+    "temporal-reasoning": {
+      "customer-timeline-v1": 250
+    },
+    "knowledge-update": {
+      "customer-timeline-v1": 250
+    },
+    "multi-session": {
+      "customer-timeline-v1": 250
+    }
+  },
+  "frozen_queries_sha256": "a324460eee9248d1a0c271b20353cdd0fc58e64a527519267f92db129df55fd5",
+  "hardset": {
+    "name": "synthetic-hard-v1",
+    "seed": 20261021,
+    "conversations": 300,
+    "candidates": 1200,
+    "queries": 900,
+    "categories": {
+      "knowledge-update": 300,
+      "temporal-reasoning": 300,
+      "multi-session": 300
+    },
+    "controls": 3600,
+    "control_counts": {
+      "shuffle": 1200,
+      "mask": 1200,
+      "counterfactual": 1200
+    },
+    "expected_counterfactual_flips": 1200,
+    "label_counts": {
+      "keep": 600,
+      "discard": 600
+    },
+    "source_length_label_strata": [
+      {
+        "label": "discard",
+        "documents": 6,
+        "characters": 768,
+        "count": 300
+      },
+      {
+        "label": "discard",
+        "documents": 9,
+        "characters": 1152,
+        "count": 300
+      },
+      {
+        "label": "keep",
+        "documents": 6,
+        "characters": 768,
+        "count": 300
+      },
+      {
+        "label": "keep",
+        "documents": 9,
+        "characters": 1152,
+        "count": 300
+      }
+    ],
+    "owner_audit_proposed": 120,
+    "model_annotations": 0,
+    "model_control_runs": 0,
+    "owner_annotations": 0,
+    "quality_status": "流程验证，不作质量证据",
+    "provenance": "independent locally program-constructed synthetic; no public corpus copied",
+    "license": "no third-party dataset text; repository has no LICENSE; external redistribution license not established",
+    "frozen_data_modified": false,
+    "replacement_approved": false,
+    "files": {
+      "constructor-truth-private.jsonl": "5e4d0a51c0453710af94c2d9214b316a65d8f7f3e6cf13b19cbd6f41004c44f7",
+      "contexts.jsonl": "4694830dc4e110d9aec31f278f1b0a061a99d171102bf2314822db1884cb74d8",
+      "control-truth-private.jsonl": "1d64ac23e21fca0919f2e5d96ec58b08c0743d88ae336ad143c6faea3ba4d66d",
+      "controls.jsonl": "4976b1176c5de44fb218ffdaf237855ba0f62fa3e59a9f7b72cee34e5cc50763",
+      "items.jsonl": "35ac5488a1b3b019f8f5e97024bae15d7eb8985f7a9d5d9a50f1ad2a048d06e7",
+      "owner-audit-proposed.jsonl": "9d0447a83a715cc6cf67883448530a8936f3fe3d548131f1160758e5bc6aa6a3",
+      "queries-proposed.jsonl": "6b7439ae20bb63b995f75131c36028cf8b5f2fef4cbed9f83d9f5a0574981d43",
+      "split-proposed.json": "f83f4c9a37ae4e6629e827fe2888c24e0b0bdb8fbdffa970dc7e61f1d0b92f0f"
+    },
+    "artifact_digest": "253f9cbb5875da1d9cf225cffdbdcf092ab9ab41508b4b6fc9c8f294262f4c5b"
+  },
+  "hardset_reproduction_identical": true,
+  "hardset_controls_actual": [
+    {
+      "model": "deepseek-v4-pro-ga-260813",
+      "provider": "Ark",
+      "status": "complete",
+      "base_n": 16,
+      "base_expected_matches": 16,
+      "controls": {
+        "shuffle": {
+          "n": 16,
+          "constructor_expected_matches": 16,
+          "compared_with_base_label_changes": 0
+        },
+        "mask": {
+          "n": 16,
+          "constructor_expected_matches": 16,
+          "compared_with_base_label_changes": 8
+        },
+        "counterfactual": {
+          "n": 16,
+          "constructor_expected_matches": 16,
+          "compared_with_base_label_changes": 16
+        }
+      },
+      "calls": 4,
+      "reported_tokens": 56074,
+      "response_versions": [
+        "deepseek-v4-pro-ga-260813"
+      ],
+      "prompt_sha256": "a91e974ed3cdeb854f6931b447155547b8f80d895f94df5b9f15f7b4de8b92f6",
+      "input_sha256": "838d42e8027ed4417846af8f65773e0b79b55d4339f1c773825e3df6718e4913",
+      "ledger_sha256": "521012bdc4009a8a3e1856be95556feafefd6601e03b032c0fbab46ca7c51530"
+    },
+    {
+      "model": "hy4-preview",
+      "provider": "TokenHub",
+      "status": "complete",
+      "base_n": 16,
+      "base_expected_matches": 15,
+      "controls": {
+        "shuffle": {
+          "n": 16,
+          "constructor_expected_matches": 16,
+          "compared_with_base_label_changes": 1
+        },
+        "mask": {
+          "n": 16,
+          "constructor_expected_matches": 16,
+          "compared_with_base_label_changes": 9
+        },
+        "counterfactual": {
+          "n": 16,
+          "constructor_expected_matches": 16,
+          "compared_with_base_label_changes": 15
+        }
+      },
+      "calls": 4,
+      "reported_tokens": 57875,
+      "response_versions": [
+        "hy4-preview"
+      ],
+      "prompt_sha256": "a91e974ed3cdeb854f6931b447155547b8f80d895f94df5b9f15f7b4de8b92f6",
+      "input_sha256": "838d42e8027ed4417846af8f65773e0b79b55d4339f1c773825e3df6718e4913",
+      "ledger_sha256": "83e7fc4fb579bbaf6a31a2e8c032a329d8d2fa9823b35e0327062a2024edd451"
+    }
+  ],
+  "query_replacement_proposal": {
+    "approved": false,
+    "activated": false,
+    "status": "流程验证，不作质量证据",
+    "queries": 2250,
+    "replaced": 750,
+    "categories": {
+      "abstention": 250,
+      "preference": 250,
+      "single-session": 1000,
+      "knowledge-update": 250,
+      "multi-session": 250,
+      "temporal-reasoning": 250
+    },
+    "unchanged_other_queries": 1500,
+    "split_note": "new proposal inherits original other-source and independent hard-set conversation splits; this is not the frozen test set",
+    "frozen_queries_sha256": "a324460eee9248d1a0c271b20353cdd0fc58e64a527519267f92db129df55fd5",
+    "files": {
+      "contexts.jsonl": "76966e16e8053ec7902e4fd2d2c503f06983a06628309175b4a5b2f3add107af",
+      "queries.jsonl": "a7a25b616c495988b2921f1d5981df4a1bc9d13c708c60452077020570dfb32a",
+      "split.json": "8bbbc1cef886db241e3c06b8582de3d408617b632f75b933864769dff8940437"
+    }
+  },
+  "judge_pools": {
+    "public-chinese": {
+      "table_kind": "public-chinese",
+      "roles": {
+        "answer_vendor": "ByteDance",
+        "annotation_vendors": [
+          "DeepSeek",
+          "Xiaomi"
+        ],
+        "annotation_models": [
+          "deepseek-v4-pro",
+          "mimo-v2.6-flash"
+        ]
+      },
+      "policy_path": "docs/evals/phase1-round3-policy-v3.json",
+      "policy_sha256": "4eaf1e3885dfd845bbf1b46cd41e32a319ece74e23f9a25245cdde7e3e4d1e49",
+      "judge_prompt_sha256": "30772f880cf2eefe3a53aa728a245597a651821d31a9a749f65c1683120ebb8e",
+      "selection": "passed preflight and successful actual calls; explicit preference; no quota ranking",
+      "candidates": [
+        {
+          "model": "glm-5-2-260617",
+          "provider": "Ark",
+          "vendor": "Zhipu",
+          "preflight": {
+            "path": "docs/reports/phase1-round3-followup-2026-10-21/glm-5-2-260617-preflight.json",
+            "sha256": "147bb4906e37dc31e3806948106c4f1fa1c52115996ddd5ce9a70c8e66a768a0"
+          },
+          "actual_call": {
+            "path": "docs/reports/phase1-round3-followup-2026-10-21/glm-5-2-260617-actual-call.json",
+            "sha256": "c053d8d183eda905e5e7718323eee3a26ead1816d2e13682052e1c4f2420421a"
+          },
+          "calibration": null
+        },
+        {
+          "model": "hy4-preview",
+          "provider": "TokenHub",
+          "vendor": "Tencent",
+          "preflight": {
+            "path": "docs/reports/phase1-round3-followup-2026-10-21/hy4-preview-preflight.json",
+            "sha256": "3cfda70885e6ac8c905a096beeb446faa3a1cd33e8e7712485e864871db91674"
+          },
+          "actual_call": {
+            "path": "docs/reports/phase1-round3-followup-2026-10-21/hy4-preview-actual-call.json",
+            "sha256": "23c6df7e7d0085754c74d46a40e4a6ba2df95f9521c616747a3b88b951ee4d6a"
+          },
+          "calibration": null
+        }
+      ],
+      "preflight_pool_frozen": false,
+      "formal_execution_ready": false,
+      "missing_backups": 1,
+      "blocked_reason": "stable backup shortage and owner calibration pending",
+      "data_scope_note": "public pool covers frozen DuLeMon dual-model labels; PerLTQA original label vendor unknown, requires separate role check before any judged table",
+      "workload_estimate": {
+        "questions": 2250,
+        "groups": 4,
+        "repeats": 3,
+        "answer_calls": 27000,
+        "judge_calls": 27000,
+        "combined_calls": 54000,
+        "judge_input_tokens_estimate": 27000000,
+        "judge_output_tokens_estimate": 2700000,
+        "judge_total_tokens_estimate": 29700000
+      },
+      "withdrawn_model": "TokenHub:glm-5v-turbo; historical preflight pass retained but pre-offline, not a stable backup"
+    },
+    "synthetic-timeline": {
+      "table_kind": "synthetic-timeline",
+      "roles": {
+        "answer_vendor": "ByteDance",
+        "annotation_vendors": [
+          "DeepSeek",
+          "Tencent"
+        ],
+        "annotation_models": [
+          "deepseek-v4-pro-ga-260813",
+          "hy4-preview"
+        ]
+      },
+      "policy_path": "docs/evals/phase1-round3-policy-v3.json",
+      "policy_sha256": "4eaf1e3885dfd845bbf1b46cd41e32a319ece74e23f9a25245cdde7e3e4d1e49",
+      "judge_prompt_sha256": "30772f880cf2eefe3a53aa728a245597a651821d31a9a749f65c1683120ebb8e",
+      "selection": "passed preflight and successful actual calls; explicit preference; no quota ranking",
+      "candidates": [
+        {
+          "model": "glm-5-2-260617",
+          "provider": "Ark",
+          "vendor": "Zhipu",
+          "preflight": {
+            "path": "docs/reports/phase1-round3-followup-2026-10-21/glm-5-2-260617-preflight.json",
+            "sha256": "147bb4906e37dc31e3806948106c4f1fa1c52115996ddd5ce9a70c8e66a768a0"
+          },
+          "actual_call": {
+            "path": "docs/reports/phase1-round3-followup-2026-10-21/glm-5-2-260617-actual-call.json",
+            "sha256": "c053d8d183eda905e5e7718323eee3a26ead1816d2e13682052e1c4f2420421a"
+          },
+          "calibration": null
+        }
+      ],
+      "preflight_pool_frozen": false,
+      "formal_execution_ready": false,
+      "missing_backups": 2,
+      "blocked_reason": "stable backup shortage and owner calibration pending",
+      "data_scope_note": "public pool covers frozen DuLeMon dual-model labels; PerLTQA original label vendor unknown, requires separate role check before any judged table",
+      "workload_estimate": {
+        "questions": 2250,
+        "groups": 4,
+        "repeats": 3,
+        "answer_calls": 27000,
+        "judge_calls": 27000,
+        "combined_calls": 54000,
+        "judge_input_tokens_estimate": 27000000,
+        "judge_output_tokens_estimate": 2700000,
+        "judge_total_tokens_estimate": 29700000
+      },
+      "withdrawn_model": "TokenHub:glm-5v-turbo; historical preflight pass retained but pre-offline, not a stable backup"
+    }
+  },
+  "judge_catalogs": {
+    "Ark": {
+      "models": 137,
+      "http_status": 200,
+      "queried_at": "2026-10-21T12:49:34.957106+00:00"
+    },
+    "TokenHub": {
+      "models": 119,
+      "http_status": 200,
+      "queried_at": "2026-10-21T12:49:36.848701+00:00"
+    }
+  },
+  "new_failed_candidates": [
+    {
+      "provider": "Ark",
+      "model": "qwen2-5-72b-20240919",
+      "calls": 1,
+      "http_statuses": [
+        404
+      ],
+      "preflight_pass": false,
+      "evidence_sha256": "25e2c1ff915c81d4c06de368675ddea415be57ff52a025ff3510ba3cb10d25bf"
+    },
+    {
+      "provider": "Ark",
+      "model": "qwen3-14b-20250429",
+      "calls": 1,
+      "http_statuses": [
+        404
+      ],
+      "preflight_pass": false,
+      "evidence_sha256": "f2fcd62de9acdfd8769695cf88be679e18571b5659213d8d3dabafe2582a6406"
+    },
+    {
+      "provider": "TokenHub",
+      "model": "glm-5.2",
+      "calls": 1,
+      "http_statuses": [
+        402
+      ],
+      "preflight_pass": false,
+      "evidence_sha256": "e459a1a3e217eb83d281e27f3c487609436d9e1e7e5888a605205588b29a47a4"
+    },
+    {
+      "provider": "TokenHub",
+      "model": "minimax-m3",
+      "calls": 1,
+      "http_statuses": [
+        402
+      ],
+      "preflight_pass": false,
+      "evidence_sha256": "f3f5d6547d6532c75651c76a8413ad2fd35acb822cc5e8bd4d8c1e20066f1420"
+    }
+  ],
+  "new_live_model_calls": 12,
+  "reported_tokens": 113949,
+  "error_response_usage_unknown": true,
+  "ecd_review_unchanged": true,
+  "protected_hashes": {
+    ".local/phase1/round3/reviews/ecd-manual-120.csv": "c5e56d41c72194d7a56327e76b5fcc6051fcb397ef2dcdf4d120e1729686fb8a",
+    ".local/phase1/round3/reviews/dulemon-native-reference/audit-blind.csv": "5a5619eba70448eae9dbaead978ef8729e3936c561274fbc77b9b811901c08a3",
+    ".local/phase1/round3/reviews/ecd-manual-120.jsonl": "392b53fd6d21d9d47f17233a08bf2f39cc11c08b4a013753ddbc3148f1501927",
+    ".local/phase1/round3/reviews/ecd-negative-local.jsonl": "34072968d613f45a0bea699f64e0204da5a476cc4a7a890fc1b33ee6eb7f568b",
+    ".local/phase1/round3/reviews/dulemon-native-reference/audit-blind.jsonl": "aa001b678ce1f122775d69411c6e815643f08c430c6cd90ff237ac69834f5eb7"
+  },
+  "validation": {
+    "pytest_passed": 362,
+    "seconds": 17.65,
+    "ruff": "passed",
+    "strict_mypy": "passed",
+    "foundation": "8/8; tenant_leaks=0; deleted_memory_hits=0",
+    "log_sha256": "7b13ad440b0f135a07cd0dc6eefd2627bb1202c51f34184e1c4ba320124f52ba"
+  },
+  "inherited_retrieval_report": "docs/reports/phase1-round3-closeout-2026-10-21/report.json",
+  "remaining": [
+    "real Chinese gold below target; proposed recovery not approved",
+    "stable judge backup shortage",
+    "judge owner calibration pending",
+    "hardset full independent model annotation and owner audit pending",
+    "query replacement awaiting owner confirmation",
+    "ECD deferred; no human labels inferred"
+  ]
+}

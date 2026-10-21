@@ -1,0 +1,65 @@
+{
+  "table_kind": "public-chinese",
+  "roles": {
+    "answer_vendor": "ByteDance",
+    "annotation_vendors": [
+      "DeepSeek",
+      "Xiaomi"
+    ],
+    "annotation_models": [
+      "deepseek-v4-pro",
+      "mimo-v2.6-flash"
+    ]
+  },
+  "policy_path": "docs/evals/phase1-round3-policy-v3.json",
+  "policy_sha256": "4eaf1e3885dfd845bbf1b46cd41e32a319ece74e23f9a25245cdde7e3e4d1e49",
+  "judge_prompt_sha256": "30772f880cf2eefe3a53aa728a245597a651821d31a9a749f65c1683120ebb8e",
+  "selection": "passed preflight and successful actual calls; explicit preference; no quota ranking",
+  "candidates": [
+    {
+      "model": "glm-5-2-260617",
+      "provider": "Ark",
+      "vendor": "Zhipu",
+      "preflight": {
+        "path": "docs/reports/phase1-round3-followup-2026-10-21/glm-5-2-260617-preflight.json",
+        "sha256": "147bb4906e37dc31e3806948106c4f1fa1c52115996ddd5ce9a70c8e66a768a0"
+      },
+      "actual_call": {
+        "path": "docs/reports/phase1-round3-followup-2026-10-21/glm-5-2-260617-actual-call.json",
+        "sha256": "c053d8d183eda905e5e7718323eee3a26ead1816d2e13682052e1c4f2420421a"
+      },
+      "calibration": null
+    },
+    {
+      "model": "hy4-preview",
+      "provider": "TokenHub",
+      "vendor": "Tencent",
+      "preflight": {
+        "path": "docs/reports/phase1-round3-followup-2026-10-21/hy4-preview-preflight.json",
+        "sha256": "3cfda70885e6ac8c905a096beeb446faa3a1cd33e8e7712485e864871db91674"
+      },
+      "actual_call": {
+        "path": "docs/reports/phase1-round3-followup-2026-10-21/hy4-preview-actual-call.json",
+        "sha256": "23c6df7e7d0085754c74d46a40e4a6ba2df95f9521c616747a3b88b951ee4d6a"
+      },
+      "calibration": null
+    }
+  ],
+  "preflight_pool_frozen": false,
+  "formal_execution_ready": false,
+  "missing_backups": 1,
+  "blocked_reason": "stable backup shortage and owner calibration pending",
+  "data_scope_note": "public pool covers frozen DuLeMon dual-model labels; PerLTQA original label vendor unknown, requires separate role check before any judged table",
+  "workload_estimate": {
+    "questions": 2250,
+    "groups": 4,
+    "repeats": 3,
+    "answer_calls": 27000,
+    "judge_calls": 27000,
+    "combined_calls": 54000,
+    "judge_input_tokens_estimate": 27000000,
+    "judge_output_tokens_estimate": 2700000,
+    "judge_total_tokens_estimate": 29700000
+  },
+  "withdrawn_model": "TokenHub:glm-5v-turbo; historical preflight pass retained but pre-offline, not a stable backup"
+}

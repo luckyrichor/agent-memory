@@ -1,0 +1,23 @@
+{
+  "approved": false,
+  "activated": false,
+  "status": "流程验证，不作质量证据",
+  "queries": 2250,
+  "replaced": 750,
+  "categories": {
+    "abstention": 250,
+    "preference": 250,
+    "single-session": 1000,
+    "knowledge-update": 250,
+    "multi-session": 250,
+    "temporal-reasoning": 250
+  },
+  "unchanged_other_queries": 1500,
+  "split_note": "new proposal inherits original other-source and independent hard-set conversation splits; this is not the frozen test set",
+  "frozen_queries_sha256": "a324460eee9248d1a0c271b20353cdd0fc58e64a527519267f92db129df55fd5",
+  "files": {
+    "contexts.jsonl": "76966e16e8053ec7902e4fd2d2c503f06983a06628309175b4a5b2f3add107af",
+    "queries.jsonl": "a7a25b616c495988b2921f1d5981df4a1bc9d13c708c60452077020570dfb32a",
+    "split.json": "8bbbc1cef886db241e3c06b8582de3d408617b632f75b933864769dff8940437"
+  }
+}

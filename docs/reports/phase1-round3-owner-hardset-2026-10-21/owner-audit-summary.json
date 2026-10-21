@@ -1,0 +1,22 @@
+{
+  "frozen_reference_agreement": 0.2484076433121019,
+  "matches": 39,
+  "audit_count": 157,
+  "frozen_sample_count": 230,
+  "unchecked_count": 73,
+  "full_sample_agreement_lower": 0.16956521739130434,
+  "full_sample_agreement_upper": 0.48695652173913045,
+  "bounds_interpretation": "deterministic bounds, not a confidence interval",
+  "human_confirmed_conversations": 130,
+  "coverage": 0.6826086956521739,
+  "sampling_limitation": "partial owner review; no assumption unchecked rows are representative",
+  "human_provenance": "owner-supplied file and reviewer assertion; never infer from Agent labels",
+  "threshold": 0.95,
+  "native_reference_accepted": false,
+  "gold_basis": "human-confirmed-subset-only",
+  "usable_positive_memory_points": 22,
+  "human_positive_memory_points": 22,
+  "submitted_sha256": "51ca7e40e56f0e43b7129bb97fa8a384a64faf9bcc4a5fd5f4a7b03c246dbc79",
+  "references_sha256": "bca6750b676484832d5cff4dae3ff34dbd8fb53f3ebe995c9ba7861eb470d300",
+  "phase_gate_passed": false
+}

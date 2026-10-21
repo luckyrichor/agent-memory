@@ -1,0 +1,57 @@
+{
+  "catalogs": {
+    "Ark": {
+      "models": 137,
+      "http_status": 200,
+      "queried_at": "2026-10-21T12:49:34.957106+00:00"
+    },
+    "TokenHub": {
+      "models": 119,
+      "http_status": 200,
+      "queried_at": "2026-10-21T12:49:36.848701+00:00"
+    }
+  },
+  "failed": [
+    {
+      "provider": "Ark",
+      "model": "qwen2-5-72b-20240919",
+      "calls": 1,
+      "http_statuses": [
+        404
+      ],
+      "preflight_pass": false,
+      "evidence_sha256": "25e2c1ff915c81d4c06de368675ddea415be57ff52a025ff3510ba3cb10d25bf"
+    },
+    {
+      "provider": "Ark",
+      "model": "qwen3-14b-20250429",
+      "calls": 1,
+      "http_statuses": [
+        404
+      ],
+      "preflight_pass": false,
+      "evidence_sha256": "f2fcd62de9acdfd8769695cf88be679e18571b5659213d8d3dabafe2582a6406"
+    },
+    {
+      "provider": "TokenHub",
+      "model": "glm-5.2",
+      "calls": 1,
+      "http_statuses": [
+        402
+      ],
+      "preflight_pass": false,
+      "evidence_sha256": "e459a1a3e217eb83d281e27f3c487609436d9e1e7e5888a605205588b29a47a4"
+    },
+    {
+      "provider": "TokenHub",
+      "model": "minimax-m3",
+      "calls": 1,
+      "http_statuses": [
+        402
+      ],
+      "preflight_pass": false,
+      "evidence_sha256": "f3f5d6547d6532c75651c76a8413ad2fd35acb822cc5e8bd4d8c1e20066f1420"
+    }
+  ],
+  "checked_at": "2026-10-21T13:02:36.560052+00:00"
+}
