@@ -48,7 +48,13 @@ def main():
         + json.loads((local / "access-extra.json").read_text())
         + json.loads((local / "access-role.json").read_text())
     )
-    repeats = {r["model"]: r for r in json.loads((local / "judge-repeat.json").read_text())}
+    repeats = {
+        r["model"]: r
+        for r in (
+            json.loads((local / "judge-repeat.json").read_text())
+            + json.loads((local / "judge-repeat-extra.json").read_text())
+        )
+    }
     for original in records:
         row = dict(original)
         model = row["model"]
@@ -64,6 +70,8 @@ def main():
         else:
             row["remaining_free_tokens"] = None
         folders = [local / ("preflight-" + model)]
+        if model == "hunyuan-role-latest":
+            folders.append(local / "preflight-hunyuan-role-latest-full")
         if model == "glm-5v-turbo":
             folders.append(local / "preflight-glm-5v-turbo-retest")
         history = []
@@ -98,11 +106,38 @@ def main():
                 {k: r[k] for k in ("score", "reason_code", "response_model", "usage") if k in r}
                 for r in repeats[model]["records"]
             ]
+        row["vendor"] = (
+            "Zhipu"
+            if model.startswith("glm")
+            else "MiniMax"
+            if model.startswith("minimax")
+            else "StepFun"
+            if model.startswith("step")
+            else "Alibaba"
+            if model.startswith("qwen")
+            else "Tencent"
+        )
+        row["control_semantics_verified"] = model in {
+            "hy4-preview",
+            "hy3",
+            "glm-5.2",
+            "glm-5v-turbo",
+            "minimax-m3",
+        }
+        if model in {"hy-role", "hunyuan-role-latest"}:
+            row["control_limit"] = (
+                "role-tuned native non-reasoning model; official thinking capability matrix not applicable; on/off control semantics not verified, not automatically admitted under frozen criterion"
+            )
         row["qualified_for_pool"] = bool(
-            row["preflight_pass"] and row.get("judge_prompt_consistent_5")
+            row["preflight_pass"]
+            and row.get("judge_prompt_consistent_5")
+            and row["control_semantics_verified"]
         )
         report["candidates"].append(row)
     report["qualified_candidate_count"] = sum(r["qualified_for_pool"] for r in report["candidates"])
+    report["remaining_quota_ranking_status"] = (
+        "blocked: callable models do not expose numeric remaining quota"
+    )
     report["required_pool_size"] = 3
     report["missing_qualified_candidates"] = max(0, 3 - report["qualified_candidate_count"])
     report["control_exclusions"] = {
@@ -127,6 +162,7 @@ def main():
         report["chinese_gold_target"] - report["human_confirmed_chinese_gold"]
     )
     retrieval = local / "retrieval-final"
+    report["retrieval_provenance"] = json.loads((retrieval / "provenance.json").read_text())
     report["retrieval"] = {}
     for name in ("longmemeval_oracle", "locomo"):
         folder = retrieval / name
@@ -159,6 +195,9 @@ def main():
         },
         "log_sha256": file_hash(local / "check-final.log"),
     }
+    report["synthetic_failover_integration"] = json.loads(
+        (local / "failover-live-synthetic/summary.json").read_text()
+    )
     report["native_review_template_sha256"] = file_hash(
         local / "reviews/dulemon-native-reference/audit-blind.csv"
     )
@@ -169,6 +208,14 @@ def main():
         "Chinese query construction/type coverage remains unfinished; public-benchmark budget is not a complete Chinese evaluation budget",
     ]
     # Public report has only aggregate metrics, model metadata and hashes, never raw review rows.
+    report["model_controls_sources"] = [
+        "https://cloud.tencent.com/document/product/1823/132061",
+        "https://cloud.tencent.com/document/product/1823/132252",
+        "https://cloud.tencent.com/document/product/1823/131208",
+        "https://cloud.tencent.com/document/product/1823/137795",
+        "https://agent.minimax.cn/tools/m3-1-flash-preview",
+    ]
+    report["private_owner_package"] = json.loads((local / "owner-package-summary.json").read_text())
     (a.output / "report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n")
     e = report["ecd"]
     b = report["budget"]
@@ -203,10 +250,10 @@ def main():
         )
     lines += [
         "",
-        "GLM-5.2已重新实际请求，仍明确报免费包耗尽、未开启后付费，不是沿用旧402直接排除。未充值、未开启后付费。模型在线列表不等于账号有额度；成功响应和响应头也未给剩余token数。",
+        "GLM-5.2已重新实际请求，仍明确报免费包耗尽、未开启后付费，不是沿用旧402直接排除。未充值、未开启后付费。表格按探测顺序排列，并非额度排名。模型在线列表不等于账号有额度；成功响应和响应头也未给剩余token数。",
         f"合格候选 {report['qualified_candidate_count']}，要求至少 {report['required_pool_size']}；当前不能冻结“余额最多主裁判＋两个备选”，主裁判和额度排名均未定。待控制台带查询日期的余额证据及足够合格可用模型，不捏造排名或宣称额度够用。",
         "glm-5v-turbo首轮有一次60秒超时，尽管格式99/100，现有严格预检因该响应无法确认思考状态未通过；本轮保留首轮并完整复测，不静默补一条或修改门槛。Step及HY-Vision探测返回非空reasoning内容，不能仅因reasoning_tokens=0就接受；MiniMax3.1按官方限制排除。GLM5.3/Kimi不满足关闭思考/采样控制条件。",
-        "预检是开发工作区中的真实独立API请求，原始请求/响应只保留本地，具体底层权重版本未暴露时只记录response.model及调用日期。通过五次与100格式不等于裁判已完成人工校准。",
+        "hunyuan-role-latest 的完整格式/五次一致也已实测；它是特定任务调优的原生非思考角色模型，官方思考能力维度不适用，尚未核实思考开关语义，因此不自动拿它凑满第3位。hy-role已观测到超出容许上限的格式失败，提前停止，不能通过99/100。\n\n预检是开发工作区中的真实独立API请求，原始请求/响应只保留本地，具体底层权重版本未暴露时只记录response.model及调用日期。通过五次与100格式不等于裁判已完成人工校准。",
         "",
         "## 调用量与自动切换",
         "",
@@ -234,7 +281,7 @@ def main():
         "",
         "## 验证与仍未完成",
         "",
-        f"干净源码全量门：pytest {report['validation']['pytest_passed']} passed，{report['validation']['pytest_seconds']}s；ruff、mypy strict、foundation 8/8 通过。审核包二次生成逐件SHA256一致。证据/脚本与源哈希随报告归档。",
+        f"干净源码全量门：pytest {report['validation']['pytest_passed']} passed，{report['validation']['pytest_seconds']}s；ruff、mypy strict、foundation {report['validation']['foundation']['passed']}/{report['validation']['foundation']['total']} 通过。审核包二次生成逐件SHA256一致。证据/脚本与源哈希随报告归档。",
         "仍未完成：最新版方案原件核对、控制台余额证据与裁判池冻结（含至少两个备选）、230条负责人回填、裁判人工校准、中文查询与题型覆盖；合成重标仅有待确认方案。标注模型后续若需替换，必须先说明原因、等负责人确认并整批重标。",
         "",
     ]
