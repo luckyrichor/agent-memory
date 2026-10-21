@@ -124,7 +124,7 @@ def main():
     lines = [
         "# 阶段1第三轮补充：火山 Ark 裁判查询",
         "",
-        f"日期：{date}（北京时间）；Codex；来源 agent-memory@{report['source_commit'][:7]}（报告生成前含未提交修改，见JSON）。",
+        f"日期：{date}（北京时间）；Codex；来源 agent-memory@{report['source_commit'][:7]}（生成时工作区状态见JSON）。",
         "",
         "本补充更新此前“只查腾讯云”的裁判范围；原交接报告的 ECD、审核和召回结论保持原状态。阶段1仍未验收，不进入阶段2。",
         "",
