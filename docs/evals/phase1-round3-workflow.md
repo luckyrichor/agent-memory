@@ -1,3 +1,5 @@
+> 历史工作流：当前以 phase1-round3-policy-v2.json、最新版方案和[第三轮后续报告](../reports/phase1-round3-followup-2026-10-21/delivery.md)为准；余额截图/排序不再要求，人工部分回填按新口径。
+
 # 阶段1第三轮执行口径
 
 本轮用户消息是当前明确修订；仓库原方案仍是旧 ECD/旧裁判用法，已请求最新版原件，不擅自覆盖。新执行配置为 phase1-round3-policy-v1.json，历史配置及结果保留。

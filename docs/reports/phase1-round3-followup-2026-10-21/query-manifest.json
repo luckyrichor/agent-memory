@@ -1,0 +1,84 @@
+{
+  "dulemon_unsupported_schema_conversations": 24500,
+  "seed": 42,
+  "queries": 2250,
+  "conversations": 795,
+  "categories": {
+    "multi-session": 250,
+    "temporal-reasoning": 250,
+    "knowledge-update": 250,
+    "abstention": 250,
+    "preference": 250,
+    "single-session": 1000
+  },
+  "by_source": {
+    "customer-timeline-v1": 750,
+    "DuLeMon": 500,
+    "PerLTQA-zh": 1000
+  },
+  "by_source_category": {
+    "DuLeMon": {
+      "abstention": 250,
+      "preference": 250
+    },
+    "PerLTQA-zh": {
+      "single-session": 1000
+    },
+    "customer-timeline-v1": {
+      "multi-session": 250,
+      "temporal-reasoning": 250,
+      "knowledge-update": 250
+    }
+  },
+  "split_queries": {
+    "test": 1557,
+    "dev": 693
+  },
+  "real_dialogue_derived_queries": 500,
+  "public_benchmark_native_queries": 1000,
+  "constructed_timeline_queries": 750,
+  "owner_confirmed_queries": 0,
+  "query_audit_prepared": 225,
+  "query_audit_requested_now": false,
+  "scale_target_pass": true,
+  "quality_gate_pass": false,
+  "phase1_accepted": false,
+  "split_policy": "inherit existing frozen conversation splits, no reassignment",
+  "source_licenses": {
+    "DuLeMon": {
+      "url": "https://github.com/PaddlePaddle/Research/tree/master/NLP/ACL2022-DuLeMon",
+      "license": "parent repository Apache-2.0; archive has no separate license"
+    },
+    "PerLTQA-zh": {
+      "url": "https://github.com/Elvin-Yiming-Du/PerLTQA",
+      "commit": "8d9e19868e239740ef701e603ec205cd581f221b",
+      "license": "CC-BY-NC-4.0",
+      "license_url": "https://creativecommons.org/licenses/by-nc/4.0/"
+    },
+    "customer-timeline-v1": {
+      "generator": "scripts/prepare-timeline-review.py",
+      "license": "project-generated; not human dialogue"
+    }
+  },
+  "source_files": {
+    ".local/phase1/normalized-v3/dulemon-split.json": "77f79f9a3a69fe8ef7b344ada6668b77352297fbc7652ad1611f221e69412874",
+    ".local/phase1/normalized-v3/perltqa_zh-split.json": "a5c34e5ce0efc421979015cf8a58b2c67d34086673d344204ae843d07beee3e3",
+    ".local/phase1/timeline-v1/split.json": "60b0060ac2ccdf1a05f38f4c51eb85203e95a357cd93e128894c68150e8ecdf3",
+    ".local/phase1/normalized-v3/perltqa_zh.jsonl": "37cbda77157247b19b2d876332828bf8c1df6b838cb35f92b164373895eaffcc",
+    ".local/phase1/normalized-v3/dulemon.jsonl": "b63647a83749aa45f432f412984f3645b48d6d50d6377808c5ae68ad6f4bd1d0",
+    ".local/phase1/timeline-v1/corpus.jsonl": "4e6a840fece9ad3148e426b9306423c4de3cb711747e55deeeed1dc4d783e36d"
+  },
+  "files": {
+    "query-audit-blind.jsonl": "660921bb73dcb53bb02983b0f2baa09d7d0849924eeb9630d1a543d5097ec296",
+    "contexts.jsonl": "433ccef55564212564ce4b6bf036a2edb5e6fc2cd82b6bfa20a934b67f2218e0",
+    "split.json": "e59bf98ce0c5025678d8282a835202e78f938eeff1e1f10762caf536a647d30e",
+    "queries.jsonl": "a324460eee9248d1a0c271b20353cdd0fc58e64a527519267f92db129df55fd5"
+  },
+  "limitations": [
+    "PerLTQA is author-model-generated, not real human dialogue",
+    "native DuLeMon references and derived questions await owner verification",
+    "timeline queries reuse old simple construction; flow only, not quality evidence",
+    "only binary relevance available; no fabricated graded nDCG labels",
+    "no system evaluated or tuned on held-out queries in this construction step"
+  ]
+}

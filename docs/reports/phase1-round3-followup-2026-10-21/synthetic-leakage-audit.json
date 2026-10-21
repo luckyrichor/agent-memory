@@ -1,0 +1,2110 @@
+{
+  "status": "流程验证，不作质量证据",
+  "items": 1630,
+  "models_agree": 1630,
+  "label_counts": {
+    "keep": 1500,
+    "discard": 130
+  },
+  "actual_request_files": 66,
+  "request_item_coverage_by_model": {
+    "deepseek-v4-pro-ga-260813": 1630,
+    "hy4-preview": 1630
+  },
+  "explicit_answer_fields_in_user_payload": 0,
+  "raw_identifiers_exposed_requests": 0,
+  "candidate_blind_source_length_predictor_matches": 1630,
+  "content_blind_original_order_predictor_matches": 1630,
+  "source_document_count_histogram": {
+    "3": 1500,
+    "1": 130
+  },
+  "label_transitions_in_original_order": 1,
+  "label_pure_batches": 66,
+  "batches": 66,
+  "negative_source_text_variants": 1,
+  "candidate_form_count": 334,
+  "construction": "scripts/prepare-timeline-review.py directly creates five supported facts for each positive user and an unsupported tea preference for every goodbye-only negative user",
+  "conclusions": [
+    "Actual user payloads contain source documents/candidates and reversible compact IDs, not constructor answer labels, questions or timeline metadata.",
+    "Source length alone and original position alone perfectly predict both model outputs; batches are class-pure. Explicit field leakage was not found, but structural/order shortcuts exist.",
+    "Generator directly determines support labels, positive wording is explicit and negative conversations are identical. This task is too simple to establish real annotation quality.",
+    "Offline diagnostics demonstrate confounding, not proof that either model actually used a particular shortcut. No randomized counterfactual model experiment was run."
+  ],
+  "proposed_next_campaign_not_executed": [
+    "Version a new corpus with hard attribution, transient statements, uncertain inference, corrections, quoted third-person facts, paraphrases, balanced within each length/session-count stratum.",
+    "Randomize candidates and opaque identifiers per model; hide constructor metadata and keep truth in a separate private file.",
+    "Compare original/shuffled/masked-metadata and semantic counterfactual samples; add independent owner audit before making quality claims.",
+    "Require owner approval for any annotator replacement and keep entire new batch separate; do not alter current frozen split or labels."
+  ],
+  "input_sha256": "98b50d7f29c8955b7df1d5f0947773e39007c1ffb2bc88a9d7bcc9cc279ed1ae",
+  "generator_sha256": "ee6aaba14b96cd4ec9cca65e50d554e88cd365a3320e074d8448433e1918c81e",
+  "annotation_prompt_sha256": "a91e974ed3cdeb854f6931b447155547b8f80d895f94df5b9f15f7b4de8b92f6",
+  "requests": [
+    {
+      "file": "03e644cda16430793ca2fc8cbab70c468f947fe386d08d685445a23b5eaedeb3.json",
+      "sha256": "ef8a71a42daee2a476cd67adeb42e55186fe0713e3a758f96e977f76f89c18ce",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "0923db47dc782e16df5f45d689e10160d25b4a0f51fea599ed3b7026bb262f66.json",
+      "sha256": "afdd87a8bff2971f9dde7b670e434f6d42159c6647d9017608146d4e1a1ef8f3",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "09d504bbc553e7b961ff4be7d48d08950542ce9b683de0c35d0ea1bdd4e48eb1.json",
+      "sha256": "7ba2825050241a0304d5e110a4bcd12e0ac41afed67e6caa9f6e2969b8c52bb3",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "0f0812b748869b3036e8ba0aa0b5d7df64f181cc75ec6985908540054452ac73.json",
+      "sha256": "fec21584279a876c523d1c3d3ac2bb8254b693dbd9620f84a08ae4150e13d0a1",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "173d3e5748ec190d59ae8b8f2c21653fdc586f4e1fb58cf6f879d5ddffcba7a8.json",
+      "sha256": "74fefcc0052c738fb4654d8e978eeca0bfe9b4c010536c141d95fca18d26aad0",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "19384f5eaa2a8e03df166cb7eda4d77930db101f6727a3d5c1443b1ee22d26f2.json",
+      "sha256": "1906652ad189dac74d94c45d6b55f48c3582339344f74b78042c49e0e1799841",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "1aae518628cf031c5b5268cd1eef53064bfbab0e0adacffa90ea46db087813d5.json",
+      "sha256": "238f969114e57ae4251d138a5fec8f8513e69ad45ec9668261d42d2254ea1916",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "1aed38da93545206a8e573daf36c0e5360aa07617c05c96ee4f3816abeb51527.json",
+      "sha256": "713b47840e0e46c83a39285e90cc5ee60d709f8eeebb5ef9cc466a7f57a4a6de",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "1b05244d0e9c32eae4f46b97c0fa269c891adaaf78251e4c5b08d7b630a4205d.json",
+      "sha256": "05ce9eaccc72ce57c9f4d37100b877a13ef80bffae081a364350f0b79f7a5253",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "24f85285a5f541a3e7d4735a029fc37dfaaaefd34035daa653f6e663bdabfbe7.json",
+      "sha256": "b1c8d0a2f02e283f2cda71207736d756df0f07b06873e51d950f200ebf561ec9",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "28dc952223b6242c58a55eee7cbc03bfcbd8f37530532b88f61beaa14b7672db.json",
+      "sha256": "bdc9153bfb81cef83bfb5e3c8aebda03d10c28a30dd14a0d194e6317e72ae33f",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "296160b96dc7cb085e03cf83e04e9b0961e5b89f1f810d6778671d02509c6bf8.json",
+      "sha256": "652e2a79874c130eaba48c0994d02eb26e3347b38cd4e01f68d2f50e661e4a8f",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "3186d66b33b0beefc3e9bcd55190b00cc87599a6f95c0b818d26169579794bd9.json",
+      "sha256": "f8ab0708659a88757b0833018ecfe5e3bda6d5f92af003c2104b65d596d1a78b",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "31f02aa00b88b352eb1dec65fc1d4e47e9bdc5be5c86c6a182eb7f6cf90ff96d.json",
+      "sha256": "de3568b05ccbadc4208f7e5de23819eea302fb4df5987556c34710eeb9f05db4",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "36b8e33c35c304f65fa23dc53eb46d5f9417022565ac9799a15e9c66158b084c.json",
+      "sha256": "e8599431c60748ffba7cac6cac5ecd4ef4cae4e17e0ff86ee3491df5a2413490",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "3b766da1cc48538029d2e6ec910936470ed226702e59342de38b984607900700.json",
+      "sha256": "8e9e1698c8b661f10d3843e327d2c7d2ef9706c2cec7d6c91563db5340550931",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "3ba5b47bf68ba798223dcfe6cdc194c4581f500daa1a7e020f800b3b9027badf.json",
+      "sha256": "5eecfb2b4620de9ef7c3c0e5717316007bc28114c7d7df7b2134b37e55ce52d1",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "46c5d9f92e78c4127991500d88fde3b867fd4dc5381ef20c1dd206e3a0233222.json",
+      "sha256": "e7a233cf5132885794a2b457e0e73cc3dc04bfc47067dff33781de16388502bc",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "46f3ec6bf64bc181bf24603f12d5ee41518782cb947cd33fc8a0207f47550875.json",
+      "sha256": "57acd849d9f94874f6fbdb966f74487a8fca8a902539a5217c58b793868efaf1",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "4823805ae531f7715b39c4c37f9f10f21175ea38dc3822576fcb07c2195d1e86.json",
+      "sha256": "ee4d7dd1d798ce392746e4910935f7f5ec92887d0e7dc30d6142cbd1ad42f93a",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "516431ca23741c87c8ac24b00a09ed1830898c425f8bd8e63233ee2f28e5d0ef.json",
+      "sha256": "641178a043aba275d75107be228e6bbe8e392154e2bcff1e0a857f27dffe07c9",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "5627153aeaf0fdbae8d7780e1e5193f80b35a0dfc3be7df9ca4503a4289a880f.json",
+      "sha256": "984b0ca388dc94f767e1f7c1d0b1278dcbc8014d77cfcbcf86f5dfd1b60294dd",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "5a0fca8739464895650cdf0c3a90a9c700ed69bf497d52ccca4da9fa25194841.json",
+      "sha256": "26f3c961300aec5c14334f18b3266bbdd13554b76d2a96d26ace1cc379622285",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "60654ea5fded9137870992e2ffdc568d827af77a5005bb0160f23711b11bf005.json",
+      "sha256": "d0163d8aad7dfe40458b1c6e7a905d7e6672bcfa192b82ad8a0ad0a2363e7da2",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "617878e1f00370fb349edc81f338dc963f364b2eec59d3ae9a3540d48416a8dd.json",
+      "sha256": "f09ec8c9f7625637ae2f4c60541f89f8098a6fcd0e8c143ccc6fa1f54d6f765e",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "61bacdde2c20ef70b4f21754e126b475631693f4be3e85300664726061a3f4da.json",
+      "sha256": "ed0a2b99cad679e2771dada4244c17442f73477308334127a7b12111726cc0ca",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "69dfe1f46f957765dd4b68acd37d316713d7119ee6ddef21d848f74165880e5d.json",
+      "sha256": "2a827931633aab197a685c38ab615aa7f1e45ff362d9a2be139e129aa4e5e107",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "6b64b31dc8592c57efdfaa6024ef32b41a27875752c10d736bd017ff537cd86b.json",
+      "sha256": "3def2e884ac67eeb92c10eb3ec4b5028cb6b7dcb00c426a44da6602cf80c601c",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "6f691a66322dd6aba192b31baabbc9a9e41df6b08fcf1898e031f50b9034460c.json",
+      "sha256": "23afe8a2d18120d293f4cc7195f6845214042e43082537b2a46a48deb0188b9c",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "7180e80d7e47b64861b86a47b18c858c34bf9904bc2c305a681d97f8904087bf.json",
+      "sha256": "b6911576fec81fdf2dca4558d526f96a6d5f30f29b3e42196f2605b2332855c4",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "71c84b0e8e1c527b97b2545593801f2e97b4e156b23521eff7b1d934619cdd8b.json",
+      "sha256": "e563c2f976accef79ac5993231740e84cd7f4a9a6b3f0383f06a55e2fc9f14bb",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "75486c387183d29875a2653174df7866a7120ea1aaa82749e72925f6c893e691.json",
+      "sha256": "2808790aacfdaaafea5749cb5c428c36645458048fc1b50360622e755f8dddaf",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "77102dcaa849451f439d96f78f03a79218256597b8c79ab71bdcf73a4cc33ad5.json",
+      "sha256": "43c953e10507ab60065bbd0156354b0845e9141f46f09180668e3273fb630a41",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "7aacc69345e147d376c4bb117e9ba0f554a62e65ce383b6dc484f5463df8e572.json",
+      "sha256": "b137799d35a87abc5ca1da0db84b85d0fc35cb11c4fd024ecb974a3671e738a5",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "7b285297af791ad59a51ef4e17d090e8f133a1971831b9578adc99535c14e31d.json",
+      "sha256": "4f43a1713cdd17dcfa3bd07ae38a6ba0257d04acfc39fd555f3540f2ff66b044",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "7bf30c9136737092af108f573b4053679e76e060809eabbdbc3d50b09f8b5e33.json",
+      "sha256": "283f2778be7af173ac47683c514ca3406acb5101ddf8ee519c31192bb4fa6f94",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "7e6e1c39b091808d42c969fb4bc9401193c4351a7f681673b2be87ccbe103d69.json",
+      "sha256": "5fd34bf22ded839f395c325f9ad51f0e06504d16a221d7300c076f42c5e25dbc",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "86b57b0cbdf7f0204bbfce347ddb49910221506c5c3023dfbb4e5f674ac8720c.json",
+      "sha256": "979f5aee68722665b0918c64510b4545460395c9e40aa8598ad472e203ee7eb5",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "8714010e41c2504b1541956b31aee3f624cb5fabb1ff4d5de0c43d2a89d43953.json",
+      "sha256": "2a0cb163659f8ab89988dbbc6507e809a6f9c7c9dc1ac24ff72265c0eca64e30",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 30,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "95c1d84a200589543f332eb37bcf5ae340de7a2b1e11c321fe140dd2cd693cf3.json",
+      "sha256": "12ea7fd3a10cbbcaab7f0c3f8ed9e6554ce410674cd30b57683298b8260094b2",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "96fd19a593a831a0aabccc1a32fb81972723f739ff0fb9dfa4650453e01d7164.json",
+      "sha256": "222d47ef1ff5bef8721041c89ddce20f37acea5efd1b13c0a3c0f349bf85cce3",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "97d24c4fb51d38146a75f2f370897c1dd82baeb881441e4bead81047f66ef978.json",
+      "sha256": "d1644e75f7b00d78327566b1826fe5180ed57b230fa612c39b23241ad3f8ad24",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "99a42c5744098a31327decbfac20dd686493fc8ae3b5b6fbf302025598067ce6.json",
+      "sha256": "c63a51a65848201ca78c87fb320258eb40cc724ee4758e83f5a25292641837a2",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "9a90cffe399169bbd480dda54e11b95e01219768f543ccb5216712e819e9425e.json",
+      "sha256": "e81f2010da87efa72006ee280693a5ef761518bb0d465f559776628165f0ba7d",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "a02ab69c7167b0a2bef65a9678d051c158151a27bf3d9967e9326f78cc1ac37d.json",
+      "sha256": "a2cd0fc361d0bc0dfa65b4a8951b28d1ac64e77c6025d194dc0ba6ab14db7060",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "a2fbc8acaceb3a16ba240b5e937ca4c4a7794aa7c081989f50401df2d13f4b56.json",
+      "sha256": "5b46572b6e2f715efe997ef4b46f566f4771dbecf17dbd0c3cc2ae220aba43ed",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "a6b7af6767c639650d23611fb5f57be091b1a0fbe9716044a29720fdfb15a109.json",
+      "sha256": "d74c747abc8c9e832edb3c0de6bf81b85d5b642d079fe9addb5a694c9a7dc4e0",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "aa091560d9cf48258d4dfa8d3f4631a91a7fbb5d6084bec83963f131888e6c2e.json",
+      "sha256": "421623bed702f057c3e3f4db102c423fd4ace34576879bf77bf46274bb3be7d5",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "aacf9e32644a35492e04548fd28bb3d1e45b82273a25cd7beb0fdd69735153dd.json",
+      "sha256": "443e6905e5c4be44ca1c8499c81c9be5154487ba6b2453de8f3b16fd26bb7fdb",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "adcdd1e2820353d0cb8191eb0350b0d7eea42629aacca215943bac397c43513a.json",
+      "sha256": "97bb9de71b6372c628e5f5697f438fae7114c54ff1a61cabb6021cccf7778545",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "b5528e8b148da624666cb440b9151995df64fa49b59e5efbd906b0b109ebb8aa.json",
+      "sha256": "e89e9f8688320b535b1b702369c59380b15e518716f1db0c99f19de88b8494ef",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "bd2157864df86c4eeb4022d4512ff549e083b01b15f2c9292d4c0569471fb263.json",
+      "sha256": "2f24f43392be207414bb30455f89d7d458e54b1188df6b1774513fb9ba1d068b",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "bfe823137037805216c569f4eb66156e5002dcfe4a4242191fae0382c281a4b6.json",
+      "sha256": "e9dde0534156cf976e758c6a102ecba8f40cd00ccbda5ef6bbb282998c9cff4c",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "c860d44017623c82c2d1f3b6b175c7ffc9e1445f8af5a0ab261043d80aa0454a.json",
+      "sha256": "8a6bf33118a6d25b2577d0a03df868eab46dae4f6bc181b7cc06ea5f0321411b",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "cd52bd0f0a83920f774269acf06977867e871ae88aaf349d9a65b1f3f6d3005e.json",
+      "sha256": "dcac3bb65f536a7a20626990b2371121da1d72ba01066d578284b4095920198b",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "ceca5bfe31c855c95c216fc1c99660feac279358b522d6512cf4377cd8fca298.json",
+      "sha256": "937ea739471cfe6da351056b52af32a7ca0dc8718ecf8919bd3ac46274c4fa9d",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "d5b365b39d1e6677d5dc8283c7f827fdd0ada995d49f656a16257afae68b1942.json",
+      "sha256": "47f9432a109766fe71b364dab501f824bde13a204205aabfad5af0026c1318d0",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "dc3e1191d8fefdfd09e103b37af6c9dc3940f21979b3fe1e207eddfa9d061141.json",
+      "sha256": "0dead4d13f4fa56dcb415f364a669f04dcdc783634e80ef790e64b89d8b8493b",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "e7ff279bc23be9b8e9ffa1c1ce64da2f1be5b127c9d638daf647300ca8854e99.json",
+      "sha256": "ab483ce184e4faa646266478adb87c05a854fad09c8ae62d1a74fc49a70acb4a",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "ee296e4cdb0b2ceec115f2157c434efd890cb95d2fb8e3bc6cd460acab7aeda9.json",
+      "sha256": "4607de2b3113675f633f80bda74da8d8674ac41dfe3189180c5c3b95eb51cc21",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 30,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "ef32da4bb78dbcc14aac66531e765a647487faace44904c39d98340a5ec60f21.json",
+      "sha256": "04fb1a50b9bceb7bd3de56f2863967d12219c66b4b22d6e114cc66b72bf0abb7",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "f0b07a5e78a7eb0224558beee29f52267d971f97eab0397ae0e0411e9f271211.json",
+      "sha256": "821840527bdf4e330cfdc8f0149a02b2179f81e126631d478618de0056e55341",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "f27f20c8f43673196103d4cf2deb0b3a3b26d634bbfca8525d87cee3b25bb578.json",
+      "sha256": "ddb4c1e1ece0524e566b733c90884201bbf605ea6b713e753459b406b2bcea34",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "f29a19a2e7c18ab598cfb4067156ebee61314df8459740c80e168dae7fa0b077.json",
+      "sha256": "d9a7877dfec3187649a4fd5237da95fb75b25567f1e841397fa490e4f15b25c0",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "f55613d9fe22a98980ccefc16213a5d9f0c35d778481a3122fd44ab5f20af73a.json",
+      "sha256": "b0a2999b853db1fa47c33b152cf7d4d5af26e32d3eefa0dff8686257d9f1e98d",
+      "model": "hy4-preview",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    },
+    {
+      "file": "ffe999ebb48dc652f64798b680684761331b9124f17a27a5a6b1d6d75ddedc6b.json",
+      "sha256": "e0da5efd320f4e0a3a66f60c8b46592834887520b629a66e6a972fe307a5a22e",
+      "model": "deepseek-v4-pro-ga-260813",
+      "forbidden_answer_field_paths": [],
+      "item_count": 50,
+      "temperature": 0,
+      "thinking": {
+        "type": "disabled"
+      },
+      "top_level_keys": [
+        "identity_context_sha256",
+        "items",
+        "sources"
+      ],
+      "item_keys": [
+        "candidate",
+        "conversation_id",
+        "item_id",
+        "source_ref",
+        "subject"
+      ],
+      "source_document_keys": [
+        "occurred_at",
+        "role",
+        "session_id",
+        "source_id",
+        "text"
+      ],
+      "raw_ids_exposed": false
+    }
+  ],
+  "calls_in_this_audit": 0,
+  "phase1_accepted": false,
+  "agreement_metrics": {
+    "n": 1630,
+    "agreement": 1.0,
+    "kappa": 1.0,
+    "matrix": [
+      {
+        "left": "discard",
+        "right": "discard",
+        "n": 130
+      },
+      {
+        "left": "keep",
+        "right": "keep",
+        "n": 1500
+      }
+    ]
+  }
+}

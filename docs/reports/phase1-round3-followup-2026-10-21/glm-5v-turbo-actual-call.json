@@ -1,0 +1,59 @@
+{
+  "model": "glm-5v-turbo",
+  "provider": "TokenHub",
+  "vendor": "Zhipu",
+  "at": "2026-10-21T08:41:56.683112+00:00",
+  "calls": [
+    {
+      "valid": true,
+      "score": true,
+      "version": "glm-5v-turbo",
+      "usage": {
+        "prompt_tokens": 154,
+        "completion_tokens": 21,
+        "total_tokens": 175
+      }
+    },
+    {
+      "valid": true,
+      "score": true,
+      "version": "glm-5v-turbo",
+      "usage": {
+        "prompt_tokens": 154,
+        "completion_tokens": 21,
+        "total_tokens": 175
+      }
+    },
+    {
+      "valid": true,
+      "score": true,
+      "version": "glm-5v-turbo",
+      "usage": {
+        "prompt_tokens": 154,
+        "completion_tokens": 21,
+        "total_tokens": 175
+      }
+    },
+    {
+      "valid": true,
+      "score": true,
+      "version": "glm-5v-turbo",
+      "usage": {
+        "prompt_tokens": 154,
+        "completion_tokens": 21,
+        "total_tokens": 175
+      }
+    },
+    {
+      "valid": true,
+      "score": true,
+      "version": "glm-5v-turbo",
+      "usage": {
+        "prompt_tokens": 154,
+        "completion_tokens": 21,
+        "total_tokens": 175
+      }
+    }
+  ],
+  "pass": true
+}

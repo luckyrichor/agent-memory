@@ -1,0 +1,481 @@
+{
+  "date_beijing": "2026-10-21",
+  "generated_at": "2026-10-21T08:55:57.844414+00:00",
+  "source_commit": "6dd38091f709dd552a7b73c2113f23e8baa7de8a",
+  "source_working_tree_modified": false,
+  "phase1_accepted": false,
+  "phase2_started": false,
+  "plan": {
+    "new": {
+      "path": "docs/plans/2026-10-21-agent-memory-interview-plan.md",
+      "sha256": "a199f472d908a603df158e2452ce8b58ef36210e8ff9a308273327e41b5d299d"
+    },
+    "old": {
+      "path": "docs/agent-memory面试级完善方案.md",
+      "sha256": "9cb312cd94e11eeaf9ca6b816f4a15b37d061d22986eba8263cf4160dbe73d2e"
+    },
+    "original_author_preserved": true,
+    "changed_blocks": 7,
+    "source_filename": "agent-memory 面试级完善方案.md"
+  },
+  "queries": {
+    "dulemon_unsupported_schema_conversations": 24500,
+    "seed": 42,
+    "queries": 2250,
+    "conversations": 795,
+    "categories": {
+      "multi-session": 250,
+      "temporal-reasoning": 250,
+      "knowledge-update": 250,
+      "abstention": 250,
+      "preference": 250,
+      "single-session": 1000
+    },
+    "by_source": {
+      "customer-timeline-v1": 750,
+      "DuLeMon": 500,
+      "PerLTQA-zh": 1000
+    },
+    "by_source_category": {
+      "DuLeMon": {
+        "abstention": 250,
+        "preference": 250
+      },
+      "PerLTQA-zh": {
+        "single-session": 1000
+      },
+      "customer-timeline-v1": {
+        "multi-session": 250,
+        "temporal-reasoning": 250,
+        "knowledge-update": 250
+      }
+    },
+    "split_queries": {
+      "test": 1557,
+      "dev": 693
+    },
+    "real_dialogue_derived_queries": 500,
+    "public_benchmark_native_queries": 1000,
+    "constructed_timeline_queries": 750,
+    "owner_confirmed_queries": 0,
+    "query_audit_prepared": 225,
+    "query_audit_requested_now": false,
+    "scale_target_pass": true,
+    "quality_gate_pass": false,
+    "phase1_accepted": false,
+    "split_policy": "inherit existing frozen conversation splits, no reassignment",
+    "source_licenses": {
+      "DuLeMon": {
+        "url": "https://github.com/PaddlePaddle/Research/tree/master/NLP/ACL2022-DuLeMon",
+        "license": "parent repository Apache-2.0; archive has no separate license"
+      },
+      "PerLTQA-zh": {
+        "url": "https://github.com/Elvin-Yiming-Du/PerLTQA",
+        "commit": "8d9e19868e239740ef701e603ec205cd581f221b",
+        "license": "CC-BY-NC-4.0",
+        "license_url": "https://creativecommons.org/licenses/by-nc/4.0/"
+      },
+      "customer-timeline-v1": {
+        "generator": "scripts/prepare-timeline-review.py",
+        "license": "project-generated; not human dialogue"
+      }
+    },
+    "source_files": {
+      ".local/phase1/normalized-v3/dulemon-split.json": "77f79f9a3a69fe8ef7b344ada6668b77352297fbc7652ad1611f221e69412874",
+      ".local/phase1/normalized-v3/perltqa_zh-split.json": "a5c34e5ce0efc421979015cf8a58b2c67d34086673d344204ae843d07beee3e3",
+      ".local/phase1/timeline-v1/split.json": "60b0060ac2ccdf1a05f38f4c51eb85203e95a357cd93e128894c68150e8ecdf3",
+      ".local/phase1/normalized-v3/perltqa_zh.jsonl": "37cbda77157247b19b2d876332828bf8c1df6b838cb35f92b164373895eaffcc",
+      ".local/phase1/normalized-v3/dulemon.jsonl": "b63647a83749aa45f432f412984f3645b48d6d50d6377808c5ae68ad6f4bd1d0",
+      ".local/phase1/timeline-v1/corpus.jsonl": "4e6a840fece9ad3148e426b9306423c4de3cb711747e55deeeed1dc4d783e36d"
+    },
+    "files": {
+      "query-audit-blind.jsonl": "660921bb73dcb53bb02983b0f2baa09d7d0849924eeb9630d1a543d5097ec296",
+      "contexts.jsonl": "433ccef55564212564ce4b6bf036a2edb5e6fc2cd82b6bfa20a934b67f2218e0",
+      "split.json": "e59bf98ce0c5025678d8282a835202e78f938eeff1e1f10762caf536a647d30e",
+      "queries.jsonl": "a324460eee9248d1a0c271b20353cdd0fc58e64a527519267f92db129df55fd5"
+    },
+    "limitations": [
+      "PerLTQA is author-model-generated, not real human dialogue",
+      "native DuLeMon references and derived questions await owner verification",
+      "timeline queries reuse old simple construction; flow only, not quality evidence",
+      "only binary relevance available; no fabricated graded nDCG labels",
+      "no system evaluated or tuned on held-out queries in this construction step"
+    ]
+  },
+  "synthetic_audit": {
+    "status": "流程验证，不作质量证据",
+    "items": 1630,
+    "models_agree": 1630,
+    "label_counts": {
+      "keep": 1500,
+      "discard": 130
+    },
+    "actual_request_files": 66,
+    "request_item_coverage_by_model": {
+      "deepseek-v4-pro-ga-260813": 1630,
+      "hy4-preview": 1630
+    },
+    "explicit_answer_fields_in_user_payload": 0,
+    "raw_identifiers_exposed_requests": 0,
+    "candidate_blind_source_length_predictor_matches": 1630,
+    "content_blind_original_order_predictor_matches": 1630,
+    "source_document_count_histogram": {
+      "3": 1500,
+      "1": 130
+    },
+    "label_transitions_in_original_order": 1,
+    "label_pure_batches": 66,
+    "batches": 66,
+    "negative_source_text_variants": 1,
+    "candidate_form_count": 334,
+    "construction": "scripts/prepare-timeline-review.py directly creates five supported facts for each positive user and an unsupported tea preference for every goodbye-only negative user",
+    "conclusions": [
+      "Actual user payloads contain source documents/candidates and reversible compact IDs, not constructor answer labels, questions or timeline metadata.",
+      "Source length alone and original position alone perfectly predict both model outputs; batches are class-pure. Explicit field leakage was not found, but structural/order shortcuts exist.",
+      "Generator directly determines support labels, positive wording is explicit and negative conversations are identical. This task is too simple to establish real annotation quality.",
+      "Offline diagnostics demonstrate confounding, not proof that either model actually used a particular shortcut. No randomized counterfactual model experiment was run."
+    ],
+    "proposed_next_campaign_not_executed": [
+      "Version a new corpus with hard attribution, transient statements, uncertain inference, corrections, quoted third-person facts, paraphrases, balanced within each length/session-count stratum.",
+      "Randomize candidates and opaque identifiers per model; hide constructor metadata and keep truth in a separate private file.",
+      "Compare original/shuffled/masked-metadata and semantic counterfactual samples; add independent owner audit before making quality claims.",
+      "Require owner approval for any annotator replacement and keep entire new batch separate; do not alter current frozen split or labels."
+    ],
+    "input_sha256": "98b50d7f29c8955b7df1d5f0947773e39007c1ffb2bc88a9d7bcc9cc279ed1ae",
+    "generator_sha256": "ee6aaba14b96cd4ec9cca65e50d554e88cd365a3320e074d8448433e1918c81e",
+    "annotation_prompt_sha256": "a91e974ed3cdeb854f6931b447155547b8f80d895f94df5b9f15f7b4de8b92f6",
+    "calls_in_this_audit": 0,
+    "phase1_accepted": false,
+    "agreement_metrics": {
+      "n": 1630,
+      "agreement": 1.0,
+      "kappa": 1.0,
+      "matrix": [
+        {
+          "left": "discard",
+          "right": "discard",
+          "n": 130
+        },
+        {
+          "left": "keep",
+          "right": "keep",
+          "n": 1500
+        }
+      ]
+    }
+  },
+  "judge_pools": {
+    "public-chinese": {
+      "table_kind": "public-chinese",
+      "roles": {
+        "answer_vendor": "ByteDance",
+        "annotation_vendors": [
+          "DeepSeek",
+          "Xiaomi"
+        ],
+        "annotation_models": [
+          "deepseek-v4-pro",
+          "mimo-v2.6-flash"
+        ]
+      },
+      "policy_path": "docs/evals/phase1-round3-policy-v2.json",
+      "policy_sha256": "522e5339a979ecf0f0afb781ffc4c09073d21ced89a74777b0eda79376d55e4c",
+      "judge_prompt_sha256": "30772f880cf2eefe3a53aa728a245597a651821d31a9a749f65c1683120ebb8e",
+      "selection": "passed preflight and successful actual calls; explicit preference; no quota ranking",
+      "candidates": [
+        {
+          "model": "glm-5-2-260617",
+          "provider": "Ark",
+          "vendor": "Zhipu",
+          "preflight": {
+            "path": "docs/reports/phase1-round3-followup-2026-10-21/glm-5-2-260617-preflight.json",
+            "sha256": "147bb4906e37dc31e3806948106c4f1fa1c52115996ddd5ce9a70c8e66a768a0"
+          },
+          "actual_call": {
+            "path": "docs/reports/phase1-round3-followup-2026-10-21/glm-5-2-260617-actual-call.json",
+            "sha256": "c053d8d183eda905e5e7718323eee3a26ead1816d2e13682052e1c4f2420421a"
+          },
+          "calibration": null
+        },
+        {
+          "model": "hy4-preview",
+          "provider": "TokenHub",
+          "vendor": "Tencent",
+          "preflight": {
+            "path": "docs/reports/phase1-round3-followup-2026-10-21/hy4-preview-preflight.json",
+            "sha256": "3cfda70885e6ac8c905a096beeb446faa3a1cd33e8e7712485e864871db91674"
+          },
+          "actual_call": {
+            "path": "docs/reports/phase1-round3-followup-2026-10-21/hy4-preview-actual-call.json",
+            "sha256": "23c6df7e7d0085754c74d46a40e4a6ba2df95f9521c616747a3b88b951ee4d6a"
+          },
+          "calibration": null
+        },
+        {
+          "model": "glm-5v-turbo",
+          "provider": "TokenHub",
+          "vendor": "Zhipu",
+          "preflight": {
+            "path": "docs/reports/phase1-round3-followup-2026-10-21/glm-5v-turbo-preflight.json",
+            "sha256": "ec88185d621f84518f36594771c3b65522c32e3f128bef5339640460f85f0ba7"
+          },
+          "actual_call": {
+            "path": "docs/reports/phase1-round3-followup-2026-10-21/glm-5v-turbo-actual-call.json",
+            "sha256": "065f2f48ddc02cd67c8341316043c59afaad9eb3d239026ce394e0965c161993"
+          },
+          "calibration": null
+        }
+      ],
+      "preflight_pool_frozen": true,
+      "formal_execution_ready": false,
+      "missing_backups": 0,
+      "blocked_reason": "human calibration pending",
+      "data_scope_note": "public pool covers frozen DuLeMon dual-model labels; PerLTQA original label vendor unknown, requires separate role check before any judged table",
+      "workload_estimate": {
+        "questions": 2250,
+        "groups": 4,
+        "repeats": 3,
+        "answer_calls": 27000,
+        "judge_calls": 27000,
+        "combined_calls": 54000,
+        "judge_input_tokens_estimate": 27000000,
+        "judge_output_tokens_estimate": 2700000,
+        "judge_total_tokens_estimate": 29700000
+      }
+    },
+    "synthetic-timeline": {
+      "table_kind": "synthetic-timeline",
+      "roles": {
+        "answer_vendor": "ByteDance",
+        "annotation_vendors": [
+          "DeepSeek",
+          "Tencent"
+        ],
+        "annotation_models": [
+          "deepseek-v4-pro-ga-260813",
+          "hy4-preview"
+        ]
+      },
+      "policy_path": "docs/evals/phase1-round3-policy-v2.json",
+      "policy_sha256": "522e5339a979ecf0f0afb781ffc4c09073d21ced89a74777b0eda79376d55e4c",
+      "judge_prompt_sha256": "30772f880cf2eefe3a53aa728a245597a651821d31a9a749f65c1683120ebb8e",
+      "selection": "passed preflight and successful actual calls; explicit preference; no quota ranking",
+      "candidates": [
+        {
+          "model": "glm-5-2-260617",
+          "provider": "Ark",
+          "vendor": "Zhipu",
+          "preflight": {
+            "path": "docs/reports/phase1-round3-followup-2026-10-21/glm-5-2-260617-preflight.json",
+            "sha256": "147bb4906e37dc31e3806948106c4f1fa1c52115996ddd5ce9a70c8e66a768a0"
+          },
+          "actual_call": {
+            "path": "docs/reports/phase1-round3-followup-2026-10-21/glm-5-2-260617-actual-call.json",
+            "sha256": "c053d8d183eda905e5e7718323eee3a26ead1816d2e13682052e1c4f2420421a"
+          },
+          "calibration": null
+        },
+        {
+          "model": "glm-5v-turbo",
+          "provider": "TokenHub",
+          "vendor": "Zhipu",
+          "preflight": {
+            "path": "docs/reports/phase1-round3-followup-2026-10-21/glm-5v-turbo-preflight.json",
+            "sha256": "ec88185d621f84518f36594771c3b65522c32e3f128bef5339640460f85f0ba7"
+          },
+          "actual_call": {
+            "path": "docs/reports/phase1-round3-followup-2026-10-21/glm-5v-turbo-actual-call.json",
+            "sha256": "065f2f48ddc02cd67c8341316043c59afaad9eb3d239026ce394e0965c161993"
+          },
+          "calibration": null
+        }
+      ],
+      "preflight_pool_frozen": false,
+      "formal_execution_ready": false,
+      "missing_backups": 1,
+      "blocked_reason": "third eligible candidate unavailable; human calibration pending",
+      "data_scope_note": "public pool covers frozen DuLeMon dual-model labels; PerLTQA original label vendor unknown, requires separate role check before any judged table",
+      "workload_estimate": {
+        "questions": 2250,
+        "groups": 4,
+        "repeats": 3,
+        "answer_calls": 27000,
+        "judge_calls": 27000,
+        "combined_calls": 54000,
+        "judge_input_tokens_estimate": 27000000,
+        "judge_output_tokens_estimate": 2700000,
+        "judge_total_tokens_estimate": 29700000
+      }
+    }
+  },
+  "new_rejected_candidates": [
+    {
+      "model": "glm-4-7-251222",
+      "provider": "Ark",
+      "calls": 1,
+      "statuses": {
+        "404": 1
+      },
+      "thinking_disabled_observed": false,
+      "preflight_pass": false,
+      "tokens": 0,
+      "reasoning_tokens": 0
+    },
+    {
+      "model": "glm-5.2",
+      "provider": "TokenHub",
+      "calls": 1,
+      "statuses": {
+        "402": 1
+      },
+      "thinking_disabled_observed": false,
+      "preflight_pass": false,
+      "tokens": 0,
+      "reasoning_tokens": 0
+    },
+    {
+      "model": "mimo-v2.6-flash",
+      "provider": "TokenHub",
+      "calls": 1,
+      "statuses": {
+        "402": 1
+      },
+      "thinking_disabled_observed": false,
+      "preflight_pass": false,
+      "tokens": 0,
+      "reasoning_tokens": 0
+    },
+    {
+      "model": "minimax-m2.7",
+      "provider": "TokenHub",
+      "calls": 1,
+      "statuses": {
+        "200": 1
+      },
+      "thinking_disabled_observed": false,
+      "preflight_pass": false,
+      "tokens": 125,
+      "reasoning_tokens": 32
+    },
+    {
+      "model": "mistral-7b-instruct-v0.2",
+      "provider": "Ark",
+      "calls": 1,
+      "statuses": {
+        "404": 1
+      },
+      "thinking_disabled_observed": false,
+      "preflight_pass": false,
+      "tokens": 0,
+      "reasoning_tokens": 0
+    }
+  ],
+  "live_calls_this_followup": 20,
+  "reported_token_usage_this_followup": 2250,
+  "unknown_usage_note": "HTTP error responses have no usage; total is reported successful-call usage only",
+  "budget": {
+    "questions": 2250,
+    "groups": 4,
+    "repeats": 3,
+    "answer_calls": 27000,
+    "judge_calls": 27000,
+    "combined_calls": 54000,
+    "judge_input_tokens_estimate": 27000000,
+    "judge_output_tokens_estimate": 2700000,
+    "judge_total_tokens_estimate": 29700000
+  },
+  "owner_audit": {
+    "template_rows": 230,
+    "new_owner_return_received": false,
+    "owner_reviewed_rows": 0,
+    "agreement": null,
+    "confirmed_real_chinese_gold_points": 0,
+    "unverified_native_positive_points": 1746,
+    "human_threshold": 0.95,
+    "policy": "score only nonblank owner rows against frozen references; below threshold human-confirmed subset only; Agent labels never inputs"
+  },
+  "protected_files": {
+    ".local/phase1/round3/reviews/ecd-manual-120.csv": "c5e56d41c72194d7a56327e76b5fcc6051fcb397ef2dcdf4d120e1729686fb8a",
+    ".local/phase1/round3/reviews/dulemon-native-reference/audit-blind.csv": "5a5619eba70448eae9dbaead978ef8729e3936c561274fbc77b9b811901c08a3",
+    ".local/phase1/round3/reviews/ecd-manual-120.jsonl": "392b53fd6d21d9d47f17233a08bf2f39cc11c08b4a013753ddbc3148f1501927",
+    ".local/phase1/round3/reviews/ecd-negative-local.jsonl": "34072968d613f45a0bea699f64e0204da5a476cc4a7a890fc1b33ee6eb7f568b",
+    ".local/phase1/round3/reviews/dulemon-native-reference/audit-blind.jsonl": "aa001b678ce1f122775d69411c6e815643f08c430c6cd90ff237ac69834f5eb7"
+  },
+  "frozen_metric_files": {
+    "docs/evals/metric-catalog.json": "d6d12679cbb14bb843c35e4fa2690852a4a2647db5a2363414640c9258e92998",
+    "docs/evals/human-review-policy-v1.json": "3bc90ff1d8ad2c498af317c4c5e1b7e8cc7c3c0ad4ab73da6bcde9caae8d7f57",
+    "src/agent_memory/evals/metrics.py": "d772a80c84cbe0f6e636631051bf04a045a8694ad2361a5f797c0c71e15b4c81"
+  },
+  "ecd_unchanged": true,
+  "ecd_manual_rows": 120,
+  "validation": {
+    "pytest_passed": 359,
+    "pytest_seconds": 18.16,
+    "ruff_pass": true,
+    "mypy_pass": true,
+    "foundation_pass": true
+  },
+  "environment": {
+    "python": "3.12.3",
+    "platform": "Linux-6.8.0-139-generic-x86_64-with-glibc2.39"
+  },
+  "cross_provider_demo": {
+    "scope": "HTTP MockTransport synthetic fault injection; no live model requests or quota ranking",
+    "http_requests": [
+      {
+        "provider": "TokenHub",
+        "model": "hy4-preview",
+        "row_id": "synthetic-0"
+      },
+      {
+        "provider": "TokenHub",
+        "model": "hy4-preview",
+        "row_id": "synthetic-1"
+      },
+      {
+        "provider": "TokenHub",
+        "model": "hy4-preview",
+        "row_id": "synthetic-2"
+      },
+      {
+        "provider": "Ark",
+        "model": "glm-5-2-260617",
+        "row_id": "synthetic-0"
+      },
+      {
+        "provider": "Ark",
+        "model": "glm-5-2-260617",
+        "row_id": "synthetic-1"
+      },
+      {
+        "provider": "Ark",
+        "model": "glm-5-2-260617",
+        "row_id": "synthetic-2"
+      }
+    ],
+    "injected_http_status": 402,
+    "live_model_calls": 0,
+    "discarded_partial_rows": 2,
+    "final_rows": 3,
+    "final_provider": "Ark",
+    "final_judge": "glm-5-2-260617",
+    "single_provider_model_version": true,
+    "whole_table_regraded": true
+  },
+  "outstanding": [
+    "synthetic judge pool lacks one preflight-qualified callable backup; not frozen as complete",
+    "all primary/backups need real owner calibration; formal runtime blocked",
+    "DuLeMon owner return not received, only actual owner-checked rows will be counted",
+    "query scale/type counts met, query/answer/relevance quality not approved; timeline portion flow-only",
+    "graded relevance not yet annotated; no fabricated graded nDCG claims",
+    "ECD manual sample remains untouched and deferred",
+    "synthetic redesign/counterfactual model experiment not executed; proposal only",
+    "phase1 unaccepted, no phase2 measurements"
+  ],
+  "prior_report": "../phase1-round3-closeout-2026-10-21/delivery.md",
+  "formal_guard": {
+    "exit_code": 2,
+    "blocked_before_live_calls": true,
+    "reason": "owner calibration missing for primary or backup"
+  }
+}

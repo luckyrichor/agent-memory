@@ -1,0 +1,17 @@
+{
+  "model": "hy4-preview",
+  "calls": 106,
+  "format_valid": 100,
+  "format_n": 100,
+  "consistent_5": true,
+  "preflight_pass": true,
+  "observed_disabled_thinking": true,
+  "sampling_control_eligible": true,
+  "latency_ms": {
+    "n": 106,
+    "p50": 2383.148904540576,
+    "p95": 3226.829555409495,
+    "p99": 3700.2937713288707
+  },
+  "http_429": 0
+}

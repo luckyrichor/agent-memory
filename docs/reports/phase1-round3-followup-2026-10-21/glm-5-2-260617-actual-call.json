@@ -1,0 +1,59 @@
+{
+  "model": "glm-5-2-260617",
+  "provider": "Ark",
+  "vendor": "Zhipu",
+  "at": "2026-10-21T08:41:37.209189+00:00",
+  "calls": [
+    {
+      "valid": true,
+      "score": true,
+      "version": "glm-5-2-260617",
+      "usage": {
+        "completion_tokens": 12,
+        "prompt_tokens": 102,
+        "total_tokens": 114
+      }
+    },
+    {
+      "valid": true,
+      "score": true,
+      "version": "glm-5-2-260617",
+      "usage": {
+        "completion_tokens": 12,
+        "prompt_tokens": 102,
+        "total_tokens": 114
+      }
+    },
+    {
+      "valid": true,
+      "score": true,
+      "version": "glm-5-2-260617",
+      "usage": {
+        "completion_tokens": 12,
+        "prompt_tokens": 102,
+        "total_tokens": 114
+      }
+    },
+    {
+      "valid": true,
+      "score": true,
+      "version": "glm-5-2-260617",
+      "usage": {
+        "completion_tokens": 12,
+        "prompt_tokens": 102,
+        "total_tokens": 114
+      }
+    },
+    {
+      "valid": true,
+      "score": true,
+      "version": "glm-5-2-260617",
+      "usage": {
+        "completion_tokens": 12,
+        "prompt_tokens": 102,
+        "total_tokens": 114
+      }
+    }
+  ],
+  "pass": true
+}

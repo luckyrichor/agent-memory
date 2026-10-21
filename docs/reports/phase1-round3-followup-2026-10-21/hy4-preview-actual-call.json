@@ -1,0 +1,59 @@
+{
+  "model": "hy4-preview",
+  "provider": "TokenHub",
+  "vendor": "Tencent",
+  "at": "2026-10-21T08:41:47.283583+00:00",
+  "calls": [
+    {
+      "valid": true,
+      "score": true,
+      "version": "hy4-preview",
+      "usage": {
+        "prompt_tokens": 122,
+        "completion_tokens": 14,
+        "total_tokens": 136
+      }
+    },
+    {
+      "valid": true,
+      "score": true,
+      "version": "hy4-preview",
+      "usage": {
+        "prompt_tokens": 122,
+        "completion_tokens": 14,
+        "total_tokens": 136
+      }
+    },
+    {
+      "valid": true,
+      "score": true,
+      "version": "hy4-preview",
+      "usage": {
+        "prompt_tokens": 122,
+        "completion_tokens": 14,
+        "total_tokens": 136
+      }
+    },
+    {
+      "valid": true,
+      "score": true,
+      "version": "hy4-preview",
+      "usage": {
+        "prompt_tokens": 122,
+        "completion_tokens": 14,
+        "total_tokens": 136
+      }
+    },
+    {
+      "valid": true,
+      "score": true,
+      "version": "hy4-preview",
+      "usage": {
+        "prompt_tokens": 122,
+        "completion_tokens": 14,
+        "total_tokens": 136
+      }
+    }
+  ],
+  "pass": true
+}
