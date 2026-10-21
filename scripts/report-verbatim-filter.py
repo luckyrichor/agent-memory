@@ -49,6 +49,7 @@ validation = {
     "log_sha256": file_hash(ROOT / "check.log"),
 }
 report = {
+    "additional_rejected_relation_trial": read(ROOT / "run-v3-probe/summary.json"),
     **r,
     "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
     "source_modified": bool(
@@ -113,6 +114,8 @@ s = [
     f"| 人工正确项保留数 | {r['offline_correct_retained']}/{r['new_keep']} | {r['offline_correct_retained'] / r['new_keep']:.2%} |",
     "**当前过滤器不合格，未声称离线验证通过。** 高错误召回不能掩盖误伤。人工标签保持，失败反映过滤器的处理能力不足，不把人工keep擅自改成discard。没有负责人批准的误伤阈值，也没有自行新增一条验收标准来凑“通过”。",
     f"本次 {r['audit_sample']} 条用于开发/调试，不能再作为该过滤器的独立通过证据。没有拿本次训练式调试的高召回当未来真实召回；这个小集合也不能证明泛化。",
+    "### 追加探索（未采纳）",
+    f"还试验过有限的亲属存在表达、爱好同义和省略主语处理：错误拦截 {report['additional_rejected_relation_trial']['offline_error_recall']['numerator']}/{report['additional_rejected_relation_trial']['offline_error_recall']['denominator']}，正确项误伤 {report['additional_rejected_relation_trial']['offline_correct_harm']['numerator']}/{report['additional_rejected_relation_trial']['offline_correct_harm']['denominator']}，未审支持项 {report['additional_rejected_relation_trial']['fresh_unreviewed_supported']}，仍不足 {report['additional_rejected_relation_trial']['fresh_sample_target']}。该探索涉及额外关系解释，既未解决误伤，也未获得可独立审核的足够池，因此未采纳；源码快照与结果留存本地。当前主线保留保守诊断版本，不启用任何版本。",
     "## 新独立盲审为什么未生成",
     f"原共同keep {r['global_joint_keep']}；累计已被人工否定 {r['owner_rejected_in_joint']} 后剩 {r['remaining_after_known_rejects']}。原型支持 {r['filter_supported']}、降级 {r['filter_uncertain']}；再排除全部已人工审核和开发样本，仅 **{r['fresh_unreviewed_supported']} 条**可作为未审支持项。",
     f"新盲审目标 {r['fresh_sample_target']}，还缺 {r['fresh_sample_deficit']}；新种子已记录为 {r['fresh_seed']}，但没有抽取/发送新表。独立性、数量和可用过滤方案的条件均未同时满足。不会复用本次已调过规则的条目、重复抽样或把不确定项装进“过滤通过池”来凑表；原八列格式与最多错误{r['maximum_errors']}条的标准保持。",
