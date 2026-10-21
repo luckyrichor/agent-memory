@@ -24,6 +24,10 @@ args = parser.parse_args()
 policy = json.loads(Path("docs/evals/phase1-round3-policy-v1.json").read_text())
 for model in (args.first_model, args.second_model):
     require_frozen_annotation_model(model, tuple(policy["annotation_models"]))
+if (args.first_model, args.second_model) != tuple(policy["annotation_models"]):
+    parser.error("exact frozen annotation pair required; changes need owner confirmation")
+if (args.first_vendor, args.second_vendor) != ("DeepSeek", "Xiaomi"):
+    parser.error("annotation vendor metadata does not match frozen models")
 DATASETS = ("dulemon",)  # ECD is no longer a double-annotation gold campaign.
 ROOT = args.root
 ROOT.mkdir(parents=True, exist_ok=True)
