@@ -43,8 +43,10 @@ def main():
         "human_confirmed_chinese_gold": 0,
         "chinese_gold_target": 1500,
     }
-    records = json.loads((local / "access.json").read_text()) + json.loads(
-        (local / "access-extra.json").read_text()
+    records = (
+        json.loads((local / "access.json").read_text())
+        + json.loads((local / "access-extra.json").read_text())
+        + json.loads((local / "access-role.json").read_text())
     )
     repeats = {r["model"]: r for r in json.loads((local / "judge-repeat.json").read_text())}
     for original in records:

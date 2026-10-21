@@ -8,17 +8,23 @@ import subprocess
 from datetime import UTC, datetime
 from pathlib import Path
 
+from agent_memory.evals.model_policy import require_frozen_annotation_model
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--root", type=Path, default=Path(".local/phase1/chinese-rotation-v1"))
-parser.add_argument("--second-model", default="glm-5.2")
-parser.add_argument("--first-model", default="deepseek-v4-pro-202606")
+parser.add_argument("--second-model", default="mimo-v2.6-flash")
+parser.add_argument("--first-model", default="deepseek-v4-pro")
 parser.add_argument("--first-vendor", default="DeepSeek")
-parser.add_argument("--second-vendor", default="Z.ai")
+parser.add_argument("--second-vendor", default="Xiaomi")
 parser.add_argument("--second-preflight", type=Path)
 parser.add_argument("--first-preflight", type=Path)
 parser.add_argument("--data-root", type=Path, default=Path(".local/phase1/chinese-expansion-v2"))
-parser.add_argument("--prompt", type=Path, default=Path("docs/evals/prompts/annotation-v4.txt"))
+parser.add_argument("--prompt", type=Path, default=Path("docs/evals/prompts/annotation-v5.txt"))
 args = parser.parse_args()
+policy = json.loads(Path("docs/evals/phase1-round3-policy-v1.json").read_text())
+for model in (args.first_model, args.second_model):
+    require_frozen_annotation_model(model, tuple(policy["annotation_models"]))
+DATASETS = ("dulemon",)  # ECD is no longer a double-annotation gold campaign.
 ROOT = args.root
 ROOT.mkdir(parents=True, exist_ok=True)
 DATA = args.data_root
@@ -103,7 +109,7 @@ async def main():
                     / ("source-frozen-split.json" if name == "dulemon" else "split.json")
                 ),
             }
-            for name in ("dulemon", "ecd")
+            for name in DATASETS
         },
         "source_files": {str(p): sha(p) for p in Path("src/agent_memory/evals").glob("*.py")},
         "note": "New pair only, full datasets; old partial annotations never merged. Native references are not filtered by model votes. No human answers generated.",
@@ -155,7 +161,7 @@ async def main():
         return result
 
     results = await asyncio.gather(
-        *(annotate(name, model) for name in ("dulemon", "ecd") for model, _, _ in PAIR)
+        *(annotate(name, model) for name in DATASETS for model, _, _ in PAIR)
     )
     (ROOT / "annotation-results.json").write_text(json.dumps(results, indent=2))
     if not all(r["complete"] and r["exit_code"] == 0 for r in results):

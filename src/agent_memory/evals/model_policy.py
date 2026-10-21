@@ -11,3 +11,11 @@ def require_disabled_thinking(data: dict[str, Any]) -> None:
     tokens = details.get("reasoning_tokens")
     if reasoning or (isinstance(tokens, (int, float)) and tokens > 0):
         raise RuntimeError("provider returned reasoning despite frozen disabled-thinking policy")
+
+
+def require_frozen_annotation_model(model: str, allowed: tuple[str, ...]) -> None:
+    """No automatic annotation-model rotation after the owner's round3 freeze."""
+    if model not in allowed:
+        raise ValueError(
+            "annotation model replacement requires owner confirmation and full relabel"
+        )

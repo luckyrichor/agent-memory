@@ -13,7 +13,10 @@ import httpx
 from pydantic import BaseModel, ConfigDict, ValidationError
 
 from agent_memory.evals.labeling import Label
-from agent_memory.evals.model_policy import require_disabled_thinking
+from agent_memory.evals.model_policy import (
+    require_disabled_thinking,
+    require_frozen_annotation_model,
+)
 from agent_memory.evals.model_preflight import MODELS
 
 
@@ -387,6 +390,12 @@ def main() -> None:
     parser.add_argument("--shards", type=int, default=1)
     parser.add_argument("--compact-identifiers", action="store_true")
     args = parser.parse_args()
+    policy = json.loads(
+        (
+            Path(__file__).resolve().parents[3] / "docs/evals/phase1-round3-policy-v1.json"
+        ).read_text()
+    )
+    require_frozen_annotation_model(args.model, tuple(policy["annotation_models"]))
     for path in (args.output, args.cache):
         if ".local" not in path.resolve().parts:
             parser.error("raw annotation and cache must stay in ignored .local/")
