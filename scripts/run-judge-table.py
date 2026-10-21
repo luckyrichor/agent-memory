@@ -32,7 +32,8 @@ async def main():
     judges = rank_judges(
         [Judge(**r) for r in config["candidates"]], {"ByteDance", "DeepSeek", "Xiaomi"}
     )
-    rows = [json.loads(line) for line in a.rows.read_text().splitlines()]
+    with a.rows.open() as stream:
+        rows = [json.loads(line) for line in stream if line.strip()]
     if (judges[0].remaining_tokens or 0) < config["full_evaluation_judge_tokens_estimate"]:
         p.error("primary remaining quota does not cover estimated full evaluation")
     token = os.environ.get("TOKENHUB_API_KEY") or os.environ.get("TENCENT_API_KEY")
