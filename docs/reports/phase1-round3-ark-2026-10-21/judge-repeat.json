@@ -1,0 +1,59 @@
+{
+  "model": "glm-5-2-260617",
+  "provider": "Ark",
+  "queried_at": "2026-10-21T02:06:29.039767+00:00",
+  "records": [
+    {
+      "score": true,
+      "reason_code": "MATCH",
+      "response_model": "glm-5-2-260617",
+      "usage": {
+        "completion_tokens": 12,
+        "prompt_tokens": 101,
+        "total_tokens": 113
+      }
+    },
+    {
+      "score": true,
+      "reason_code": "MATCH",
+      "response_model": "glm-5-2-260617",
+      "usage": {
+        "completion_tokens": 12,
+        "prompt_tokens": 101,
+        "total_tokens": 113
+      }
+    },
+    {
+      "score": true,
+      "reason_code": "MATCH",
+      "response_model": "glm-5-2-260617",
+      "usage": {
+        "completion_tokens": 12,
+        "prompt_tokens": 101,
+        "total_tokens": 113
+      }
+    },
+    {
+      "score": true,
+      "reason_code": "MATCH",
+      "response_model": "glm-5-2-260617",
+      "usage": {
+        "completion_tokens": 12,
+        "prompt_tokens": 101,
+        "total_tokens": 113
+      }
+    },
+    {
+      "score": true,
+      "reason_code": "MATCH",
+      "response_model": "glm-5-2-260617",
+      "usage": {
+        "completion_tokens": 12,
+        "prompt_tokens": 101,
+        "total_tokens": 113
+      }
+    }
+  ],
+  "consistent_5": true,
+  "scope": "synthetic judge prompt only; not human calibration"
+}

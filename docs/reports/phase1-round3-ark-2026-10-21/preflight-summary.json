@@ -1,0 +1,17 @@
+{
+  "model": "glm-5-2-260617",
+  "calls": 106,
+  "format_valid": 100,
+  "format_n": 100,
+  "consistent_5": true,
+  "preflight_pass": true,
+  "observed_disabled_thinking": true,
+  "sampling_control_eligible": true,
+  "latency_ms": {
+    "n": 106,
+    "p50": 1848.1626020511612,
+    "p95": 3088.5440951096825,
+    "p99": 4103.550820751117
+  },
+  "http_429": 0
+}
