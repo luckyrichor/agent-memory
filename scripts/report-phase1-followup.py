@@ -11,6 +11,8 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 from agent_memory.evals.datasets import file_hash
 from agent_memory.evals.judge_pool import judge_budget
+from agent_memory.evals.labeling import load_labels
+from agent_memory.evals.metrics import agreement
 
 ROOT=Path('.local/phase1/round3/followup')
 OUT=Path('docs/reports/phase1-round3-followup-2026-10-21')
@@ -24,6 +26,12 @@ patch=''.join(difflib.unified_diff(old_plan.read_text().splitlines(True),new_pla
 (OUT/'plan-diff.patch').write_text(patch)
 queries=read(ROOT/'chinese-queries-v1-ready/manifest.json')
 leak=read(ROOT/'leakage-audit.json')
+left=load_labels(Path('.local/phase1/round3/closeout/timeline-v2-deepseek/labels.jsonl'))
+right=load_labels(Path('.local/phase1/round3/closeout/timeline-v2-hy4/labels.jsonl'))
+assert left.keys()==right.keys()
+leak['agreement_metrics']=agreement([left[k].label for k in sorted(left)],[right[k].label for k in sorted(left)])
+native=load_labels(Path('.local/phase1/chinese-expansion-v2/dulemon/references.jsonl'))
+
 write(OUT/'query-manifest.json',queries)
 write(OUT/'synthetic-leakage-audit.json',leak)
 shutil.copyfile(ROOT/'check.log',OUT/'validation.log')
@@ -100,6 +108,7 @@ report={
  'budget':judge_budget(queries['queries'],4,3),
  'owner_audit':{'template_rows':len(owner_rows),'new_owner_return_received':False,'owner_reviewed_rows':0,
                 'agreement':None,'confirmed_real_chinese_gold_points':0,
+                'unverified_native_positive_points':sum(r.label=='keep' for r in native.values()),
                 'human_threshold':policy['native_reference_audit_minimum'],
                 'policy':'score only nonblank owner rows against frozen references; below threshold human-confirmed subset only; Agent labels never inputs'},
  'protected_files':protected, 'frozen_metric_files':{str(p):file_hash(p) for p in metric_paths},
@@ -179,7 +188,7 @@ GLM-5.2 腾讯渠道与 MiMo Flash 的额度错误仍在；MiniMax 虽能返回�
 
 ## 合成时间线一致性审计
 
-结论：**流程验证，不作质量证据**。新批次共有 {leak['items']} 条，两模型一致 {leak['models_agree']} 条；未重标或混入历史标签。
+结论：**流程验证，不作质量证据**。新批次共有 {leak['items']} 条，两模型一致 {leak['models_agree']} 条，一致率 {leak['agreement_metrics']['agreement']:.0%}、κ={leak['agreement_metrics']['kappa']:.1f}；未重标或混入历史标签。
 
 审查实际归档请求 {leak['actual_request_files']} 份，用户载荷内发现显式答案/构造标签字段 {leak['explicit_answer_fields_in_user_payload']} 处，原始构造 ID 暴露请求 {leak['raw_identifiers_exposed_requests']} 份。输入含来源正文和候选，标准答案/问题/时间线元数据未发送；输出 schema 提到 label 属于任务说明，不等于泄漏答案。
 
@@ -205,7 +214,7 @@ GLM-5.2 腾讯渠道与 MiMo Flash 的额度错误仍在；MiniMax 虽能返回�
 
 DuLeMon 模板仍为 {o['template_rows']} 条，当前收到的新负责人回填 {o['owner_reviewed_rows']} 条，一致率尚无。用户所说“约核对若干行”不是已收到的结果，未代填数字或人工标签。脚本支持原表全行保留、未核对人工栏留空；只对实际有效填写的行计分，并报告样本覆盖与部分审核局限。先算冻结参照一致率，低于 {o['human_threshold']:.0%} 只采用人工确认子集并重算记忆点；不会先纠正参照再制造高一致率。缺一半的人工字段、重复 ID、被改来源即拒绝。旧 Agent 标签无自动导入路径。
 
-当前可宣称的负责人确认真实中文金标准为 {o['confirmed_real_chinese_gold_points']}，距目标 {max(0,1500-o['confirmed_real_chinese_gold_points'])}；原生待核验参照量沿用前报告，不能混称人工确认。ECD {report['ecd_manual_rows']} 段表和原审核包全部逐字节保持，继续等待负责人另行标注；未生成旧仲裁包。
+当前可宣称的负责人确认真实中文金标准为 {o['confirmed_real_chinese_gold_points']}，距目标 {max(0,1500-o['confirmed_real_chinese_gold_points'])}；原生待核验应记参照 {o['unverified_native_positive_points']} 个，不能混称人工确认。ECD {report['ecd_manual_rows']} 段表和原审核包全部逐字节保持，继续等待负责人另行标注；未生成旧仲裁包。
 
 ## 验证、运行与遗留
 
