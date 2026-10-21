@@ -1,0 +1,93 @@
+{
+  "version": 3,
+  "scope": "phase1-only-unaccepted",
+  "authorization": "Owner instruction in current conversation; supersedes prior automatic annotation-model replacement",
+  "annotation_models": [
+    "deepseek-v4-pro",
+    "mimo-v2.6-flash"
+  ],
+  "annotation_replacement_requires_confirmation": true,
+  "annotation_replacement_requires_full_batch_relabel": true,
+  "ecd": {
+    "model_kappa_gate_applicable": false,
+    "negative_reference": "existing frozen dual-model joint discard; unverified by human",
+    "human_sample_size": 120,
+    "sample_seed": 42,
+    "stratum_definition": "source first-person personal-information regex hint vs no hint; anonymous roles make this provisional, owner confirms attribution",
+    "raw_text_distribution": "server .local and owner private package only; never group or Git",
+    "generate_616_arbitration": false
+  },
+  "owner_required_now": [],
+  "owner_deferred": [
+    "dulemon-model-comparison",
+    "perltqa-native-reference",
+    "ecd-small-manual-reference"
+  ],
+  "native_reference_audit_minimum": 0.95,
+  "below_threshold_gold_policy": "only human-confirmed subset; recompute actual Chinese gold count",
+  "judge_failover_unit": "entire comparison table; never mix judges within one table",
+  "judge_minimum_backups": 2,
+  "synthetic_relabel": "Owner approved replacement after quota 402; new full-batch synthetic-only pair after complete preflight. Original public Chinese pair unchanged. Old partial/full labels never mixed.",
+  "unchanged": [
+    "metrics",
+    "data splits",
+    "0.7 applicable kappa threshold",
+    "95% owner audit threshold"
+  ],
+  "synthetic_annotation_models": [
+    "deepseek-v4-pro-ga-260813",
+    "hy4-preview"
+  ],
+  "synthetic_annotation_vendors": [
+    "DeepSeek",
+    "Tencent"
+  ],
+  "supersedes": "docs/evals/phase1-round3-policy-v2.json",
+  "plan": "docs/plans/2026-10-21-agent-memory-interview-plan.md",
+  "judge_selection": "preflight-pass-and-successful-actual-call; explicit frozen order; no balance query",
+  "quota_screenshots_required": false,
+  "quota_ranking_required": false,
+  "owner_audit_partial_allowed": true,
+  "blank_owner_fields": "excluded from denominator; never filled by assistant",
+  "synthetic_quality_status": "流程验证，不作质量证据",
+  "tables": {
+    "public-chinese": {
+      "answer_vendor": "ByteDance",
+      "annotation_vendors": [
+        "DeepSeek",
+        "Xiaomi"
+      ],
+      "annotation_models": [
+        "deepseek-v4-pro",
+        "mimo-v2.6-flash"
+      ]
+    },
+    "synthetic-timeline": {
+      "answer_vendor": "ByteDance",
+      "annotation_vendors": [
+        "DeepSeek",
+        "Tencent"
+      ],
+      "annotation_models": [
+        "deepseek-v4-pro-ga-260813",
+        "hy4-preview"
+      ]
+    }
+  },
+  "judge_vendors": {
+    "Ark:glm-5-2-260617": "Zhipu",
+    "TokenHub:glm-5v-turbo": "Zhipu",
+    "TokenHub:hy4-preview": "Tencent"
+  },
+  "human_calibration_required_for_all_judges": true,
+  "withdrawn_judges": {
+    "TokenHub:glm-5v-turbo": "pre-offline; historical qualification retained, not a stable backup"
+  },
+  "owner_return_selection": "old Agent strata: all uncertain124, discard3, random keep30; not random sample of native references",
+  "hardset_status": "independent proposal only; original frozen queries and labels unchanged",
+  "owner_return_processed": {
+    "checked_rows": 157,
+    "unchecked_rows": 73,
+    "unchecked_rows_not_requested_now": true
+  }
+}

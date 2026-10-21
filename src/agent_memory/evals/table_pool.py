@@ -29,6 +29,8 @@ def load_table_pool(config: dict[str, Any], policy: dict[str, Any], table_kind: 
     excluded = {roles["answer_vendor"], *roles["annotation_vendors"]}
     judges = []
     for row in config["candidates"]:
+        if row["provider"] + ":" + row["model"] in policy.get("withdrawn_judges", {}):
+            raise ValueError("judge withdrawn from stable pool")
         if policy["judge_vendors"].get(row["provider"] + ":" + row["model"]) != row["vendor"]:
             raise ValueError("judge vendor does not match frozen registry")
         preflight = evidence(row["preflight"])

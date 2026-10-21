@@ -50,6 +50,10 @@ def finalize_native_audit(
         "audit_count": len(checked),
         "frozen_sample_count": len(expected),
         "unchecked_count": len(expected) - len(checked),
+        "full_sample_agreement_lower": matches / len(expected),
+        "full_sample_agreement_upper": (matches + len(expected) - len(checked)) / len(expected),
+        "bounds_interpretation": "deterministic bounds, not a confidence interval",
+        "human_confirmed_conversations": len({rows[k]["conversation_id"] for k in checked}),
         "coverage": len(checked) / len(expected),
         "sampling_limitation": "partial owner review; no assumption unchecked rows are representative",
         "human_provenance": "owner-supplied file and reviewer assertion; never infer from Agent labels",
@@ -66,6 +70,16 @@ def finalize_native_audit(
     output.chmod(0o700)
     (output / "adopted-labels.jsonl").write_text(
         "".join(adopted[k].model_dump_json() + "\n" for k in sorted(adopted))
+    )
+    (output / "human-confirmed-items.jsonl").write_text(
+        "".join(json.dumps(rows[k], ensure_ascii=False) + "\n" for k in sorted(checked))
+    )
+    (output / "human-positive-items.jsonl").write_text(
+        "".join(
+            json.dumps(rows[k], ensure_ascii=False) + "\n"
+            for k in sorted(checked)
+            if checked[k].label == "keep"
+        )
     )
     (output / "report.json").write_text(json.dumps(result, indent=2) + "\n")
     return result

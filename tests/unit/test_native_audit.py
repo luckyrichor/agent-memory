@@ -55,6 +55,8 @@ def test_frozen_reference_denominator_and_failure_subset(
     assert result["usable_positive_memory_points"] == expected_count
     assert result["frozen_reference_agreement"] == (0.9 if mismatch else 1.0)
     assert result["phase_gate_passed"] is False
+    assert result["full_sample_agreement_lower"] == result["frozen_reference_agreement"]
+    assert result["full_sample_agreement_upper"] == result["frozen_reference_agreement"]
 
 
 @pytest.mark.parametrize("mismatch", [False, True])
@@ -100,6 +102,8 @@ def test_partial_owner_rows_only_and_blank_rows_never_become_votes(tmp_path, mis
     )
     assert result["audit_count"] == 7
     assert result["unchecked_count"] == 3
+    assert result["full_sample_agreement_lower"] == ((6 if mismatch else 7) / 10)
+    assert result["full_sample_agreement_upper"] == ((9 if mismatch else 10) / 10)
     assert result["frozen_reference_agreement"] == (6 / 7 if mismatch else 1)
     assert result["usable_positive_memory_points"] == (6 if mismatch else 100)
 

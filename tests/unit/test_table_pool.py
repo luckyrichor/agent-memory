@@ -97,3 +97,13 @@ async def test_explicit_synthetic_vendor_scope_allows_xiaomi_judge(tmp_path):
         excluded_vendors={"ByteDance", "DeepSeek", "Tencent"},
     )
     assert result["complete"]
+
+
+def test_withdrawn_model_rejected_even_with_complete_old_evidence(tmp_path):
+    config, policy = fixture(tmp_path)
+    policy["withdrawn_judges"] = {"TokenHub:m0": "pre-offline"}
+    path = Path(config["policy_path"])
+    path.write_text(json.dumps(policy))
+    config["policy_sha256"] = file_hash(path)
+    with pytest.raises(ValueError, match="withdrawn"):
+        load_table_pool(config, policy, "synthetic-timeline")
