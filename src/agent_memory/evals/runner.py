@@ -28,10 +28,12 @@ def score(
     if len(predicted) != len(rows):
         raise ValueError("duplicate prediction question ID")
     cases: list[dict[str, Any]] = []
+    flow_categories: set[str] = set()
     gold_ids: set[str] = set()
     with dataset.open() as stream:
         for line in stream:
             conv = Conversation.model_validate_json(line)
+            flow_categories.update(conv.metadata.get("flow_only_categories", []))
             for q in conv.questions:
                 if q.question_id in gold_ids:
                     raise ValueError("duplicate gold question ID")
@@ -40,6 +42,7 @@ def score(
                     "question_id": q.question_id,
                     "conversation_id": conv.conversation_id,
                     "category": q.category,
+                    "flow_only": q.category in conv.metadata.get("flow_only_categories", []),
                     "scores": {},
                 }
                 prediction = predicted.get(q.question_id)
@@ -94,7 +97,8 @@ def score(
     totals: dict[tuple[str, str], list[float]] = defaultdict(list)
     for (cid, category, name), values in clusters.items():
         by_type[category][name].append((sum(values), float(len(values))))
-        totals[(cid, name)].extend(values)
+        if category not in flow_categories:
+            totals[(cid, name)].extend(values)
     for (_, name), values in totals.items():
         scores[name].append((sum(values), float(len(values))))
     return {
@@ -105,7 +109,15 @@ def score(
         "by_type": {
             cat: {name: ratio(values).to_dict() for name, values in sorted(items.items())}
             for cat, items in sorted(by_type.items())
+            if cat not in flow_categories
         },
+        "flow_only_by_type": {
+            cat: {name: ratio(values).to_dict() for name, values in sorted(items.items())}
+            for cat, items in sorted(by_type.items())
+            if cat in flow_categories
+        },
+        "flow_only_question_count": sum(c["flow_only"] for c in cases),
+        "metrics_scope": "excludes flow-only categories; they are not quality evidence",
         "ci_unit": "conversation cluster, 1000 bootstrap resamples",
         "precision_denominator": "k, including empty result slots",
         "ndcg_gain": "2**grade-1; no-evidence queries reported only as RT6",
@@ -163,12 +175,12 @@ def save_report(
             before = {
                 c["question_id"]: c["scores"][metric]
                 for c in previous["cases"]
-                if c["scores"].get(metric) is not None
+                if not c.get("flow_only") and c["scores"].get(metric) is not None
             }
             after = {
                 c["question_id"]: c["scores"][metric]
                 for c in result["cases"]
-                if c["scores"].get(metric) is not None
+                if not c.get("flow_only") and c["scores"].get(metric) is not None
             }
             if before and before.keys() == after.keys():
                 comparisons[metric] = paired_difference(before, after)
@@ -206,6 +218,7 @@ def save_report(
             "## 分题型、逐题、配对对比",
             "",
             "完整数据见同目录report.json。",
+            "流程验证题型在flow_only_by_type单列，不作质量证据，不进入质量汇总或配对差异。",
             "",
             "## 用量与边界",
             "",

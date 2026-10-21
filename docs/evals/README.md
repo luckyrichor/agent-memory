@@ -149,8 +149,13 @@ with-ark uv run python scripts/with-phase1-runtime.py COMMAND [ARGS ...]
 
 ## 当前：阶段1第三轮（2026-10-21）
 
-当前执行口径为 [最新版方案](../plans/2026-10-21-agent-memory-interview-plan.md)、phase1-round3-policy-v3.json 与 [负责人回填及困难集交接](../reports/phase1-round3-owner-hardset-2026-10-21/delivery.md)。旧第三轮工作流和 v1 保留为历史。裁判按每张表的答题/实际标注厂商排除，凭预检和实际调用成功选择，不查余额、不等截图；完整主备均需人工校准，切换整表重判。公开中文和合成分别有池，未凑足合格备选时如实报告。
+当前执行口径为 [最新版方案](../plans/2026-10-21-agent-memory-interview-plan-v2.md)、phase1-round3-policy-v4.json 与 [负责人回填及困难集交接](../reports/phase1-round3-approved-followup-2026-10-21/delivery.md)。旧第三轮工作流和 v1 保留为历史。裁判按每张表的答题/实际标注厂商排除，凭预检和实际调用成功选择，不查余额、不等截图；完整主备均需人工校准，切换整表重判。公开中文和合成分别有池，未凑足合格备选时如实报告。
 
 DuLeMon 原生审核只对负责人真正核对行计算冻结参照一致率，其余人工栏留空；不得使用旧 Agent 标签。ECD 审核表保持，其余旧审核暂缓。中文查询按源会话继承切分，真人对话衍生、作者模型生成基准、合成时间线分开统计，合成批次只作流程验证。原文仅服务器和负责人私有包，不发群或 Git。标注模型更换仍须负责人确认并整批重标。
 
 旧第三轮报告由 scripts/report-phase1-round3.py 生成；当时尚未取得新版原件的说明仅属历史。当前原件已归档 docs/plans/，当前报告由 scripts/report-owner-hardset.py 从真实人工附件、冻结参照、模型请求与全量验证日志生成。困难集及查询替换是独立提案，未经负责人确认不得切换冻结入口；预下线GLM-5V不再计稳定备选。
+
+
+当前查询由 chinese-query-current.json 选择已获批准的新版本；materialize-current-chinese-queries.py 生成常规评测入口可读语料。旧版保留，新旧哈希不同不能同集比较。时间推理、知识更新、多会话只进flow_only_by_type，不进质量汇总；阶段1不启动阶段2评测。
+
+新的共同保留池审核采用原八列格式，item_id不透明、source原JSON、人工栏空白。prepare-approved-joint-audit.py排除既往人工审核项后独立随机抽样；finalize-approved-joint-audit.py完整校验真实回填，按负责人批准的错误条数闸门计算，并单列有限总体超几何置信区间，不新增CI上界验收条件。ECD与困难集旧人工审核继续暂缓。

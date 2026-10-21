@@ -37,7 +37,7 @@ async def main():
     config = json.loads(a.pool.read_text())
     if not a.table_kind:
         p.error("formal run requires --table-kind")
-    policy = json.loads(Path("docs/evals/phase1-round3-policy-v3.json").read_text())
+    policy = json.loads(Path("docs/evals/phase1-round3-policy-v4.json").read_text())
     try:
         judges = load_table_pool(config, policy, a.table_kind)
     except (ValueError, KeyError, OSError) as exc:

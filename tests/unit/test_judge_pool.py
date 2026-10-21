@@ -15,8 +15,11 @@ from agent_memory.evals.judge_pool import (
 def test_preserve_frozen_order_without_balance_ranking():
     pool = [Judge(str(i), "Tencent", True, n) for i, n in enumerate([None, 5, 100])]
     assert rank_judges(pool, {"Xiaomi"}) == pool
-    with pytest.raises(ValueError, match="two qualified backups"):
-        rank_judges(pool[:2], {"Xiaomi"})
+    assert rank_judges(pool[:2], {"Xiaomi"}) == pool[:2]
+    with pytest.raises(ValueError, match="qualified backups"):
+        rank_judges(pool[:1], {"Xiaomi"})
+    with pytest.raises(ValueError, match="qualified backups"):
+        rank_judges(pool[:2], {"Xiaomi"}, minimum_backups=2)
     with pytest.raises(ValueError, match="duplicate"):
         rank_judges([*pool, pool[0]], {"Xiaomi"})
 

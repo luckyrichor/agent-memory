@@ -57,4 +57,4 @@ def load_table_pool(config: dict[str, Any], policy: dict[str, Any], table_kind: 
         ):
             raise ValueError("owner calibration missing for primary or backup")
         judges.append(Judge(row["model"], row["vendor"], True, provider=row["provider"]))
-    return rank_judges(judges, excluded)
+    return rank_judges(judges, excluded, minimum_backups=policy.get("judge_minimum_backups", 1))

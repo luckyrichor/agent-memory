@@ -38,10 +38,14 @@ class JudgeFailure(RuntimeError):
         self.status = status
 
 
-def rank_judges(candidates: Sequence[Judge], excluded_vendors: set[str]) -> list[Judge]:
+def rank_judges(
+    candidates: Sequence[Judge], excluded_vendors: set[str], *, minimum_backups: int = 1
+) -> list[Judge]:
+    if minimum_backups < 1:
+        raise ValueError("at least one backup required")
     eligible = [j for j in candidates if j.qualified and j.vendor not in excluded_vendors]
-    if len({(j.provider, j.model) for j in eligible}) < 3:
-        raise ValueError("one primary and at least two qualified backups required")
+    if len({(j.provider, j.model) for j in eligible}) < 1 + minimum_backups:
+        raise ValueError("one primary and required qualified backups missing")
     if len(eligible) != len({(j.provider, j.model) for j in eligible}):
         raise ValueError("duplicate judge is not a backup")
     # Frozen explicit preference order after preflight and actual-call checks. No balance query.

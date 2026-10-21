@@ -1,0 +1,30 @@
+{
+  "version": "chinese-queries-v2-hard",
+  "active": true,
+  "owner_approved": true,
+  "previous_version": "chinese-queries-v1",
+  "same_set_comparison_allowed": false,
+  "flow_only_categories": [
+    "temporal-reasoning",
+    "knowledge-update",
+    "multi-session"
+  ],
+  "files": {
+    "queries": {
+      "path": ".local/phase1/round3/approved-followup/chinese-queries-v2/queries.jsonl",
+      "sha256": "a7a25b616c495988b2921f1d5981df4a1bc9d13c708c60452077020570dfb32a"
+    },
+    "contexts": {
+      "path": ".local/phase1/round3/approved-followup/chinese-queries-v2/contexts.jsonl",
+      "sha256": "76966e16e8053ec7902e4fd2d2c503f06983a06628309175b4a5b2f3add107af"
+    },
+    "split": {
+      "path": ".local/phase1/round3/approved-followup/chinese-queries-v2/split.json",
+      "sha256": "8bbbc1cef886db241e3c06b8582de3d408617b632f75b933864769dff8940437"
+    },
+    "manifest": {
+      "path": ".local/phase1/round3/approved-followup/chinese-queries-v2/manifest.json",
+      "sha256": "fda1abe689436f1caa5337410783c35b51ee3f181695c7f7bbdc96ed10bb0f0e"
+    }
+  }
+}
