@@ -38,9 +38,10 @@ class InMemoryCandidateProvider:
             if query.memory_type and m.memory_type != query.memory_type:
                 continue
             content_tokens = lexical_tokens(v.content)
-            if tokens and tokens <= content_tokens:
+            overlap = tokens & content_tokens
+            if overlap:
                 channels["lexical"].append(
-                    Candidate(m.memory_id, v.version_id, v.content, "lexical", len(tokens))
+                    Candidate(m.memory_id, v.version_id, v.content, "lexical", len(overlap))
                 )
             embedding = self.embeddings.get(v.version_id)
             if query.vector and embedding and embedding[0] == query.model:

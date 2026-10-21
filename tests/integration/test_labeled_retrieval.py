@@ -68,3 +68,39 @@ async def test_labeled_chinese_retrieval_recall_and_top_k(app_database_url):
         )
     finally:
         await engine.dispose()
+
+
+async def test_english_question_uses_partial_stemmed_terms_not_all_query_words(app_database_url):
+    engine = create_engine(app_database_url)
+    sessions = create_session_factory(engine)
+    who = principal()
+    try:
+        async with session_for_principal(sessions, who) as session:
+            usecase = service(session, who, datetime.now(UTC))
+            match = await usecase.remember(
+                RememberMemoryCommand(
+                    "Alice hiked in Yosemite valley.",
+                    MemoryType.SEMANTIC,
+                    MemoryScope(ScopeKind.TENANT, None, None),
+                    "english-yosemite",
+                ),
+                who,
+            )
+            await usecase.remember(
+                RememberMemoryCommand(
+                    "Bob repaired his laptop.",
+                    MemoryType.SEMANTIC,
+                    MemoryScope(ScopeKind.TENANT, None, None),
+                    "english-unrelated",
+                ),
+                who,
+            )
+        async with session_for_principal(sessions, who) as session:
+            page = await MemoryRetriever(PostgresCandidateProvider(session)).search(
+                RetrievalQuery("Where does Alice enjoy hiking?", limit=10), who
+            )
+            assert page.channel_counts["lexical"] == 1
+            assert page.items[0].memory_id == match.memory_id
+            assert page.items[0].ranks["lexical"] == 1
+    finally:
+        await engine.dispose()

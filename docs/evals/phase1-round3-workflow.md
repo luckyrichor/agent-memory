@@ -23,3 +23,7 @@ run-judge-table.py 要求带查询日期和证据哈希的冻结池。持续失�
 ## 合成集
 
 时间线旧标注为 deepseek-v4.1-flash + minimax-m2.7，与本轮冻结的 deepseek-v4-pro + mimo-v2.6-flash 不一致。提议保留原始候选/时间线/切分，用新冻结组合整批重标、独立报告；需要负责人先确认，不自动重标。旧合成结果保留为历史实验，不与新组合拼接。若继续用旧合成标注，裁判厂商独立约束还要额外排除MiniMax；不得借当前角色配置掩盖历史标签来源。
+
+## 收尾追加授权
+
+负责人已在本轮402后明确批准换模型完成合成时间线整批重标。合成使用policy中的synthetic_annotation_models，通过annotate --campaign synthetic-timeline选择；默认public-chinese仍使用原annotation_models，不能借合成授权改写公开中文批次。新旧批次隔离。正式裁判入口按policy的judge_excluded_vendors保守并集过滤；模拟 --demo-cross-provider 只用内置合成题及HTTP mock，不创建正式额度池。最新状态以第三轮收尾报告为准。

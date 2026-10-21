@@ -17,7 +17,9 @@ from agent_memory.evals.model_policy import (
     require_disabled_thinking,
     require_frozen_annotation_model,
 )
-from agent_memory.evals.model_preflight import MODELS
+from agent_memory.evals.model_preflight import ARK_MODELS, MODELS
+
+ANNOTATION_MODELS = (*MODELS, *ARK_MODELS, "hy4-preview")
 
 
 class LabelBatch(BaseModel):
@@ -137,6 +139,7 @@ async def annotate_sharded(
         json.dumps(
             {
                 "model": model,
+                "provider": "Ark" if model in ARK_MODELS else "TokenHub",
                 "batch_size": batch_size,
                 "shards": shards,
                 "items_sha256": hashlib.sha256(items.read_bytes()).hexdigest(),
@@ -183,7 +186,7 @@ async def annotate(
     deduplicate_sources: bool = False,
     compact_ids: bool = False,
 ) -> None:
-    if model not in MODELS:
+    if model not in ANNOTATION_MODELS:
         raise ValueError("model is not eligible under the frozen sampling policy")
     if batch_size < 1 or batch_size > 50:
         raise ValueError("annotation batch must be 1..50")
@@ -197,10 +200,19 @@ async def annotate(
     cache.mkdir(parents=True, exist_ok=True)
     cache.chmod(0o700)
     prompt = prompt_path.read_text()
-    token = os.environ.get("TOKENHUB_API_KEY") or os.environ.get("TENCENT_API_KEY")
+    ark = model in ARK_MODELS
+    token = (
+        os.environ.get("ARK_API_KEY")
+        if ark
+        else (os.environ.get("TOKENHUB_API_KEY") or os.environ.get("TENCENT_API_KEY"))
+    )
     if not token:
-        raise ValueError("use authorized shared configuration through with-tencent")
-    base = os.environ.get("TENCENT_BASE_URL", "https://tokenhub.tencentmaas.com/v1").rstrip("/")
+        raise ValueError("use authorized shared provider configuration through with-llm")
+    base = (
+        "https://ark.cn-beijing.volces.com/api/v3"
+        if ark
+        else os.environ.get("TENCENT_BASE_URL", "https://tokenhub.tencentmaas.com/v1").rstrip("/")
+    )
     ledger: list[dict[str, Any]] = []
     labels: list[Label] = []
     async with httpx.AsyncClient(timeout=120, trust_env=False) as client:
@@ -270,6 +282,7 @@ async def annotate(
             replayed = cachefile.exists()
             current: dict[str, Any] = {
                 "model": model,
+                "provider": "Ark" if ark else "TokenHub",
                 "batch_hash": key,
                 "item_count": len(batch),
                 "replayed": replayed,
@@ -383,7 +396,10 @@ def main() -> None:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--cache", type=Path, required=True)
     parser.add_argument("--prompt", type=Path, default=Path("docs/evals/prompts/annotation-v1.txt"))
-    parser.add_argument("--model", choices=MODELS, required=True)
+    parser.add_argument("--model", choices=ANNOTATION_MODELS, required=True)
+    parser.add_argument(
+        "--campaign", choices=("public-chinese", "synthetic-timeline"), default="public-chinese"
+    )
     parser.add_argument("--batch-size", type=int, default=25)
     parser.add_argument("--retry-invalid-cache", action="store_true")
     parser.add_argument("--deduplicate-sources", action="store_true")
@@ -395,7 +411,12 @@ def main() -> None:
             Path(__file__).resolve().parents[3] / "docs/evals/phase1-round3-policy-v1.json"
         ).read_text()
     )
-    require_frozen_annotation_model(args.model, tuple(policy["annotation_models"]))
+    key = (
+        "synthetic_annotation_models"
+        if args.campaign == "synthetic-timeline"
+        else "annotation_models"
+    )
+    require_frozen_annotation_model(args.model, tuple(policy[key]))
     for path in (args.output, args.cache):
         if ".local" not in path.resolve().parts:
             parser.error("raw annotation and cache must stay in ignored .local/")

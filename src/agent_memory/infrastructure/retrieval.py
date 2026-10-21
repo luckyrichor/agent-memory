@@ -1,6 +1,6 @@
 import re
 
-from sqlalchemy import and_, func, or_, select
+from sqlalchemy import String, and_, cast, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from agent_memory.application.retrieval import Candidate, RetrievalQuery
@@ -40,7 +40,8 @@ class PostgresCandidateProvider:
         if query.text.strip():
             chinese = bool(re.search(r"[一-鿿]", query.text))
             document = func.to_tsvector(
-                "simple", func.memory_lexical_tokens(v.content) if chinese else v.content
+                "simple" if chinese else "english",
+                func.memory_lexical_tokens(v.content) if chinese else v.content,
             )
             # Tokenizer yields only CJK/ASCII word lexemes, never tsquery operators.
             # OR broadens Chinese paraphrases; PostgreSQL ranks overlap afterwards.
@@ -52,7 +53,16 @@ class PostgresCandidateProvider:
                     ),
                 )
                 if chinese
-                else func.plainto_tsquery("simple", query.text)
+                # Natural-language questions rarely occur verbatim in one turn.
+                # Remove English stopwords/stem, then match any content lexeme.
+                else func.to_tsquery(
+                    "english",
+                    func.replace(
+                        cast(func.plainto_tsquery("english", query.text), String),
+                        " & ",
+                        " | ",
+                    ),
+                )
             )
             score = func.ts_rank_cd(document, terms)
             rows = await self.session.execute(

@@ -35,7 +35,7 @@ MODELS = (
     "mimo-v2.5-pro",
 )
 EXPERIMENTAL_MODELS = ("kimi-k3",)
-ARK_MODELS = ("doubao-seed-2-1-pro-260915",)
+ARK_MODELS = ("doubao-seed-2-1-pro-260915", "deepseek-v4-pro-ga-260813")
 
 
 class ProbeReply(BaseModel):

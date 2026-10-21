@@ -1,4 +1,4 @@
-"""TokenHub transport for the whole-table judge pool. Never logs text or credentials."""
+"""Provider transports for the whole-table judge pool. No text/credential logging."""
 
 import json
 from typing import Any
@@ -7,6 +7,32 @@ import httpx
 
 from agent_memory.evals.judge_pool import Grade, Judge, JudgeFailure
 from agent_memory.evals.model_policy import require_disabled_thinking
+
+
+class ProviderJudgeRouter:
+    """Choose each frozen judge's own cloud and credential, including on failover."""
+
+    def __init__(
+        self,
+        client: httpx.AsyncClient,
+        prompt: str,
+        tokens: dict[str, str],
+        tokenhub_base: str = "https://tokenhub.tencentmaas.com/v1",
+    ) -> None:
+        self.transports = {
+            provider: TokenHubJudge(client, token, endpoint, prompt)
+            for provider, endpoint in {
+                "TokenHub": tokenhub_base,
+                "Ark": "https://ark.cn-beijing.volces.com/api/v3",
+            }.items()
+            if (token := tokens.get(provider))
+        }
+
+    async def __call__(self, judge: Judge, row: dict[str, Any]) -> Grade:
+        transport = self.transports.get(judge.provider)
+        if transport is None:
+            raise JudgeFailure(401)
+        return await transport(judge, row)
 
 
 class TokenHubJudge:

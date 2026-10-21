@@ -17,6 +17,11 @@ class Judge:
     vendor: str
     qualified: bool
     remaining_tokens: int | None
+    provider: str = "TokenHub"
+
+    def __post_init__(self) -> None:
+        if self.provider not in {"TokenHub", "Ark"}:
+            raise ValueError("unknown judge provider")
 
 
 @dataclass(frozen=True)
@@ -35,7 +40,7 @@ class JudgeFailure(RuntimeError):
 
 def rank_judges(candidates: Sequence[Judge], excluded_vendors: set[str]) -> list[Judge]:
     eligible = [j for j in candidates if j.qualified and j.vendor not in excluded_vendors]
-    if len({j.model for j in eligible}) < 3:
+    if len({(j.provider, j.model) for j in eligible}) < 3:
         raise ValueError("one primary and at least two qualified backups required")
     if any(j.remaining_tokens is None for j in eligible):
         raise ValueError("observed remaining quota required; unknown is not unlimited")
@@ -67,13 +72,15 @@ async def evaluate_table(
     output: Path,
     *,
     retry_delay: float = 1.0,
+    excluded_vendors: set[str] | None = None,
 ) -> dict[str, Any]:
     """Publish only a complete single-judge table. All failed attempts remain local."""
     if ".local" not in output.resolve().parts:
         raise ValueError("judge outputs must stay in private .local")
     if not re.fullmatch(r"[a-zA-Z0-9_-]{1,120}", table_id) or not rows or not judges:
         raise ValueError("valid table ID, rows and frozen judge pool required")
-    if any(not j.qualified or j.vendor in {"ByteDance", "DeepSeek", "Xiaomi"} for j in judges):
+    excluded = {"ByteDance", "DeepSeek", "Xiaomi"} | (excluded_vendors or set())
+    if any(not j.qualified or j.vendor in excluded for j in judges):
         raise ValueError("judge pool violates frozen model-role independence")
     ids = [r.get("row_id") for r in rows]
     if any(not isinstance(i, str) or not i for i in ids) or len(set(ids)) != len(ids):
@@ -86,7 +93,12 @@ async def evaluate_table(
         grades: list[dict[str, Any]] = []
         version: str | None = None
         failed = False
-        attempt: dict[str, Any] = {"judge": judge.model, "rows_scored": 0, "complete": False}
+        attempt: dict[str, Any] = {
+            "judge": judge.model,
+            "provider": judge.provider,
+            "rows_scored": 0,
+            "complete": False,
+        }
         ledger = output / f"attempt-{index}.jsonl"
         for row in rows:  # restart from row zero after every switch
             grade = None
@@ -104,6 +116,7 @@ async def evaluate_table(
                                 {
                                     "row_id": row["row_id"],
                                     "judge": judge.model,
+                                    "provider": judge.provider,
                                     "retry": retry,
                                     "http_status": error.status,
                                     "valid": False,
@@ -122,6 +135,7 @@ async def evaluate_table(
             record = {
                 "row_id": row["row_id"],
                 "judge": judge.model,
+                "provider": judge.provider,
                 "judge_version": version,
                 "judge_version_source": "provider response.model; underlying weights not exposed",
                 "graded_at": datetime.now(UTC).isoformat(),
@@ -141,6 +155,7 @@ async def evaluate_table(
                 "table_id": table_id,
                 "input_sha256": input_hash,
                 "judge": judge.model,
+                "provider": judge.provider,
                 "judge_version": version,
                 "complete": True,
                 "records": grades,

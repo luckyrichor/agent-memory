@@ -17,7 +17,7 @@ from agent_memory.api.schemas import ScopeRequest, SearchRequest
 from agent_memory.domain.enums import MemoryType
 from agent_memory.domain.models import MemoryScope
 from agent_memory.evals.datasets import Conversation
-from agent_memory.sdk import MemoryClient
+from agent_memory.sdk import MemoryAPIError, MemoryClient
 
 
 def key_for(*parts: str) -> str:
@@ -38,7 +38,12 @@ def source_time(value: str | None) -> datetime:
 
 
 async def import_conversation(
-    client: MemoryClient, conv: Conversation, scope: MemoryScope, *, mode: str
+    client: MemoryClient,
+    conv: Conversation,
+    scope: MemoryScope,
+    *,
+    mode: str,
+    rejected: list[dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     if mode not in ("direct", "full"):
         raise ValueError("unknown import mode")
@@ -67,9 +72,28 @@ async def import_conversation(
                 "content_sha256": hashlib.sha256(chunk.encode()).hexdigest(),
             }
             if mode == "direct":
-                memory = await client.remember(
-                    chunk, MemoryType.EPISODIC, scope, idempotency_key=stable
-                )
+                try:
+                    memory = await client.remember(
+                        chunk, MemoryType.EPISODIC, scope, idempotency_key=stable
+                    )
+                except MemoryAPIError as error:
+                    if (
+                        rejected is None
+                        or error.status_code != 422
+                        or error.code != "CONTENT_POLICY_REJECTED"
+                    ):
+                        raise
+                    # Explicit diagnostic opt-in only. Never bypass the content gate,
+                    # alter source text, or drop the question from the metric denominator.
+                    rejected.append(
+                        {
+                            **row,
+                            "http_status": error.status_code,
+                            "code": error.code,
+                            "reason_code": error.reason_code,
+                        }
+                    )
+                    continue
                 row.update(memory_id=str(memory.memory_id), version_id=str(memory.version_id))
             else:
                 if doc.role not in ("user", "assistant"):

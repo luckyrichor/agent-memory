@@ -56,3 +56,19 @@ async def test_reasoning_and_non_boolean_grade_are_rejected():
                     Judge("judge", "Tencent", True, 100),
                     {"question": "q", "reference": "r", "answer": "a"},
                 )
+
+
+@pytest.mark.asyncio
+async def test_production_router_cross_cloud_full_table_demo(tmp_path):
+    from agent_memory.evals.judge_demo import cross_provider_demo
+
+    root = tmp_path / ".local" / "cross-cloud"
+    report = await cross_provider_demo(root, "cross_cloud")
+    assert report["live_model_calls"] == 0
+    assert report["discarded_partial_rows"] == 2
+    assert report["whole_table_regraded"] and report["single_provider_model_version"]
+    assert report["final_provider"] == "Ark" and report["final_rows"] == 3
+    assert [r["provider"] for r in report["http_requests"]] == ["TokenHub"] * 3 + ["Ark"] * 3
+    assert [r["row_id"] for r in report["http_requests"][-3:]] == [
+        f"synthetic-{i}" for i in range(3)
+    ]

@@ -86,3 +86,19 @@ async def test_returned_version_change_never_publishes_mixed_version(tmp_path):
             retry_delay=0,
         )
     assert not (out / "result.json").exists()
+
+
+@pytest.mark.asyncio
+async def test_replacement_annotator_vendor_is_excluded_from_formal_judges(tmp_path):
+    async def should_not_call(judge, row):
+        raise AssertionError("role conflict must reject before any call")
+
+    with pytest.raises(ValueError, match="independence"):
+        await evaluate_table(
+            "synthetic_roles",
+            [{"row_id": "1"}],
+            [Judge("hy4-preview", "Tencent", True, 100)],
+            should_not_call,
+            tmp_path / ".local" / "bad",
+            excluded_vendors={"Tencent"},
+        )

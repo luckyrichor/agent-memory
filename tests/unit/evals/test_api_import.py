@@ -96,3 +96,45 @@ def test_source_time_does_not_fabricate_missing_chronology():
     for invalid in [None, "2020-01-01", "not a time"]:
         with pytest.raises(ValueError):
             source_time(invalid)
+
+
+async def test_policy_rejection_is_explicit_opt_in_and_does_not_change_gold_questions():
+    from agent_memory.evals.datasets import Question
+    from agent_memory.sdk import MemoryAPIError
+
+    def deny(request):
+        return httpx.Response(
+            422,
+            json={
+                "error": {
+                    "code": "CONTENT_POLICY_REJECTED",
+                    "reason_code": "CONTENT_TOKEN_OR_CONTACT",
+                }
+            },
+        )
+
+    conv = Conversation(
+        conversation_id="c",
+        documents=[Document(source_id="d", session_id="s", role="source", text="public fixture")],
+        questions=[
+            Question(
+                question_id="q",
+                text="fixture?",
+                answer="fixture",
+                category="fixture",
+                relevant={"d": 1},
+            )
+        ],
+    )
+    scope = MemoryScope(ScopeKind.WORKSPACE, "eval", None)
+    async with httpx.AsyncClient(
+        base_url="https://api.test", transport=httpx.MockTransport(deny)
+    ) as http:
+        client = MemoryClient(http, token="unit-test-only")
+        with pytest.raises(MemoryAPIError):
+            await import_conversation(client, conv, scope, mode="direct")
+        rejected = []
+        rows = await import_conversation(client, conv, scope, mode="direct", rejected=rejected)
+    assert rows == [] and len(rejected) == 1
+    assert rejected[0]["source_id"] == "d" and rejected[0]["http_status"] == 422
+    assert len(conv.questions) == 1 and conv.questions[0].relevant == {"d": 1}
