@@ -1,0 +1,24 @@
+{
+  "assembled_at": "2026-10-21T02:49:52.934797+00:00",
+  "authorization": "owner explicitly approved replacing exhausted pair and whole-batch synthetic relabel in current thread",
+  "scope": "synthetic only; public Chinese original pair remains frozen",
+  "items_sha256": "98b50d7f29c8955b7df1d5f0947773e39007c1ffb2bc88a9d7bcc9cc279ed1ae",
+  "split_sha256": "60b0060ac2ccdf1a05f38f4c51eb85203e95a357cd93e128894c68150e8ecdf3",
+  "prompt_sha256": "a91e974ed3cdeb854f6931b447155547b8f80d895f94df5b9f15f7b4de8b92f6",
+  "models": [
+    {
+      "provider": "Ark",
+      "model": "deepseek-v4-pro-ga-260813",
+      "vendor": "DeepSeek",
+      "preflight_sha256": "a62845c1e8d340964075af73f35192613227ce38fa48012b845f99cce6459a49",
+      "preflight_records_sha256": "d415b5564cb94aeb392bf3866431056bc90abc9cf8f2f97ee43ef4e39457f83a"
+    },
+    {
+      "provider": "TokenHub",
+      "model": "hy4-preview",
+      "vendor": "Tencent",
+      "preflight_sha256": "be8ffe5f4ebbfc8690e200cfbfe862782a0f6f22525996ba86351fd3d8ff2c41",
+      "preflight_records_sha256": "31dcbaacd6f19c4ad4cdc6def6293fd50341d0202542f3168648902001ba5d81"
+    }
+  ]
+}

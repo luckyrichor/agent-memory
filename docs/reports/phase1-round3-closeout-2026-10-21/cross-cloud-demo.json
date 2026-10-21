@@ -1,0 +1,43 @@
+{
+  "scope": "HTTP MockTransport synthetic fault injection; no live model requests or quota ranking",
+  "http_requests": [
+    {
+      "provider": "TokenHub",
+      "model": "hy4-preview",
+      "row_id": "synthetic-0"
+    },
+    {
+      "provider": "TokenHub",
+      "model": "hy4-preview",
+      "row_id": "synthetic-1"
+    },
+    {
+      "provider": "TokenHub",
+      "model": "hy4-preview",
+      "row_id": "synthetic-2"
+    },
+    {
+      "provider": "Ark",
+      "model": "glm-5-2-260617",
+      "row_id": "synthetic-0"
+    },
+    {
+      "provider": "Ark",
+      "model": "glm-5-2-260617",
+      "row_id": "synthetic-1"
+    },
+    {
+      "provider": "Ark",
+      "model": "glm-5-2-260617",
+      "row_id": "synthetic-2"
+    }
+  ],
+  "injected_http_status": 402,
+  "live_model_calls": 0,
+  "discarded_partial_rows": 2,
+  "final_rows": 3,
+  "final_provider": "Ark",
+  "final_judge": "glm-5-2-260617",
+  "single_provider_model_version": true,
+  "whole_table_regraded": true
+}

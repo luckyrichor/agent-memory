@@ -1,0 +1,183 @@
+{
+  "synthetic": true,
+  "target_count": 1630,
+  "input_sha256": "98b50d7f29c8955b7df1d5f0947773e39007c1ffb2bc88a9d7bcc9cc279ed1ae",
+  "split_sha256": "60b0060ac2ccdf1a05f38f4c51eb85203e95a357cd93e128894c68150e8ecdf3",
+  "prompt_sha256": "a91e974ed3cdeb854f6931b447155547b8f80d895f94df5b9f15f7b4de8b92f6",
+  "original_failed_attempts": [
+    {
+      "model": "deepseek-v4-pro",
+      "provider": "TokenHub",
+      "complete": false,
+      "count": 1000,
+      "remaining": 630,
+      "label_counts": {
+        "keep": 1000
+      },
+      "http_status_counts": {
+        "200": 20,
+        "402": 2
+      },
+      "total_tokens": 119319,
+      "response_models": [
+        "deepseek-v4-pro"
+      ],
+      "input_matches": true,
+      "prompt_matches": true,
+      "labels_sha256": null,
+      "evidence_hashes": {
+        "timeline-deepseek/shard-0/labels.jsonl": "96aa930c560cf14951a09c8a123aee85429a4d373667b65f22705b5c69f46310",
+        "timeline-deepseek/shard-1/labels.jsonl": "b7ff534329a6a3b99e65004475b5b85fe2c6278ac17cfa76803a436a200e7a5e",
+        "timeline-deepseek/shard-1/ledger.json": "349ab20ede1933f269babc174f13b830c69d637513171b4f6743ec11eaaecf90",
+        "timeline-deepseek/shard-0/ledger.json": "ea14767ca26dd7671851ade75c10351bd3d4390b04bcf1d96d98994c8f56fb41",
+        "timeline-deepseek/manifest.json": "b9935f57a54d46bc37ac078f74ba3a2950963bebe538dd3bddf6492792238c48"
+      }
+    },
+    {
+      "model": "mimo-v2.6-flash",
+      "provider": "TokenHub",
+      "complete": false,
+      "count": 1050,
+      "remaining": 580,
+      "label_counts": {
+        "keep": 1050
+      },
+      "http_status_counts": {
+        "200": 21,
+        "402": 2
+      },
+      "total_tokens": 131718,
+      "response_models": [
+        "mimo-v2.6-flash"
+      ],
+      "input_matches": true,
+      "prompt_matches": true,
+      "labels_sha256": null,
+      "evidence_hashes": {
+        "timeline-mimo/shard-0/labels.jsonl": "96aa930c560cf14951a09c8a123aee85429a4d373667b65f22705b5c69f46310",
+        "timeline-mimo/shard-1/labels.jsonl": "7eeaf4e5ae7ea2a9299af74915b3624a02dace722c263acda0176b7b2d51c7fd",
+        "timeline-mimo/shard-1/ledger.json": "d48f9a4726a7c9513f553bce501090f172e38f3118ed584da21da15da9c6f4de",
+        "timeline-mimo/shard-0/ledger.json": "8d21ab47a0f5be289d3e71fe15b618fc1fa0b52e492b0b608e801c8162689db2",
+        "timeline-mimo/manifest.json": "b25c36bf4d9dc09b7abb17f826fdcbf3bc1103d409b2368901daa5b92d4ce3f0"
+      }
+    }
+  ],
+  "models": [
+    {
+      "model": "deepseek-v4-pro-ga-260813",
+      "provider": "Ark",
+      "complete": true,
+      "count": 1630,
+      "remaining": 0,
+      "label_counts": {
+        "keep": 1500,
+        "discard": 130
+      },
+      "http_status_counts": {
+        "200": 33
+      },
+      "total_tokens": 192845,
+      "response_models": [
+        "deepseek-v4-pro-ga-260813"
+      ],
+      "input_matches": true,
+      "prompt_matches": true,
+      "labels_sha256": "295028214f92f3cedce4321ba52c14e23f517b2bae161ce64fc207addde7b1b9",
+      "evidence_hashes": {
+        "timeline-v2-deepseek/shard-0/labels.jsonl": "e5d1c03227d1b7061eab9e8279154a83f88ee7da1d611c4175b59634969f4592",
+        "timeline-v2-deepseek/shard-1/labels.jsonl": "eb999a1587984ea5f5b41365857d344c61603ba2a1ff3b8c4026a63daeac881d",
+        "timeline-v2-deepseek/shard-1/ledger.json": "e7f8aa80bc341c499941e2801e899f61a3bbf879013a65f60a477ddfcfc39f24",
+        "timeline-v2-deepseek/shard-0/ledger.json": "6083bad10fc44a8a88bf86666a8555c8e55cd060189a7411aa3faacebc89bd9c",
+        "timeline-v2-deepseek/manifest.json": "a274092730ac9366bb41a9829177fef58e1379da69ef101dda009b27300e7b33"
+      }
+    },
+    {
+      "model": "hy4-preview",
+      "provider": "TokenHub",
+      "complete": true,
+      "count": 1630,
+      "remaining": 0,
+      "label_counts": {
+        "keep": 1500,
+        "discard": 130
+      },
+      "http_status_counts": {
+        "200": 33
+      },
+      "total_tokens": 187548,
+      "response_models": [
+        "hy4-preview"
+      ],
+      "input_matches": true,
+      "prompt_matches": true,
+      "labels_sha256": "295028214f92f3cedce4321ba52c14e23f517b2bae161ce64fc207addde7b1b9",
+      "evidence_hashes": {
+        "timeline-v2-hy4/shard-0/labels.jsonl": "e5d1c03227d1b7061eab9e8279154a83f88ee7da1d611c4175b59634969f4592",
+        "timeline-v2-hy4/shard-1/labels.jsonl": "eb999a1587984ea5f5b41365857d344c61603ba2a1ff3b8c4026a63daeac881d",
+        "timeline-v2-hy4/shard-1/ledger.json": "98bb90e1d6ab14bf62d30fe72757d89e72b1219f9a9e3b70bd1af2b1cd03b1f5",
+        "timeline-v2-hy4/shard-0/ledger.json": "51f8db4948c4cc18f973dd1928b2a358d46c4fef908d4bfcbe167bb6be5bc1de",
+        "timeline-v2-hy4/manifest.json": "d1cd63ea403bc6e57dc77d4598884dfb8fdf14750f20bc0fff9c88b4048789b2"
+      }
+    }
+  ],
+  "old_labels_reused": false,
+  "human_review_complete": false,
+  "counts_toward_real_chinese": false,
+  "complete": true,
+  "agreement": {
+    "n": 1630,
+    "agreement": 1.0,
+    "kappa": 1.0,
+    "matrix": [
+      {
+        "left": "discard",
+        "right": "discard",
+        "n": 130
+      },
+      {
+        "left": "keep",
+        "right": "keep",
+        "n": 1500
+      }
+    ]
+  },
+  "joint_keep": 1500,
+  "conflicts": 0,
+  "audit_reference_count": 163,
+  "qualifications": {
+    "deepseek-v4-pro-ga-260813": {
+      "model": "deepseek-v4-pro-ga-260813",
+      "calls": 106,
+      "format_valid": 100,
+      "format_n": 100,
+      "consistent_5": true,
+      "preflight_pass": true,
+      "observed_disabled_thinking": true,
+      "sampling_control_eligible": true,
+      "latency_ms": {
+        "n": 106,
+        "p50": 1567.8893805015832,
+        "p95": 2063.63081978634,
+        "p99": 2221.902625449002
+      },
+      "http_429": 0
+    },
+    "hy4-preview": {
+      "model": "hy4-preview",
+      "calls": 106,
+      "format_valid": 100,
+      "format_n": 100,
+      "consistent_5": true,
+      "preflight_pass": true,
+      "observed_disabled_thinking": true,
+      "sampling_control_eligible": true,
+      "latency_ms": {
+        "n": 106,
+        "p50": 2383.148904540576,
+        "p95": 3226.829555409495,
+        "p99": 3700.2937713288707
+      },
+      "http_429": 0
+    }
+  }
+}
