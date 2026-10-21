@@ -1,0 +1,19 @@
+{
+  "scope": "phase1-postprocessing-experiment-only",
+  "parent_policy": "docs/evals/phase1-round3-policy-v4.json",
+  "frozen_data_overwrite": false,
+  "owner_labels_override_experimental_filter": true,
+  "whole_joint_pool_adoption_allowed": false,
+  "filter_active": false,
+  "filter_owner_approved": false,
+  "development_owner_return": ".local/dulemon72-final.csv",
+  "development_data_reuse_for_acceptance": false,
+  "fresh_sample_size": 72,
+  "fresh_seed": 20261023,
+  "fresh_maximum_errors": 3,
+  "fresh_sampling_with_replacement": false,
+  "fresh_exclude_all_owner_reviewed": true,
+  "incremental_annotation_requires_filter_approval": true,
+  "minimum_real_chinese_points": 700,
+  "target_real_chinese_points": 1500
+}

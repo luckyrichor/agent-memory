@@ -22,3 +22,5 @@
 - [阶段1第三轮后续：方案、裁判、查询与泄漏审计](2026-10-21-phase1-round3-followup.md)
 
 - [获批补量、八列盲审与查询启用](2026-10-21-phase1-approved-followup.md)
+
+- [共同保留池抽检失败与逐字过滤试验](2026-10-21-phase1-verbatim-filter.md)

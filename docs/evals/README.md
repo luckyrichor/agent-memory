@@ -159,3 +159,8 @@ DuLeMon 原生审核只对负责人真正核对行计算冻结参照一致率，
 当前查询由 chinese-query-current.json 选择已获批准的新版本；materialize-current-chinese-queries.py 生成常规评测入口可读语料。旧版保留，新旧哈希不同不能同集比较。时间推理、知识更新、多会话只进flow_only_by_type，不进质量汇总；阶段1不启动阶段2评测。
 
 新的共同保留池审核采用原八列格式，item_id不透明、source原JSON、人工栏空白。prepare-approved-joint-audit.py排除既往人工审核项后独立随机抽样；finalize-approved-joint-audit.py完整校验真实回填，按负责人批准的错误条数闸门计算，并单列有限总体超几何置信区间，不新增CI上界验收条件。ECD与困难集旧人工审核继续暂缓。
+
+
+### 当前人工金标与失败过滤实验
+
+当前人工确认集合见 human-confirmed-current.json 与[最新交接](../reports/phase1-round3-verbatim-filter-2026-10-21/delivery.md)。共同保留池的真实盲审未通过，不能整体采纳。verbatim-filter-policy-v1.json仅约束离线后处理实验，未启用过滤原型；规则及误伤局限见verbatim-filter-v1.md。新的盲审表尚未生成：未审文字支持项不足指定数量，且过滤方案不可用。原审核数据已成为规则开发集，不再用于证明新方案通过。
