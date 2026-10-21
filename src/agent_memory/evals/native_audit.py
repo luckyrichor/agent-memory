@@ -34,9 +34,9 @@ def finalize_native_audit(
             raise ValueError("audit source changed")
     if {r["item_id"] for r in raw} != expected or set(manifest["audit_ids"]) != expected:
         raise ValueError("frozen sampling changed")
-    checked = answers(template, submitted)
-    if checked.keys() != expected:
-        raise ValueError("owner audit incomplete")
+    checked = answers(template, submitted, allow_blank=True)
+    if not checked:
+        raise ValueError("no owner-checked rows; blank is not an annotation")
     matches = sum(label.label == ref[key].label for key, label in checked.items())
     ratio = matches / len(checked)
     passed = ratio >= 0.95
@@ -48,6 +48,11 @@ def finalize_native_audit(
         "frozen_reference_agreement": ratio,
         "matches": matches,
         "audit_count": len(checked),
+        "frozen_sample_count": len(expected),
+        "unchecked_count": len(expected) - len(checked),
+        "coverage": len(checked) / len(expected),
+        "sampling_limitation": "partial owner review; no assumption unchecked rows are representative",
+        "human_provenance": "owner-supplied file and reviewer assertion; never infer from Agent labels",
         "threshold": 0.95,
         "native_reference_accepted": passed,
         "gold_basis": "native-after-owner-corrections" if passed else "human-confirmed-subset-only",

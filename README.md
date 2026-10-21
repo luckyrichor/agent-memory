@@ -354,8 +354,8 @@ API/SDK、计数口径与验收见[Context Builder](docs/context-builder.md)。
 
 ## 新完善方案：阶段1评测工程
 
-2026-10-19起按用户提供的[完善方案](docs/agent-memory面试级完善方案.md)推进，本轮只做阶段1，之后等待确认，不进入阶段2。评测命令、公开数据来源/协议、模型预检、重放账本和人工标注流程见[评测说明](docs/evals/README.md)。**阶段1尚未通过全部人工/数据闸门，不能称完整B0已测或优化已完成。** B0标签仍为阶段0修复后源码。
+2026-10-19起按用户提供的方案推进，当前以[最新版原件](docs/plans/2026-10-21-agent-memory-interview-plan.md)为准，本轮只做阶段1，之后等待确认，不进入阶段2。评测命令、公开数据来源/协议、模型预检、重放账本和人工标注流程见[评测说明](docs/evals/README.md)。**阶段1尚未通过全部人工/数据闸门，不能称完整B0已测或优化已完成。** B0标签仍为阶段0修复后源码。
 
-阶段1当前交接：[第三轮收尾报告（召回修复、跨云运行入口、合成整批重标）](docs/reports/phase1-round3-closeout-2026-10-21/delivery.md)。当前仅要求DuLeMon原生230条审核，其他旧审核暂缓；阶段1仍未验收。
+阶段1当前交接：[第三轮后续报告（方案更新、按表裁判、查询集与合成泄漏审计）](docs/reports/phase1-round3-followup-2026-10-21/delivery.md)。DuLeMon原生审核仅统计负责人实际核对行；ECD表保持，其他旧审核暂缓；阶段1仍未验收。
 
 裁判历史补查：[火山 Ark 实测与额度查询限制](docs/reports/phase1-round3-ark-2026-10-21/delivery.md)。

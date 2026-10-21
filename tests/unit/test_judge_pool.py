@@ -12,11 +12,13 @@ from agent_memory.evals.judge_pool import (
 )
 
 
-def test_quota_unknown_never_fabricates_order():
-    with pytest.raises(ValueError, match="observed remaining"):
-        rank_judges([Judge(str(i), "Tencent", True, None) for i in range(3)], {"Xiaomi"})
-    ranked = rank_judges([Judge(str(i), "Tencent", True, 100 - i) for i in range(3)], {"Xiaomi"})
-    assert [j.model for j in ranked] == ["0", "1", "2"]
+def test_preserve_frozen_order_without_balance_ranking():
+    pool = [Judge(str(i), "Tencent", True, n) for i, n in enumerate([None, 5, 100])]
+    assert rank_judges(pool, {"Xiaomi"}) == pool
+    with pytest.raises(ValueError, match="two qualified backups"):
+        rank_judges(pool[:2], {"Xiaomi"})
+    with pytest.raises(ValueError, match="duplicate"):
+        rank_judges([*pool, pool[0]], {"Xiaomi"})
 
 
 @pytest.mark.asyncio

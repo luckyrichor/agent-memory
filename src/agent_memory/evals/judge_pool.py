@@ -16,7 +16,7 @@ class Judge:
     model: str
     vendor: str
     qualified: bool
-    remaining_tokens: int | None
+    remaining_tokens: int | None = None
     provider: str = "TokenHub"
 
     def __post_init__(self) -> None:
@@ -42,9 +42,10 @@ def rank_judges(candidates: Sequence[Judge], excluded_vendors: set[str]) -> list
     eligible = [j for j in candidates if j.qualified and j.vendor not in excluded_vendors]
     if len({(j.provider, j.model) for j in eligible}) < 3:
         raise ValueError("one primary and at least two qualified backups required")
-    if any(j.remaining_tokens is None for j in eligible):
-        raise ValueError("observed remaining quota required; unknown is not unlimited")
-    return sorted(eligible, key=lambda j: (-(j.remaining_tokens or 0), j.model))
+    if len(eligible) != len({(j.provider, j.model) for j in eligible}):
+        raise ValueError("duplicate judge is not a backup")
+    # Frozen explicit preference order after preflight and actual-call checks. No balance query.
+    return eligible
 
 
 def judge_budget(questions: int, groups: int, repeats: int) -> dict[str, int]:
@@ -79,7 +80,9 @@ async def evaluate_table(
         raise ValueError("judge outputs must stay in private .local")
     if not re.fullmatch(r"[a-zA-Z0-9_-]{1,120}", table_id) or not rows or not judges:
         raise ValueError("valid table ID, rows and frozen judge pool required")
-    excluded = {"ByteDance", "DeepSeek", "Xiaomi"} | (excluded_vendors or set())
+    excluded = (
+        excluded_vendors if excluded_vendors is not None else {"ByteDance", "DeepSeek", "Xiaomi"}
+    )
     if any(not j.qualified or j.vendor in excluded for j in judges):
         raise ValueError("judge pool violates frozen model-role independence")
     ids = [r.get("row_id") for r in rows]
@@ -94,6 +97,7 @@ async def evaluate_table(
         version: str | None = None
         failed = False
         attempt: dict[str, Any] = {
+            "started_at": datetime.now(UTC).isoformat(),
             "judge": judge.model,
             "provider": judge.provider,
             "rows_scored": 0,
@@ -110,6 +114,8 @@ async def evaluate_table(
                     break
                 except JudgeFailure as error:
                     grade = None
+                    attempt["failure_status"] = error.status
+                    attempt["failure_at"] = datetime.now(UTC).isoformat()
                     with ledger.open("a") as stream:
                         stream.write(
                             json.dumps(
@@ -124,7 +130,7 @@ async def evaluate_table(
                             )
                             + "\n"
                         )
-                    if error.status in (400, 401, 402, 403, 404):
+                    if error.status == 402:
                         break
                     if retry < 2:
                         await asyncio.sleep(retry_delay * (2**retry))

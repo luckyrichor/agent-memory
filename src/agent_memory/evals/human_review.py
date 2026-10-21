@@ -22,7 +22,7 @@ def csv_text(value: Any) -> str:
     return "'" + text if text.startswith(("=", "+", "-", "@", "\t", "\r")) else text
 
 
-def answers(template: Path, submitted: Path) -> dict[str, Label]:
+def answers(template: Path, submitted: Path, *, allow_blank: bool = False) -> dict[str, Label]:
     original = [json.loads(line) for line in template.read_text().splitlines() if line.strip()]
     expected = {row["item_id"]: row for row in original}
     if len(expected) != len(original):
@@ -34,10 +34,12 @@ def answers(template: Path, submitted: Path) -> dict[str, Label]:
     else:
         rows = [json.loads(line) for line in submitted.read_text().splitlines() if line.strip()]
     result = {}
+    seen: set[str] = set()
     for row in rows:
         key = row.get("item_id")
-        if not isinstance(key, str) or key not in expected or key in result:
+        if not isinstance(key, str) or key not in expected or key in seen:
             raise ValueError("human review ID coverage invalid")
+        seen.add(key)
         reference = expected[key]
         if is_csv:
             if row.get("record_sha256") != digest(reference):
@@ -50,6 +52,10 @@ def answers(template: Path, submitted: Path) -> dict[str, Label]:
             if frozen != {k: v for k, v in reference.items() if not k.startswith("human_")}:
                 raise ValueError("human review source/candidate was changed")
         label, reason = row.get("human_label"), row.get("human_reason")
+        label = label.strip() if isinstance(label, str) else label
+        reason = reason.strip() if isinstance(reason, str) else reason
+        if allow_blank and not label and not reason:
+            continue
         if (
             label not in ("keep", "discard", "uncertain")
             or not isinstance(reason, str)
@@ -59,7 +65,7 @@ def answers(template: Path, submitted: Path) -> dict[str, Label]:
         result[key] = Label.model_validate(
             {"item_id": key, "label": label, "reason": reason.strip()}
         )
-    if result.keys() != expected.keys():
+    if seen != expected.keys():
         raise ValueError("human review ID coverage invalid")
     return result
 
