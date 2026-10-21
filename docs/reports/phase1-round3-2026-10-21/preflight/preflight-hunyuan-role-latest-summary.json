@@ -1,0 +1,11 @@
+{
+  "model": "hunyuan-role-latest",
+  "calls": 6,
+  "format_valid": 0,
+  "format_n": 0,
+  "consistent_5": true,
+  "preflight_pass": false,
+  "observed_disabled_thinking": true,
+  "latency_ms": {},
+  "scope": "initial qualification probe; no arbitrary 100-call spend after minimal format failure"
+}

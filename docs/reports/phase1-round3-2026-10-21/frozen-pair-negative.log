@@ -1,0 +1,9 @@
+usage: run-chinese-rotation.py [-h] [--root ROOT]
+                               [--second-model SECOND_MODEL]
+                               [--first-model FIRST_MODEL]
+                               [--first-vendor FIRST_VENDOR]
+                               [--second-vendor SECOND_VENDOR]
+                               [--second-preflight SECOND_PREFLIGHT]
+                               [--first-preflight FIRST_PREFLIGHT]
+                               [--data-root DATA_ROOT] [--prompt PROMPT]
+run-chinese-rotation.py: error: exact frozen annotation pair required; changes need owner confirmation

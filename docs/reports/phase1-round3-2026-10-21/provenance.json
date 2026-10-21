@@ -1,0 +1,30 @@
+{
+  "source_commit": "e70cb00c2fa2703527e31db7a5e133291161f5f3",
+  "artifacts_sha256": {
+    "review-methods-and-hashes.json": "9323e004687ccff64a77f6f17917b2a05fa5e5f7c67dfe8b6d290fe1606c1f0e",
+    "delivery.md": "c0d85a7afa89a5a3dc7b1903a9d7f31583a05ed2cfb9d1bc9f46a6879f8706f0",
+    "report.json": "4afa30e0a11d5a4cb5dffc48769455e2b9fd159c00d27bddb874029626d53326",
+    "frozen-pair-negative.log": "dd8f30ab878ce278be2ea345892dab502549ecacf42f8f9d39f1aadb47ad2438",
+    "synthetic-failover-integration.json": "994276d9b24c355bb597cd67862be7b0a7cd3a3ae6ce07c0756cfbd0c8ff0786",
+    "budget.json": "75009147b6427c9fb4a380cf3b453ed994f7871f303c755cb8dd065021761535",
+    "validation.log": "7c9adcc07a33903a5ea2bacf009168995253f96431735d5788258b4f9a64826f",
+    "retrieval-provenance.json": "b29c9847951cf247f03ada9496d5cebaed7e06f72f3a47e4eb86d1a87a4861b7",
+    "preflight/preflight-hunyuan-role-latest-summary.json": "87c65cc5c6fe2bea37d0fdf46ddda516f94b6f456007991b1478f7e70763c41c",
+    "preflight/preflight-hy4-preview-summary.json": "be8ffe5f4ebbfc8690e200cfbfe862782a0f6f22525996ba86351fd3d8ff2c41",
+    "preflight/preflight-hunyuan-role-latest-full-summary.json": "df6b710eba493507d8e7f32adc050fb3ed9c4633344348ac52db5c46161d492b",
+    "preflight/preflight-hy-role-summary.json": "b1e367dd76f174490ae8c93cee4ab4b6dbf2a6a0c432dea47635c19dfb9e7b60",
+    "preflight/preflight-glm-5v-turbo-summary.json": "58f003899083cc07954bf0cb36bde1dfa2125e5643c9bcdf4ae97a74f6a62fd4",
+    "preflight/preflight-glm-5v-turbo-retest-summary.json": "6e4bda3af7f05d103f7de0156ea2e4f0b881edbffb116a2013b415fd174aa67d"
+  },
+  "frozen_inputs_sha256": {
+    "docs/agent-memory面试级完善方案.md": "9cb312cd94e11eeaf9ca6b816f4a15b37d061d22986eba8263cf4160dbe73d2e",
+    "docs/evals/metric-catalog.json": "d6d12679cbb14bb843c35e4fa2690852a4a2647db5a2363414640c9258e92998",
+    "docs/evals/human-review-policy-v1.json": "3bc90ff1d8ad2c498af317c4c5e1b7e8cc7c3c0ad4ab73da6bcde9caae8d7f57",
+    "docs/evals/labeling-guide-v2.md": "97a66d80cc29527cd278720b3c6781907adc398f5b2af25ebb3051989bcbd57b",
+    "src/agent_memory/evals/metrics.py": "d772a80c84cbe0f6e636631051bf04a045a8694ad2361a5f797c0c71e15b4c81",
+    ".local/phase1/chinese-expansion-v2/dulemon/source-frozen-split.json": "8afee30dc4562c7bb68e07a8d46732dad1b7c41337e98ef0746945ade95afbf8",
+    ".local/phase1/chinese-expansion-v2/ecd/split.json": "12ea5989fccea2991b6e40efa090668d9af5b78b3c706baa6660c0ff29472a8d"
+  },
+  "frozen_metric_guide_threshold_files_unchanged_from_previous_delivery": true,
+  "privacy": "Only aggregate methods/hashes/metrics; no ECD source, review text or owner labels exported"
+}

@@ -1,0 +1,17 @@
+{
+  "model": "hunyuan-role-latest",
+  "calls": 106,
+  "format_valid": 100,
+  "format_n": 100,
+  "consistent_5": true,
+  "preflight_pass": true,
+  "observed_disabled_thinking": true,
+  "sampling_control_eligible": true,
+  "latency_ms": {
+    "n": 106,
+    "p50": 1057.7053885208443,
+    "p95": 1481.832598685287,
+    "p99": 1775.0954905524854
+  },
+  "http_429": 0
+}

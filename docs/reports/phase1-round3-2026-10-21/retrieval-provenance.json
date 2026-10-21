@@ -1,0 +1,13 @@
+{
+  "source_commit_at_start": "e698367bba51f05320c5b0a5517a964fb4f218e6",
+  "clean_worktree_observed_before_run": true,
+  "retrieval_relevant_files_unchanged_after_annotation_only_updates": true,
+  "source_files_sha256": {
+    "src/agent_memory/evals/datasets.py": "83dbfe226b66fb8397f5f6fe54635c15dc8fda4ba53ed2b6a555cda3e448b38e",
+    "src/agent_memory/evals/api_import.py": "bbde855987018099884769f6abc0cb553609bf9d4810da7199381c74582caa54",
+    "src/agent_memory/evals/runner.py": "e390ba24d0c8cff495d985ea1c3fd0786185cbcb7885811db995677722c72940",
+    "src/agent_memory/evals/metrics.py": "d772a80c84cbe0f6e636631051bf04a045a8694ad2361a5f797c0c71e15b4c81",
+    "scripts/public-retrieval-smoke.py": "9da7f89d30161a5a0a08eb5a7db90f212fe46fe304c06779f79d296e0f9bd504",
+    "docs/evals/metric-catalog.json": "d6d12679cbb14bb843c35e4fa2690852a4a2647db5a2363414640c9258e92998"
+  }
+}

@@ -1,0 +1,924 @@
+{
+  "generated_at": "2026-10-21T01:49:01.671633+00:00",
+  "generated_date_beijing": "2026-10-21",
+  "source_commit": "e70cb00c2fa2703527e31db7a5e133291161f5f3",
+  "working_tree_modified_before_report": false,
+  "phase": 1,
+  "phase_gate_passed": false,
+  "phase2_started": false,
+  "annotation_models": [
+    "deepseek-v4-pro",
+    "mimo-v2.6-flash"
+  ],
+  "annotation_replacement_requires_confirmation": true,
+  "latest_plan_received": false,
+  "original_plan_sha256": "9cb312cd94e11eeaf9ca6b816f4a15b37d061d22986eba8263cf4160dbe73d2e",
+  "policy_sha256": "adbeb2e6a63c619b4c86babc43a3e4561ff4c05423c0b706cedac4dd5b688d31",
+  "ecd": {
+    "seed": 42,
+    "ecd_conversations": 400,
+    "ecd_candidates": 2720,
+    "ecd_provisional_negative_candidates": 2104,
+    "ecd_provisional_entire_negative_conversations": 251,
+    "human_verified": false,
+    "ecd_kappa_gate_applicable": false,
+    "ecd_manual_conversations": 120,
+    "ecd_strata_population": {
+      "personal_information_hint": 25,
+      "no_personal_information_hint": 375
+    },
+    "ecd_manual_strata": {
+      "no_personal_information_hint": 95,
+      "personal_information_hint": 25
+    },
+    "ecd_manual_split": {
+      "test": 88,
+      "dev": 32
+    },
+    "strata_limit": "regex personal-info hint only; anonymous speakers, not verified user facts or gold. Owner labels attribution.",
+    "source_items_sha256": "35f4e64cd6eb6d3a36d9fcde3516e5978d64ba9cb9762368fd671babd48014ad",
+    "labels_sha256": [
+      "b365300d764b8811535a17268649ce1bcb0ca1f97e8637a14bc3882bdf3cd770",
+      "1115c32356a2c2000a8e19186c975f42962110b05d32c11be2dc6c90db165548"
+    ],
+    "required_owner_audit": 230,
+    "ecd_manual_required_now": false,
+    "other_old_reviews_required_now": false,
+    "frozen_native_audit_unchanged": true,
+    "output_files_sha256": {
+      "ecd-manual-120.jsonl": "392b53fd6d21d9d47f17233a08bf2f39cc11c08b4a013753ddbc3148f1501927",
+      "ecd-negative-local.jsonl": "34072968d613f45a0bea699f64e0204da5a476cc4a7a890fc1b33ee6eb7f568b",
+      "ecd-manual-120.csv": "c5e56d41c72194d7a56327e76b5fcc6051fcb397ef2dcdf4d120e1729686fb8a",
+      "dulemon-native-reference/audit-blind.jsonl": "aa001b678ce1f122775d69411c6e815643f08c430c6cd90ff237ac69834f5eb7",
+      "dulemon-native-reference/reference-review.json": "215f2a3b49313b7415b008c7aae0b542447cd5421dcb796c61aac042871d5aaf",
+      "dulemon-native-reference/audit-blind.csv": "5a5619eba70448eae9dbaead978ef8729e3936c561274fbc77b9b811901c08a3"
+    },
+    "source_models": [
+      "deepseek-v4-pro",
+      "mimo-v2.6-flash"
+    ],
+    "phase_gate_passed": false
+  },
+  "budget": {
+    "questions": 500,
+    "groups": 4,
+    "repeats": 3,
+    "answer_calls": 6000,
+    "judge_calls": 6000,
+    "combined_calls": 12000,
+    "judge_input_tokens_estimate": 6000000,
+    "judge_output_tokens_estimate": 600000,
+    "judge_total_tokens_estimate": 6600000,
+    "source": "supplied plan section7 example workload",
+    "input_tokens_per_judge_call": 1000,
+    "output_tokens_per_judge_call": 100,
+    "scope": "one combined grading call per answer; standalone E4/CX5 calls require extra budget",
+    "quota_sufficient": null,
+    "quota_verified": false,
+    "available_benchmarks": {
+      "longmemeval_s": {
+        "all_questions": 500,
+        "test_questions": 350,
+        "conversations": 500
+      },
+      "locomo": {
+        "all_questions": 1986,
+        "test_questions": 1294,
+        "conversations": 10
+      },
+      "perltqa_zh": {
+        "all_questions": 8593,
+        "test_questions": 6180,
+        "conversations": 141
+      }
+    },
+    "existing_lme_s_plus_locomo_test_workload": {
+      "questions": 1644,
+      "groups": 4,
+      "repeats": 3,
+      "answer_calls": 19728,
+      "judge_calls": 19728,
+      "combined_calls": 39456,
+      "judge_input_tokens_estimate": 19728000,
+      "judge_output_tokens_estimate": 1972800,
+      "judge_total_tokens_estimate": 21700800
+    },
+    "full_evaluation_workload_frozen": false,
+    "unbuilt_chinese_queries_not_assumed_complete": true
+  },
+  "candidates": [
+    {
+      "model": "glm-5.2",
+      "queried_at": "2026-10-21T01:08:07.627416+00:00",
+      "remaining_tokens": null,
+      "quota_source": "not exposed by GET /models",
+      "http_status": 402,
+      "seconds": 1.2834017951972783,
+      "quota_headers": {},
+      "error_code": "401008",
+      "error_type": "permission_error",
+      "quota_exhausted": true,
+      "preflight_pass": false,
+      "format_valid": 0,
+      "format_n": 0,
+      "consistent_5": false,
+      "remaining_free_tokens": 0,
+      "quota_basis": "Actual HTTP402 explicitly free trial exhausted and postpaid disabled; not entire account balance",
+      "qualification_history": [],
+      "vendor": "Zhipu",
+      "control_semantics_verified": true,
+      "qualified_for_pool": false
+    },
+    {
+      "model": "hy3",
+      "queried_at": "2026-10-21T01:08:10.913306+00:00",
+      "remaining_tokens": null,
+      "quota_source": "not exposed by GET /models",
+      "http_status": 402,
+      "seconds": 0.5144255799241364,
+      "quota_headers": {},
+      "error_code": "401008",
+      "error_type": "permission_error",
+      "quota_exhausted": true,
+      "preflight_pass": false,
+      "format_valid": 0,
+      "format_n": 0,
+      "consistent_5": false,
+      "remaining_free_tokens": 0,
+      "quota_basis": "Actual HTTP402 explicitly free trial exhausted and postpaid disabled; not entire account balance",
+      "qualification_history": [],
+      "vendor": "Tencent",
+      "control_semantics_verified": true,
+      "qualified_for_pool": false
+    },
+    {
+      "model": "hy4-preview",
+      "queried_at": "2026-10-21T01:08:13.429354+00:00",
+      "remaining_tokens": null,
+      "quota_source": "not exposed by GET /models",
+      "http_status": 200,
+      "seconds": 2.1475024421233684,
+      "quota_headers": {},
+      "response_model": "hy4-preview",
+      "usage": {
+        "prompt_tokens": 39,
+        "completion_tokens": 12,
+        "total_tokens": 51,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "reasoning_present": false,
+      "preflight_pass": true,
+      "format_valid": 100,
+      "format_n": 100,
+      "consistent_5": true,
+      "remaining_free_tokens": null,
+      "qualification_history": [
+        {
+          "summary": {
+            "model": "hy4-preview",
+            "calls": 106,
+            "format_valid": 100,
+            "format_n": 100,
+            "consistent_5": true,
+            "preflight_pass": true,
+            "observed_disabled_thinking": true,
+            "sampling_control_eligible": true,
+            "latency_ms": {
+              "n": 106,
+              "p50": 2383.148904540576,
+              "p95": 3226.829555409495,
+              "p99": 3700.2937713288707
+            },
+            "http_429": 0
+          },
+          "summary_sha256": "be8ffe5f4ebbfc8690e200cfbfe862782a0f6f22525996ba86351fd3d8ff2c41",
+          "response_failures": 0
+        }
+      ],
+      "observed_disabled_thinking": true,
+      "latency_ms": {
+        "n": 106,
+        "p50": 2383.148904540576,
+        "p95": 3226.829555409495,
+        "p99": 3700.2937713288707
+      },
+      "judge_prompt_consistent_5": true,
+      "judge_prompt_responses": [
+        {
+          "score": true,
+          "reason_code": "MATCH",
+          "response_model": "hy4-preview",
+          "usage": {
+            "prompt_tokens": 121,
+            "completion_tokens": 14,
+            "total_tokens": 135
+          }
+        },
+        {
+          "score": true,
+          "reason_code": "MATCH",
+          "response_model": "hy4-preview",
+          "usage": {
+            "prompt_tokens": 121,
+            "completion_tokens": 14,
+            "total_tokens": 135
+          }
+        },
+        {
+          "score": true,
+          "reason_code": "MATCH",
+          "response_model": "hy4-preview",
+          "usage": {
+            "prompt_tokens": 121,
+            "completion_tokens": 14,
+            "total_tokens": 135
+          }
+        },
+        {
+          "score": true,
+          "reason_code": "MATCH",
+          "response_model": "hy4-preview",
+          "usage": {
+            "prompt_tokens": 121,
+            "completion_tokens": 14,
+            "total_tokens": 135
+          }
+        },
+        {
+          "score": true,
+          "reason_code": "MATCH",
+          "response_model": "hy4-preview",
+          "usage": {
+            "prompt_tokens": 121,
+            "completion_tokens": 14,
+            "total_tokens": 135
+          }
+        }
+      ],
+      "vendor": "Tencent",
+      "control_semantics_verified": true,
+      "qualified_for_pool": true
+    },
+    {
+      "model": "minimax-m3",
+      "queried_at": "2026-10-21T01:08:17.579310+00:00",
+      "remaining_tokens": null,
+      "quota_source": "not exposed by GET /models",
+      "http_status": 402,
+      "seconds": 0.42489436198957264,
+      "quota_headers": {},
+      "error_code": "401008",
+      "error_type": "permission_error",
+      "quota_exhausted": true,
+      "preflight_pass": false,
+      "format_valid": 0,
+      "format_n": 0,
+      "consistent_5": false,
+      "remaining_free_tokens": 0,
+      "quota_basis": "Actual HTTP402 explicitly free trial exhausted and postpaid disabled; not entire account balance",
+      "qualification_history": [],
+      "vendor": "MiniMax",
+      "control_semantics_verified": true,
+      "qualified_for_pool": false
+    },
+    {
+      "model": "minimax-m3.1-flash",
+      "queried_at": "2026-10-21T01:08:20.006751+00:00",
+      "remaining_tokens": null,
+      "quota_source": "not exposed by GET /models",
+      "http_status": 400,
+      "seconds": 5.435250189853832,
+      "quota_headers": {},
+      "error_code": "400001",
+      "error_type": "invalid_request_error",
+      "quota_exhausted": false,
+      "preflight_pass": false,
+      "format_valid": 0,
+      "format_n": 0,
+      "consistent_5": false,
+      "remaining_free_tokens": null,
+      "qualification_history": [],
+      "vendor": "MiniMax",
+      "control_semantics_verified": false,
+      "qualified_for_pool": false
+    },
+    {
+      "model": "glm-5v-turbo",
+      "queried_at": "2026-10-21T01:08:27.444336+00:00",
+      "remaining_tokens": null,
+      "quota_source": "not exposed by GET /models",
+      "http_status": 200,
+      "seconds": 1.5622125479858369,
+      "quota_headers": {},
+      "response_model": "glm-5v-turbo",
+      "usage": {
+        "prompt_tokens": 72,
+        "completion_tokens": 15,
+        "total_tokens": 87,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "reasoning_present": false,
+      "preflight_pass": true,
+      "format_valid": 100,
+      "format_n": 100,
+      "consistent_5": true,
+      "remaining_free_tokens": null,
+      "qualification_history": [
+        {
+          "summary": {
+            "model": "glm-5v-turbo",
+            "calls": 106,
+            "format_valid": 99,
+            "format_n": 100,
+            "consistent_5": true,
+            "preflight_pass": false,
+            "observed_disabled_thinking": false,
+            "sampling_control_eligible": true,
+            "latency_ms": {
+              "n": 106,
+              "p50": 1808.4136254619807,
+              "p95": 3848.4291147906333,
+              "p99": 31875.565267226248
+            },
+            "http_429": 0
+          },
+          "summary_sha256": "58f003899083cc07954bf0cb36bde1dfa2125e5643c9bcdf4ae97a74f6a62fd4",
+          "response_failures": 1
+        },
+        {
+          "summary": {
+            "model": "glm-5v-turbo",
+            "calls": 106,
+            "format_valid": 100,
+            "format_n": 100,
+            "consistent_5": true,
+            "preflight_pass": true,
+            "observed_disabled_thinking": true,
+            "sampling_control_eligible": true,
+            "latency_ms": {
+              "n": 106,
+              "p50": 1749.4504689238966,
+              "p95": 2885.221528878901,
+              "p99": 3974.18035262963
+            },
+            "http_429": 0
+          },
+          "summary_sha256": "6e4bda3af7f05d103f7de0156ea2e4f0b881edbffb116a2013b415fd174aa67d",
+          "response_failures": 0
+        }
+      ],
+      "observed_disabled_thinking": true,
+      "latency_ms": {
+        "n": 106,
+        "p50": 1749.4504689238966,
+        "p95": 2885.221528878901,
+        "p99": 3974.18035262963
+      },
+      "judge_prompt_consistent_5": true,
+      "judge_prompt_responses": [
+        {
+          "score": true,
+          "reason_code": "MATCH",
+          "response_model": "glm-5v-turbo",
+          "usage": {
+            "prompt_tokens": 153,
+            "completion_tokens": 21,
+            "total_tokens": 174
+          }
+        },
+        {
+          "score": true,
+          "reason_code": "MATCH",
+          "response_model": "glm-5v-turbo",
+          "usage": {
+            "prompt_tokens": 153,
+            "completion_tokens": 21,
+            "total_tokens": 174
+          }
+        },
+        {
+          "score": true,
+          "reason_code": "MATCH",
+          "response_model": "glm-5v-turbo",
+          "usage": {
+            "prompt_tokens": 153,
+            "completion_tokens": 21,
+            "total_tokens": 174
+          }
+        },
+        {
+          "score": true,
+          "reason_code": "MATCH",
+          "response_model": "glm-5v-turbo",
+          "usage": {
+            "prompt_tokens": 153,
+            "completion_tokens": 21,
+            "total_tokens": 174
+          }
+        },
+        {
+          "score": true,
+          "reason_code": "MATCH",
+          "response_model": "glm-5v-turbo",
+          "usage": {
+            "prompt_tokens": 153,
+            "completion_tokens": 21,
+            "total_tokens": 174
+          }
+        }
+      ],
+      "vendor": "Zhipu",
+      "control_semantics_verified": true,
+      "qualified_for_pool": true
+    },
+    {
+      "model": "step-5-preview",
+      "queried_at": "2026-10-21T01:08:31.008990+00:00",
+      "remaining_tokens": null,
+      "quota_source": "not exposed by GET /models",
+      "http_status": 200,
+      "seconds": 3.1166685270145535,
+      "quota_headers": {},
+      "response_model": "step-5-preview",
+      "usage": {
+        "prompt_tokens": 26,
+        "completion_tokens": 120,
+        "total_tokens": 146,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "reasoning_present": true,
+      "preflight_pass": false,
+      "format_valid": 0,
+      "format_n": 0,
+      "consistent_5": false,
+      "remaining_free_tokens": null,
+      "qualification_history": [],
+      "vendor": "StepFun",
+      "control_semantics_verified": false,
+      "qualified_for_pool": false
+    },
+    {
+      "model": "hy-vision-2.0-instruct",
+      "queried_at": "2026-10-21T01:09:48.295737+00:00",
+      "remaining_tokens": null,
+      "quota_source": "not exposed by GET /models",
+      "http_status": 200,
+      "seconds": 2.5606433930806816,
+      "quota_headers": {},
+      "response_model": "hy-vision-2.0-instruct",
+      "usage": {
+        "prompt_tokens": 19,
+        "completion_tokens": 19,
+        "total_tokens": 38,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "reasoning_present": true,
+      "preflight_pass": false,
+      "format_valid": 0,
+      "format_n": 0,
+      "consistent_5": false,
+      "remaining_free_tokens": null,
+      "qualification_history": [],
+      "vendor": "Tencent",
+      "control_semantics_verified": false,
+      "qualified_for_pool": false
+    },
+    {
+      "model": "qwen3.5-plus",
+      "queried_at": "2026-10-21T01:09:52.858781+00:00",
+      "remaining_tokens": null,
+      "quota_source": "not exposed by GET /models",
+      "http_status": 400,
+      "seconds": 0.6618225299753249,
+      "quota_headers": {},
+      "error_code": "400004",
+      "error_type": "invalid_request_error",
+      "quota_exhausted": false,
+      "preflight_pass": false,
+      "format_valid": 0,
+      "format_n": 0,
+      "consistent_5": false,
+      "remaining_free_tokens": null,
+      "qualification_history": [],
+      "vendor": "Alibaba",
+      "control_semantics_verified": false,
+      "qualified_for_pool": false
+    },
+    {
+      "model": "qwen3.5-flash",
+      "queried_at": "2026-10-21T01:09:55.523254+00:00",
+      "remaining_tokens": null,
+      "quota_source": "not exposed by GET /models",
+      "http_status": 400,
+      "seconds": 0.4395914990454912,
+      "quota_headers": {},
+      "error_code": "400004",
+      "error_type": "invalid_request_error",
+      "quota_exhausted": false,
+      "preflight_pass": false,
+      "format_valid": 0,
+      "format_n": 0,
+      "consistent_5": false,
+      "remaining_free_tokens": null,
+      "qualification_history": [],
+      "vendor": "Alibaba",
+      "control_semantics_verified": false,
+      "qualified_for_pool": false
+    },
+    {
+      "model": "hy-role",
+      "queried_at": "2026-10-21T01:25:01.886568+00:00",
+      "remaining_tokens": null,
+      "quota_source": "not exposed by GET /models",
+      "http_status": 200,
+      "seconds": 4.722194628790021,
+      "quota_headers": {},
+      "response_model": "hy-role",
+      "usage": {
+        "prompt_tokens": 18,
+        "completion_tokens": 10,
+        "total_tokens": 28,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "reasoning_present": false,
+      "preflight_pass": false,
+      "format_valid": 0,
+      "format_n": 50,
+      "consistent_5": false,
+      "remaining_free_tokens": null,
+      "qualification_history": [
+        {
+          "summary": {
+            "model": "hy-role",
+            "calls": 56,
+            "format_n": 50,
+            "format_valid": 0,
+            "consistent_5": false,
+            "preflight_pass": false,
+            "observed_disabled_thinking": true,
+            "sampling_control_eligible": false,
+            "latency_ms": {},
+            "early_stopped": "Already exceeds permitted invalid-format count; cannot reach99/100; no need spend remaining probes",
+            "control_documentation": "Role-tuned, thinking capability matrix not applicable; not qualified as formal judge"
+          },
+          "summary_sha256": "b1e367dd76f174490ae8c93cee4ab4b6dbf2a6a0c432dea47635c19dfb9e7b60",
+          "response_failures": 56
+        }
+      ],
+      "observed_disabled_thinking": true,
+      "latency_ms": {},
+      "vendor": "Tencent",
+      "control_semantics_verified": false,
+      "control_limit": "role-tuned native non-reasoning model; official thinking capability matrix not applicable; on/off control semantics not verified, not automatically admitted under frozen criterion",
+      "qualified_for_pool": false
+    },
+    {
+      "model": "hunyuan-role-latest",
+      "queried_at": "2026-10-21T01:25:08.610459+00:00",
+      "remaining_tokens": null,
+      "quota_source": "not exposed by GET /models",
+      "http_status": 200,
+      "seconds": 1.0677621529903263,
+      "quota_headers": {},
+      "response_model": "hunyuan-role-latest",
+      "usage": {
+        "prompt_tokens": 18,
+        "completion_tokens": 12,
+        "total_tokens": 30,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "reasoning_present": false,
+      "preflight_pass": true,
+      "format_valid": 100,
+      "format_n": 100,
+      "consistent_5": true,
+      "remaining_free_tokens": null,
+      "qualification_history": [
+        {
+          "summary": {
+            "model": "hunyuan-role-latest",
+            "calls": 6,
+            "format_valid": 0,
+            "format_n": 0,
+            "consistent_5": true,
+            "preflight_pass": false,
+            "observed_disabled_thinking": true,
+            "latency_ms": {},
+            "scope": "initial qualification probe; no arbitrary 100-call spend after minimal format failure"
+          },
+          "summary_sha256": "87c65cc5c6fe2bea37d0fdf46ddda516f94b6f456007991b1478f7e70763c41c",
+          "response_failures": 0
+        },
+        {
+          "summary": {
+            "model": "hunyuan-role-latest",
+            "calls": 106,
+            "format_valid": 100,
+            "format_n": 100,
+            "consistent_5": true,
+            "preflight_pass": true,
+            "observed_disabled_thinking": true,
+            "sampling_control_eligible": true,
+            "latency_ms": {
+              "n": 106,
+              "p50": 1057.7053885208443,
+              "p95": 1481.832598685287,
+              "p99": 1775.0954905524854
+            },
+            "http_429": 0
+          },
+          "summary_sha256": "df6b710eba493507d8e7f32adc050fb3ed9c4633344348ac52db5c46161d492b",
+          "response_failures": 0
+        }
+      ],
+      "observed_disabled_thinking": true,
+      "latency_ms": {
+        "n": 106,
+        "p50": 1057.7053885208443,
+        "p95": 1481.832598685287,
+        "p99": 1775.0954905524854
+      },
+      "judge_prompt_consistent_5": true,
+      "judge_prompt_responses": [
+        {
+          "score": true,
+          "reason_code": "MATCH",
+          "response_model": "hunyuan-role-latest",
+          "usage": {
+            "prompt_tokens": 99,
+            "completion_tokens": 14,
+            "total_tokens": 113
+          }
+        },
+        {
+          "score": true,
+          "reason_code": "MATCH",
+          "response_model": "hunyuan-role-latest",
+          "usage": {
+            "prompt_tokens": 99,
+            "completion_tokens": 14,
+            "total_tokens": 113
+          }
+        },
+        {
+          "score": true,
+          "reason_code": "MATCH",
+          "response_model": "hunyuan-role-latest",
+          "usage": {
+            "prompt_tokens": 99,
+            "completion_tokens": 14,
+            "total_tokens": 113
+          }
+        },
+        {
+          "score": true,
+          "reason_code": "MATCH",
+          "response_model": "hunyuan-role-latest",
+          "usage": {
+            "prompt_tokens": 99,
+            "completion_tokens": 14,
+            "total_tokens": 113
+          }
+        },
+        {
+          "score": true,
+          "reason_code": "MATCH",
+          "response_model": "hunyuan-role-latest",
+          "usage": {
+            "prompt_tokens": 99,
+            "completion_tokens": 14,
+            "total_tokens": 113
+          }
+        }
+      ],
+      "vendor": "Tencent",
+      "control_semantics_verified": false,
+      "control_limit": "role-tuned native non-reasoning model; official thinking capability matrix not applicable; on/off control semantics not verified, not automatically admitted under frozen criterion",
+      "qualified_for_pool": false
+    }
+  ],
+  "quota_ranked_pool_frozen": false,
+  "primary_judge": null,
+  "backups": [],
+  "owner_native_audit_received": false,
+  "human_confirmed_chinese_gold": 0,
+  "chinese_gold_target": 1500,
+  "qualified_candidate_count": 2,
+  "remaining_quota_ranking_status": "blocked: callable models do not expose numeric remaining quota",
+  "required_pool_size": 3,
+  "missing_qualified_candidates": 1,
+  "control_exclusions": {
+    "glm-5.3_series": "officially cannot disable thinking",
+    "kimi_series": "frozen sampling/cannot meet temperature0 policy",
+    "minimax-m3.1-flash": "official M3.1 preview guidance disallows disabled-thinking"
+  },
+  "synthetic_timeline": {
+    "candidate_count": 1630,
+    "models": [
+      "deepseek-v4.1-flash",
+      "minimax-m2.7"
+    ],
+    "complete": true,
+    "items_sha256": "98b50d7f29c8955b7df1d5f0947773e39007c1ffb2bc88a9d7bcc9cc279ed1ae",
+    "labels_sha256": [
+      "1be7aaa577fd073b89a5883c4c58a5751c4e3f1472afb27da0637135e9121516",
+      "0bead3aabe75aabbda5c6af97ea5ace205ca9db6b23341ef94aec7d6493ac879"
+    ],
+    "matches_current_frozen_pair": false,
+    "relabel_proposal": "Retain candidates/timeline/splits and fully label with frozen pair only after owner confirmation",
+    "relabel_executed": false
+  },
+  "native_dulemon_unreviewed_keep": 1746,
+  "human_confirmed_chinese_gold_gap": 1500,
+  "retrieval_provenance": {
+    "source_commit_at_start": "e698367bba51f05320c5b0a5517a964fb4f218e6",
+    "clean_worktree_observed_before_run": true,
+    "retrieval_relevant_files_unchanged_after_annotation_only_updates": true,
+    "source_files_sha256": {
+      "src/agent_memory/evals/datasets.py": "83dbfe226b66fb8397f5f6fe54635c15dc8fda4ba53ed2b6a555cda3e448b38e",
+      "src/agent_memory/evals/api_import.py": "bbde855987018099884769f6abc0cb553609bf9d4810da7199381c74582caa54",
+      "src/agent_memory/evals/runner.py": "e390ba24d0c8cff495d985ea1c3fd0786185cbcb7885811db995677722c72940",
+      "src/agent_memory/evals/metrics.py": "d772a80c84cbe0f6e636631051bf04a045a8694ad2361a5f797c0c71e15b4c81",
+      "scripts/public-retrieval-smoke.py": "9da7f89d30161a5a0a08eb5a7db90f212fe46fe304c06779f79d296e0f9bd504",
+      "docs/evals/metric-catalog.json": "d6d12679cbb14bb843c35e4fa2690852a4a2647db5a2363414640c9258e92998"
+    }
+  },
+  "retrieval": {
+    "longmemeval_oracle": {
+      "question_count": 1,
+      "scored_count": 1,
+      "recall_at10": {
+        "value": 1.0,
+        "n": 1,
+        "numerator": 1.0,
+        "denominator": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "evidence_coverage_at10": {
+        "value": 0.3333333333333333,
+        "n": 1,
+        "numerator": 0.3333333333333333,
+        "denominator": 1.0,
+        "ci95": [
+          0.3333333333333333,
+          0.3333333333333333
+        ]
+      },
+      "mapping_records": 36,
+      "channel": "PostgreSQL lexical+structured; vector unconfigured",
+      "full_corpus": false,
+      "source_corpus_sha256": "7548a44f09bcb15adedcff249e9a02b9ef0e2f5a7535da7963efb8b7aca24a65",
+      "normalized_subset_sha256": "8be41a6ed667111b3e2631c091a6530575ca02bd030f5cbd663a09bf652c8797",
+      "prediction_sha256": "e6d4fb3332b6cf1f893f12d8573e6f0ee0afd2e243355e72d715fcc8b0a43dbe",
+      "run_scope": "first frozen development conversation; direct memory import; actual non-owner RLS PostgreSQL and ASGI HTTP API; no extraction/vector or full B0 claim"
+    },
+    "locomo": {
+      "question_count": 193,
+      "scored_count": 193,
+      "recall_at10": {
+        "value": 0.013157894736842105,
+        "n": 1,
+        "numerator": 2.0,
+        "denominator": 152.0,
+        "ci95": [
+          0.013157894736842105,
+          0.013157894736842105
+        ]
+      },
+      "evidence_coverage_at10": {
+        "value": 0.008223684210526315,
+        "n": 1,
+        "numerator": 1.25,
+        "denominator": 152.0,
+        "ci95": [
+          0.008223684210526315,
+          0.008223684210526315
+        ]
+      },
+      "mapping_records": 663,
+      "channel": "PostgreSQL lexical+structured; vector unconfigured",
+      "full_corpus": false,
+      "source_corpus_sha256": "7f9672088cd079572353be859d50d00c7e8d118a3e40fb1f99d17058512cfcad",
+      "normalized_subset_sha256": "c7248345f12e81b6c87a973689e4f5c2c12c6e05edf2865ef347aa715ba4e9de",
+      "prediction_sha256": "805b57fb5dd3f78d5132ea1af058dc7158119a93e12dc87267aea7500657c2f3",
+      "run_scope": "first frozen development conversation; direct memory import; actual non-owner RLS PostgreSQL and ASGI HTTP API; no extraction/vector or full B0 claim"
+    }
+  },
+  "validation": {
+    "pytest_passed": 345,
+    "pytest_seconds": 16.85,
+    "ruff": true,
+    "mypy_strict": true,
+    "foundation": {
+      "passed": 8,
+      "total": 8
+    },
+    "log_sha256": "7c9adcc07a33903a5ea2bacf009168995253f96431735d5788258b4f9a64826f"
+  },
+  "synthetic_failover_integration": {
+    "scope": "stage1 synthetic integration only; injected HTTP402 after two actual grades, not actual provider quota exhaustion, not a quota-ranked formal pool",
+    "request_sequence": [
+      {
+        "judge": "hy4-preview",
+        "row_id": "synthetic-0"
+      },
+      {
+        "judge": "hy4-preview",
+        "row_id": "synthetic-1"
+      },
+      {
+        "judge": "hy4-preview",
+        "row_id": "synthetic-2"
+      },
+      {
+        "judge": "glm-5v-turbo",
+        "row_id": "synthetic-0"
+      },
+      {
+        "judge": "glm-5v-turbo",
+        "row_id": "synthetic-1"
+      },
+      {
+        "judge": "glm-5v-turbo",
+        "row_id": "synthetic-2"
+      }
+    ],
+    "complete_single_judge": true,
+    "discarded_partial_rows": 2,
+    "final_rows": 3,
+    "real_provider_grade_calls": 5,
+    "final_judge": "glm-5v-turbo",
+    "version": "glm-5v-turbo"
+  },
+  "native_review_template_sha256": "5a5619eba70448eae9dbaead978ef8729e3936c561274fbc77b9b811901c08a3",
+  "limitations": [
+    "Latest revised plan original not yet supplied; execute explicit owner message without overwriting old plan",
+    "Numeric remaining quota unavailable for callable candidates; cannot rank or prove full evaluation budget coverage",
+    "Owner native audit and judge human calibration not completed by assistant",
+    "Chinese query construction/type coverage remains unfinished; public-benchmark budget is not a complete Chinese evaluation budget"
+  ],
+  "model_controls_sources": [
+    "https://cloud.tencent.com/document/product/1823/132061",
+    "https://cloud.tencent.com/document/product/1823/132252",
+    "https://cloud.tencent.com/document/product/1823/131208",
+    "https://cloud.tencent.com/document/product/1823/137795",
+    "https://agent.minimax.cn/tools/m3-1-flash-preview"
+  ],
+  "private_owner_package": {
+    "path": ".local/phase1/round3/agent-memory-phase1-round3-owner-private.zip",
+    "bytes": 141169,
+    "sha256": "5971279bcd6a4061ead8c5a5c1708102f5f631b3fce8c12164227907e8f27765",
+    "manifest": {
+      "private_owner_only": true,
+      "not_for_group_or_github": true,
+      "required_now": {
+        "native_dulemon_rows": 230
+      },
+      "optional_later": {
+        "ecd_conversations": 120,
+        "strata": {
+          "no_personal_information_hint": 95,
+          "personal_information_hint": 25
+        }
+      },
+      "files_sha256": {
+        "现在只填这份-DuLeMon230.csv": "5a5619eba70448eae9dbaead978ef8729e3936c561274fbc77b9b811901c08a3",
+        "预备材料-本轮不要求填写-ECD120.csv": "c5e56d41c72194d7a56327e76b5fcc6051fcb397ef2dcdf4d120e1729686fb8a"
+      },
+      "native_audit_unchanged": true
+    }
+  }
+}

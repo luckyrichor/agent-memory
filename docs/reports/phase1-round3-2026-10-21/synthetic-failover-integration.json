@@ -1,0 +1,35 @@
+{
+  "scope": "stage1 synthetic integration only; injected HTTP402 after two actual grades, not actual provider quota exhaustion, not a quota-ranked formal pool",
+  "request_sequence": [
+    {
+      "judge": "hy4-preview",
+      "row_id": "synthetic-0"
+    },
+    {
+      "judge": "hy4-preview",
+      "row_id": "synthetic-1"
+    },
+    {
+      "judge": "hy4-preview",
+      "row_id": "synthetic-2"
+    },
+    {
+      "judge": "glm-5v-turbo",
+      "row_id": "synthetic-0"
+    },
+    {
+      "judge": "glm-5v-turbo",
+      "row_id": "synthetic-1"
+    },
+    {
+      "judge": "glm-5v-turbo",
+      "row_id": "synthetic-2"
+    }
+  ],
+  "complete_single_judge": true,
+  "discarded_partial_rows": 2,
+  "final_rows": 3,
+  "real_provider_grade_calls": 5,
+  "final_judge": "glm-5v-turbo",
+  "version": "glm-5v-turbo"
+}

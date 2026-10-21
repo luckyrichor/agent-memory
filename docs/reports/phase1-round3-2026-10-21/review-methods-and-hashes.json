@@ -1,0 +1,45 @@
+{
+  "seed": 42,
+  "ecd_conversations": 400,
+  "ecd_candidates": 2720,
+  "ecd_provisional_negative_candidates": 2104,
+  "ecd_provisional_entire_negative_conversations": 251,
+  "human_verified": false,
+  "ecd_kappa_gate_applicable": false,
+  "ecd_manual_conversations": 120,
+  "ecd_strata_population": {
+    "personal_information_hint": 25,
+    "no_personal_information_hint": 375
+  },
+  "ecd_manual_strata": {
+    "no_personal_information_hint": 95,
+    "personal_information_hint": 25
+  },
+  "ecd_manual_split": {
+    "test": 88,
+    "dev": 32
+  },
+  "strata_limit": "regex personal-info hint only; anonymous speakers, not verified user facts or gold. Owner labels attribution.",
+  "source_items_sha256": "35f4e64cd6eb6d3a36d9fcde3516e5978d64ba9cb9762368fd671babd48014ad",
+  "labels_sha256": [
+    "b365300d764b8811535a17268649ce1bcb0ca1f97e8637a14bc3882bdf3cd770",
+    "1115c32356a2c2000a8e19186c975f42962110b05d32c11be2dc6c90db165548"
+  ],
+  "required_owner_audit": 230,
+  "ecd_manual_required_now": false,
+  "other_old_reviews_required_now": false,
+  "frozen_native_audit_unchanged": true,
+  "output_files_sha256": {
+    "ecd-manual-120.jsonl": "392b53fd6d21d9d47f17233a08bf2f39cc11c08b4a013753ddbc3148f1501927",
+    "ecd-negative-local.jsonl": "34072968d613f45a0bea699f64e0204da5a476cc4a7a890fc1b33ee6eb7f568b",
+    "ecd-manual-120.csv": "c5e56d41c72194d7a56327e76b5fcc6051fcb397ef2dcdf4d120e1729686fb8a",
+    "dulemon-native-reference/audit-blind.jsonl": "aa001b678ce1f122775d69411c6e815643f08c430c6cd90ff237ac69834f5eb7",
+    "dulemon-native-reference/reference-review.json": "215f2a3b49313b7415b008c7aae0b542447cd5421dcb796c61aac042871d5aaf",
+    "dulemon-native-reference/audit-blind.csv": "5a5619eba70448eae9dbaead978ef8729e3936c561274fbc77b9b811901c08a3"
+  },
+  "source_models": [
+    "deepseek-v4-pro",
+    "mimo-v2.6-flash"
+  ],
+  "phase_gate_passed": false
+}

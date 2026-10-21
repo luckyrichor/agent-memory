@@ -1,0 +1,47 @@
+{
+  "questions": 500,
+  "groups": 4,
+  "repeats": 3,
+  "answer_calls": 6000,
+  "judge_calls": 6000,
+  "combined_calls": 12000,
+  "judge_input_tokens_estimate": 6000000,
+  "judge_output_tokens_estimate": 600000,
+  "judge_total_tokens_estimate": 6600000,
+  "source": "supplied plan section7 example workload",
+  "input_tokens_per_judge_call": 1000,
+  "output_tokens_per_judge_call": 100,
+  "scope": "one combined grading call per answer; standalone E4/CX5 calls require extra budget",
+  "quota_sufficient": null,
+  "quota_verified": false,
+  "available_benchmarks": {
+    "longmemeval_s": {
+      "all_questions": 500,
+      "test_questions": 350,
+      "conversations": 500
+    },
+    "locomo": {
+      "all_questions": 1986,
+      "test_questions": 1294,
+      "conversations": 10
+    },
+    "perltqa_zh": {
+      "all_questions": 8593,
+      "test_questions": 6180,
+      "conversations": 141
+    }
+  },
+  "existing_lme_s_plus_locomo_test_workload": {
+    "questions": 1644,
+    "groups": 4,
+    "repeats": 3,
+    "answer_calls": 19728,
+    "judge_calls": 19728,
+    "combined_calls": 39456,
+    "judge_input_tokens_estimate": 19728000,
+    "judge_output_tokens_estimate": 1972800,
+    "judge_total_tokens_estimate": 21700800
+  },
+  "full_evaluation_workload_frozen": false,
+  "unbuilt_chinese_queries_not_assumed_complete": true
+}

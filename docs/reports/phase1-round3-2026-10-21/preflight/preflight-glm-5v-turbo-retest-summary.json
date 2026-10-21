@@ -1,0 +1,17 @@
+{
+  "model": "glm-5v-turbo",
+  "calls": 106,
+  "format_valid": 100,
+  "format_n": 100,
+  "consistent_5": true,
+  "preflight_pass": true,
+  "observed_disabled_thinking": true,
+  "sampling_control_eligible": true,
+  "latency_ms": {
+    "n": 106,
+    "p50": 1749.4504689238966,
+    "p95": 2885.221528878901,
+    "p99": 3974.18035262963
+  },
+  "http_429": 0
+}
