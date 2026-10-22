@@ -18,7 +18,10 @@ async def main():
     p = argparse.ArgumentParser()
     p.add_argument("--pool", type=Path)
     p.add_argument("--rows", type=Path)
-    p.add_argument("--table-kind", choices=("public-chinese", "synthetic-timeline"))
+    p.add_argument("--table-kind", help="table key from the frozen policy")
+    p.add_argument(
+        "--policy", type=Path, default=Path("docs/evals/phase1-round3-policy-v4.json")
+    )
     p.add_argument("--output", type=Path, required=True)
     p.add_argument("--table-id", required=True)
     p.add_argument(
@@ -37,7 +40,7 @@ async def main():
     config = json.loads(a.pool.read_text())
     if not a.table_kind:
         p.error("formal run requires --table-kind")
-    policy = json.loads(Path("docs/evals/phase1-round3-policy-v4.json").read_text())
+    policy = json.loads(a.policy.read_text())
     try:
         judges = load_table_pool(config, policy, a.table_kind)
     except (ValueError, KeyError, OSError) as exc:

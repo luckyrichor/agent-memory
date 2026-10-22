@@ -1,0 +1,14 @@
+{
+  "basis": "owner-approved-old-pool-union-human",
+  "individually_human_confirmed": 154,
+  "old_audited_model_pool": 262,
+  "old_model_only_not_individually_confirmed": 193,
+  "human_old_overlap": 69,
+  "accepted_union": 347,
+  "old_temporal_screen_applied": false,
+  "new_pool_adopted": 0,
+  "phase1_accepted": false,
+  "items_sha256": "8287c00bebf2b4b33cc58f030b1cae0018e0cc5082abb800ec7ab690f8bcc9a0",
+  "provenance_sha256": "9927f041cbb37efafbcdd580d2096819583330c24f6e525772498bc7386d5889",
+  "owner_message": "om_x100b62a9407f9cacdfb8a3edc01d487"
+}

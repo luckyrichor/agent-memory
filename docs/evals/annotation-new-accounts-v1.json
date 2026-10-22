@@ -1,0 +1,32 @@
+{
+  "frozen_at": "2026-10-22T12:55:40.045414+00:00",
+  "models": [
+    "deepseek-v4.1-flash-1017",
+    "hunyuan-role-latest"
+  ],
+  "structured_models": [
+    "deepseek-v4.1-flash-1017"
+  ],
+  "provider": "TokenHub",
+  "account": "tokenhub-secondary",
+  "qualifications": {
+    "deepseek-v4.1-flash-1017": {
+      "path": ".local/phase1/round3/new-accounts-v1/annotation-preflight-structured/tokenhub-secondary/deepseek-v4.1-flash-1017/report.json",
+      "sha256": "8150ea175942d07744351d4a3ecae26f61f46d5e4820e69d23d769111117cf9e"
+    },
+    "deepseek-v4-flash-202605": {
+      "path": ".local/phase1/round3/new-accounts-v1/annotation-preflight-retry/tokenhub-secondary/deepseek-v4-flash-202605/report.json",
+      "sha256": "86d9441a17df33187b3adf68327377c88c9d5e126abc0a4058713d089d1ef73c"
+    },
+    "hunyuan-role-latest": {
+      "path": ".local/phase1/round3/new-accounts-v1/annotation-preflight/tokenhub-secondary/hunyuan-role-latest/report.json",
+      "sha256": "88b788ecf20367b04c9a6f2618bebe4ba3c3f3b07e6db2bbebad57ba172d6c83"
+    }
+  },
+  "prompt": "docs/evals/prompts/labeling-guide-v3-temporal-v1.txt",
+  "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
+  "validator_unchanged": true,
+  "batch4_both_sides_fresh": true,
+  "old_labels_not_spliced": true,
+  "phase1_accepted": false
+}

@@ -1,0 +1,30 @@
+{
+  "judge_minimum_backups": 1,
+  "tables": {
+    "old-pool": {
+      "answer_vendor": "ByteDance",
+      "annotation_vendors": [
+        "DeepSeek",
+        "Tencent"
+      ]
+    },
+    "new-pool": {
+      "answer_vendor": "ByteDance",
+      "annotation_vendors": [
+        "DeepSeek",
+        "Tencent"
+      ]
+    }
+  },
+  "judge_vendors": {
+    "TokenHub:glm-5.2": "Zhipu",
+    "TokenHub:mimo-v2.6-flash": "Xiaomi",
+    "TokenHub:minimax-m3": "MiniMax"
+  },
+  "withdrawn_judges": {
+    "TokenHub:glm-5v-turbo": "pre-offline",
+    "TokenHub:youtu-vita": "discontinued"
+  },
+  "human_calibration_required": true,
+  "formal_scores_currently_allowed": false
+}

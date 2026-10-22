@@ -1,0 +1,1379 @@
+{
+  "created_at": "2026-10-22T13:10:30.029202+00:00",
+  "source_commit": "c2e1ffe9834155bf3b15eeff52ad76409e144a5c",
+  "uncommitted_changes_at_generation": true,
+  "plan": "docs/plans/2026-10-22-agent-memory-interview-plan-v3.md",
+  "plan_sha256": "06ad7319525c6b0f4eb7333c981b094dd1ed6ec41ae2e5ea1b46009306389418",
+  "policy": {
+    "owner_message": "om_x100b62a9407f9cacdfb8a3edc01d487",
+    "plan": "docs/plans/2026-10-22-agent-memory-interview-plan-v3.md",
+    "plan_sha256": "06ad7319525c6b0f4eb7333c981b094dd1ed6ec41ae2e5ea1b46009306389418",
+    "old_pool": "adopt original eligible pool minus known owner errors; no temporal screen; union individually human-confirmed positives by original item_id",
+    "new_pool": "keep only dual-model citation-validated non-temporary items; adopt only after independent owner blind audit",
+    "target_reliable_union": 700,
+    "aspirational_target": 1500,
+    "maximum_blind_errors": 3,
+    "blind_sample": 72,
+    "new_source_seed": 20261029,
+    "new_audit_seed": 20261030,
+    "stop": "target joint pool sufficient for reliable union target after audit allowance, or exhaust unused reserve",
+    "credentials": [
+      "tokenhub-secondary",
+      "ark-secondary"
+    ],
+    "new_key_preflight": "temperature zero, disabled thinking, five consistent decisions, 100 distinct format samples at least 99 valid, actual successful call",
+    "redo": "entire unfinished batch index4, both sides; all old side results retired and never replayed",
+    "later_quota_switch": "qualified same-role independent-vendor replacement; whole affected side of current batch, never partial splice",
+    "judge": "per table exclude answer and actual adopted annotation vendors; main plus at least one qualified backup; human calibration required before formal scores",
+    "ecd": "unchanged",
+    "phase1_accepted": false,
+    "delivery": "current group only"
+  },
+  "planning": {
+    "old_pool_original": 265,
+    "known_errors_removed": 3,
+    "old_pool_adopted": 262,
+    "old_pool_temporal_screen_applied": false,
+    "human_confirmed": 154,
+    "overlap_human_old": 69,
+    "old_pool_model_only": 193,
+    "base_reliable_union": 347,
+    "base_gap_700": 353,
+    "base_gap_1500": 1153,
+    "completed_new_candidates": 2291,
+    "completed_new_joint_keep": 277,
+    "target_new_joint_keep": 356,
+    "target_basis": "owner-approved old union plus new joint keeps minus at most three final blind errors >=700; three is audit accounting, not a confidence guarantee",
+    "new_joint_gap": 79,
+    "completed_new_dialogues": 400,
+    "redo_dialogues": 100,
+    "unused_dialogues": 892,
+    "supplement_seed": 20261029,
+    "audit_seed": 20261030,
+    "phase1_accepted": false,
+    "new_pool_adopted": 0,
+    "conditional_projection": {
+      "basis": "completed four batches only, observed yield; not achieved count",
+      "joint_yield": 0.12090790048013968,
+      "additional_candidates": 654,
+      "additional_dialogues": 115,
+      "two_side_packet8_calls": 164,
+      "packet8_plus_packet1_calls": 736,
+      "excludes_qualification_and_retries": true
+    }
+  },
+  "old_audit": {
+    "audit_precision": {
+      "value": 0.9583333333333334,
+      "n": 67,
+      "numerator": 69,
+      "denominator": 72,
+      "ci95": [
+        0.9040762937595129,
+        1.0
+      ]
+    },
+    "audit_errors": 3,
+    "maximum_errors": 3,
+    "error_types": {
+      "temporary-state-as-long-term": 3
+    }
+  },
+  "old_temporal_screen_reference_only": {
+    "pool_temporary_removed": 49,
+    "known_errors_identified": 3,
+    "human_positive_falsely_removed": 25,
+    "human_positive_denominator": 154
+  },
+  "batches": [
+    {
+      "batch": 0,
+      "conversations": 100,
+      "candidates": 585,
+      "joint_keep": 77,
+      "temporal_removed": 79,
+      "citation_invalid": 54,
+      "per_model": {
+        "deepseek-v4-flash-202605": {
+          "keep": 79,
+          "temporary": 14,
+          "citation_invalid": 6
+        },
+        "hunyuan-role-latest": {
+          "keep": 146,
+          "temporary": 71,
+          "citation_invalid": 54
+        }
+      },
+      "models": [
+        "deepseek-v4-flash-202605",
+        "hunyuan-role-latest"
+      ],
+      "gold_adopted": false,
+      "invalid_evidence_total": 54,
+      "schema_invalid": 1,
+      "program_uncertain": 54,
+      "path": ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/cohort-000-attempt-00/batch-000",
+      "whole_batch_frozen": true
+    },
+    {
+      "batch": 1,
+      "conversations": 100,
+      "candidates": 567,
+      "joint_keep": 78,
+      "temporal_removed": 95,
+      "citation_invalid": 81,
+      "per_model": {
+        "deepseek-v4-flash-202605": {
+          "keep": 98,
+          "temporary": 18,
+          "citation_invalid": 9
+        },
+        "hunyuan-role-latest": {
+          "keep": 125,
+          "temporary": 82,
+          "citation_invalid": 83
+        }
+      },
+      "models": [
+        "deepseek-v4-flash-202605",
+        "hunyuan-role-latest"
+      ],
+      "gold_adopted": false,
+      "invalid_evidence_total": 88,
+      "schema_invalid": 7,
+      "program_uncertain": 88,
+      "path": ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/cohort-001-attempt-00/batch-001",
+      "whole_batch_frozen": true
+    },
+    {
+      "batch": 2,
+      "conversations": 100,
+      "candidates": 571,
+      "joint_keep": 58,
+      "temporal_removed": 87,
+      "citation_invalid": 77,
+      "per_model": {
+        "deepseek-v4-flash-202605": {
+          "keep": 74,
+          "temporary": 13,
+          "citation_invalid": 12
+        },
+        "hy-role": {
+          "keep": 108,
+          "temporary": 81,
+          "citation_invalid": 77
+        }
+      },
+      "models": [
+        "deepseek-v4-flash-202605",
+        "hy-role"
+      ],
+      "gold_adopted": false,
+      "invalid_evidence_total": 82,
+      "schema_invalid": 5,
+      "program_uncertain": 82,
+      "path": ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-002-attempt-00/batch-002",
+      "whole_batch_frozen": true
+    },
+    {
+      "batch": 3,
+      "conversations": 100,
+      "candidates": 568,
+      "joint_keep": 64,
+      "temporal_removed": 57,
+      "citation_invalid": 80,
+      "per_model": {
+        "deepseek/deepseek-v4-flash-vision-exp": {
+          "keep": 80,
+          "temporary": 12,
+          "citation_invalid": 7
+        },
+        "hy-role": {
+          "keep": 140,
+          "temporary": 50,
+          "citation_invalid": 87
+        }
+      },
+      "models": [
+        "deepseek/deepseek-v4-flash-vision-exp",
+        "hy-role"
+      ],
+      "gold_adopted": false,
+      "invalid_evidence_total": 92,
+      "schema_invalid": 12,
+      "program_uncertain": 92,
+      "path": ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-003-attempt-00/batch-003",
+      "whole_batch_frozen": true
+    },
+    {
+      "batch": 4,
+      "conversations": 100,
+      "candidates": 558,
+      "joint_keep": 56,
+      "temporal_removed": 69,
+      "citation_invalid": 64,
+      "per_model": {
+        "deepseek-v4.1-flash-1017": {
+          "keep": 74,
+          "temporary": 23,
+          "citation_invalid": 4
+        },
+        "hunyuan-role-latest": {
+          "keep": 107,
+          "temporary": 61,
+          "citation_invalid": 82
+        }
+      },
+      "models": [
+        "deepseek-v4.1-flash-1017",
+        "hunyuan-role-latest"
+      ],
+      "gold_adopted": false,
+      "invalid_evidence_total": 83,
+      "schema_invalid": 19,
+      "program_uncertain": 83,
+      "path": ".local/phase1/round3/new-accounts-v1/increment-batches-v6/cohort-004-attempt-00/batch-004",
+      "whole_batch_frozen": true
+    },
+    {
+      "batch": 5,
+      "conversations": 100,
+      "candidates": 557,
+      "joint_keep": 78,
+      "temporal_removed": 62,
+      "citation_invalid": 72,
+      "per_model": {
+        "deepseek-v4.1-flash-1017": {
+          "keep": 98,
+          "temporary": 14,
+          "citation_invalid": 7
+        },
+        "hunyuan-role-latest": {
+          "keep": 122,
+          "temporary": 54,
+          "citation_invalid": 85
+        }
+      },
+      "models": [
+        "deepseek-v4.1-flash-1017",
+        "hunyuan-role-latest"
+      ],
+      "gold_adopted": false,
+      "invalid_evidence_total": 88,
+      "schema_invalid": 16,
+      "program_uncertain": 88,
+      "path": ".local/phase1/round3/new-accounts-v1/increment-batches-v6/cohort-005-attempt-00/batch-005",
+      "whole_batch_frozen": true
+    }
+  ],
+  "increment": {
+    "batches": [
+      {
+        "batch": 0,
+        "conversations": 100,
+        "candidates": 585,
+        "joint_keep": 77,
+        "temporal_removed": 79,
+        "citation_invalid": 54,
+        "per_model": {
+          "deepseek-v4-flash-202605": {
+            "keep": 79,
+            "temporary": 14,
+            "citation_invalid": 6
+          },
+          "hunyuan-role-latest": {
+            "keep": 146,
+            "temporary": 71,
+            "citation_invalid": 54
+          }
+        },
+        "models": [
+          "deepseek-v4-flash-202605",
+          "hunyuan-role-latest"
+        ],
+        "gold_adopted": false,
+        "invalid_evidence_total": 54,
+        "schema_invalid": 1,
+        "program_uncertain": 54,
+        "path": ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/cohort-000-attempt-00/batch-000",
+        "whole_batch_frozen": true
+      },
+      {
+        "batch": 1,
+        "conversations": 100,
+        "candidates": 567,
+        "joint_keep": 78,
+        "temporal_removed": 95,
+        "citation_invalid": 81,
+        "per_model": {
+          "deepseek-v4-flash-202605": {
+            "keep": 98,
+            "temporary": 18,
+            "citation_invalid": 9
+          },
+          "hunyuan-role-latest": {
+            "keep": 125,
+            "temporary": 82,
+            "citation_invalid": 83
+          }
+        },
+        "models": [
+          "deepseek-v4-flash-202605",
+          "hunyuan-role-latest"
+        ],
+        "gold_adopted": false,
+        "invalid_evidence_total": 88,
+        "schema_invalid": 7,
+        "program_uncertain": 88,
+        "path": ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/cohort-001-attempt-00/batch-001",
+        "whole_batch_frozen": true
+      },
+      {
+        "batch": 2,
+        "conversations": 100,
+        "candidates": 571,
+        "joint_keep": 58,
+        "temporal_removed": 87,
+        "citation_invalid": 77,
+        "per_model": {
+          "deepseek-v4-flash-202605": {
+            "keep": 74,
+            "temporary": 13,
+            "citation_invalid": 12
+          },
+          "hy-role": {
+            "keep": 108,
+            "temporary": 81,
+            "citation_invalid": 77
+          }
+        },
+        "models": [
+          "deepseek-v4-flash-202605",
+          "hy-role"
+        ],
+        "gold_adopted": false,
+        "invalid_evidence_total": 82,
+        "schema_invalid": 5,
+        "program_uncertain": 82,
+        "path": ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-002-attempt-00/batch-002",
+        "whole_batch_frozen": true
+      },
+      {
+        "batch": 3,
+        "conversations": 100,
+        "candidates": 568,
+        "joint_keep": 64,
+        "temporal_removed": 57,
+        "citation_invalid": 80,
+        "per_model": {
+          "deepseek/deepseek-v4-flash-vision-exp": {
+            "keep": 80,
+            "temporary": 12,
+            "citation_invalid": 7
+          },
+          "hy-role": {
+            "keep": 140,
+            "temporary": 50,
+            "citation_invalid": 87
+          }
+        },
+        "models": [
+          "deepseek/deepseek-v4-flash-vision-exp",
+          "hy-role"
+        ],
+        "gold_adopted": false,
+        "invalid_evidence_total": 92,
+        "schema_invalid": 12,
+        "program_uncertain": 92,
+        "path": ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-003-attempt-00/batch-003",
+        "whole_batch_frozen": true
+      },
+      {
+        "batch": 4,
+        "conversations": 100,
+        "candidates": 558,
+        "joint_keep": 56,
+        "temporal_removed": 69,
+        "citation_invalid": 64,
+        "per_model": {
+          "deepseek-v4.1-flash-1017": {
+            "keep": 74,
+            "temporary": 23,
+            "citation_invalid": 4
+          },
+          "hunyuan-role-latest": {
+            "keep": 107,
+            "temporary": 61,
+            "citation_invalid": 82
+          }
+        },
+        "models": [
+          "deepseek-v4.1-flash-1017",
+          "hunyuan-role-latest"
+        ],
+        "gold_adopted": false,
+        "invalid_evidence_total": 83,
+        "schema_invalid": 19,
+        "program_uncertain": 83,
+        "path": ".local/phase1/round3/new-accounts-v1/increment-batches-v6/cohort-004-attempt-00/batch-004",
+        "whole_batch_frozen": true
+      },
+      {
+        "batch": 5,
+        "conversations": 100,
+        "candidates": 557,
+        "joint_keep": 78,
+        "temporal_removed": 62,
+        "citation_invalid": 72,
+        "per_model": {
+          "deepseek-v4.1-flash-1017": {
+            "keep": 98,
+            "temporary": 14,
+            "citation_invalid": 7
+          },
+          "hunyuan-role-latest": {
+            "keep": 122,
+            "temporary": 54,
+            "citation_invalid": 85
+          }
+        },
+        "models": [
+          "deepseek-v4.1-flash-1017",
+          "hunyuan-role-latest"
+        ],
+        "gold_adopted": false,
+        "invalid_evidence_total": 88,
+        "schema_invalid": 16,
+        "program_uncertain": 88,
+        "path": ".local/phase1/round3/new-accounts-v1/increment-batches-v6/cohort-005-attempt-00/batch-005",
+        "whole_batch_frozen": true
+      }
+    ],
+    "conversations": 600,
+    "candidates": 3406,
+    "joint_keep": 409,
+    "raw_joint_keep": 411,
+    "dedup_or_historical_removed": 8,
+    "target_unreviewed_joint_keeps": 356,
+    "target_reached": true,
+    "supplement_complete": true,
+    "unresolved_target_joint_keeps": 0,
+    "new_points_adopted": 0,
+    "owner_audit_pending": true,
+    "phase1_accepted": false,
+    "blocked": null,
+    "complete": true,
+    "remaining_unused_dialogues": 792,
+    "base_reliable_union": 347,
+    "unfinished_current_batch_excluded_from_gold": false,
+    "audit": {
+      "seed": 20261030,
+      "joint_keep": 409,
+      "owner_rejected_removed": 0,
+      "remaining_pool": 409,
+      "prior_reviewed_in_remaining_pool": 0,
+      "eligible_unreviewed_pool": 409,
+      "sample": 72,
+      "previous_review_overlap": 0,
+      "conversations": 69,
+      "source_counts": {
+        "dulemon-both-train": 72
+      },
+      "topic_counts": {
+        "preference": 14,
+        "other": 43,
+        "work-education": 5,
+        "family": 9,
+        "residence-origin": 1
+      },
+      "topic_rule": "descriptive regex, first matching category; not human/model labels; absent from reviewer table",
+      "maximum_errors": 3,
+      "human_completed": false,
+      "passed": null,
+      "error_rate": null,
+      "confidence_interval_95": null,
+      "format_approved": true,
+      "format_authorization": "owner message om_x100b62bf9ec420a0c1f4c8e945cc40e",
+      "files": {
+        "audit-blind.csv": "1c26fb5f8c4fcdfd4de00edf62d893c85458c17f395ec634572024bf7491ca46",
+        "audit-blind.jsonl": "2564072209189a531391bac1c993824417a7c6eecf7f87d25953873563fd6d9c",
+        "opaque-map-private.json": "0d00b72911135a12d8a0dd6880965cdfcaf74351b02078729f673288dbdce3c8"
+      },
+      "inputs": {
+        ".local/phase1/round3/new-accounts-v1/increment-batches-v6/audit-items.jsonl": "fda4c8126530731ab4a6fec809812b9858424fcf60eabc19026b21925d351b91",
+        ".local/phase1/round3/new-accounts-v1/increment-batches-v6/audit-left.jsonl": "8e440e145940cdd91181d1317ba2533a9f1022115fcb63ae35b0db30ddb0e9bf",
+        ".local/phase1/round3/new-accounts-v1/increment-batches-v6/audit-right.jsonl": "544a468c459a5e7eecc3075a57ab70a5aac6eec74a8c926c593c73f738f02d7d",
+        ".local/phase1/round3/new-accounts-v1/increment-batches-v6/audit-human-projection.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "owner_audit_issued": false,
+    "audit_prepared_private_only": false,
+    "audit_export_deferred_until_supplement_complete": false,
+    "controller_remaining_unused_dialogues_raw": 792,
+    "selected_incomplete_dialogues": 0
+  },
+  "annotation_preflight": [
+    {
+      "model": "deepseek/deepseek-flash",
+      "provider": "TokenHub",
+      "account": "tokenhub-secondary",
+      "qualified_at": "2026-10-22T12:41:26.200385+00:00",
+      "fictional_only": true,
+      "schema": "full v3 plus temporal",
+      "consistent_5": true,
+      "format_n": 100,
+      "format_valid": 83,
+      "distinct_inputs": 100,
+      "observed_disabled_thinking": true,
+      "calls": 105,
+      "reported_tokens": 142586,
+      "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
+      "temperature_requested": 0,
+      "passed": false,
+      "qualification_variant": "annotation-preflight",
+      "raw_report_calls": 105,
+      "transport_attempts_without_response_recorded_late": 0,
+      "http_counts": {
+        "200": 105
+      },
+      "error_types": {
+        "ValidationError": 17
+      },
+      "provider_error_codes": {}
+    },
+    {
+      "model": "deepseek/deepseek-v4-flash-vision-exp",
+      "provider": "TokenHub",
+      "account": "tokenhub-secondary",
+      "qualified_at": "2026-10-22T12:41:47.904058+00:00",
+      "fictional_only": true,
+      "schema": "full v3 plus temporal",
+      "consistent_5": false,
+      "format_n": 0,
+      "format_valid": 0,
+      "distinct_inputs": 0,
+      "observed_disabled_thinking": false,
+      "calls": 1,
+      "reported_tokens": 0,
+      "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
+      "temperature_requested": 0,
+      "passed": false,
+      "qualification_variant": "annotation-preflight",
+      "raw_report_calls": 0,
+      "transport_attempts_without_response_recorded_late": 1,
+      "http_counts": {},
+      "error_types": {
+        "RemoteProtocolError": 1
+      },
+      "provider_error_codes": {}
+    },
+    {
+      "model": "deepseek-v4-flash-202605",
+      "provider": "TokenHub",
+      "account": "tokenhub-secondary",
+      "qualified_at": "2026-10-22T12:43:12.256512+00:00",
+      "fictional_only": true,
+      "schema": "full v3 plus temporal",
+      "consistent_5": false,
+      "format_n": 0,
+      "format_valid": 0,
+      "distinct_inputs": 0,
+      "observed_disabled_thinking": false,
+      "calls": 1,
+      "reported_tokens": 0,
+      "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
+      "temperature_requested": 0,
+      "passed": false,
+      "qualification_variant": "annotation-preflight",
+      "raw_report_calls": 0,
+      "transport_attempts_without_response_recorded_late": 1,
+      "http_counts": {},
+      "error_types": {
+        "RemoteProtocolError": 1
+      },
+      "provider_error_codes": {}
+    },
+    {
+      "model": "deepseek-v4.1-flash-1017",
+      "provider": "TokenHub",
+      "account": "tokenhub-secondary",
+      "qualified_at": "2026-10-22T09:14:05.423209+00:00",
+      "fictional_only": true,
+      "schema": "full v3 plus temporal",
+      "consistent_5": true,
+      "format_n": 100,
+      "format_valid": 96,
+      "distinct_inputs": 100,
+      "observed_disabled_thinking": true,
+      "calls": 105,
+      "reported_tokens": 142567,
+      "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
+      "temperature_requested": 0,
+      "passed": false,
+      "qualification_variant": "annotation-preflight",
+      "raw_report_calls": 105,
+      "transport_attempts_without_response_recorded_late": 0,
+      "http_counts": {
+        "200": 105
+      },
+      "error_types": {
+        "ValidationError": 4
+      },
+      "provider_error_codes": {}
+    },
+    {
+      "model": "hunyuan-role-latest",
+      "provider": "TokenHub",
+      "account": "tokenhub-secondary",
+      "qualified_at": "2026-10-22T12:39:16.626541+00:00",
+      "fictional_only": true,
+      "schema": "full v3 plus temporal",
+      "consistent_5": true,
+      "format_n": 100,
+      "format_valid": 100,
+      "distinct_inputs": 100,
+      "observed_disabled_thinking": true,
+      "calls": 105,
+      "reported_tokens": 136516,
+      "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
+      "temperature_requested": 0,
+      "passed": true,
+      "qualification_variant": "annotation-preflight",
+      "raw_report_calls": 105,
+      "transport_attempts_without_response_recorded_late": 0,
+      "http_counts": {
+        "200": 105
+      },
+      "error_types": {},
+      "provider_error_codes": {}
+    },
+    {
+      "model": "hy4-preview",
+      "provider": "TokenHub",
+      "account": "tokenhub-secondary",
+      "qualified_at": "2026-10-22T12:45:28.659965+00:00",
+      "fictional_only": true,
+      "schema": "full v3 plus temporal",
+      "consistent_5": true,
+      "format_n": 100,
+      "format_valid": 96,
+      "distinct_inputs": 100,
+      "observed_disabled_thinking": true,
+      "calls": 105,
+      "reported_tokens": 146653,
+      "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
+      "temperature_requested": 0,
+      "passed": false,
+      "qualification_variant": "annotation-preflight",
+      "raw_report_calls": 105,
+      "transport_attempts_without_response_recorded_late": 0,
+      "http_counts": {
+        "200": 105
+      },
+      "error_types": {
+        "ValueError": 4
+      },
+      "provider_error_codes": {}
+    },
+    {
+      "model": "deepseek-v4-1-flash-261017",
+      "provider": "Ark",
+      "account": "ark-secondary",
+      "qualified_at": "2026-10-22T12:44:21.337126+00:00",
+      "fictional_only": true,
+      "schema": "full v3 plus temporal",
+      "consistent_5": false,
+      "format_n": 0,
+      "format_valid": 0,
+      "distinct_inputs": 0,
+      "observed_disabled_thinking": false,
+      "calls": 1,
+      "reported_tokens": 0,
+      "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
+      "temperature_requested": 0,
+      "passed": false,
+      "qualification_variant": "annotation-preflight-retry",
+      "raw_report_calls": 1,
+      "transport_attempts_without_response_recorded_late": 0,
+      "http_counts": {
+        "404": 1
+      },
+      "error_types": {
+        "RuntimeError": 1
+      },
+      "provider_error_codes": {
+        "ModelNotOpen": 1
+      }
+    },
+    {
+      "model": "deepseek/deepseek-v4-flash-vision-exp",
+      "provider": "TokenHub",
+      "account": "tokenhub-secondary",
+      "qualified_at": "2026-10-22T12:49:01.054789+00:00",
+      "fictional_only": true,
+      "schema": "full v3 plus temporal",
+      "consistent_5": true,
+      "format_n": 100,
+      "format_valid": 98,
+      "distinct_inputs": 100,
+      "observed_disabled_thinking": true,
+      "calls": 105,
+      "reported_tokens": 142655,
+      "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
+      "temperature_requested": 0,
+      "passed": false,
+      "qualification_variant": "annotation-preflight-retry",
+      "raw_report_calls": 105,
+      "transport_attempts_without_response_recorded_late": 0,
+      "http_counts": {
+        "200": 105
+      },
+      "error_types": {
+        "ValidationError": 2
+      },
+      "provider_error_codes": {}
+    },
+    {
+      "model": "deepseek-v4-flash-202605",
+      "provider": "TokenHub",
+      "account": "tokenhub-secondary",
+      "qualified_at": "2026-10-22T12:54:11.247530+00:00",
+      "fictional_only": true,
+      "schema": "full v3 plus temporal",
+      "consistent_5": true,
+      "format_n": 100,
+      "format_valid": 99,
+      "distinct_inputs": 100,
+      "observed_disabled_thinking": true,
+      "calls": 105,
+      "reported_tokens": 142662,
+      "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
+      "temperature_requested": 0,
+      "passed": true,
+      "qualification_variant": "annotation-preflight-retry",
+      "raw_report_calls": 105,
+      "transport_attempts_without_response_recorded_late": 0,
+      "http_counts": {
+        "200": 105
+      },
+      "error_types": {
+        "ValidationError": 1
+      },
+      "provider_error_codes": {}
+    },
+    {
+      "model": "deepseek-v4.1-flash-1017",
+      "provider": "TokenHub",
+      "account": "tokenhub-secondary",
+      "qualified_at": "2026-10-22T12:54:30.969383+00:00",
+      "fictional_only": true,
+      "schema": "full v3 plus temporal",
+      "consistent_5": true,
+      "format_n": 100,
+      "format_valid": 100,
+      "distinct_inputs": 100,
+      "observed_disabled_thinking": true,
+      "calls": 105,
+      "reported_tokens": 206516,
+      "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
+      "temperature_requested": 0,
+      "transport_response_format": "json_schema",
+      "validator_unchanged": true,
+      "passed": true,
+      "qualification_variant": "annotation-preflight-structured",
+      "raw_report_calls": 105,
+      "transport_attempts_without_response_recorded_late": 0,
+      "http_counts": {
+        "200": 105
+      },
+      "error_types": {},
+      "provider_error_codes": {}
+    }
+  ],
+  "judge_preflight": [
+    {
+      "model": "glm-5-3-flash-260828",
+      "calls": 1,
+      "format_valid": 0,
+      "format_n": 0,
+      "consistent_5": false,
+      "preflight_pass": false,
+      "observed_disabled_thinking": false,
+      "sampling_control_eligible": true,
+      "latency_ms": {
+        "n": 1,
+        "p50": 186.6463979240507,
+        "p95": 186.6463979240507,
+        "p99": 186.6463979240507
+      },
+      "http_429": 0,
+      "qualification_variant": "original",
+      "preflight_path": ".local/phase1/round3/new-accounts-v1/judge-preflight/ark-secondary/alternatives/glm-5-3-flash-260828-summary.json",
+      "actual_call_path": ".local/phase1/round3/new-accounts-v1/judge-controls/ark-secondary/glm-5-3-flash-260828.json",
+      "account": "ark-secondary",
+      "vendor": "Zhipu",
+      "provider": "Ark",
+      "evidence_sha256": "1808790d01ac116c327eea45e9bac548f44818c1e54343339f90088a9b3985cb",
+      "judge_prompt_controls": null,
+      "eligible": false
+    },
+    {
+      "model": "qwen3-14b-20250429",
+      "calls": 1,
+      "format_valid": 0,
+      "format_n": 0,
+      "consistent_5": false,
+      "preflight_pass": false,
+      "observed_disabled_thinking": false,
+      "sampling_control_eligible": true,
+      "latency_ms": {
+        "n": 1,
+        "p50": 91.73236694186926,
+        "p95": 91.73236694186926,
+        "p99": 91.73236694186926
+      },
+      "http_429": 0,
+      "qualification_variant": "original",
+      "preflight_path": ".local/phase1/round3/new-accounts-v1/judge-preflight/ark-secondary/alternatives/qwen3-14b-20250429-summary.json",
+      "actual_call_path": ".local/phase1/round3/new-accounts-v1/judge-controls/ark-secondary/qwen3-14b-20250429.json",
+      "account": "ark-secondary",
+      "vendor": "Alibaba",
+      "provider": "Ark",
+      "evidence_sha256": "df8b097703ca8aa42ed75ccb1bdafd69c951041ab1b6e1544b8be6779e3930c6",
+      "judge_prompt_controls": null,
+      "eligible": false
+    },
+    {
+      "model": "glm-5-2-260617",
+      "calls": 1,
+      "format_valid": 0,
+      "format_n": 0,
+      "consistent_5": false,
+      "preflight_pass": false,
+      "observed_disabled_thinking": false,
+      "sampling_control_eligible": true,
+      "latency_ms": {
+        "n": 1,
+        "p50": 166.2424320820719,
+        "p95": 166.2424320820719,
+        "p99": 166.2424320820719
+      },
+      "http_429": 0,
+      "qualification_variant": "original",
+      "preflight_path": ".local/phase1/round3/new-accounts-v1/judge-preflight/ark-secondary/glm-5-2-260617/glm-5-2-260617-summary.json",
+      "actual_call_path": ".local/phase1/round3/new-accounts-v1/judge-controls/ark-secondary/glm-5-2-260617.json",
+      "account": "ark-secondary",
+      "vendor": "Zhipu",
+      "provider": "Ark",
+      "evidence_sha256": "d98f93e6742763380f1342f1c7622eca5bc05063b179d0fab947cff7357c71f0",
+      "judge_prompt_controls": null,
+      "eligible": false
+    },
+    {
+      "model": "glm-5.2",
+      "account": "tokenhub-secondary",
+      "at": "2026-10-22T12:40:38.648356+00:00",
+      "calls": 106,
+      "format_valid": 100,
+      "format_n": 100,
+      "consistent_5": true,
+      "observed_disabled_thinking": true,
+      "preflight_pass": true,
+      "latency_ms": {
+        "n": 106,
+        "p50": 2412.380156572908,
+        "p95": 3058.5935873095877,
+        "p99": 5271.796808030923
+      },
+      "http_429": 0,
+      "resumed_saved_responses_not_reissued": true,
+      "qualification_variant": "original",
+      "preflight_path": ".local/phase1/round3/new-accounts-v1/judge-preflight/tokenhub-secondary/glm-5.2-summary.json",
+      "actual_call_path": ".local/phase1/round3/new-accounts-v1/judge-controls/tokenhub-secondary/glm-5.2.json",
+      "vendor": "Zhipu",
+      "provider": "TokenHub",
+      "evidence_sha256": "dac4b249135e89f536bca39741ee436711345579647ff254e8cff49d583d29d0",
+      "judge_prompt_controls": {
+        "model": "glm-5.2",
+        "vendor": "Zhipu",
+        "provider": "TokenHub",
+        "account": "tokenhub-secondary",
+        "at": "2026-10-22T12:41:30.670534+00:00",
+        "fictional_only": true,
+        "human_calibrated": false,
+        "prompt_sha256": "30772f880cf2eefe3a53aa728a245597a651821d31a9a749f65c1683120ebb8e",
+        "generic_preflight_sha256": "dac4b249135e89f536bca39741ee436711345579647ff254e8cff49d583d29d0",
+        "calls": [
+          {
+            "valid": true,
+            "score": true,
+            "version": "glm-5.2",
+            "usage": {
+              "prompt_tokens": 101,
+              "completion_tokens": 13,
+              "total_tokens": 114
+            }
+          },
+          {
+            "valid": true,
+            "score": true,
+            "version": "glm-5.2",
+            "usage": {
+              "prompt_tokens": 101,
+              "completion_tokens": 13,
+              "total_tokens": 114
+            }
+          },
+          {
+            "valid": true,
+            "score": true,
+            "version": "glm-5.2",
+            "usage": {
+              "prompt_tokens": 101,
+              "completion_tokens": 13,
+              "total_tokens": 114
+            }
+          },
+          {
+            "valid": true,
+            "score": true,
+            "version": "glm-5.2",
+            "usage": {
+              "prompt_tokens": 101,
+              "completion_tokens": 13,
+              "total_tokens": 114
+            }
+          },
+          {
+            "valid": true,
+            "score": true,
+            "version": "glm-5.2",
+            "usage": {
+              "prompt_tokens": 101,
+              "completion_tokens": 13,
+              "total_tokens": 114
+            }
+          }
+        ],
+        "complete": true,
+        "passed": true
+      },
+      "eligible": true
+    },
+    {
+      "model": "mimo-v2.6-flash",
+      "account": "tokenhub-secondary",
+      "at": "2026-10-22T12:53:04.224934+00:00",
+      "calls": 106,
+      "format_valid": 98,
+      "format_n": 100,
+      "consistent_5": true,
+      "observed_disabled_thinking": false,
+      "preflight_pass": false,
+      "latency_ms": {
+        "n": 106,
+        "p50": 3356.459714472294,
+        "p95": 7751.430686854292,
+        "p99": 8746.907456114423
+      },
+      "http_429": 0,
+      "resumed_saved_responses_not_reissued": true,
+      "qualification_variant": "original",
+      "preflight_path": ".local/phase1/round3/new-accounts-v1/judge-preflight/tokenhub-secondary/mimo-v2.6-flash-summary.json",
+      "actual_call_path": ".local/phase1/round3/new-accounts-v1/judge-controls/tokenhub-secondary/mimo-v2.6-flash.json",
+      "vendor": "Xiaomi",
+      "provider": "TokenHub",
+      "evidence_sha256": "10e7503d04a55636f99f1a02db00cd75761aea265834d869940e58caeec1da06",
+      "judge_prompt_controls": {
+        "model": "mimo-v2.6-flash",
+        "vendor": "Xiaomi",
+        "provider": "TokenHub",
+        "account": "tokenhub-secondary",
+        "at": "2026-10-22T12:55:47.728078+00:00",
+        "fictional_only": true,
+        "human_calibrated": false,
+        "prompt_sha256": "30772f880cf2eefe3a53aa728a245597a651821d31a9a749f65c1683120ebb8e",
+        "generic_preflight_sha256": "9ffe0c933b6705494a588044422631543f375af818f0e6ed204cc4fecf3a6aa7",
+        "calls": [
+          {
+            "valid": true,
+            "score": true,
+            "version": "mimo-v2.6-flash",
+            "usage": {
+              "prompt_tokens": 108,
+              "completion_tokens": 14,
+              "total_tokens": 122
+            }
+          },
+          {
+            "valid": true,
+            "score": true,
+            "version": "mimo-v2.6-flash",
+            "usage": {
+              "prompt_tokens": 108,
+              "completion_tokens": 14,
+              "total_tokens": 122
+            }
+          },
+          {
+            "valid": true,
+            "score": true,
+            "version": "mimo-v2.6-flash",
+            "usage": {
+              "prompt_tokens": 108,
+              "completion_tokens": 14,
+              "total_tokens": 122
+            }
+          },
+          {
+            "valid": true,
+            "score": true,
+            "version": "mimo-v2.6-flash",
+            "usage": {
+              "prompt_tokens": 108,
+              "completion_tokens": 14,
+              "total_tokens": 122
+            }
+          },
+          {
+            "valid": true,
+            "score": true,
+            "version": "mimo-v2.6-flash",
+            "usage": {
+              "prompt_tokens": 108,
+              "completion_tokens": 14,
+              "total_tokens": 122
+            }
+          }
+        ],
+        "complete": true,
+        "passed": true
+      },
+      "eligible": false
+    },
+    {
+      "model": "minimax-m3",
+      "account": "tokenhub-secondary",
+      "at": "2026-10-22T13:02:36.277527+00:00",
+      "calls": 106,
+      "format_valid": 100,
+      "format_n": 100,
+      "consistent_5": true,
+      "observed_disabled_thinking": true,
+      "preflight_pass": true,
+      "latency_ms": {
+        "n": 106,
+        "p50": 1888.7699008919299,
+        "p95": 3937.38821381703,
+        "p99": 8978.561198466927
+      },
+      "http_429": 0,
+      "resumed_saved_responses_not_reissued": true,
+      "qualification_variant": "original",
+      "preflight_path": ".local/phase1/round3/new-accounts-v1/judge-preflight/tokenhub-secondary/minimax-m3-summary.json",
+      "actual_call_path": ".local/phase1/round3/new-accounts-v1/judge-controls/tokenhub-secondary/minimax-m3.json",
+      "vendor": "MiniMax",
+      "provider": "TokenHub",
+      "evidence_sha256": "94c7a4f2752835eb03bc2fda7be3833b66ec952f06e3a5620d5f46c33cd80efa",
+      "judge_prompt_controls": {
+        "model": "minimax-m3",
+        "vendor": "MiniMax",
+        "provider": "TokenHub",
+        "account": "tokenhub-secondary",
+        "at": "2026-10-22T13:03:48.068510+00:00",
+        "fictional_only": true,
+        "human_calibrated": false,
+        "prompt_sha256": "30772f880cf2eefe3a53aa728a245597a651821d31a9a749f65c1683120ebb8e",
+        "generic_preflight_sha256": "94c7a4f2752835eb03bc2fda7be3833b66ec952f06e3a5620d5f46c33cd80efa",
+        "calls": [
+          {
+            "valid": true,
+            "score": true,
+            "version": "minimax-m3",
+            "usage": {
+              "prompt_tokens": 260,
+              "completion_tokens": 12,
+              "total_tokens": 272
+            }
+          },
+          {
+            "valid": true,
+            "score": true,
+            "version": "minimax-m3",
+            "usage": {
+              "prompt_tokens": 260,
+              "completion_tokens": 12,
+              "total_tokens": 272
+            }
+          },
+          {
+            "valid": true,
+            "score": true,
+            "version": "minimax-m3",
+            "usage": {
+              "prompt_tokens": 260,
+              "completion_tokens": 12,
+              "total_tokens": 272
+            }
+          },
+          {
+            "valid": true,
+            "score": true,
+            "version": "minimax-m3",
+            "usage": {
+              "prompt_tokens": 260,
+              "completion_tokens": 12,
+              "total_tokens": 272
+            }
+          },
+          {
+            "valid": true,
+            "score": true,
+            "version": "minimax-m3",
+            "usage": {
+              "prompt_tokens": 260,
+              "completion_tokens": 12,
+              "total_tokens": 272
+            }
+          }
+        ],
+        "complete": true,
+        "passed": true
+      },
+      "eligible": true
+    },
+    {
+      "model": "mimo-v2.6-flash",
+      "account": "tokenhub-secondary",
+      "at": "2026-10-22T12:54:52.108142+00:00",
+      "calls": 106,
+      "new_calls": 2,
+      "format_valid": 100,
+      "format_n": 100,
+      "consistent_5": true,
+      "observed_disabled_thinking": true,
+      "same_100_inputs_no_replacement": true,
+      "original_failed_requests": 2,
+      "prompt_sha256": "d4f9d30b34c28049829f15cb8cdb2d5a6013665b6533e39a8f9d8602ef4596ef",
+      "source_progress_sha256": "afb248298e89164dd30f01c41c272c8c4b5dd3baa252b5493c1e327367ab714f",
+      "latency_ms": {
+        "n": 106,
+        "p50": 3336.132018477656,
+        "p95": 7751.430686854292,
+        "p99": 8746.907456114423
+      },
+      "scope": "bounded retries only for unanswered transport failures, not answer/format resampling",
+      "preflight_pass": true,
+      "qualification_variant": "transport-repair",
+      "preflight_path": ".local/phase1/round3/new-accounts-v1/judge-repair/tokenhub-secondary/mimo-v2.6-flash/mimo-v2.6-flash-summary.json",
+      "actual_call_path": ".local/phase1/round3/new-accounts-v1/judge-controls/tokenhub-secondary/mimo-v2.6-flash.json",
+      "vendor": "Xiaomi",
+      "provider": "TokenHub",
+      "evidence_sha256": "9ffe0c933b6705494a588044422631543f375af818f0e6ed204cc4fecf3a6aa7",
+      "judge_prompt_controls": {
+        "model": "mimo-v2.6-flash",
+        "vendor": "Xiaomi",
+        "provider": "TokenHub",
+        "account": "tokenhub-secondary",
+        "at": "2026-10-22T12:55:47.728078+00:00",
+        "fictional_only": true,
+        "human_calibrated": false,
+        "prompt_sha256": "30772f880cf2eefe3a53aa728a245597a651821d31a9a749f65c1683120ebb8e",
+        "generic_preflight_sha256": "9ffe0c933b6705494a588044422631543f375af818f0e6ed204cc4fecf3a6aa7",
+        "calls": [
+          {
+            "valid": true,
+            "score": true,
+            "version": "mimo-v2.6-flash",
+            "usage": {
+              "prompt_tokens": 108,
+              "completion_tokens": 14,
+              "total_tokens": 122
+            }
+          },
+          {
+            "valid": true,
+            "score": true,
+            "version": "mimo-v2.6-flash",
+            "usage": {
+              "prompt_tokens": 108,
+              "completion_tokens": 14,
+              "total_tokens": 122
+            }
+          },
+          {
+            "valid": true,
+            "score": true,
+            "version": "mimo-v2.6-flash",
+            "usage": {
+              "prompt_tokens": 108,
+              "completion_tokens": 14,
+              "total_tokens": 122
+            }
+          },
+          {
+            "valid": true,
+            "score": true,
+            "version": "mimo-v2.6-flash",
+            "usage": {
+              "prompt_tokens": 108,
+              "completion_tokens": 14,
+              "total_tokens": 122
+            }
+          },
+          {
+            "valid": true,
+            "score": true,
+            "version": "mimo-v2.6-flash",
+            "usage": {
+              "prompt_tokens": 108,
+              "completion_tokens": 14,
+              "total_tokens": 122
+            }
+          }
+        ],
+        "complete": true,
+        "passed": true
+      },
+      "eligible": true
+    }
+  ],
+  "judge_pools": {
+    "old-pool": {
+      "annotation_vendors": [
+        "DeepSeek",
+        "Tencent"
+      ],
+      "excluded_vendors": [
+        "ByteDance",
+        "DeepSeek",
+        "Tencent"
+      ],
+      "primary": {
+        "model": "glm-5.2",
+        "vendor": "Zhipu",
+        "provider": "TokenHub",
+        "account": "tokenhub-secondary",
+        "evidence_sha256": "dac4b249135e89f536bca39741ee436711345579647ff254e8cff49d583d29d0",
+        "preflight_path": ".local/phase1/round3/new-accounts-v1/judge-preflight/tokenhub-secondary/glm-5.2-summary.json",
+        "actual_call_path": ".local/phase1/round3/new-accounts-v1/judge-controls/tokenhub-secondary/glm-5.2.json"
+      },
+      "backups": [
+        {
+          "model": "mimo-v2.6-flash",
+          "vendor": "Xiaomi",
+          "provider": "TokenHub",
+          "account": "tokenhub-secondary",
+          "evidence_sha256": "9ffe0c933b6705494a588044422631543f375af818f0e6ed204cc4fecf3a6aa7",
+          "preflight_path": ".local/phase1/round3/new-accounts-v1/judge-repair/tokenhub-secondary/mimo-v2.6-flash/mimo-v2.6-flash-summary.json",
+          "actual_call_path": ".local/phase1/round3/new-accounts-v1/judge-controls/tokenhub-secondary/mimo-v2.6-flash.json"
+        },
+        {
+          "model": "minimax-m3",
+          "vendor": "MiniMax",
+          "provider": "TokenHub",
+          "account": "tokenhub-secondary",
+          "evidence_sha256": "94c7a4f2752835eb03bc2fda7be3833b66ec952f06e3a5620d5f46c33cd80efa",
+          "preflight_path": ".local/phase1/round3/new-accounts-v1/judge-preflight/tokenhub-secondary/minimax-m3-summary.json",
+          "actual_call_path": ".local/phase1/round3/new-accounts-v1/judge-controls/tokenhub-secondary/minimax-m3.json"
+        }
+      ],
+      "backup_gap": 0,
+      "human_calibrated": false,
+      "formal_scores_allowed": false
+    },
+    "new-pool": {
+      "annotation_vendors": [
+        "DeepSeek",
+        "Tencent"
+      ],
+      "excluded_vendors": [
+        "ByteDance",
+        "DeepSeek",
+        "Tencent"
+      ],
+      "primary": {
+        "model": "glm-5.2",
+        "vendor": "Zhipu",
+        "provider": "TokenHub",
+        "account": "tokenhub-secondary",
+        "evidence_sha256": "dac4b249135e89f536bca39741ee436711345579647ff254e8cff49d583d29d0",
+        "preflight_path": ".local/phase1/round3/new-accounts-v1/judge-preflight/tokenhub-secondary/glm-5.2-summary.json",
+        "actual_call_path": ".local/phase1/round3/new-accounts-v1/judge-controls/tokenhub-secondary/glm-5.2.json"
+      },
+      "backups": [
+        {
+          "model": "mimo-v2.6-flash",
+          "vendor": "Xiaomi",
+          "provider": "TokenHub",
+          "account": "tokenhub-secondary",
+          "evidence_sha256": "9ffe0c933b6705494a588044422631543f375af818f0e6ed204cc4fecf3a6aa7",
+          "preflight_path": ".local/phase1/round3/new-accounts-v1/judge-repair/tokenhub-secondary/mimo-v2.6-flash/mimo-v2.6-flash-summary.json",
+          "actual_call_path": ".local/phase1/round3/new-accounts-v1/judge-controls/tokenhub-secondary/mimo-v2.6-flash.json"
+        },
+        {
+          "model": "minimax-m3",
+          "vendor": "MiniMax",
+          "provider": "TokenHub",
+          "account": "tokenhub-secondary",
+          "evidence_sha256": "94c7a4f2752835eb03bc2fda7be3833b66ec952f06e3a5620d5f46c33cd80efa",
+          "preflight_path": ".local/phase1/round3/new-accounts-v1/judge-preflight/tokenhub-secondary/minimax-m3-summary.json",
+          "actual_call_path": ".local/phase1/round3/new-accounts-v1/judge-controls/tokenhub-secondary/minimax-m3.json"
+        }
+      ],
+      "backup_gap": 0,
+      "human_calibrated": false,
+      "formal_scores_allowed": false
+    }
+  },
+  "usage_new_round": {
+    "annotation_preflight_calls": 738,
+    "annotation_preflight_reported_tokens": 1060155,
+    "judge_preflight_calls": 323,
+    "judge_preflight_reported_tokens": 47621,
+    "judge_prompt_control_calls": 15,
+    "judge_prompt_control_reported_tokens": 2540,
+    "annotation_calls": 280,
+    "annotation_reported_tokens": 1155116,
+    "cached_response_replays_not_new_calls": 0,
+    "known_total_post_calls": 1356,
+    "reported_total_tokens": 2265432,
+    "possible_interrupted_unknown_usage_calls": 8
+  },
+  "validation": {
+    "pytest_passed": 432,
+    "pytest_seconds": 18.35,
+    "ruff": true,
+    "strict_mypy": true,
+    "foundation": true,
+    "log_sha256": "889765e9b8450a21ed9878b5b3a358799e384afe3526a4657dfc132fb780b519"
+  },
+  "token_projection": {
+    "basis": "old completed batches, actual responses only; conditional estimate, model/source lengths can change",
+    "historical_means": {
+      "Tencent": {
+        "calls": 155,
+        "items": 1234,
+        "reported_tokens": 588967,
+        "mean_reported_tokens_per_item": 477.2828200972447
+      },
+      "DeepSeek": {
+        "calls": 128,
+        "items": 1023,
+        "reported_tokens": 477264,
+        "mean_reported_tokens_per_item": 466.533724340176
+      }
+    },
+    "additional_candidate_estimate": 654,
+    "additional_token_estimate": 617257,
+    "retry_preflight_switch_tokens_excluded": true
+  },
+  "ecd_unchanged_hashes": {
+    "docs/evals/ecd-human-current.json": "6d11a9528511987c5b67ea404ddb7e68915bac0a9af68191a2543f37aa0b3d5d",
+    ".local/phase1/round3/temporal-v1/ecd-owner/report.json": "6d11a9528511987c5b67ea404ddb7e68915bac0a9af68191a2543f37aa0b3d5d",
+    ".local/ecd120-human-labeled.csv": "95c81861d698d93e453d8c511da12e3470c2608c4368fc5823708f6b7fad5d15"
+  },
+  "phase1_accepted": false,
+  "new_pool_adopted": 0
+}

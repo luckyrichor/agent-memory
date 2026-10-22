@@ -1,0 +1,88 @@
+{
+  "old-pool": {
+    "annotation_vendors": [
+      "DeepSeek",
+      "Tencent"
+    ],
+    "excluded_vendors": [
+      "ByteDance",
+      "DeepSeek",
+      "Tencent"
+    ],
+    "primary": {
+      "model": "glm-5.2",
+      "vendor": "Zhipu",
+      "provider": "TokenHub",
+      "account": "tokenhub-secondary",
+      "evidence_sha256": "dac4b249135e89f536bca39741ee436711345579647ff254e8cff49d583d29d0",
+      "preflight_path": ".local/phase1/round3/new-accounts-v1/judge-preflight/tokenhub-secondary/glm-5.2-summary.json",
+      "actual_call_path": ".local/phase1/round3/new-accounts-v1/judge-controls/tokenhub-secondary/glm-5.2.json"
+    },
+    "backups": [
+      {
+        "model": "mimo-v2.6-flash",
+        "vendor": "Xiaomi",
+        "provider": "TokenHub",
+        "account": "tokenhub-secondary",
+        "evidence_sha256": "9ffe0c933b6705494a588044422631543f375af818f0e6ed204cc4fecf3a6aa7",
+        "preflight_path": ".local/phase1/round3/new-accounts-v1/judge-repair/tokenhub-secondary/mimo-v2.6-flash/mimo-v2.6-flash-summary.json",
+        "actual_call_path": ".local/phase1/round3/new-accounts-v1/judge-controls/tokenhub-secondary/mimo-v2.6-flash.json"
+      },
+      {
+        "model": "minimax-m3",
+        "vendor": "MiniMax",
+        "provider": "TokenHub",
+        "account": "tokenhub-secondary",
+        "evidence_sha256": "94c7a4f2752835eb03bc2fda7be3833b66ec952f06e3a5620d5f46c33cd80efa",
+        "preflight_path": ".local/phase1/round3/new-accounts-v1/judge-preflight/tokenhub-secondary/minimax-m3-summary.json",
+        "actual_call_path": ".local/phase1/round3/new-accounts-v1/judge-controls/tokenhub-secondary/minimax-m3.json"
+      }
+    ],
+    "backup_gap": 0,
+    "human_calibrated": false,
+    "formal_scores_allowed": false
+  },
+  "new-pool": {
+    "annotation_vendors": [
+      "DeepSeek",
+      "Tencent"
+    ],
+    "excluded_vendors": [
+      "ByteDance",
+      "DeepSeek",
+      "Tencent"
+    ],
+    "primary": {
+      "model": "glm-5.2",
+      "vendor": "Zhipu",
+      "provider": "TokenHub",
+      "account": "tokenhub-secondary",
+      "evidence_sha256": "dac4b249135e89f536bca39741ee436711345579647ff254e8cff49d583d29d0",
+      "preflight_path": ".local/phase1/round3/new-accounts-v1/judge-preflight/tokenhub-secondary/glm-5.2-summary.json",
+      "actual_call_path": ".local/phase1/round3/new-accounts-v1/judge-controls/tokenhub-secondary/glm-5.2.json"
+    },
+    "backups": [
+      {
+        "model": "mimo-v2.6-flash",
+        "vendor": "Xiaomi",
+        "provider": "TokenHub",
+        "account": "tokenhub-secondary",
+        "evidence_sha256": "9ffe0c933b6705494a588044422631543f375af818f0e6ed204cc4fecf3a6aa7",
+        "preflight_path": ".local/phase1/round3/new-accounts-v1/judge-repair/tokenhub-secondary/mimo-v2.6-flash/mimo-v2.6-flash-summary.json",
+        "actual_call_path": ".local/phase1/round3/new-accounts-v1/judge-controls/tokenhub-secondary/mimo-v2.6-flash.json"
+      },
+      {
+        "model": "minimax-m3",
+        "vendor": "MiniMax",
+        "provider": "TokenHub",
+        "account": "tokenhub-secondary",
+        "evidence_sha256": "94c7a4f2752835eb03bc2fda7be3833b66ec952f06e3a5620d5f46c33cd80efa",
+        "preflight_path": ".local/phase1/round3/new-accounts-v1/judge-preflight/tokenhub-secondary/minimax-m3-summary.json",
+        "actual_call_path": ".local/phase1/round3/new-accounts-v1/judge-controls/tokenhub-secondary/minimax-m3.json"
+      }
+    ],
+    "backup_gap": 0,
+    "human_calibrated": false,
+    "formal_scores_allowed": false
+  }
+}

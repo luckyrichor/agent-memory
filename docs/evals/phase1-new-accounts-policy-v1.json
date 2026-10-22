@@ -1,0 +1,22 @@
+{
+  "owner_message": "om_x100b62a9407f9cacdfb8a3edc01d487",
+  "plan": "docs/plans/2026-10-22-agent-memory-interview-plan-v3.md",
+  "plan_sha256": "06ad7319525c6b0f4eb7333c981b094dd1ed6ec41ae2e5ea1b46009306389418",
+  "old_pool": "adopt original eligible pool minus known owner errors; no temporal screen; union individually human-confirmed positives by original item_id",
+  "new_pool": "keep only dual-model citation-validated non-temporary items; adopt only after independent owner blind audit",
+  "target_reliable_union": 700,
+  "aspirational_target": 1500,
+  "maximum_blind_errors": 3,
+  "blind_sample": 72,
+  "new_source_seed": 20261029,
+  "new_audit_seed": 20261030,
+  "stop": "target joint pool sufficient for reliable union target after audit allowance, or exhaust unused reserve",
+  "credentials": ["tokenhub-secondary", "ark-secondary"],
+  "new_key_preflight": "temperature zero, disabled thinking, five consistent decisions, 100 distinct format samples at least 99 valid, actual successful call",
+  "redo": "entire unfinished batch index4, both sides; all old side results retired and never replayed",
+  "later_quota_switch": "qualified same-role independent-vendor replacement; whole affected side of current batch, never partial splice",
+  "judge": "per table exclude answer and actual adopted annotation vendors; main plus at least one qualified backup; human calibration required before formal scores",
+  "ecd": "unchanged",
+  "phase1_accepted": false,
+  "delivery": "current group only"
+}

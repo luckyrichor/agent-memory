@@ -1,6 +1,6 @@
 # 方案原件
 
-当前方案：[2026-10-21 最新用户原件](2026-10-21-agent-memory-interview-plan.md)。原文和署名保留；附件下载后原样归档，校验哈希及旧版差异见 [第三轮后续报告](../reports/phase1-round3-followup-2026-10-21/delivery.md)。
+当前方案：[2026-10-22 最新用户原件 v3](2026-10-22-agent-memory-interview-plan-v3.md)，包含两层记忆设计。原文、署名和历史版本保留。执行时同时应用负责人后续逐条决定；本轮旧池采纳与新增密钥重做范围见 `docs/evals/phase1-new-accounts-policy-v1.json`。
 
 历史原件：[首次收到的旧版](../agent-memory面试级完善方案.md)。历史报告的结论须结合当时版本理解。
 
