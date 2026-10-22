@@ -1,15 +1,15 @@
 {
   "basis": "owner-confirmed-subset-only",
   "whole_joint_pool_accepted": false,
-  "confirmed_positive_points": 85,
+  "confirmed_positive_points": 154,
   "labels": {
-    "path": ".local/phase1/round3/verbatim-filter/run-final/human-positive-labels.jsonl",
-    "sha256": "71b07681cc981bcc39eb59f34d97bba71960dd6450a9ada6d00b3d058cc35580"
+    "path": ".local/phase1/round3/temporal-v1/human-positive-labels.jsonl",
+    "sha256": "8a3ee5ae56acad1b3d9162b39f108ffbf1e9e00153ddc8fd036ffbd267dc22a2"
   },
   "items": {
-    "path": ".local/phase1/round3/verbatim-filter/run-final/human-positive-items.jsonl",
-    "sha256": "e8ad4806ea25c0e681b21b684d6e17af712e2f52b360764ac12676ab4dfd987f"
+    "path": ".local/phase1/round3/temporal-v1/human-positive-items.jsonl",
+    "sha256": "173e5f31b07118d21b8f6f0902cd4653340f499abbf65d69dd0a5029172a4916"
   },
-  "new_owner_return_sha256": "51485957ae64f0c8e0dadef785a9dcccba8d9678598a71411ca067dca3c5b4e4",
+  "new_owner_return_sha256": "5be99e4f6dcc8eb206fd672880efccb8ad96d45eef9f39a9b207016479e31397",
   "phase1_accepted": false
 }

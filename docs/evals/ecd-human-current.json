@@ -1,0 +1,26 @@
+{
+  "source": "ECD120",
+  "annotation_method": "AI 草稿加人工确认",
+  "independent_human_annotation": false,
+  "agent_modified_owner_labels": false,
+  "conversations": 120,
+  "counts": {
+    "negative": 108,
+    "positive": 7,
+    "uncertain": 5
+  },
+  "negative_fraction_all_conversations": 0.9,
+  "negative_fraction_denominator": 120,
+  "uncertain_excluded_from_positive_and_negative": true,
+  "negative_gold_conversations": 108,
+  "positive_conversations_not_memory_point_count": 7,
+  "uncertain_conversations": 5,
+  "raw_private_only": true,
+  "license": "unclear; no source or memory text in GitHub/public materials",
+  "owner_message_id": "om_x100b62ae68e1b0a0c3059bdbc44bdbc",
+  "submitted_sha256": "95c81861d698d93e453d8c511da12e3470c2608c4368fc5823708f6b7fad5d15",
+  "template_sha256": "c5e56d41c72194d7a56327e76b5fcc6051fcb397ef2dcdf4d120e1729686fb8a",
+  "all_frozen_fields_match": true,
+  "protected_original_files_unchanged": true,
+  "scope_note": "Negative small gold for these reviewed conversations; stratified sample, not an estimate of full ECD prevalence. Seven positive conversations do not automatically add seven memory points to DuLeMon gold. No system false-extraction rate has been measured in this intake."
+}

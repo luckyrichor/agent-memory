@@ -1,0 +1,187 @@
+{
+  "generated_at": "2026-10-22T05:44:35.957768+00:00",
+  "code_commit": "8470dc37295ed707d1fae08c55fe400bbd727095",
+  "tracked_changes": true,
+  "python": "3.12.3",
+  "plan": {
+    "path": "docs/plans/2026-10-22-agent-memory-interview-plan-v3.md",
+    "sha256": "06ad7319525c6b0f4eb7333c981b094dd1ed6ec41ae2e5ea1b46009306389418",
+    "previous_sha256": "da1126e8e77b5b91835cfc6b9849dd4915e1bdaba7524c7774c8fd09312c58e9",
+    "source_message_id": "om_x100b62ae48d290b8dd72c5b51feec54",
+    "execution": "latest plan plus latest explicit owner temporal/audit instructions; phase1 only",
+    "changes": [
+      "PAL-Set optional after phase2, excluded from phase1 gold and recall",
+      "long-term/short-term design: phase1 long-term only",
+      "quota-based annotator replacement now automatic; whole affected side relabeled"
+    ],
+    "remaining_internal_conflicts": [
+      "role-table says two backups but explicit judge selection says one; execute one",
+      "role-table still lists old DeepSeek/MiMo; actual replacements explicitly authorized",
+      "native22/old711 references remain historical; use verified owner returns/current registry"
+    ]
+  },
+  "screen": {
+    "created_at": "2026-10-22T05:36:20.707891+00:00",
+    "models": [
+      "deepseek-v4.1-flash-1017",
+      "hy4-preview"
+    ],
+    "items": 350,
+    "pool": 265,
+    "old_positive": 85,
+    "new_positive": 69,
+    "deduplicated_human_positive": 154,
+    "audit_precision": {
+      "value": 0.9583333333333334,
+      "n": 67,
+      "numerator": 69,
+      "denominator": 72,
+      "ci95": [
+        0.9040762937595129,
+        1.0
+      ]
+    },
+    "audit_errors": 3,
+    "maximum_errors": 3,
+    "audit_passed_at_boundary": true,
+    "error_types": {
+      "temporary-state-as-long-term": 3
+    },
+    "adoption_requires_owner_decision": true,
+    "prompt_sha256": "38723f6d4a2cfd774e8b2acd60723dd3650bb484b8802ed1760bdaac3375e50b",
+    "items_sha256": "7934c790a6cf9545a2fd143a6926c6ae2ec4800f6c7c1a09d1bcff01e4e20c2f",
+    "plan_sha256": "06ad7319525c6b0f4eb7333c981b094dd1ed6ec41ae2e5ea1b46009306389418",
+    "active_models": [
+      "deepseek-v4.1-flash-1017",
+      "glm-5-2-260617"
+    ],
+    "switches": [
+      {
+        "from": "hy4-preview",
+        "to": "glm-5-2-260617",
+        "cause": "HTTP 402 quota",
+        "whole_side_items": 350,
+        "retired_partial_labels_used": false,
+        "preflight": {
+          "model": "glm-5-2-260617",
+          "calls": 106,
+          "format_valid": 100,
+          "format_n": 100,
+          "consistent_5": true,
+          "preflight_pass": true,
+          "observed_disabled_thinking": true,
+          "sampling_control_eligible": true,
+          "latency_ms": {
+            "n": 106,
+            "p50": 1848.1626020511612,
+            "p95": 3088.5440951096825,
+            "p99": 4103.550820751117
+          },
+          "http_429": 0
+        }
+      }
+    ],
+    "per_model_temporary": {
+      "deepseek-v4.1-flash-1017": 33,
+      "glm-5-2-260617": 62
+    },
+    "temporary_union": 65,
+    "pool_temporary_removed": 49,
+    "known_errors_identified": 3,
+    "known_errors_denominator": 3,
+    "known_errors_explicitly_removed": 3,
+    "human_positive_falsely_removed": 25,
+    "human_positive_denominator": 154,
+    "previous85_falsely_removed": 16,
+    "new69_falsely_removed": 9,
+    "pool_surviving_after_temporal_and_owner_rejection": 216,
+    "proposed_pool_union_previous_human": 301,
+    "confirmed_only_gap_700": 546,
+    "confirmed_only_gap_1500": 1346,
+    "actual_adopted_model_pool": 0,
+    "owner_decision_pending": true,
+    "phase1_accepted": false
+  },
+  "ecd": {
+    "source": "ECD120",
+    "annotation_method": "AI 草稿加人工确认",
+    "independent_human_annotation": false,
+    "agent_modified_owner_labels": false,
+    "conversations": 120,
+    "counts": {
+      "negative": 108,
+      "positive": 7,
+      "uncertain": 5
+    },
+    "negative_fraction_all_conversations": 0.9,
+    "negative_fraction_denominator": 120,
+    "uncertain_excluded_from_positive_and_negative": true,
+    "negative_gold_conversations": 108,
+    "positive_conversations_not_memory_point_count": 7,
+    "uncertain_conversations": 5,
+    "raw_private_only": true,
+    "license": "unclear; no source or memory text in GitHub/public materials",
+    "owner_message_id": "om_x100b62ae68e1b0a0c3059bdbc44bdbc",
+    "submitted_sha256": "95c81861d698d93e453d8c511da12e3470c2608c4368fc5823708f6b7fad5d15",
+    "template_sha256": "c5e56d41c72194d7a56327e76b5fcc6051fcb397ef2dcdf4d120e1729686fb8a",
+    "all_frozen_fields_match": true,
+    "protected_original_files_unchanged": true,
+    "scope_note": "Negative small gold for these reviewed conversations; stratified sample, not an estimate of full ECD prevalence. Seven positive conversations do not automatically add seven memory points to DuLeMon gold. No system false-extraction rate has been measured in this intake."
+  },
+  "increment": {
+    "complete": false,
+    "batches": [],
+    "new_points_adopted": 0
+  },
+  "judge": {
+    "old_pool_including_screening_annotation_vendors": [
+      "DeepSeek",
+      "Tencent",
+      "Zhipu"
+    ],
+    "answer_vendor": "ByteDance",
+    "old_pool_excluded_judge_vendors": [
+      "ByteDance",
+      "DeepSeek",
+      "Tencent",
+      "Zhipu"
+    ],
+    "increment_annotation_vendors": [
+      "DeepSeek",
+      "Zhipu"
+    ],
+    "old_pool_qualified_available_judges": [],
+    "qualified_backup_count": 0,
+    "required_backups": 1,
+    "backup_gap": 1,
+    "main_judge_missing": true,
+    "note": "Ark GLM-5.2 becomes annotator/filter and cannot judge these data. Tencent HY4 remains vendor-independent for new DeepSeek+Zhipu increment but its current HTTP402 means unavailable. Other independent vendors require successful strict preflight and human calibration; no gate relaxed."
+  },
+  "calls": {
+    "post_attempts": 99,
+    "reported_tokens": 608823,
+    "by_model": {
+      "deepseek-v4.1-flash-1017": 44,
+      "glm-5-2-260617": 44,
+      "hy4-preview": 11
+    }
+  },
+  "private_evidence_hashes": {
+    ".local/phase1/round3/temporal-v1/ecd-owner/report.json": "6d11a9528511987c5b67ea404ddb7e68915bac0a9af68191a2543f37aa0b3d5d",
+    ".local/phase1/round3/temporal-v1/owner-final/report.json": "f7249e84d03a8e47b8d8dd3c92bf4a26b867ccb80a8a2372cca31f77d85b908b",
+    ".local/phase1/round3/temporal-v1/screen/deepseek-v4.1-flash-1017/ledger.json": "15763b3381687a00c5987bc22f03e70aa69ed7818258c53964829b1138875a50",
+    ".local/phase1/round3/temporal-v1/screen/glm-5-2-260617/ledger.json": "4db92baed58159054c3c6779e00c9d321ed31a090b4361721491ed3651857293",
+    ".local/phase1/round3/temporal-v1/screen/hy4-preview/ledger.json": "9012febc4225168ae6622e585ddef66d053487482564ae538eb3fbae225cad5e",
+    ".local/phase1/round3/temporal-v1/screen/manifest.json": "def2154b38d5752682c892e54aa76d985b28e0a3fb5af0741e5979648b529114",
+    ".local/phase1/round3/temporal-v1/screen/report.json": "76f3701d709ea584b0bd0985d2a04412b1f75eaf1732066daf782114ddb2712a"
+  },
+  "phase1_accepted": false,
+  "owner_adoption_decision_pending": true,
+  "unfinished": [
+    "owner decision on old-pool temporal screening",
+    "incremental annotation/export incomplete",
+    "judge main/backup/calibration gaps",
+    "full negative dialogue count/proportion confirmation",
+    "ECD system false-extraction evaluation not run; intake only"
+  ]
+}
