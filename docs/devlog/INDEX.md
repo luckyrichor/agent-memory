@@ -24,3 +24,5 @@
 - [获批补量、八列盲审与查询启用](2026-10-21-phase1-approved-followup.md)
 
 - [共同保留池抽检失败与逐字过滤试验](2026-10-21-phase1-verbatim-filter.md)
+
+- [标注规程v3与离线额度阻塞](2026-10-22-phase1-evidence-v3.md)
