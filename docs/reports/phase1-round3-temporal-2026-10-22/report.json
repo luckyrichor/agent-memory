@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-22T07:10:55.702597+00:00",
-  "code_commit": "0cecf624e8386714ddb86f71e020b7509697f176",
+  "generated_at": "2026-10-22T07:18:21.438876+00:00",
+  "code_commit": "e1b36a613e41274fe8f122d8963b95edb6b2ba4d",
   "tracked_changes": true,
   "python": "3.12.3",
   "plan": {
@@ -19,6 +19,20 @@
       "role-table still lists old DeepSeek/MiMo; actual replacements explicitly authorized",
       "native22/old711 references remain historical; use verified owner returns/current registry"
     ]
+  },
+  "cache_refresh_incident": {
+    "duplicate_current_other_side": {
+      "completed_posts": 14,
+      "known_tokens": 56291,
+      "interrupted_unknown_requests": 2
+    },
+    "new_deepseek_side_not_duplicate": {
+      "completed_posts": 14,
+      "known_tokens": 54192,
+      "interrupted_unknown_requests": 2
+    },
+    "raw_ledgers_unchanged": true,
+    "regression_test": "tests/unit/test_temporal_response_replay.py"
   },
   "remaining_source_inventory": {
     "eligible_unused_before_increment": 1392,
@@ -93,21 +107,21 @@
     },
     {
       "batch": 3,
-      "model": "deepseek-v4-flash-202605",
+      "model": "deepseek/deepseek-v4-flash-vision-exp",
       "expected": 568,
-      "completed": 400,
-      "keep": 52,
-      "temporary": 9,
-      "citation_invalid": 5
+      "completed": 296,
+      "keep": 43,
+      "temporary": 8,
+      "citation_invalid": 2
     },
     {
       "batch": 3,
       "model": "hy-role",
       "expected": 568,
-      "completed": 464,
-      "keep": 111,
-      "temporary": 46,
-      "citation_invalid": 75
+      "completed": 568,
+      "keep": 140,
+      "temporary": 50,
+      "citation_invalid": 87
     }
   ],
   "production_projection": {
@@ -148,12 +162,12 @@
     "observed_joint_candidates": 1723
   },
   "validation": {
-    "pytest_passed": 427,
-    "pytest_seconds": 18.22,
+    "pytest_passed": 428,
+    "pytest_seconds": 18.15,
     "ruff_passed": true,
     "strict_mypy_source_files": 98,
     "foundation_passed": true,
-    "log_sha256": "f65418e1908132869aadb2be332f5eb99a4cd3d7cd9e75643520f43fbd15ca7b"
+    "log_sha256": "69adc1fa9c97e2e1daeb3aab2c5cde4f1bad384dddaeeca75caccc6afc75e749"
   },
   "screen": {
     "created_at": "2026-10-22T05:36:20.707891+00:00",
@@ -264,6 +278,7 @@
     "scope_note": "Negative small gold for these reviewed conversations; stratified sample, not an estimate of full ECD prevalence. Seven positive conversations do not automatically add seven memory points to DuLeMon gold. No system false-extraction rate has been measured in this intake."
   },
   "increment": {
+    "complete": false,
     "batches": [
       {
         "batch": 0,
@@ -356,20 +371,7 @@
         "whole_batch_frozen": true
       }
     ],
-    "conversations": 300,
-    "candidates": 1723,
-    "joint_keep": 213,
-    "raw_joint_keep": 213,
-    "dedup_or_historical_removed": 0,
-    "target_unreviewed_joint_keeps": 549,
-    "target_reached": false,
-    "new_points_adopted": 0,
-    "owner_audit_pending": false,
-    "phase1_accepted": false,
-    "blocked": null,
-    "complete": false,
-    "remaining_unused_dialogues": 1092,
-    "unfinished_current_batch_excluded_from_gold": false
+    "new_points_adopted": 0
   },
   "increment_switches": [
     {
@@ -380,6 +382,14 @@
       "scope": "entire affected side of current fixed batch",
       "retired_partial_used": false,
       "qualification": ".local/phase1/round3/temporal-v1/full-annotation-qualification/hy-role/report.json"
+    },
+    {
+      "batch": 3,
+      "from": "deepseek-v4-flash-202605",
+      "to": "deepseek/deepseek-v4-flash-vision-exp",
+      "reason": "quota",
+      "scope": "entire affected side of current fixed batch",
+      "retired_partial_used": false
     }
   ],
   "judge": {
@@ -400,7 +410,7 @@
       "Tencent"
     ],
     "increment_models": [
-      "deepseek-v4-flash-202605",
+      "deepseek/deepseek-v4-flash-vision-exp",
       "hy-role"
     ],
     "increment_vendor_independent_historically_preflighted_judge_vendors": [
@@ -603,6 +613,23 @@
       "passed": true
     },
     {
+      "model": "hunyuan-turbos-vision-video-20250728",
+      "provider": "TokenHub",
+      "qualified_at": "2026-10-22T07:18:18.556804+00:00",
+      "fictional_only": true,
+      "schema": "full v3 plus temporal",
+      "consistent_5": true,
+      "format_n": 100,
+      "format_valid": 100,
+      "distinct_inputs": 100,
+      "observed_disabled_thinking": true,
+      "calls": 105,
+      "reported_tokens": 144310,
+      "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
+      "temperature_requested": 0,
+      "passed": true
+    },
+    {
       "model": "hy-role",
       "provider": "TokenHub",
       "qualified_at": "2026-10-22T06:55:07.677673+00:00",
@@ -718,33 +745,37 @@
     }
   ],
   "calls": {
-    "qualification_attempts": 808,
+    "qualification_attempts": 913,
     "transport_extra_attempts": 13,
     "transport_schema_invalid_attempts": 13,
-    "post_attempts": 867,
-    "reported_tokens": 3485335,
+    "post_attempts": 931,
+    "reported_tokens": 3731683,
     "unique_ledger_records_by_model": {
       "deepseek-v4.1-flash-1017": 117,
       "glm-5-2-260617": 103,
       "deepseek-v4-flash-202605": 416,
-      "hy-role": 168,
+      "hy-role": 266,
       "hunyuan-role-latest": 253,
+      "deepseek/deepseek-v4-flash-vision-exp": 55,
       "hy4-preview": 11
     },
     "post_attempts_by_model": {
       "deepseek-v4-flash-202605": 269,
       "deepseek-v4.1-flash-1017": 117,
+      "deepseek/deepseek-v4-flash-vision-exp": 37,
       "glm-5-2-260617": 103,
       "hunyuan-role-latest": 190,
-      "hy-role": 164,
+      "hy-role": 191,
       "hy4-preview": 11
     },
-    "genuine_cached_response_replays": 208
+    "potential_inflight_without_response": 6,
+    "genuine_cached_response_replays": 293
   },
   "private_evidence_hashes": {
     ".local/phase1/round3/temporal-v1/diverse-annotation-qualification/hunyuan-role-latest/report.json": "ab9e4e9d24da03b22df36229db27625d4c9b415616db00b450fbca70f8734b38",
     ".local/phase1/round3/temporal-v1/ecd-owner/report.json": "6d11a9528511987c5b67ea404ddb7e68915bac0a9af68191a2543f37aa0b3d5d",
     ".local/phase1/round3/temporal-v1/full-annotation-qualification/deepseek-deepseek-v4-flash-vision-exp/report.json": "1341db40bd0159f53985939f8c5caa90f123cf8c277e64277cca662400e9a147",
+    ".local/phase1/round3/temporal-v1/full-annotation-qualification/hunyuan-turbos-vision-video-20250728/report.json": "78bab90047552f025fe6893ba1208ccd1dd10c9c02692a61d4d72d2aa32a8def",
     ".local/phase1/round3/temporal-v1/full-annotation-qualification/hy-role/report.json": "2b6e7f8823cceaee2e614f5c7dcd964b3374f83c92be930818bdbee3b85e0d79",
     ".local/phase1/round3/temporal-v1/full-annotation-qualification/hy-vision-2.0-instruct/report.json": "aeaf4f1b058b51d78073437574ec5077d88fa045e8056014748c74f8e54852e1",
     ".local/phase1/round3/temporal-v1/full-annotation-qualification/kimi-k2.6/report.json": "4fadf0b03505ce580c976455d1300b4d6ef85a5c446ebc0d880dfd558613f5f5",
@@ -794,11 +825,22 @@
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-002-attempt-00/batch-002/shard-1/hy-role/ledger.json": "77eea16e70196d488147e5254eab63cbc35d6312b2c9e74e26ca2df92bc35359",
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-003-attempt-00/batch-003/manifest.json": "01d3a73966ec61a9d00d2fc66e79ae85ce017b131ecf889e5ad31affefebf3d2",
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-003-attempt-00/batch-003/shard-0/deepseek-v4-flash-202605/ledger.json": "2866ffc1960fd757dcd166ad86737d5ac1f148203967f0360d88fb94c1b139c3",
-    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-003-attempt-00/batch-003/shard-0/hy-role/ledger.json": "e38f2a7eca54087fc9a971657ad72fd34b73921993a2f9753e72961c696eac7f",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-003-attempt-00/batch-003/shard-0/hy-role/ledger.json": "264e5a335ffbe4b4cbad94154d2019e7e922d2d7fc92366916dd6c82f77d0a62",
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-003-attempt-00/batch-003/shard-1/deepseek-v4-flash-202605/ledger.json": "73961501d8cd5e5815ea613ec9e3d9e47881d08758b15b24b0540519f66940ab",
-    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-003-attempt-00/batch-003/shard-1/hy-role/ledger.json": "4b47d34c969911706475032ca563c54db149967f6edce66547ff4bb125a0760a",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-003-attempt-00/batch-003/shard-1/hy-role/ledger.json": "2915e47ae8786b706235c52b779f1a68a2ca26f2fe2684b16393b2a4920bcdb2",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-003-attempt-01/batch-003/manifest.json": "21f2dc796a8805de6ced79b756c116ba997636aca39bb1ec190e77d97ea76843",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-003-attempt-01/batch-003/shard-0/deepseek-deepseek-v4-flash-vision-exp/ledger.json": "cd78de0830e5dca3d8a8105bdacb4aba1febcbb1d74a359b308138996097345a",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-003-attempt-01/batch-003/shard-0/hy-role/ledger.json": "a1199208ffe5c8858d4e0a45aa2bac7c2411ef15391b4a5ec132663993636055",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-003-attempt-01/batch-003/shard-1/deepseek-deepseek-v4-flash-vision-exp/ledger.json": "9a68c9c03113a0ab56f43d0ed9465c3cced78c887f9025f11b3fc496bb336190",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-003-attempt-01/batch-003/shard-1/hy-role/ledger.json": "18a03f31167e4a5477b69365cb0d61c8d149d0bcedc5694fee9d76afc4a39599",
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/manifest.json": "c6422c7615e37d7ff392832c010b86b28358c6b53ee870711a21cb4e8550c590",
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/report.json": "8d693aedb965612252dedc1a77decaf8a0fe046b0184b29324a96137e7901a4f",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-003-attempt-00/batch-003/manifest.json": "21f2dc796a8805de6ced79b756c116ba997636aca39bb1ec190e77d97ea76843",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-003-attempt-00/batch-003/shard-0/deepseek-deepseek-v4-flash-vision-exp/ledger.json": "0dadb445e0033296b075330318bab286e094da2d5efe71cc168cd0914714086b",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-003-attempt-00/batch-003/shard-0/hy-role/ledger.json": "60b555fc286274a66ae595ab15e94ada8800cf9c4e3d991ae372d12d2bac3c67",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-003-attempt-00/batch-003/shard-1/deepseek-deepseek-v4-flash-vision-exp/ledger.json": "c8929fafb517967be2211e16867ed455328773283d184dbd4ca7477c5fbdaadc",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-003-attempt-00/batch-003/shard-1/hy-role/ledger.json": "58041041e113a336b9bb382c6587eac0a83ed1ce31ffc14c52cb2c0750c8fef2",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/manifest.json": "b82bedcc332cb8b0ce7f031ca8c6ca8c600dc97786e3899721dd8bc9adb7ded1",
     ".local/phase1/round3/temporal-v1/increment-batches-v1/cohort-000-attempt-00/batch-000/manifest.json": "00abf170b1c0d508dab0857b86681cedad84c107cc6f88ae0828a25929c48672",
     ".local/phase1/round3/temporal-v1/increment-batches-v1/cohort-000-attempt-00/batch-000/shard-0/deepseek-v4-flash-202605/failed-before-strict-retry/ledger.json": "ee8ae66d60f8fb7275e6e779630fc5e215eb8d3d9110a6293dadb7d22492aa4f",
     ".local/phase1/round3/temporal-v1/increment-batches-v1/cohort-000-attempt-00/batch-000/shard-0/deepseek-v4-flash-202605/ledger.json": "e8a1946e8bdc926d59271b24c7ca2a73598e17c1db9e4b33a1767da14c4d3447",
@@ -914,10 +956,10 @@
   "phase1_accepted": false,
   "owner_adoption_decision_pending": true,
   "increment_runtime_state": {
-    "active_batch_path": ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-003-attempt-00/batch-003",
+    "active_batch_path": ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-003-attempt-00/batch-003",
     "completed_batches": 3,
     "models": [
-      "deepseek-v4-flash-202605",
+      "deepseek/deepseek-v4-flash-vision-exp",
       "hy-role"
     ],
     "blocked": null

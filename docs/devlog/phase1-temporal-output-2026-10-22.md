@@ -14,3 +14,13 @@
 [{"batch": 0, "conversations": 100, "candidates": 585, "joint_keep": 77, "temporal_removed": 79, "citation_invalid": 54, "schema_invalid": 1}, {"batch": 1, "conversations": 100, "candidates": 567, "joint_keep": 78, "temporal_removed": 95, "citation_invalid": 81, "schema_invalid": 7}]
 
 新增可靠采纳仍为零，独立盲审未交付。补量与备选检查进行中；四门最近完整日志check-final.log，精确测试数量、时间与文件数由交接脚本读取。阶段1未验收。
+
+### 自动切换缓存缺陷与修复（同轮，未掩盖额外用量）
+
+自动换DeepSeek侧后，缓存索引只在进程启动时建立，未看见该进程后来已完成的混元侧，导致重复请求。发现后中断旧入口，原始响应和台账不改；新独立入口每侧启动前刷新真实响应索引、重新执行原严格校验。完成批独立冻结，当前完整混元侧缓存复用，当前DeepSeek新标仍继续。回归测试使用完全虚构请求：先建立索引，再加入后完成侧，确认后续side必须缓存命中且不发API。完整四门再次通过，精确数量和时间读取check-final.log。
+
+事故台账（脚本读取）：
+
+{"duplicate_current_other_side": {"completed_posts": 14, "known_tokens": 56291, "interrupted_unknown_requests": 2}, "new_deepseek_side_not_duplicate": {"completed_posts": 14, "known_tokens": 54192, "interrupted_unknown_requests": 2}, "raw_ledgers_unchanged": true, "regression_test": "tests/unit/test_temporal_response_replay.py"}
+
+已完成的重复调用明确计入用量；中断时无响应usage未知，不按零推断。不是格式/引用标准的放宽。新备选预检仍在进行，不把未完成预检列为合格。阶段1仍未验收，新增候选未采纳。
