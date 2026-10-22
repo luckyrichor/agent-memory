@@ -30,3 +30,5 @@
 - [v3替代组合真实离线验证失败](2026-10-22-phase1-evidence-v3-replacement.md)
 
 - [701池格式重标、服务上限阻塞与补量估算](2026-10-22-phase1-pool-refresh-v3.md)
+
+- [腾讯额度替代、完整重标与新独立盲审](2026-10-22-phase1-tokenhub-pool.md)

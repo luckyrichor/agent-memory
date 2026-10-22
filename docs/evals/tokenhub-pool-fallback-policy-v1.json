@@ -1,0 +1,23 @@
+{
+  "version": "tokenhub-pool-v4",
+  "authorization": "om_x100b62a2b0bb448cdde412b912e6146",
+  "quota_replacement_requires_new_confirmation": false,
+  "prefer_tokenhub_when_ark_unavailable": true,
+  "candidate_order": ["deepseek-v4.1-flash-1017", "deepseek-v4-flash-202605", "deepseek/deepseek-flash"],
+  "qualification": "current actual call; temperature0; thinking disabled observed; 5 identical replies; format100/100",
+  "optional_api_json_mode": "omit only when provider rejects it; keep identical strict response schema and exact source/user/substring checks",
+  "prompt": "docs/evals/prompts/labeling-guide-v3-evidence-v3.txt",
+  "whole_changed_side_relabel_required": true,
+  "unchanged_full_hy4_replay": "entire701 only, exact same pool and prompt, model/provider checked; no partial tail splicing",
+  "retired_ark_partial_used": false,
+  "retention_is_gate": false,
+  "new_owner_data_offline_evaluation": false,
+  "quota_failure_scope": "402 or429 SetLimitExceeded; ordinary format/semantic errors must not lower validation",
+  "billing_or_provider_limit_mutations": false,
+  "audit_sample": 72,
+  "audit_maximum_errors": 3,
+  "audit_exclude": ["all prior human", "all development", "all final"],
+  "incremental_before_owner_audit_pass": false,
+  "phase1_accepted": false,
+  "delivery": "current group, no p2p"
+}
