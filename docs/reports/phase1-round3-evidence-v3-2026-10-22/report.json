@@ -1,0 +1,336 @@
+{
+  "version": "labeling-guide-v3-evidence-v1",
+  "manifest_sha256": "b565887c776f9e42bf17220817653d3929194d20a5f6ff86bc598e8c3fc472f9",
+  "source_files": {
+    "src/agent_memory/evals/evidence_v3.py": "794e29ac3721b29e77a29bbd7c8bc976ab5ad3a99cba8e43bc67c8aaf4da886d",
+    "/home/ubuntu/project/WorkPlan/agent-memory/scripts/run-evidence-v3.py": "5285743ceb1bbd15972aa80e3b1479a7983e8bb30c241c5fc6829c27c7c1d9d4",
+    "docs/evals/prompts/labeling-guide-v3-evidence-v1.txt": "57de6e00a577918f28e946b4b3d107d885bb4fcf40e2c914637ec58faed4af75"
+  },
+  "source_commit": "382e816",
+  "source_modified": false,
+  "frozen": {
+    "version": "labeling-guide-v3-evidence-v1",
+    "models": [
+      "deepseek-v4-pro",
+      "mimo-v2.6-flash"
+    ],
+    "provider": "TokenHub",
+    "created_beijing": "2026-10-22T08:49:55.618914+08:00",
+    "split_seed": 20261024,
+    "new_blind_sample_seed": 20261023,
+    "files": {
+      ".local/phase1/chinese-expansion-v2/dulemon/items.jsonl": "41dd160364690ffedf45d49f038cf33bde3e65cb996b4804cf9c3a9552f91279",
+      ".local/phase1/round3/verbatim-filter/run-final/human-confirmed-labels.jsonl": "8e2c7e032652e59ab304bedb49e58e99763adbb3119defb18cc805f704963099",
+      ".local/phase1/round3/approved-followup/joint-audit-72-v1/opaque-map-private.json": "c807c9329903059bc770952d6d2c675f2d2a74418715480a001f89ddb5995755",
+      "docs/evals/prompts/labeling-guide-v3-evidence-v1.txt": "57de6e00a577918f28e946b4b3d107d885bb4fcf40e2c914637ec58faed4af75",
+      "src/agent_memory/evals/evidence_v3.py": "794e29ac3721b29e77a29bbd7c8bc976ab5ad3a99cba8e43bc67c8aaf4da886d",
+      "/home/ubuntu/project/WorkPlan/agent-memory/scripts/run-evidence-v3.py": "5285743ceb1bbd15972aa80e3b1479a7983e8bb30c241c5fc6829c27c7c1d9d4",
+      ".local/phase1/round3/evidence-v3/split-private.json": "23ce6604aa8f678e5c954947fb78626ad73927f5aa19f386f448960fa2a2124a",
+      ".local/phase1/round3/evidence-v3/development-items.jsonl": "3193435bc539bd5d33701422f5e77db06df29c25d93a58290719f1196fcb0333",
+      ".local/phase1/round3/evidence-v3/final-items.jsonl": "6e13c584ba57ca15619e0b17c43dedf21251c1dcacb44c70e73421f78b202645"
+    },
+    "prompt_variants_allowed_this_run": 1,
+    "final_evaluation_runs_allowed": 1,
+    "development_counts": {
+      "native157-keep": 11,
+      "native157-discard": 68,
+      "blind72-keep": 32,
+      "blind72-discard": 4
+    },
+    "final_counts": {
+      "native157-discard": 67,
+      "blind72-keep": 31,
+      "native157-keep": 11,
+      "blind72-discard": 5
+    },
+    "conversation_overlap": 0,
+    "historical_exposure": "All 229 owner answers existed before this protocol; previous filter used 72. New holdout is reserved for this prompt version, not a historically unseen benchmark.",
+    "thresholds": {
+      "known_error_block": 0.8888888888888888,
+      "blind_correct_retention": 0.6,
+      "native_correct_retention": 0.6,
+      "next_audit_max_errors": 3
+    },
+    "gate_scope": "joint validated keep; development AND final AND aggregate separately pass; final small-error stratum requires ceil(8/9*n) blocked",
+    "human_current_positive": 85,
+    "minimum": 700,
+    "target": 1500,
+    "authorization": "om_x100b62a18b11e0acb09f793d77af4fa",
+    "full_relabel": "only after complete offline validation passes; same models, new complete batch"
+  },
+  "development": {
+    "complete": false,
+    "per_model": {
+      "deepseek-v4-pro": {
+        "blind72-discard": {
+          "expected": 4,
+          "observed": 0,
+          "correct": 0,
+          "rate": null
+        },
+        "blind72-keep": {
+          "expected": 32,
+          "observed": 0,
+          "correct": 0,
+          "rate": null
+        },
+        "native157-discard": {
+          "expected": 68,
+          "observed": 0,
+          "correct": 0,
+          "rate": null
+        },
+        "native157-keep": {
+          "expected": 11,
+          "observed": 0,
+          "correct": 0,
+          "rate": null
+        }
+      },
+      "mimo-v2.6-flash": {
+        "blind72-discard": {
+          "expected": 4,
+          "observed": 0,
+          "correct": 0,
+          "rate": null
+        },
+        "blind72-keep": {
+          "expected": 32,
+          "observed": 0,
+          "correct": 0,
+          "rate": null
+        },
+        "native157-discard": {
+          "expected": 68,
+          "observed": 0,
+          "correct": 0,
+          "rate": null
+        },
+        "native157-keep": {
+          "expected": 11,
+          "observed": 0,
+          "correct": 0,
+          "rate": null
+        }
+      }
+    },
+    "joint": {
+      "blind72-discard": {
+        "expected": 4,
+        "observed": 0,
+        "correct": 0,
+        "rate": null
+      },
+      "blind72-keep": {
+        "expected": 32,
+        "observed": 0,
+        "correct": 0,
+        "rate": null
+      },
+      "native157-discard": {
+        "expected": 68,
+        "observed": 0,
+        "correct": 0,
+        "rate": null
+      },
+      "native157-keep": {
+        "expected": 11,
+        "observed": 0,
+        "correct": 0,
+        "rate": null
+      }
+    },
+    "passed": false
+  },
+  "final": {
+    "complete": false,
+    "per_model": {
+      "deepseek-v4-pro": {
+        "blind72-discard": {
+          "expected": 5,
+          "observed": 0,
+          "correct": 0,
+          "rate": null
+        },
+        "blind72-keep": {
+          "expected": 31,
+          "observed": 0,
+          "correct": 0,
+          "rate": null
+        },
+        "native157-discard": {
+          "expected": 67,
+          "observed": 0,
+          "correct": 0,
+          "rate": null
+        },
+        "native157-keep": {
+          "expected": 11,
+          "observed": 0,
+          "correct": 0,
+          "rate": null
+        }
+      },
+      "mimo-v2.6-flash": {
+        "blind72-discard": {
+          "expected": 5,
+          "observed": 0,
+          "correct": 0,
+          "rate": null
+        },
+        "blind72-keep": {
+          "expected": 31,
+          "observed": 0,
+          "correct": 0,
+          "rate": null
+        },
+        "native157-discard": {
+          "expected": 67,
+          "observed": 0,
+          "correct": 0,
+          "rate": null
+        },
+        "native157-keep": {
+          "expected": 11,
+          "observed": 0,
+          "correct": 0,
+          "rate": null
+        }
+      }
+    },
+    "joint": {
+      "blind72-discard": {
+        "expected": 5,
+        "observed": 0,
+        "correct": 0,
+        "rate": null
+      },
+      "blind72-keep": {
+        "expected": 31,
+        "observed": 0,
+        "correct": 0,
+        "rate": null
+      },
+      "native157-discard": {
+        "expected": 67,
+        "observed": 0,
+        "correct": 0,
+        "rate": null
+      },
+      "native157-keep": {
+        "expected": 11,
+        "observed": 0,
+        "correct": 0,
+        "rate": null
+      }
+    },
+    "passed": false
+  },
+  "all_229_joint": {
+    "blind72-discard": {
+      "expected": 9,
+      "observed": 0,
+      "correct": 0,
+      "rate": null
+    },
+    "blind72-keep": {
+      "expected": 63,
+      "observed": 0,
+      "correct": 0,
+      "rate": null
+    },
+    "native157-discard": {
+      "expected": 135,
+      "observed": 0,
+      "correct": 0,
+      "rate": null
+    },
+    "native157-keep": {
+      "expected": 22,
+      "observed": 0,
+      "correct": 0,
+      "rate": null
+    }
+  },
+  "offline_passed": false,
+  "status": "incomplete",
+  "actual_calls": 2,
+  "http_counts": {
+    "402": 2
+  },
+  "reported_total_tokens": 0,
+  "usage_missing_calls": 2,
+  "failures": [
+    {
+      "stage": "development",
+      "requested_model": "deepseek-v4-pro",
+      "offset": 0,
+      "status": "http-failed",
+      "http_status": 402
+    },
+    {
+      "stage": "development",
+      "requested_model": "mimo-v2.6-flash",
+      "offset": 0,
+      "status": "http-failed",
+      "http_status": 402
+    }
+  ],
+  "full_relabel_complete": false,
+  "new_audit_generated": false,
+  "human_positive_points": 85,
+  "gap_to_minimum": 615,
+  "phase1_accepted": false,
+  "incremental_annotation_started": false,
+  "mechanical_checker_limitation": "Only checks source identity, user role and exact quote substrings. Cannot prove semantic entailment, complete detail enumeration, or absence of negation/question/attribution errors inside a quote; models must judge these, then fresh human audit.",
+  "validation": {
+    "pytest": 394,
+    "seconds": 17.96,
+    "ruff": "pass",
+    "strict_mypy": "pass",
+    "foundation": "8/8; tenant_leaks=0; deleted_memory_hits=0",
+    "log_sha256": "c14734c6c6c168c4d05c67ab5e6eedc246288e32ba33ad9528abf83a16b16241"
+  },
+  "provider_errors": [
+    {
+      "model": "deepseek-v4-pro",
+      "code": "401008",
+      "type": "permission_error",
+      "meaning": "free trial quota exhausted; postpaid not enabled",
+      "response_sha256": "2502a1102d777bfd279a3cb7ad7b4c21f4c6065c96f77238e724233f75155e37"
+    },
+    {
+      "model": "mimo-v2.6-flash",
+      "code": "401008",
+      "type": "permission_error",
+      "meaning": "free trial quota exhausted; postpaid not enabled",
+      "response_sha256": "66a1c3f81ff0c873af05ddbf6e26bc7f0b7f465711e0e0c1f0c75b5642174796"
+    }
+  ],
+  "date_beijing": "2026-10-22",
+  "unchanged_hashes": {
+    "docs/evals/human-confirmed-current.json": "40e65e9f2b4f76428407f047ac9b2453ae9efe67053c0a24260e5f4e13693d10",
+    "docs/evals/chinese-query-current.json": "6228efaae3bd70f660083eff796ba407b582e19ce8228a92080492428e520ac4",
+    "docs/evals/phase1-round3-policy-v4.json": "0ac08f2346b0b3fdb1ca27babcae5df30ef508e724e015b04c51808ac12b1304",
+    "src/agent_memory/evals/metrics.py": "d772a80c84cbe0f6e636631051bf04a045a8694ad2361a5f797c0c71e15b4c81",
+    "docs/plans/2026-10-21-agent-memory-interview-plan-v2.md": "da1126e8e77b5b91835cfc6b9849dd4915e1bdaba7524c7774c8fd09312c58e9"
+  },
+  "protected_hashes": {
+    ".local/phase1/round3/reviews/ecd-manual-120.csv": "c5e56d41c72194d7a56327e76b5fcc6051fcb397ef2dcdf4d120e1729686fb8a",
+    ".local/phase1/round3/reviews/dulemon-native-reference/audit-blind.csv": "5a5619eba70448eae9dbaead978ef8729e3936c561274fbc77b9b811901c08a3",
+    ".local/phase1/round3/reviews/ecd-manual-120.jsonl": "392b53fd6d21d9d47f17233a08bf2f39cc11c08b4a013753ddbc3148f1501927",
+    ".local/phase1/round3/reviews/ecd-negative-local.jsonl": "34072968d613f45a0bea699f64e0204da5a476cc4a7a890fc1b33ee6eb7f568b",
+    ".local/phase1/round3/reviews/dulemon-native-reference/audit-blind.jsonl": "aa001b678ce1f122775d69411c6e815643f08c430c6cd90ff237ac69834f5eb7"
+  },
+  "unfinished": [
+    "complete v3 offline model experiment",
+    "v3 full batch relabel if qualified",
+    "new independent audit72",
+    "incremental annotation after audit passes",
+    "700 real Chinese positives",
+    "whole negative conversation gates",
+    "synthetic judge backup and human judge calibration"
+  ],
+  "delivery_target": "current group; no p2p",
+  "evidence_note": "No raw owner text, raw questions, keys or opaque audit mappings in public report."
+}
