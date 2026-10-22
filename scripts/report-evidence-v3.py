@@ -68,7 +68,7 @@ for key in sorted(f['development_counts']):
  text.append(f'| {key} | {a} | {b} | {a+b} |')
 text += [
 '这些人工题此前已用于审核和错误分析，不能把新最终切分宣称为历史未暴露基准。本轮未利用最终集调提示词；也没有以模型结果选择切分。',
-f"离线参考线：已知错误拦截至少 **{8}/{9}**；两组人工正确项保留分别至少 **{f['thresholds']['blind_correct_retention']:.0%}**、**{f['thresholds']['native_correct_retention']:.0%}**；旧表discard仅报告拦截率。执行器在开发/最终/汇总各核对同一比例，小样错误组向上取整，比只看汇总保守；不放宽参考线。", 
+f"离线参考线：已知错误拦截至少 **{8}/{9}**；两组人工正确项保留分别至少 **{f['thresholds']['blind_correct_retention']:.0%}**、**{f['thresholds']['native_correct_retention']:.0%}**；旧表discard仅报告拦截率。执行器在开发/最终/汇总各核对同一比例，小样错误组向上取整，比只看汇总保守；不放宽参考线。",
 '## 实际调用与阻塞',
 f"冻结模型：{'、'.join(f['models'])}，渠道 {f['provider']}。实际请求 **{r['actual_calls']}** 次，HTTP计数 `{json.dumps(r['http_counts'])}`。每模型只试首个开发批次一次，无重试、无自动换模型；最终集未调用。",
 '| 模型 | HTTP | 服务错误码 | 返回含义 |',
