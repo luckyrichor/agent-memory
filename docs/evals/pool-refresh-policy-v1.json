@@ -1,0 +1,23 @@
+{
+  "version": "pool-refresh-v3-format-v3",
+  "authorization": "om_x100b62a2ee4f8ca0cffd78d2b53c6ef",
+  "scope": "agent-memory phase1 unaccepted",
+  "models": ["Ark:deepseek-v4-pro-ga-260813", "TokenHub:hy4-preview"],
+  "prompt": "docs/evals/prompts/labeling-guide-v3-evidence-v3.txt",
+  "validator": "src/agent_memory/evals/evidence_v3.py:validate_quotes",
+  "validator_and_candidate_changes_allowed": false,
+  "human_correct_retention_is_gate": false,
+  "human_correct_retention_is_report_only": true,
+  "known_error_block_gate": {"minimum": 8, "denominator": 9, "previous_result_accepted_by_owner": true},
+  "new_offline_evaluation_allowed": false,
+  "prompt_revision_data": "development only; fictitious structural examples",
+  "pool": 701,
+  "unreviewed_audit": {"sample": 72, "maximum_errors": 3, "seed": 20261025},
+  "audit_exclusions": ["all human reviewed", "all previous development", "all previous final"],
+  "human_result_provenance": "real owner labels projected to pool; blacklist placeholders are not human labels",
+  "audit_finalizer": "scripts/complete-pool-refresh-v3.py finalize",
+  "incremental_allowed_before_audit_pass": false,
+  "provider_limit_changes_allowed": false,
+  "automatic_model_replacement_allowed": false,
+  "delivery": "current group, no p2p"
+}

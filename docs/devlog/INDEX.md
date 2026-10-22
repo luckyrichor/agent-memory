@@ -28,3 +28,5 @@
 - [标注规程v3与离线额度阻塞](2026-10-22-phase1-evidence-v3.md)
 
 - [v3替代组合真实离线验证失败](2026-10-22-phase1-evidence-v3-replacement.md)
+
+- [701池格式重标、服务上限阻塞与补量估算](2026-10-22-phase1-pool-refresh-v3.md)
