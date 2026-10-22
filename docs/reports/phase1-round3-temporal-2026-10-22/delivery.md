@@ -1,8 +1,14 @@
 # agent-memory 阶段1：长期记忆筛选与补量交接
 
-生成时间：2026-10-22T08:01:26.552632+00:00；代码：d9b2936b79b1ac67b14474a418cf0a88f91be978；生成前存在未提交改动（含新文件）：True。阶段1仍未验收，不进入阶段2。
+生成时间：2026-10-22T08:22:15.379647+00:00；代码：0d8c19a2114224ae6021e5ec283e599ad0f9dc5b；生成前存在未提交改动（含新文件）：True。阶段1仍未验收，不进入阶段2。
 
 执行方案：`docs/plans/2026-10-22-agent-memory-interview-plan-v3.md`；SHA256 `06ad7319525c6b0f4eb7333c981b094dd1ed6ec41ae2e5ea1b46009306389418`。原作者保留，旧版未覆盖。按最新方案及负责人当前任务执行。
+
+## 本轮状态
+
+本次标注尝试已关闭=True；补量目标达成=False；阶段1未验收。完整冻结400段、2291候选；共同保留277条仍未采纳；人工确认正例154条。
+
+不能把当前双模型组合受阻概括为所有模型余额耗尽：本轮DeepSeek侧仍有真实成功调用；腾讯Turbo先遇多候选格式故障，单条修复后再明确返回402。未查询全模型余额；这是已验证候选池当前无法继续配对，不是全目录余额结论。
 
 ## 方案变化与口径
 
@@ -59,11 +65,16 @@ HY4在完成部分后HTTP402，停止旧侧；替代模型对该侧全部输入�
 |2|deepseek-v4-flash-202605 + hy-role|100|571|58|87|77|5|
 |3|deepseek/deepseek-v4-flash-vision-exp + hy-role|100|568|64|57|80|12|
 
-补量未完成；未宣称达到700或1500。
+已完整冻结400段/2291候选，共同保留277；新增目标549未达到，尚缺272。失败的当前批整体排除，实际新增采纳0。阶段性72条审核包仅本地准备、未发出、不作为人工证据；遵守补量完成后再发新增盲审表的顺序，不催本次临时包。
 
-实际单侧进度（不是共同保留，不计可靠规模）：[{"batch": 0, "model": "deepseek-v4-flash-202605", "expected": 585, "completed": 585, "keep": 79, "temporary": 14, "citation_invalid": 6}, {"batch": 0, "model": "hunyuan-role-latest", "expected": 585, "completed": 585, "keep": 146, "temporary": 71, "citation_invalid": 54}, {"batch": 1, "model": "deepseek-v4-flash-202605", "expected": 567, "completed": 567, "keep": 98, "temporary": 18, "citation_invalid": 9}, {"batch": 1, "model": "hunyuan-role-latest", "expected": 567, "completed": 567, "keep": 125, "temporary": 82, "citation_invalid": 83}, {"batch": 2, "model": "deepseek-v4-flash-202605", "expected": 571, "completed": 571, "keep": 74, "temporary": 13, "citation_invalid": 12}, {"batch": 2, "model": "hy-role", "expected": 571, "completed": 571, "keep": 108, "temporary": 81, "citation_invalid": 77}, {"batch": 3, "model": "deepseek/deepseek-v4-flash-vision-exp", "expected": 568, "completed": 568, "keep": 80, "temporary": 12, "citation_invalid": 7}, {"batch": 3, "model": "hy-role", "expected": 568, "completed": 568, "keep": 140, "temporary": 50, "citation_invalid": 87}, {"batch": 4, "model": "deepseek/deepseek-v4-flash-vision-exp", "expected": 558, "completed": 558, "keep": 75, "temporary": 23, "citation_invalid": 3}, {"batch": 4, "model": "hunyuan-turbos-vision-video-20250728", "expected": 558, "completed": 255, "keep": 26, "temporary": 222, "citation_invalid": 26}]
+阻塞：{"batch": 4, "model": "hunyuan-turbos-vision-video-20250728", "http": 402, "error_code": "401008", "error_type": null, "cause": "no further qualified independent available candidate in bounded pool"}。已终止本次运行，不是补量完成或阶段验收；有界候选试用结果不代表所有目录型号都不可用。
 
-当前阻塞记录：null；具体完成状态：False。
+### 未完成批单侧进度（不计金标）
+
+|批次|模型|候选分母|完成|模型keep经严格校验后|临时标记|证据无效（含结构拒绝）|
+|---|---|---:|---:|---:|---:|---:|
+|4|deepseek/deepseek-v4-flash-vision-exp|558|558|75|23|3|
+|4|hunyuan-turbos-vision-video-20250728|558|371|32|328|39|
 
 预算更正：早期按预筛701池外推原始候选不合适，已退役该估计。当前完整单侧保留79/585；如果另一侧不再损失任何候选，条件乐观外推需4066候选、721对话、约1018次双侧POST。该单侧口径不能当作实际共同保留率或产出承诺；不设新产量质量门。
 
@@ -90,9 +101,9 @@ HY4在完成部分后HTTP402，停止旧侧；替代模型对该侧全部输入�
 
 ## 用量与证据
 
-完整门禁：pytest 430通过/18.14秒，ruff通过=True，strict mypy 98源文件，foundation零泄漏门通过=True。原始日志见validation.log。
+完整门禁：pytest 430通过/17.93秒，ruff通过=True，strict mypy 98源文件，foundation零泄漏门通过=True。原始日志见validation.log。
 
-当前台账POST尝试 1338；成功响应报告token 4832641。另有8条可能在途、没有最终响应记录；失败或中断无usage不按0实际用量推断，以上为响应报告token而非完整账单。额外替代资格预检台账在tokenhub-pool-qualification目录，单独记录，未混为筛选调用。
+当前台账POST尝试 1456；成功响应报告token 5072118。另有6条可能在途、没有最终响应记录；失败或中断无usage不按0实际用量推断，以上为响应报告token而非完整账单。额外替代资格预检台账在tokenhub-pool-qualification目录，单独记录，未混为筛选调用。
 
 替代资格预检已知POST尝试1079次，另2次可能在途，报告token合计924303；普通429与额度故障分开。旧报告不覆盖，Ark历史预检复用不计新调用。各次资格结果见下表及report.json，不与真实人工质量校验混淆。
 
@@ -142,7 +153,7 @@ HY4在完成部分后HTTP402，停止旧侧；替代模型对该侧全部输入�
 
 真实分组探测：[{"size": 1, "transport_complete": true, "schema_valid": 1, "citation_valid": 1, "items": 1, "model": "hunyuan-turbos-vision-video-20250728", "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f", "quality_evidence": false, "candidate_modified": false, "validation_relaxed": false}, {"size": 2, "transport_complete": true, "schema_valid": 0, "citation_valid": 0, "items": 2, "model": "hunyuan-turbos-vision-video-20250728", "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f", "quality_evidence": false, "candidate_modified": false, "validation_relaxed": false}, {"size": 4, "transport_complete": true, "schema_valid": 0, "citation_valid": 0, "items": 4, "model": "hunyuan-turbos-vision-video-20250728", "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f", "quality_evidence": false, "candidate_modified": false, "validation_relaxed": false}]；分散真实输入控制：{"controls": [{"position": 0, "complete": true, "schema_valid": true, "citation_valid": true}, {"position": 100, "complete": true, "schema_valid": true, "citation_valid": true}, {"position": 200, "complete": true, "schema_valid": true, "citation_valid": true}, {"position": 400, "complete": true, "schema_valid": true, "citation_valid": true}, {"position": 550, "complete": true, "schema_valid": true, "citation_valid": true}], "all_format_and_quote_checks_passed": true, "human_quality_evidence": false, "prompt_unchanged": true, "validation_unchanged": true, "blind_pool_excluded_debug_items": 8}。仅验证格式/引用机械校验，不是语义质量证据。用于排查的真实条目保守排除出后续盲审及可采纳池；原多条请求不合格响应不修复、不混入。
 
-当前分组预算：{"transport_packet_sizes": {"deepseek/deepseek-v4-flash-vision-exp": 8, "hunyuan-turbos-vision-video-20250728": 1}, "single_packet_complete_candidate_call_estimate": 5109, "single_packet_remaining_candidate_call_estimate": 2532, "single_packet_observed_token_means": {"deepseek/deepseek-v4-flash-vision-exp": {"observed_requests": 141, "observed_candidate_items": 1126, "reported_tokens": 530876, "mean_tokens_per_item": 471.47069271758437}, "hunyuan-turbos-vision-video-20250728": {"observed_requests": 257, "observed_candidate_items": 257, "reported_tokens": 537568, "mean_tokens_per_item": 2091.704280155642}}, "quota_sufficiency_not_inferred": true, "single_packet_remaining_tokens_conditional_estimate": 5767144}。token按真实单条调用小样本均值条件外推，完整来源长度不同会改变用量；调用数不含重试/换型，格式恢复不代表余额足够。运行状态以本报告increment字段为准。
+当前分组预算：{"transport_packet_sizes": {"deepseek/deepseek-v4-flash-vision-exp": 8, "hunyuan-turbos-vision-video-20250728": 1}, "single_packet_complete_candidate_call_estimate": 5109, "single_packet_remaining_candidate_call_estimate": 2532, "single_packet_observed_token_means": {"deepseek/deepseek-v4-flash-vision-exp": {"observed_requests": 141, "observed_candidate_items": 1126, "reported_tokens": 530876, "mean_tokens_per_item": 471.47069271758437}, "hunyuan-turbos-vision-video-20250728": {"observed_requests": 373, "observed_candidate_items": 373, "reported_tokens": 777045, "mean_tokens_per_item": 2083.230563002681}}, "quota_sufficiency_not_inferred": true, "single_packet_remaining_tokens_conditional_estimate": 5748078}。token按真实单条调用小样本均值条件外推，完整来源长度不同会改变用量；调用数不含重试/换型，格式恢复不代表余额足够。运行状态以本报告increment字段为准。
 
 API结构化输出虚构探测：{"at": "2026-10-22T07:54:06.277400+00:00", "model": "hunyuan-turbos-vision-video-20250728", "fictional_only": true, "quality_evidence": false, "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f", "schema_unmodified": true, "calls": 1, "http": 200, "usage": {"prompt_tokens": 1884, "completion_tokens": 1023, "total_tokens": 2907, "prompt_tokens_details": {"cached_tokens": 0}, "completion_tokens_details": {"reasoning_tokens": 0}}, "schema_valid": 0, "citation_valid": 0, "items": 8, "observed_disabled_thinking": true}。HTTP200不代表返回已满足原严格结构；失败包未进入任何标注池，不采用该方案；额外调用与token另记。
 
@@ -150,7 +161,7 @@ API结构化输出虚构探测：{"at": "2026-10-22T07:54:06.277400+00:00", "mod
 
 - 旧池时效性筛选是否采用，等待负责人决定
 
-- 增量标注或审核表导出未完成
+- 补量被额度及真实批量格式故障阻塞；未达新增目标；本地阶段性盲审未发，补量完成后再交
 
 - 当前可用裁判主备与人工校准仍有缺口
 

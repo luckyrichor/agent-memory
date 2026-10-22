@@ -173,6 +173,7 @@ def main():
  '# agent-memory 阶段1：长期记忆筛选与补量交接',
  f"生成时间：{report['generated_at']}；代码：{code}；生成前存在未提交改动（含新文件）：{dirty}。阶段1仍未验收，不进入阶段2。",
  f"执行方案：`{plan}`；SHA256 `{sha(plan)}`。原作者保留，旧版未覆盖。按最新方案及负责人当前任务执行。",
+ '## 本轮状态',f"本次标注尝试已关闭={bool(final and final.get('complete'))}；补量目标达成={bool(final and final.get('target_reached'))}；阶段1未验收。完整冻结{sum(r['conversations'] for r in batches)}段、{sum(r['candidates'] for r in batches)}候选；共同保留{(final or {}).get('joint_keep',sum(r['joint_keep'] for r in batches))}条仍未采纳；人工确认正例{screen['deduplicated_human_positive']}条。",'不能把当前双模型组合受阻概括为所有模型余额耗尽：本轮DeepSeek侧仍有真实成功调用；腾讯Turbo先遇多候选格式故障，单条修复后再明确返回402。未查询全模型余额；这是已验证候选池当前无法继续配对，不是全目录余额结论。',
  '## 方案变化与口径',*['- '+x for x in report['plan']['changes']],*['- 内部旧口径：'+x for x in report['plan']['remaining_internal_conflicts']],
  '完整逐行差异见 plan-diff.patch。PAL-Set来源内容为负责人方案声明，本轮未另行验证或下载。',
  '## 新盲审与人工正例',
@@ -194,6 +195,9 @@ def main():
  if final and final.get('audit') and final.get('audit_prepared_private_only'):text += [f"已完整冻结{final['conversations']}段/{final['candidates']}候选，共同保留{final['joint_keep']}；新增目标{final['target_unreviewed_joint_keeps']}未达到，尚缺{final['unresolved_target_joint_keeps']}。失败的当前批整体排除，实际新增采纳{final['new_points_adopted']}。阶段性{final['audit']['sample']}条审核包仅本地准备、未发出、不作为人工证据；遵守补量完成后再发新增盲审表的顺序，不催本次临时包。",f"阻塞：{json.dumps({k:v for k,v in final['blocked'].items() if k!='observations'},ensure_ascii=False)}。已终止本次运行，不是补量完成或阶段验收；有界候选试用结果不代表所有目录型号都不可用。"]
  elif final and final.get('audit'):text += [f"新增共 {final['conversations']} 段/{final['candidates']}候选，共同保留 {final['joint_keep']}。独立审核表 {final['audit']['sample']}条，新种子{final['audit']['seed']}，历史审核条目重叠 {final['audit']['previous_review_overlap']}。新增实际采纳 {final['new_points_adopted']}，等待负责人审核≤3错。"]
  else:text+=['补量未完成；未宣称达到700或1500。',f"实际单侧进度（不是共同保留，不计可靠规模）：{json.dumps(model_observations,ensure_ascii=False)}",f"当前阻塞记录：{json.dumps((final or {}).get('blocked'),ensure_ascii=False)}；具体完成状态：{(final or {}).get('complete',False)}。"]
+ incomplete=[r for r in model_observations if r['batch'] not in {batch['batch'] for batch in batches}]
+ if incomplete:
+  text += ['### 未完成批单侧进度（不计金标）','|批次|模型|候选分母|完成|模型keep经严格校验后|临时标记|证据无效（含结构拒绝）|','|---|---|---:|---:|---:|---:|---:|',*[f"|{r['batch']}|{r['model']}|{r['expected']}|{r['completed']}|{r['keep']}|{r['temporary']}|{r['citation_invalid']}|" for r in incomplete]]
  if completed_one_side:
   text += [f"预算更正：早期按预筛701池外推原始候选不合适，已退役该估计。当前完整单侧保留{completed_one_side['keep']}/{completed_one_side['completed']}；如果另一侧不再损失任何候选，条件乐观外推需{optimistic_candidates}候选、{optimistic_dialogues}对话、约{projection['optimistic_post_call_estimate']}次双侧POST。该单侧口径不能当作实际共同保留率或产出承诺；不设新产量质量门。"]
  if batches:
@@ -209,7 +213,7 @@ def main():
  '|组别|模型|格式有效/检查数|五次判定一致|关闭思考检查|技术预检通过|已知新POST|响应报告token|','|---|---|---:|---|---|---|---:|---:|',
  *[f"|{group}|{r['model']}|{r.get('format_valid',0)}/{r.get('format_n',0)}|{r.get('consistent_5',False)}|{r.get('observed_disabled_thinking',False)}|{r.get('passed',False)}|{r.get('new_post_attempts',r.get('calls',0))}|{r.get('new_reported_tokens',r.get('reported_tokens',0))}|" for group,records in [('原始通用格式',qualifications),('限流同题补齐',repaired_qualifications),('完整v3修正预检',diverse_qualifications),('完整v3虚构预检',full_qualifications)] for r in records],
  '完整v3预检的五次一致指label与temporal判定一致，不声称证据说明逐字节相同；100不同输入用于格式控制，虚构内容只有长期/临时两类模板，不作为语义准确率证据。腾讯Turbo虚构单项预检通过，真实多候选根结构持续失败；另用真实控制确认单条请求格式后，独立版本恢复，不把格式通过冒充人工质量通过。',
- f"返工：早期虚构生成器只改变未进入实际请求的字段，重复探测不能算100不同输入；已停用并独立重做。旧结果和未知中断用量保留：{json.dumps(interrupted_qualification,ensure_ascii=False)}。", 
+ f"返工：早期虚构生成器只改变未进入实际请求的字段，重复探测不能算100不同输入；已停用并独立重做。旧结果和未知中断用量保留：{json.dumps(interrupted_qualification,ensure_ascii=False)}。",
  f"缓存刷新返工：{json.dumps(cache_incident,ensure_ascii=False)}。旧索引在同进程换侧后未刷新，造成另一完整侧重复调用；发现后中断，独立新入口每侧开始前刷新真实响应索引并重新严格校验。事故台账区分重复的混元侧和本就需要新标的DeepSeek侧；中断无响应的usage未知，不当作零。不改原始台账。",
  '候选状态复核：当前目录仍标online的型号也可能实际402，不等于可调用。YT-VITA目录标discontinued，发现后中断其虚构预检，未进入标注池或裁判池；已发生调用与未知中断usage仍保留。没有以实际返回过200绕过退役状态或格式门槛。',
  f"后续预算仅条件估算：还需{projection.get('remaining_joint_target')}个未审共同保留候选；按完成批次留存率预计{projection.get('remaining_candidate_estimate')}候选、{projection.get('remaining_dialogue_estimate')}对话、按每请求8候选双侧约{projection.get('remaining_post_estimate_two_sides_at_batch8')}次POST，不含重试/换型。这是两侧都8条/请求的旧预算；若启用腾讯单条请求，以后面的新预算为准。换型或改调用分组后不承诺继承产率，不推断额度足够。",

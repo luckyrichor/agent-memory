@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-22T08:01:26.552632+00:00",
-  "code_commit": "d9b2936b79b1ac67b14474a418cf0a88f91be978",
+  "generated_at": "2026-10-22T08:22:15.379647+00:00",
+  "code_commit": "0d8c19a2114224ae6021e5ec283e599ad0f9dc5b",
   "tracked_changes": true,
   "python": "3.12.3",
   "plan": {
@@ -170,7 +170,60 @@
     "validation_unchanged": true,
     "blind_pool_excluded_debug_items": 8
   },
-  "private_audit_structure_verification": null,
+  "private_audit_structure_verification": {
+    "csv_sha256": "f8982baa437590b353320ecc2bd014e5ca525459139969fa908ad4915c2493c3",
+    "sample": 72,
+    "columns": [
+      "item_id",
+      "conversation_id",
+      "subject",
+      "candidate",
+      "source",
+      "record_sha256",
+      "human_label",
+      "human_reason"
+    ],
+    "blank_human_columns": true,
+    "opaque_ids": true,
+    "source_matches_frozen_original": true,
+    "historical_audit_development_final_overlap": 0,
+    "new_unused_source_inventory_only": true,
+    "audit_seed": 20261028,
+    "annotation_models_by_completed_batch": [
+      {
+        "batch": 0,
+        "models": [
+          "deepseek-v4-flash-202605",
+          "hunyuan-role-latest"
+        ]
+      },
+      {
+        "batch": 1,
+        "models": [
+          "deepseek-v4-flash-202605",
+          "hunyuan-role-latest"
+        ]
+      },
+      {
+        "batch": 2,
+        "models": [
+          "deepseek-v4-flash-202605",
+          "hy-role"
+        ]
+      },
+      {
+        "batch": 3,
+        "models": [
+          "deepseek/deepseek-v4-flash-vision-exp",
+          "hy-role"
+        ]
+      }
+    ],
+    "gold_adopted": false,
+    "owner_review_pending": false,
+    "private_preview_only": true,
+    "phase1_accepted": false
+  },
   "cache_refresh_incident": {
     "duplicate_current_other_side": {
       "completed_posts": 14,
@@ -288,10 +341,10 @@
       "batch": 4,
       "model": "hunyuan-turbos-vision-video-20250728",
       "expected": 558,
-      "completed": 255,
-      "keep": 26,
-      "temporary": 222,
-      "citation_invalid": 26
+      "completed": 371,
+      "keep": 32,
+      "temporary": 328,
+      "citation_invalid": 39
     }
   ],
   "production_projection": {
@@ -350,22 +403,22 @@
         "mean_tokens_per_item": 471.47069271758437
       },
       "hunyuan-turbos-vision-video-20250728": {
-        "observed_requests": 257,
-        "observed_candidate_items": 257,
-        "reported_tokens": 537568,
-        "mean_tokens_per_item": 2091.704280155642
+        "observed_requests": 373,
+        "observed_candidate_items": 373,
+        "reported_tokens": 777045,
+        "mean_tokens_per_item": 2083.230563002681
       }
     },
     "quota_sufficiency_not_inferred": true,
-    "single_packet_remaining_tokens_conditional_estimate": 5767144
+    "single_packet_remaining_tokens_conditional_estimate": 5748078
   },
   "validation": {
     "pytest_passed": 430,
-    "pytest_seconds": 18.14,
+    "pytest_seconds": 17.93,
     "ruff_passed": true,
     "strict_mypy_source_files": 98,
     "foundation_passed": true,
-    "log_sha256": "76ca36742d33347a08225510857e9e3a390f960288c9002ab9a754b973ba9f96"
+    "log_sha256": "ce2910944a55593f3c3c1cfa339e70cab6a5e0f85cf00216374366baa8cc8910"
   },
   "screen": {
     "created_at": "2026-10-22T05:36:20.707891+00:00",
@@ -476,7 +529,6 @@
     "scope_note": "Negative small gold for these reviewed conversations; stratified sample, not an estimate of full ECD prevalence. Seven positive conversations do not automatically add seven memory points to DuLeMon gold. No system false-extraction rate has been measured in this intake."
   },
   "increment": {
-    "complete": false,
     "batches": [
       {
         "batch": 0,
@@ -599,7 +651,72 @@
         "whole_batch_frozen": true
       }
     ],
-    "new_points_adopted": 0
+    "conversations": 400,
+    "candidates": 2291,
+    "joint_keep": 277,
+    "raw_joint_keep": 277,
+    "dedup_or_historical_removed": 0,
+    "target_unreviewed_joint_keeps": 549,
+    "target_reached": false,
+    "supplement_complete": false,
+    "unresolved_target_joint_keeps": 272,
+    "new_points_adopted": 0,
+    "owner_audit_pending": false,
+    "phase1_accepted": false,
+    "blocked": {
+      "batch": 4,
+      "model": "hunyuan-turbos-vision-video-20250728",
+      "http": 402,
+      "error_code": "401008",
+      "error_type": null,
+      "cause": "no further qualified independent available candidate in bounded pool"
+    },
+    "complete": true,
+    "remaining_unused_dialogues": 992,
+    "unfinished_current_batch_excluded_from_gold": true,
+    "audit": {
+      "seed": 20261028,
+      "joint_keep": 277,
+      "owner_rejected_removed": 0,
+      "remaining_pool": 277,
+      "prior_reviewed_in_remaining_pool": 0,
+      "eligible_unreviewed_pool": 277,
+      "sample": 72,
+      "previous_review_overlap": 0,
+      "conversations": 65,
+      "source_counts": {
+        "dulemon-both-train": 72
+      },
+      "topic_counts": {
+        "other": 37,
+        "work-education": 5,
+        "preference": 18,
+        "residence-origin": 4,
+        "family": 8
+      },
+      "topic_rule": "descriptive regex, first matching category; not human/model labels; absent from reviewer table",
+      "maximum_errors": 3,
+      "human_completed": false,
+      "passed": null,
+      "error_rate": null,
+      "confidence_interval_95": null,
+      "format_approved": true,
+      "format_authorization": "owner message om_x100b62bf9ec420a0c1f4c8e945cc40e",
+      "files": {
+        "audit-blind.csv": "f8982baa437590b353320ecc2bd014e5ca525459139969fa908ad4915c2493c3",
+        "audit-blind.jsonl": "284b6ebfbe767a73bf6f98ad9e824aa48457e98cfd903aa5b7afc09ef273a27f",
+        "opaque-map-private.json": "feb8808dc03b715e5d375c33fb283e203416baa83da8617fbc5970472822e447"
+      },
+      "inputs": {
+        ".local/phase1/round3/temporal-v1/increment-batches-single-packet-v1/audit-items.jsonl": "165b7f4ba7c4a1e49f6519d37efe109f984d6a1eab7a603af048a472352dbd43",
+        ".local/phase1/round3/temporal-v1/increment-batches-single-packet-v1/audit-left.jsonl": "a904932a56190281de7c1b2392c636314ad1be73b510155b48964c8589ecb8cc",
+        ".local/phase1/round3/temporal-v1/increment-batches-single-packet-v1/audit-right.jsonl": "0d127fef62b10d19497a6f76d897c0f92986b68569af52023508d96e43765be3",
+        ".local/phase1/round3/temporal-v1/increment-batches-single-packet-v1/audit-human-projection.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "owner_audit_issued": false,
+    "audit_prepared_private_only": true,
+    "audit_export_deferred_until_supplement_complete": true
   },
   "increment_switches": [
     {
@@ -1060,15 +1177,15 @@
     "qualification_reported_tokens": 924303,
     "transport_extra_attempts": 13,
     "transport_schema_invalid_attempts": 13,
-    "post_attempts": 1338,
-    "reported_tokens": 4832641,
+    "post_attempts": 1456,
+    "reported_tokens": 5072118,
     "unique_ledger_records_by_model": {
       "deepseek-v4.1-flash-1017": 117,
       "glm-5-2-260617": 103,
       "deepseek-v4-flash-202605": 416,
       "hy-role": 292,
       "deepseek/deepseek-v4-flash-vision-exp": 297,
-      "hunyuan-turbos-vision-video-20250728": 285,
+      "hunyuan-turbos-vision-video-20250728": 401,
       "hunyuan-role-latest": 253,
       "hy4-preview": 11
     },
@@ -1078,17 +1195,17 @@
       "deepseek/deepseek-v4-flash-vision-exp": 141,
       "glm-5-2-260617": 103,
       "hunyuan-role-latest": 190,
-      "hunyuan-turbos-vision-video-20250728": 277,
+      "hunyuan-turbos-vision-video-20250728": 395,
       "hy-role": 217,
       "hy4-preview": 11
     },
-    "potential_inflight_without_response": 8,
+    "potential_inflight_without_response": 6,
     "genuine_cached_response_replays": 437,
     "transport_schema_probe_calls": 1,
     "transport_schema_probe_reported_tokens": 2907,
-    "total_known_post_attempts": 2418,
-    "total_potential_unknown_requests": 10,
-    "total_reported_tokens": 5759851,
+    "total_known_post_attempts": 2536,
+    "total_potential_unknown_requests": 8,
+    "total_reported_tokens": 5999328,
     "catalog_gets": 1
   },
   "private_evidence_hashes": {
@@ -1121,12 +1238,14 @@
     ".local/phase1/round3/temporal-v1/increment-attempt-2/batch-000/shard-1/hy-role/failed-before-strict-retry/ledger.json": "32121934b1957d6e724d83370f5a0a9b840866b8101af2bb8419cce6feea6cdc",
     ".local/phase1/round3/temporal-v1/increment-attempt-2/batch-000/shard-1/hy-role/ledger.json": "8eb35b2c583fbbf088be1d0c41b1464f2d2a9b9cc1d1a5e6dda98fff41a6f465",
     ".local/phase1/round3/temporal-v1/increment-attempt-2/manifest.json": "a021839ed5b42f5dd04067145462b7e215e92758294b1323479ffc2186ec235f",
+    ".local/phase1/round3/temporal-v1/increment-batches-single-packet-v1/audit72/manifest.json": "8aa37ad125990c3760d72cd467867fc2c9da8ef364a242344af8feab53c0b71f",
     ".local/phase1/round3/temporal-v1/increment-batches-single-packet-v1/cohort-004-attempt-00/batch-004/manifest.json": "57f396c8c67a084e3843a01f6447dc0f62d7b758a8e237e409013d7f2146ef0c",
     ".local/phase1/round3/temporal-v1/increment-batches-single-packet-v1/cohort-004-attempt-00/batch-004/shard-0/deepseek-deepseek-v4-flash-vision-exp/ledger.json": "279edce67ab78613e4096216ac4b66b03e99b2c226ea106f2a06586cba35a72b",
-    ".local/phase1/round3/temporal-v1/increment-batches-single-packet-v1/cohort-004-attempt-00/batch-004/shard-0/hunyuan-turbos-vision-video-20250728/ledger.json": "f47a060f9154392355f13bf8f750d6a1cd3bc5a6927549b7a1c2003280c018d8",
+    ".local/phase1/round3/temporal-v1/increment-batches-single-packet-v1/cohort-004-attempt-00/batch-004/shard-0/hunyuan-turbos-vision-video-20250728/ledger.json": "f12c4fa7a00c521d11373ea75862a5e3c8c8e58462beaceda3bbe45da57c7974",
     ".local/phase1/round3/temporal-v1/increment-batches-single-packet-v1/cohort-004-attempt-00/batch-004/shard-1/deepseek-deepseek-v4-flash-vision-exp/ledger.json": "598d6681988910239ed6bc78a2d6473ccb237c43c4fe33cbd917d86e365095d1",
-    ".local/phase1/round3/temporal-v1/increment-batches-single-packet-v1/cohort-004-attempt-00/batch-004/shard-1/hunyuan-turbos-vision-video-20250728/ledger.json": "46687457a13c8211dca864d3708792c24b8d478b46ce61ad3f70a8401d96f237",
+    ".local/phase1/round3/temporal-v1/increment-batches-single-packet-v1/cohort-004-attempt-00/batch-004/shard-1/hunyuan-turbos-vision-video-20250728/ledger.json": "42c53cdfdf755053f4e874bd9e8288163993ea8b33f575b34adce970f33862b7",
     ".local/phase1/round3/temporal-v1/increment-batches-single-packet-v1/manifest.json": "36537ecbdb43dbc38647eadc2818a47ed4e243764369529b5f402c8b3436a21b",
+    ".local/phase1/round3/temporal-v1/increment-batches-single-packet-v1/report.json": "4235499e3e012d2e225e4232d3b1b0d33707d738f726993b15e16c2405b5f68c",
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/audit72/manifest.json": "edb464ef8317a1b4ee2a898ba3477aa180fa312d3085f5882b5607af75a7023d",
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/cohort-000-attempt-00/batch-000/manifest.json": "00abf170b1c0d508dab0857b86681cedad84c107cc6f88ae0828a25929c48672",
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/cohort-000-attempt-00/batch-000/report.json": "f5f4b2ef6d51e2574c207cc846c1796046e0996d7aaefc28c6564817273fc920",
@@ -1316,11 +1435,18 @@
       "deepseek/deepseek-v4-flash-vision-exp",
       "hunyuan-turbos-vision-video-20250728"
     ],
-    "blocked": null
+    "blocked": {
+      "batch": 4,
+      "model": "hunyuan-turbos-vision-video-20250728",
+      "http": 402,
+      "error_code": "401008",
+      "error_type": null,
+      "cause": "no further qualified independent available candidate in bounded pool"
+    }
   },
   "unfinished": [
     "旧池时效性筛选是否采用，等待负责人决定",
-    "增量标注或审核表导出未完成",
+    "补量被额度及真实批量格式故障阻塞；未达新增目标；本地阶段性盲审未发，补量完成后再交",
     "当前可用裁判主备与人工校准仍有缺口",
     "完整负样本会话数与负样本比例两个闸门尚未共同确认",
     "ECD只完成真实回填接入；系统误抽评测未运行"
