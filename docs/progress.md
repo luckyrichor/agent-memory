@@ -325,3 +325,11 @@ Ark同一共享密钥调用新版Pro260915和Mini260428成功，旧Pro260215仍4
 [{"batch": 0, "conversations": 100, "candidates": 585, "joint_keep": 77, "temporal_removed": 79, "citation_invalid": 54, "schema_invalid": 1}, {"batch": 1, "conversations": 100, "candidates": 567, "joint_keep": 78, "temporal_removed": 95, "citation_invalid": 81, "schema_invalid": 7}]
 
 新增可靠采纳仍为零，独立盲审未交付。补量与备选检查进行中；四门最近完整日志check-final.log，精确测试数量、时间与文件数由交接脚本读取。阶段1未验收。
+
+### 同轮额度切换与第三批冻结（脚本汇总）
+
+hunyuan-role-latest在当前未完成批返回402；完整v3格式预检合格的hy-role接替，当前受影响侧全批重标。已完整DeepSeek侧由真实响应缓存重新校验，无重收费。新执行清单与旧批清单分别保存，旧临时导出的72表未发出、不作为审核或通过证据。另一个DeepSeek备选也完成完整v3格式预检；Kimi和MiniMax新候选实际400，未放进可用备选。
+
+[{"batch": 0, "conversations": 100, "candidates": 585, "joint_keep": 77, "models": ["deepseek-v4-flash-202605", "hunyuan-role-latest"]}, {"batch": 1, "conversations": 100, "candidates": 567, "joint_keep": 78, "models": ["deepseek-v4-flash-202605", "hunyuan-role-latest"]}, {"batch": 2, "conversations": 100, "candidates": 571, "joint_keep": 58, "models": ["deepseek-v4-flash-202605", "hy-role"]}]
+
+四门再次通过，原始日志check-final.log；精确数字由报告脚本读取。新增规模仍未采纳，下一批进行中，阶段1未验收。

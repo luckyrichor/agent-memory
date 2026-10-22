@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-22T06:52:11.980404+00:00",
-  "code_commit": "6342c31fbef819b7a4575373400d723135cc404a",
+  "generated_at": "2026-10-22T07:10:55.702597+00:00",
+  "code_commit": "0cecf624e8386714ddb86f71e020b7509697f176",
   "tracked_changes": true,
   "python": "3.12.3",
   "plan": {
@@ -19,6 +19,13 @@
       "role-table still lists old DeepSeek/MiMo; actual replacements explicitly authorized",
       "native22/old711 references remain historical; use verified owner returns/current registry"
     ]
+  },
+  "remaining_source_inventory": {
+    "eligible_unused_before_increment": 1392,
+    "unique_dialogues_selected_in_any_increment_attempt": 400,
+    "unused_not_selected_remaining": 992,
+    "selected_candidate_slots": 2291,
+    "unfinished_selected_batches_not_claimed_unused": true
   },
   "adoption_projection": {
     "human_confirmed": 154,
@@ -70,29 +77,47 @@
       "batch": 2,
       "model": "deepseek-v4-flash-202605",
       "expected": 571,
-      "completed": 176,
-      "keep": 22,
-      "temporary": 3,
-      "citation_invalid": 1
+      "completed": 571,
+      "keep": 74,
+      "temporary": 13,
+      "citation_invalid": 12
     },
     {
       "batch": 2,
-      "model": "hunyuan-role-latest",
+      "model": "hy-role",
       "expected": 571,
-      "completed": 176,
-      "keep": 37,
-      "temporary": 23,
-      "citation_invalid": 30
+      "completed": 571,
+      "keep": 108,
+      "temporary": 81,
+      "citation_invalid": 77
+    },
+    {
+      "batch": 3,
+      "model": "deepseek-v4-flash-202605",
+      "expected": 568,
+      "completed": 400,
+      "keep": 52,
+      "temporary": 9,
+      "citation_invalid": 5
+    },
+    {
+      "batch": 3,
+      "model": "hy-role",
+      "expected": 568,
+      "completed": 464,
+      "keep": 111,
+      "temporary": 46,
+      "citation_invalid": 75
     }
   ],
   "production_projection": {
     "target_joint_survivors": 549,
     "historical_joint_rate": 0.43081312410841655,
     "temporal_pool_survival_rate": 0.8150943396226416,
-    "estimated_joint_rate": 0.1345486111111111,
-    "candidate_estimate": 4081,
-    "dialogue_estimate": 723,
-    "post_call_estimate_both_models": 1022,
+    "estimated_joint_rate": 0.12362159024956472,
+    "candidate_estimate": 4441,
+    "dialogue_estimate": 787,
+    "post_call_estimate_both_models": 1112,
     "assumption_only": true,
     "not_a_claim_of_reliable_points": true,
     "reserve_before_increment": 1392,
@@ -119,16 +144,16 @@
       "estimated_joint_rate": 0.3511533388959169
     },
     "estimate_kind": "conditional completed-batch joint yield extrapolation; not quality or adopted count",
-    "observed_joint_keep": 155,
-    "observed_joint_candidates": 1152
+    "observed_joint_keep": 213,
+    "observed_joint_candidates": 1723
   },
   "validation": {
     "pytest_passed": 427,
-    "pytest_seconds": 17.8,
+    "pytest_seconds": 18.22,
     "ruff_passed": true,
     "strict_mypy_source_files": 98,
     "foundation_passed": true,
-    "log_sha256": "5b8c98efed72deedb04feabfacdb7a0986f30ba85d8a8f57f766a9752417943f"
+    "log_sha256": "f65418e1908132869aadb2be332f5eb99a4cd3d7cd9e75643520f43fbd15ca7b"
   },
   "screen": {
     "created_at": "2026-10-22T05:36:20.707891+00:00",
@@ -299,12 +324,42 @@
         "program_uncertain": 88,
         "path": ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/cohort-001-attempt-00/batch-001",
         "whole_batch_frozen": true
+      },
+      {
+        "batch": 2,
+        "conversations": 100,
+        "candidates": 571,
+        "joint_keep": 58,
+        "temporal_removed": 87,
+        "citation_invalid": 77,
+        "per_model": {
+          "deepseek-v4-flash-202605": {
+            "keep": 74,
+            "temporary": 13,
+            "citation_invalid": 12
+          },
+          "hy-role": {
+            "keep": 108,
+            "temporary": 81,
+            "citation_invalid": 77
+          }
+        },
+        "models": [
+          "deepseek-v4-flash-202605",
+          "hy-role"
+        ],
+        "gold_adopted": false,
+        "invalid_evidence_total": 82,
+        "schema_invalid": 5,
+        "program_uncertain": 82,
+        "path": ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-002-attempt-00/batch-002",
+        "whole_batch_frozen": true
       }
     ],
-    "conversations": 200,
-    "candidates": 1152,
-    "joint_keep": 155,
-    "raw_joint_keep": 155,
+    "conversations": 300,
+    "candidates": 1723,
+    "joint_keep": 213,
+    "raw_joint_keep": 213,
     "dedup_or_historical_removed": 0,
     "target_unreviewed_joint_keeps": 549,
     "target_reached": false,
@@ -313,10 +368,20 @@
     "phase1_accepted": false,
     "blocked": null,
     "complete": false,
-    "remaining_unused_dialogues": 1192,
+    "remaining_unused_dialogues": 1092,
     "unfinished_current_batch_excluded_from_gold": false
   },
-  "increment_switches": [],
+  "increment_switches": [
+    {
+      "batch": 2,
+      "from": "hunyuan-role-latest",
+      "to": "hy-role",
+      "reason": "HTTP402 code401008 on actual labeling; complete full-v3 qualification passed",
+      "scope": "entire affected side of current fixed batch",
+      "retired_partial_used": false,
+      "qualification": ".local/phase1/round3/temporal-v1/full-annotation-qualification/hy-role/report.json"
+    }
+  ],
   "judge": {
     "old_pool_including_screening_annotation_vendors": [
       "DeepSeek",
@@ -332,23 +397,29 @@
     ],
     "increment_annotation_vendors": [
       "DeepSeek",
-      "hunyuan-role-latest"
+      "Tencent"
     ],
     "increment_models": [
       "deepseek-v4-flash-202605",
-      "hunyuan-role-latest"
+      "hy-role"
     ],
     "increment_vendor_independent_historically_preflighted_judge_vendors": [
       "Zhipu"
     ],
     "increment_currently_available_qualified_judge_vendors": [],
+    "increment_vendor_independent_options_not_necessarily_qualified": [
+      "Zhipu",
+      "Xiaomi",
+      "MiniMax",
+      "Moonshot"
+    ],
     "latest_availability_issue": "Ark GLM SetLimitExceeded during actual increment; Tencent GLM historical402; no new judge calls made",
     "old_pool_qualified_available_judges": [],
     "qualified_backup_count": 0,
     "required_backups": 1,
     "backup_gap": 1,
     "main_judge_missing": true,
-    "note": "Ark GLM-5.2 becomes annotator/filter and cannot judge these data. Tencent HY4 remains vendor-independent for new DeepSeek+Zhipu increment but its current HTTP402 means unavailable. Other independent vendors require successful strict preflight and human calibration; no gate relaxed."
+    "note": "Old265 pool uses GLM temporal screening, so Zhipu cannot judge that pool. New increment uses DeepSeek+Tencent and may use Zhipu by vendor independence, but Ark GLM hit SetLimitExceeded this run; Tencent GLM last HTTP402 is historical, current availability not reverified. No currently available qualified judge is asserted. Other listed vendor-independent options are not technical qualification; human calibration remains incomplete."
   },
   "new_replacement_qualification": [
     {
@@ -515,6 +586,40 @@
   ],
   "full_schema_qualification": [
     {
+      "model": "deepseek/deepseek-v4-flash-vision-exp",
+      "provider": "TokenHub",
+      "qualified_at": "2026-10-22T06:55:09.057753+00:00",
+      "fictional_only": true,
+      "schema": "full v3 plus temporal",
+      "consistent_5": true,
+      "format_n": 100,
+      "format_valid": 100,
+      "distinct_inputs": 100,
+      "observed_disabled_thinking": true,
+      "calls": 105,
+      "reported_tokens": 142663,
+      "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
+      "temperature_requested": 0,
+      "passed": true
+    },
+    {
+      "model": "hy-role",
+      "provider": "TokenHub",
+      "qualified_at": "2026-10-22T06:55:07.677673+00:00",
+      "fictional_only": true,
+      "schema": "full v3 plus temporal",
+      "consistent_5": true,
+      "format_n": 100,
+      "format_valid": 100,
+      "distinct_inputs": 100,
+      "observed_disabled_thinking": true,
+      "calls": 105,
+      "reported_tokens": 135055,
+      "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
+      "temperature_requested": 0,
+      "passed": true
+    },
+    {
       "model": "hy-vision-2.0-instruct",
       "provider": "TokenHub",
       "qualified_at": "2026-10-22T06:27:17.615657+00:00",
@@ -532,9 +637,43 @@
       "passed": false
     },
     {
+      "model": "kimi-k2.6",
+      "provider": "TokenHub",
+      "qualified_at": "2026-10-22T06:56:34.738947+00:00",
+      "fictional_only": true,
+      "schema": "full v3 plus temporal",
+      "consistent_5": false,
+      "format_n": 0,
+      "format_valid": 0,
+      "distinct_inputs": 0,
+      "observed_disabled_thinking": false,
+      "calls": 1,
+      "reported_tokens": 0,
+      "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
+      "temperature_requested": 0,
+      "passed": false
+    },
+    {
       "model": "mimo-v2.6-pro",
       "provider": "TokenHub",
       "qualified_at": "2026-10-22T06:28:46.920462+00:00",
+      "fictional_only": true,
+      "schema": "full v3 plus temporal",
+      "consistent_5": false,
+      "format_n": 0,
+      "format_valid": 0,
+      "distinct_inputs": 0,
+      "observed_disabled_thinking": false,
+      "calls": 1,
+      "reported_tokens": 0,
+      "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
+      "temperature_requested": 0,
+      "passed": false
+    },
+    {
+      "model": "minimax-m3.1-flash",
+      "provider": "TokenHub",
+      "qualified_at": "2026-10-22T06:56:35.593806+00:00",
       "fictional_only": true,
       "schema": "full v3 plus temporal",
       "consistent_5": false,
@@ -579,25 +718,38 @@
     }
   ],
   "calls": {
-    "qualification_attempts": 596,
+    "qualification_attempts": 808,
     "transport_extra_attempts": 13,
     "transport_schema_invalid_attempts": 13,
-    "post_attempts": 611,
-    "reported_tokens": 2526496,
-    "by_model": {
+    "post_attempts": 867,
+    "reported_tokens": 3485335,
+    "unique_ledger_records_by_model": {
       "deepseek-v4.1-flash-1017": 117,
       "glm-5-2-260617": 103,
-      "deepseek-v4-flash-202605": 244,
-      "hy-role": 36,
-      "hunyuan-role-latest": 231,
+      "deepseek-v4-flash-202605": 416,
+      "hy-role": 168,
+      "hunyuan-role-latest": 253,
       "hy4-preview": 11
-    }
+    },
+    "post_attempts_by_model": {
+      "deepseek-v4-flash-202605": 269,
+      "deepseek-v4.1-flash-1017": 117,
+      "glm-5-2-260617": 103,
+      "hunyuan-role-latest": 190,
+      "hy-role": 164,
+      "hy4-preview": 11
+    },
+    "genuine_cached_response_replays": 208
   },
   "private_evidence_hashes": {
     ".local/phase1/round3/temporal-v1/diverse-annotation-qualification/hunyuan-role-latest/report.json": "ab9e4e9d24da03b22df36229db27625d4c9b415616db00b450fbca70f8734b38",
     ".local/phase1/round3/temporal-v1/ecd-owner/report.json": "6d11a9528511987c5b67ea404ddb7e68915bac0a9af68191a2543f37aa0b3d5d",
+    ".local/phase1/round3/temporal-v1/full-annotation-qualification/deepseek-deepseek-v4-flash-vision-exp/report.json": "1341db40bd0159f53985939f8c5caa90f123cf8c277e64277cca662400e9a147",
+    ".local/phase1/round3/temporal-v1/full-annotation-qualification/hy-role/report.json": "2b6e7f8823cceaee2e614f5c7dcd964b3374f83c92be930818bdbee3b85e0d79",
     ".local/phase1/round3/temporal-v1/full-annotation-qualification/hy-vision-2.0-instruct/report.json": "aeaf4f1b058b51d78073437574ec5077d88fa045e8056014748c74f8e54852e1",
+    ".local/phase1/round3/temporal-v1/full-annotation-qualification/kimi-k2.6/report.json": "4fadf0b03505ce580c976455d1300b4d6ef85a5c446ebc0d880dfd558613f5f5",
     ".local/phase1/round3/temporal-v1/full-annotation-qualification/mimo-v2.6-pro/report.json": "e479adce5eda4bf8e1d4405d16e947073121277a58461155bb54517abd205e50",
+    ".local/phase1/round3/temporal-v1/full-annotation-qualification/minimax-m3.1-flash/report.json": "86c9ebf34ee5a59d738d98ddfb2474ce9c76d697391568bb408509f470963947",
     ".local/phase1/round3/temporal-v1/full-annotation-qualification/step-5-preview/report.json": "4f87c91b2a4c10e5d69d343015ee53be34e5168f6c5286f195df8586b665fcc3",
     ".local/phase1/round3/temporal-v1/increment/batch-000/manifest.json": "1dbea5920bc69409e4206e17aa2a464d9ff208ba28108ac84fea3312782bcdc9",
     ".local/phase1/round3/temporal-v1/increment/batch-000/shard-0/deepseek-v4.1-flash-1017/ledger.json": "e150f9901e1a350399d151cf912c2e65ca11199b8d28ad8f87c78d56d9ef210b",
@@ -614,6 +766,7 @@
     ".local/phase1/round3/temporal-v1/increment-attempt-2/batch-000/shard-1/hy-role/failed-before-strict-retry/ledger.json": "32121934b1957d6e724d83370f5a0a9b840866b8101af2bb8419cce6feea6cdc",
     ".local/phase1/round3/temporal-v1/increment-attempt-2/batch-000/shard-1/hy-role/ledger.json": "8eb35b2c583fbbf088be1d0c41b1464f2d2a9b9cc1d1a5e6dda98fff41a6f465",
     ".local/phase1/round3/temporal-v1/increment-attempt-2/manifest.json": "a021839ed5b42f5dd04067145462b7e215e92758294b1323479ffc2186ec235f",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/audit72/manifest.json": "edb464ef8317a1b4ee2a898ba3477aa180fa312d3085f5882b5607af75a7023d",
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/cohort-000-attempt-00/batch-000/manifest.json": "00abf170b1c0d508dab0857b86681cedad84c107cc6f88ae0828a25929c48672",
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/cohort-000-attempt-00/batch-000/report.json": "f5f4b2ef6d51e2574c207cc846c1796046e0996d7aaefc28c6564817273fc920",
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/cohort-000-attempt-00/batch-000/shard-0/deepseek-v4-flash-202605/ledger.json": "43fe245fb4ab64429af896cc3b9a8e6ed5d10388ce0b7b88bff837b6c8fe6f6c",
@@ -627,12 +780,25 @@
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/cohort-001-attempt-00/batch-001/shard-1/deepseek-v4-flash-202605/ledger.json": "5fbbf6791cdf45f9f7504cefa0e829aa0114ef02faad48a61317079b9b59810e",
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/cohort-001-attempt-00/batch-001/shard-1/hunyuan-role-latest/ledger.json": "d27320b65602689a04c2df433f036a7ab9d314d3804335aa6e4b0784628ba15e",
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/cohort-002-attempt-00/batch-002/manifest.json": "85893ad5194033387db71e51d9f025bdccba29ca93b2d8ccc1d3a55c5c4966d0",
-    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/cohort-002-attempt-00/batch-002/shard-0/deepseek-v4-flash-202605/ledger.json": "cbfe0798db5f269dd7a07927e879496ee9ca08be671fc5c83fd3c60c4b5975ac",
-    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/cohort-002-attempt-00/batch-002/shard-0/hunyuan-role-latest/ledger.json": "447b7c4a44e75d11482897960e1287008ce881dba9159ffc071ccae170fc8d26",
-    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/cohort-002-attempt-00/batch-002/shard-1/deepseek-v4-flash-202605/ledger.json": "3921d52b0ec5539ef13c402e0496ef3b6dbb8b07baffd317ac441a6faae4d1f7",
-    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/cohort-002-attempt-00/batch-002/shard-1/hunyuan-role-latest/ledger.json": "833f6bc0d919aff10424b60a654643fa7ec9d566213e16916f461b4180fc82e0",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/cohort-002-attempt-00/batch-002/shard-0/deepseek-v4-flash-202605/ledger.json": "4e61335ceb96c66ff90adb37ce0dd764b2a912b8cfcee7471f7295369bd9e9c9",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/cohort-002-attempt-00/batch-002/shard-0/hunyuan-role-latest/ledger.json": "799dcbd6626036934c0bc3e032185d82991521760db76f933ef27b1bfb6fdd6b",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/cohort-002-attempt-00/batch-002/shard-1/deepseek-v4-flash-202605/ledger.json": "29a10b45571ab5d9721f467eb2f0a440ad9dde16c6407e419fc45c351ffa2bdd",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/cohort-002-attempt-00/batch-002/shard-1/hunyuan-role-latest/ledger.json": "7eeb0f857bea672cf6bed78b1a1dbe20c21c6719ae02f44497628757ccf5c2a3",
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/manifest.json": "127240aaa862e2b01983695f61f22351278c7a301047e86a5272198df7ffd281",
-    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/report.json": "e473b59ca697d68a7ad0f1f364cf5acc5b6a268c3cb78ef1d40727c7100e971c",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/report.json": "996a5a79abb7714ce12e7dade8c2d028018c19c05f59c3d1b7287817bf9d9bdd",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-002-attempt-00/batch-002/manifest.json": "588c2ad9f7da9ed939272024f16d7de3d33b026ea77d11e99f513f23eccb2c3a",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-002-attempt-00/batch-002/report.json": "249718b287aa2b59c0177ad473aad324daa051d3a7e18f3e584371ea49e73c92",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-002-attempt-00/batch-002/shard-0/deepseek-v4-flash-202605/ledger.json": "b239fc4a47885c000ea34481ca7108d7531c087275b935427cdd5d573b7b0bcd",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-002-attempt-00/batch-002/shard-0/hy-role/ledger.json": "0b36880f09d471a2191a9fcf9faf80e4e135d1eeacf1f10b479d2a31c9eea6c6",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-002-attempt-00/batch-002/shard-1/deepseek-v4-flash-202605/ledger.json": "2008de31d64b6316ccc03976ed921101b90bc74465d4d960b02c2985b619ecb3",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-002-attempt-00/batch-002/shard-1/hy-role/ledger.json": "77eea16e70196d488147e5254eab63cbc35d6312b2c9e74e26ca2df92bc35359",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-003-attempt-00/batch-003/manifest.json": "01d3a73966ec61a9d00d2fc66e79ae85ce017b131ecf889e5ad31affefebf3d2",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-003-attempt-00/batch-003/shard-0/deepseek-v4-flash-202605/ledger.json": "2866ffc1960fd757dcd166ad86737d5ac1f148203967f0360d88fb94c1b139c3",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-003-attempt-00/batch-003/shard-0/hy-role/ledger.json": "e38f2a7eca54087fc9a971657ad72fd34b73921993a2f9753e72961c696eac7f",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-003-attempt-00/batch-003/shard-1/deepseek-v4-flash-202605/ledger.json": "73961501d8cd5e5815ea613ec9e3d9e47881d08758b15b24b0540519f66940ab",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-003-attempt-00/batch-003/shard-1/hy-role/ledger.json": "4b47d34c969911706475032ca563c54db149967f6edce66547ff4bb125a0760a",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/manifest.json": "c6422c7615e37d7ff392832c010b86b28358c6b53ee870711a21cb4e8550c590",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/report.json": "8d693aedb965612252dedc1a77decaf8a0fe046b0184b29324a96137e7901a4f",
     ".local/phase1/round3/temporal-v1/increment-batches-v1/cohort-000-attempt-00/batch-000/manifest.json": "00abf170b1c0d508dab0857b86681cedad84c107cc6f88ae0828a25929c48672",
     ".local/phase1/round3/temporal-v1/increment-batches-v1/cohort-000-attempt-00/batch-000/shard-0/deepseek-v4-flash-202605/failed-before-strict-retry/ledger.json": "ee8ae66d60f8fb7275e6e779630fc5e215eb8d3d9110a6293dadb7d22492aa4f",
     ".local/phase1/round3/temporal-v1/increment-batches-v1/cohort-000-attempt-00/batch-000/shard-0/deepseek-v4-flash-202605/ledger.json": "e8a1946e8bdc926d59271b24c7ca2a73598e17c1db9e4b33a1767da14c4d3447",
@@ -747,6 +913,15 @@
   },
   "phase1_accepted": false,
   "owner_adoption_decision_pending": true,
+  "increment_runtime_state": {
+    "active_batch_path": ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-003-attempt-00/batch-003",
+    "completed_batches": 3,
+    "models": [
+      "deepseek-v4-flash-202605",
+      "hy-role"
+    ],
+    "blocked": null
+  },
   "unfinished": [
     "owner decision on old-pool temporal screening",
     "incremental annotation/export incomplete",
