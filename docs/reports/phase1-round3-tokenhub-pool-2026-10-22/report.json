@@ -1,0 +1,576 @@
+{
+  "date_beijing": "2026-10-22",
+  "source_commit": "684bb80",
+  "source_modified": false,
+  "phase1_accepted": false,
+  "incremental_started": false,
+  "new_offline_owner_evaluation": false,
+  "manifest": {
+    "version": "pool-tokenhub-v4",
+    "authorization": "om_x100b62a2b0bb448cdde412b912e6146",
+    "changed_model": "deepseek-v4.1-flash-1017",
+    "models": [
+      "deepseek-v4.1-flash-1017",
+      "hy4-preview"
+    ],
+    "providers": [
+      "TokenHub",
+      "TokenHub"
+    ],
+    "vendors": [
+      "DeepSeek",
+      "Tencent"
+    ],
+    "changed_side_relabel_entire": 701,
+    "unchanged_hy4_full_replay": 701,
+    "old_deepseek_partial_used": false,
+    "hy4_replay_reason": "same full pool, same prompt, same model/provider, independent original calls",
+    "response_format_mode": {
+      "deepseek-v4.1-flash-1017": "omitted: service rejects optional JSON mode",
+      "hy4-preview": "json_object"
+    },
+    "validation_unchanged": true,
+    "retention_is_gate": false,
+    "new_offline_evaluation": false,
+    "seed": 20261025,
+    "sample": 72,
+    "maximum_errors": 3,
+    "files": {
+      ".local/phase1/round3/pool-refresh-v3-v3/manifest.json": "cc09df87c94624f519252e574fda107fba2d441f5293d521d84fd136a4107392",
+      ".local/phase1/round3/pool-refresh-v3-v3/pool-items.jsonl": "724afcbbfa8f31f2eb7c2cb60ce37abfe2578ae61dfe77244161519f1cabffcb",
+      "docs/evals/prompts/labeling-guide-v3-evidence-v3.txt": "442729716b606803b4900639177e62ca46a2e0dfd987046271f32f5f48b35d17",
+      "scripts/tokenhub-pool-annotation-engine.py": "fffcd69ef3f51aba54cd988347ec92b60058c74ac74d814f476e45b015094a97",
+      "/home/ubuntu/project/WorkPlan/agent-memory/scripts/run-tokenhub-pool-fallback.py": "de807cc8a7747f42395c5381931883769e47b98d92a78bf004d01b71f50c7615",
+      ".local/phase1/round3/tokenhub-pool-qualification/deepseek-v4.1-flash-1017/report.json": "82a1fe4300a056a5267c086c2027f2eb18457d376b3fdbef44ae3b11cdf88233",
+      "src/agent_memory/evals/evidence_v3.py": "794e29ac3721b29e77a29bbd7c8bc976ab5ad3a99cba8e43bc67c8aaf4da886d",
+      ".local/phase1/round3/tokenhub-pool-v4/deepseek-v4.1-flash-1017/pool-items.jsonl": "724afcbbfa8f31f2eb7c2cb60ce37abfe2578ae61dfe77244161519f1cabffcb",
+      ".local/phase1/round3/tokenhub-pool-v4/deepseek-v4.1-flash-1017/hy4-complete-checked.jsonl": "fdc9249060134b7934ad5e7da3d79703648aed0f0c3b95d6ab44bd347e325204",
+      ".local/phase1/round3/tokenhub-pool-v4/deepseek-v4.1-flash-1017/hy4-complete-labels.jsonl": "7a82e3572854ecbd2a33be753ce87c3e19dc0c4c325168db55a26eeca497d67e",
+      ".local/phase1/round3/tokenhub-pool-v4/deepseek-v4.1-flash-1017/shard-0-items.jsonl": "42874dc7e5c7aaee93906b9966988debf9fc8d1802d5d1da3b5116d7bfbcae5b",
+      ".local/phase1/round3/tokenhub-pool-v4/deepseek-v4.1-flash-1017/shard-1-items.jsonl": "0746bb7bb73c9a7d370ddcdecd74a2036107d97ce4d9554aba3830d3e4530205",
+      ".local/phase1/round3/tokenhub-pool-v4/deepseek-v4.1-flash-1017/engine-pre-import-fix.py": "81c1679b77328ea1fc1c16dfd43c5c2a3ea283c9bb498a38a65a282850fbef8b",
+      ".local/phase1/round3/tokenhub-pool-v4/deepseek-v4.1-flash-1017/manifest-pre-import-fix.json": "e509a5d77222e64e5dd8ff7447ce4e2ba9715272d9eab13c9d54202b5f8687fe"
+    },
+    "implementation_correction": {
+      "reason": "missing read_rows import at result assembly; API response already valid and cached, replay without new call",
+      "old_engine_sha256": "81c1679b77328ea1fc1c16dfd43c5c2a3ea283c9bb498a38a65a282850fbef8b",
+      "new_engine_sha256": "fffcd69ef3f51aba54cd988347ec92b60058c74ac74d814f476e45b015094a97",
+      "prompt_or_candidate_or_validation_changed": false
+    }
+  },
+  "yield": {
+    "pool": 701,
+    "joint_keep": 302,
+    "joint_retention": 0.43081312410841655,
+    "exposed_survivors": 37,
+    "unexposed_survivors": 265,
+    "known_exclusions": 229,
+    "sample": 72,
+    "phase1_accepted": false,
+    "incremental_started": false
+  },
+  "audit": {
+    "seed": 20261025,
+    "joint_keep": 302,
+    "owner_rejected_removed": 0,
+    "remaining_pool": 302,
+    "prior_reviewed_in_remaining_pool": 37,
+    "eligible_unreviewed_pool": 265,
+    "sample": 72,
+    "previous_review_overlap": 0,
+    "conversations": 67,
+    "source_counts": {
+      "dulemon-both-train": 72
+    },
+    "topic_counts": {
+      "other": 51,
+      "preference": 11,
+      "family": 7,
+      "work-education": 3
+    },
+    "topic_rule": "descriptive regex, first matching category; not human/model labels; absent from reviewer table",
+    "maximum_errors": 3,
+    "human_completed": false,
+    "passed": null,
+    "error_rate": null,
+    "confidence_interval_95": null,
+    "format_approved": true,
+    "format_authorization": "owner message om_x100b62bf9ec420a0c1f4c8e945cc40e",
+    "files": {
+      "audit-blind.csv": "f59f70eca7726e8be54b7f62a59e6ab69f97cf0aca43857eb5bec1982fd03bd0",
+      "audit-blind.jsonl": "3963400664007530ca4cf3976f14221f558c078e965632b267724b4b08cea7c3",
+      "opaque-map-private.json": "e5e930e21a1007bd28ef6a396452e750680a5b8b09730d64c12603c66f6219b5"
+    },
+    "inputs": {
+      ".local/phase1/round3/tokenhub-pool-v4/deepseek-v4.1-flash-1017/pool-items.jsonl": "724afcbbfa8f31f2eb7c2cb60ce37abfe2578ae61dfe77244161519f1cabffcb",
+      ".local/phase1/round3/tokenhub-pool-v4/deepseek-v4.1-flash-1017/replacement-complete-labels.jsonl": "3bb9468ba6a8262b60c7227cdd4fe746e9f7787c61ac1851cc5ec2f30cb24bf2",
+      ".local/phase1/round3/tokenhub-pool-v4/deepseek-v4.1-flash-1017/hy4-complete-labels.jsonl": "7a82e3572854ecbd2a33be753ce87c3e19dc0c4c325168db55a26eeca497d67e",
+      ".local/phase1/round3/tokenhub-pool-v4/deepseek-v4.1-flash-1017/real-owner-pool-projection.jsonl": "4dbf6452ef5496b39dfa7c1a6a575c92bd269eca6e11cdaa81c9f60d1c31b495"
+    }
+  },
+  "probe_results": [
+    {
+      "model": "deepseek/deepseek-flash",
+      "provider": "TokenHub",
+      "timestamp": 1792634988.0482583,
+      "http": 400,
+      "error_code": "400006",
+      "sha256": "7cf7c2dc066832fee7efeeb3b695acacd1f6e9e00db8e1686253b825b6a63fd4",
+      "file": ".local/phase1/round3/tokenhub-pool-fallback-probes/deepseek/deepseek-flash.json",
+      "api_json_mode": true
+    },
+    {
+      "model": "deepseek-v4-flash-0731",
+      "provider": "TokenHub",
+      "timestamp": 1792634919.5848734,
+      "http": 400,
+      "error_code": "400004",
+      "sha256": "7b78a3c36619975f0b94502d28054b301662fac09b41b7f38f04e4fec2d9f2ba",
+      "file": ".local/phase1/round3/tokenhub-pool-fallback-probes/deepseek-v4-flash-0731.json",
+      "api_json_mode": true
+    },
+    {
+      "model": "deepseek-v4-flash-202605",
+      "provider": "TokenHub",
+      "timestamp": 1792634942.007126,
+      "http": 400,
+      "error_code": "400006",
+      "sha256": "9f74d3d50f088fb731e52135d24749277add52c7cc1a83fb8ebb8cb445051588",
+      "file": ".local/phase1/round3/tokenhub-pool-fallback-probes/deepseek-v4-flash-202605.json",
+      "api_json_mode": true
+    },
+    {
+      "model": "deepseek-v4-pro-0813",
+      "provider": "TokenHub",
+      "timestamp": 1792634919.4750767,
+      "http": 402,
+      "error_code": "401008",
+      "sha256": "08d8381685536efa0d57b5c5d47145092a426c0a47af0540a81bffda2defbdc2",
+      "file": ".local/phase1/round3/tokenhub-pool-fallback-probes/deepseek-v4-pro-0813.json",
+      "api_json_mode": true
+    },
+    {
+      "model": "deepseek-v4-pro-202606",
+      "provider": "TokenHub",
+      "timestamp": 1792634919.6090236,
+      "http": 402,
+      "error_code": "401008",
+      "sha256": "a37a701493638a34b33082274c7de22c036b89fd2f242faa24c32dad97420063",
+      "file": ".local/phase1/round3/tokenhub-pool-fallback-probes/deepseek-v4-pro-202606.json",
+      "api_json_mode": true
+    },
+    {
+      "model": "deepseek-v4.1-flash-1017",
+      "provider": "TokenHub",
+      "timestamp": 1792634941.9803565,
+      "http": 400,
+      "error_code": "400006",
+      "sha256": "091170508f28e57bbeca1a4eda457a28950979e5c242e365667763d246613b45",
+      "file": ".local/phase1/round3/tokenhub-pool-fallback-probes/deepseek-v4.1-flash-1017.json",
+      "api_json_mode": true
+    },
+    {
+      "model": "deepseek-v4.1-flash",
+      "provider": "TokenHub",
+      "timestamp": 1792634919.5590446,
+      "http": 402,
+      "error_code": "401008",
+      "sha256": "a7055b89a3da15524f1bb2415119b1e3a2396a962c2ab3cfe12253beade22151",
+      "file": ".local/phase1/round3/tokenhub-pool-fallback-probes/deepseek-v4.1-flash.json",
+      "api_json_mode": true
+    },
+    {
+      "model": "glm-5.2",
+      "provider": "TokenHub",
+      "timestamp": 1792634941.866514,
+      "http": 402,
+      "error_code": "401008",
+      "sha256": "6ec7de825f149d8033aa2d54b161959a36970ba88e88ea4921d7ac5b8b8c972e",
+      "file": ".local/phase1/round3/tokenhub-pool-fallback-probes/glm-5.2.json",
+      "api_json_mode": true
+    },
+    {
+      "model": "hy-role",
+      "provider": "TokenHub",
+      "timestamp": 1792634988.0713158,
+      "http": 200,
+      "usage": {
+        "prompt_tokens": 24,
+        "completion_tokens": 16,
+        "total_tokens": 40,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "returned_model": "hy-role",
+      "error_type": "JSONDecodeError",
+      "sha256": "ebf295f5c5ac3c33c7c202d3451d3ece38a1353aa98cfa964d0c05528de61f96",
+      "file": ".local/phase1/round3/tokenhub-pool-fallback-probes/hy-role.json",
+      "api_json_mode": true
+    },
+    {
+      "model": "hy3",
+      "provider": "TokenHub",
+      "timestamp": 1792634987.9577842,
+      "http": 402,
+      "error_code": "401008",
+      "sha256": "42281518e96d2f2737e22d7fd421bcef3fbcc20f49d546f62163ec59ea2457ee",
+      "file": ".local/phase1/round3/tokenhub-pool-fallback-probes/hy3.json",
+      "api_json_mode": true
+    },
+    {
+      "model": "mimo-v2.5-pro",
+      "provider": "TokenHub",
+      "timestamp": 1792634941.9332054,
+      "http": 402,
+      "error_code": "401010",
+      "sha256": "6b67d98c205af3af851a5b0e04553d99f59b0ca170c8bd84c185f549446e1f3c",
+      "file": ".local/phase1/round3/tokenhub-pool-fallback-probes/mimo-v2.5-pro.json",
+      "api_json_mode": true
+    },
+    {
+      "model": "minimax-m3.1-flash",
+      "provider": "TokenHub",
+      "timestamp": 1792634988.0247147,
+      "http": 400,
+      "error_code": "400001",
+      "sha256": "c49994927fa8576b67489d1e9b58d590557a67811a8992ddb69d392d2d31fdd8",
+      "file": ".local/phase1/round3/tokenhub-pool-fallback-probes/minimax-m3.1-flash.json",
+      "api_json_mode": true
+    },
+    {
+      "model": "minimax-m3",
+      "provider": "TokenHub",
+      "timestamp": 1792634941.9568205,
+      "http": 402,
+      "error_code": "401008",
+      "sha256": "c7a8b9cfa69dfba03bf5786c81608e3d7f511cfb5f267fbf8d097852f86d7c86",
+      "file": ".local/phase1/round3/tokenhub-pool-fallback-probes/minimax-m3.json",
+      "api_json_mode": true
+    },
+    {
+      "model": "deepseek/deepseek-flash",
+      "provider": "TokenHub",
+      "timestamp": 1792635031.5057967,
+      "http": 200,
+      "usage": {
+        "prompt_tokens": 26,
+        "completion_tokens": 9,
+        "total_tokens": 35,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "returned_model": "deepseek/deepseek-flash",
+      "valid": true,
+      "sha256": "c659f0a54fe371dea7c8953869c060e2f0df9a87f112eaccb16f36672aa2d9d3",
+      "file": ".local/phase1/round3/tokenhub-pool-fallback-probes/no-json-mode/deepseek/deepseek-flash.json",
+      "api_json_mode": false
+    },
+    {
+      "model": "deepseek-v4-flash-202605",
+      "provider": "TokenHub",
+      "timestamp": 1792635031.4815207,
+      "http": 200,
+      "usage": {
+        "prompt_tokens": 26,
+        "completion_tokens": 9,
+        "total_tokens": 35,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "returned_model": "deepseek-v4-flash-202605",
+      "valid": true,
+      "sha256": "432739656384d1c75769fb2ea455509d40e6da2ec3745516cda628986bbb5f19",
+      "file": ".local/phase1/round3/tokenhub-pool-fallback-probes/no-json-mode/deepseek-v4-flash-202605.json",
+      "api_json_mode": false
+    },
+    {
+      "model": "deepseek-v4.1-flash-1017",
+      "provider": "TokenHub",
+      "timestamp": 1792635031.4139602,
+      "http": 200,
+      "usage": {
+        "prompt_tokens": 26,
+        "completion_tokens": 9,
+        "total_tokens": 35,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "returned_model": "deepseek-v4.1-flash-1017",
+      "valid": true,
+      "sha256": "eed5888e1a667d94616d3805846ce399cbccca4b2c2f507e56c8100c622cf953",
+      "file": ".local/phase1/round3/tokenhub-pool-fallback-probes/no-json-mode/deepseek-v4.1-flash-1017.json",
+      "api_json_mode": false
+    }
+  ],
+  "catalog_http": 200,
+  "catalog_model_count": 119,
+  "qualification": {
+    "model": "deepseek-v4.1-flash-1017",
+    "provider": "TokenHub",
+    "calls": 105,
+    "consistent_5": true,
+    "format_n": 100,
+    "format_valid": 100,
+    "observed_disabled_thinking": true,
+    "temperature_requested": 0,
+    "api_json_mode": false,
+    "reported_tokens": 7455,
+    "passed": true
+  },
+  "validation": {
+    "pytest": 416,
+    "seconds": 18.27,
+    "ruff": "pass",
+    "strict_mypy": "pass",
+    "foundation": "8/8; tenant_leaks=0; deleted_memory_hits=0",
+    "log_sha256": "ea170c5be42bd39e9db651d67d8e3da1d7879e1eb3b286bee718a0516c2df80c"
+  },
+  "retired_partial_ark_labels_used": false,
+  "hy4_full_replay": 701,
+  "hy4_new_calls": 0,
+  "current_calls": 89,
+  "preflight_calls": 105,
+  "probe_calls": 16,
+  "all_new_post_calls": 210,
+  "catalog_get_calls": 1,
+  "current_reported_tokens": 476489,
+  "preflight_reported_tokens": 7455,
+  "probe_reported_tokens": 145,
+  "current_http_counts": {
+    "200": 89
+  },
+  "current_returned_model_names": [
+    "deepseek-v4.1-flash-1017"
+  ],
+  "per_model": {
+    "deepseek-v4.1-flash-1017": {
+      "counts": {
+        "uncertain": 331,
+        "keep": 351,
+        "discard": 19
+      },
+      "citation_invalid": 9,
+      "citation_codes": {
+        "not-user-source": 8,
+        "quote-not-exact-substring": 1
+      }
+    },
+    "hy4-preview": {
+      "counts": {
+        "keep": 333,
+        "uncertain": 308,
+        "discard": 60
+      },
+      "citation_invalid": 6,
+      "citation_codes": {
+        "not-user-source": 6
+      }
+    }
+  },
+  "initial_check_failure": {
+    "failed": 2,
+    "passed": 406,
+    "seconds": 18.79,
+    "reason": "missing result-assembly import; fixed without new model request"
+  },
+  "same_candidate_content_prior_overlap": 0,
+  "audit_prior_conversation_overlap": 29,
+  "audit_candidate_level_exclusion": true,
+  "audit_human_completed": false,
+  "audit_passed": null,
+  "audit_csv_sha256": "f59f70eca7726e8be54b7f62a59e6ab69f97cf0aca43857eb5bec1982fd03bd0",
+  "human_positive_points": 85,
+  "human_positive_conversations": 80,
+  "gap_to_700": 615,
+  "gap_to_1500": 1415,
+  "reserve": {
+    "scope": "DuLeMon/both/train.json",
+    "raw_sizes": {
+      "DuLeMon/self/train.json": 23000,
+      "DuLeMon/self/dev.json": 750,
+      "DuLeMon/self/test.json": 750,
+      "DuLeMon/both/train.json": 2401,
+      "DuLeMon/both/dev.json": 300,
+      "DuLeMon/both/test.json": 300
+    },
+    "raw_train_dialogues": 2401,
+    "annotation_used_unique": 740,
+    "query_used_unique": 386,
+    "annotation_query_overlap": 117,
+    "used_union": 1009,
+    "remaining_before_field_and_dedup": 1392,
+    "available_field_valid_unique": 1392,
+    "available_native_candidate_slots": 7859,
+    "candidates_per_available_dialogue": 5.645833333333333,
+    "excluded_counts": {
+      "used-source-index": 1009
+    },
+    "inherited_split_counts": {
+      "test": 968,
+      "dev": 424
+    },
+    "self_schema_excluded": 24500,
+    "native_dev_test_held_out": 600,
+    "definition": "Never selected for known annotation/review export nor frozen Chinese queries; normalized full archive parsing is not counted as task use. Exact normalized role/text hashes deduplicate, not semantic near-duplicates. Full negative dialogues require separate owner confirmation.",
+    "origin_manifests": {
+      ".local/phase1/chinese-expansion-v1/dulemon/manifest.json": {
+        "used_indices": 740
+      },
+      ".local/phase1/chinese-expansion-v2/dulemon/manifest.json": {
+        "used_indices": 740
+      },
+      ".local/phase1/round3/approved-followup/chinese-queries-v2/contexts.jsonl": {
+        "query_source_indices": 386
+      },
+      ".local/phase1/round3/followup/chinese-queries-v1-final/contexts.jsonl": {
+        "query_source_indices": 386
+      },
+      ".local/phase1/round3/followup/chinese-queries-v1-ready/contexts.jsonl": {
+        "query_source_indices": 386
+      }
+    },
+    "input_hashes": {
+      ".local/phase1/data/DuLeMon.zip": "797680b350dcb401cbe6255362c84e32c37363c983ffccaa0c0000bc75e3bde3",
+      ".local/phase1/chinese-expansion-v1/dulemon/manifest.json": "f18e25aeb59da6dd4e96ac7dcd68d1ed754722793a32e05d612b56d5058d4b0b",
+      ".local/phase1/chinese-expansion-v2/dulemon/manifest.json": "7c98741aef04012e7e032a825704c2d864d7bee203623dc09a4258084ce2373d",
+      ".local/phase1/round3/approved-followup/chinese-queries-v2/contexts.jsonl": "76966e16e8053ec7902e4fd2d2c503f06983a06628309175b4a5b2f3add107af",
+      ".local/phase1/round3/followup/chinese-queries-v1-final/contexts.jsonl": "433ccef55564212564ce4b6bf036a2edb5e6fc2cd82b6bfa20a934b67f2218e0",
+      ".local/phase1/round3/followup/chinese-queries-v1-ready/contexts.jsonl": "433ccef55564212564ce4b6bf036a2edb5e6fc2cd82b6bfa20a934b67f2218e0",
+      ".local/phase1/normalized-v3/dulemon-split.json": "77f79f9a3a69fe8ef7b344ada6668b77352297fbc7652ad1611f221e69412874"
+    },
+    "incremental_sampling_started": false
+  },
+  "old_selected_share_assumption": 0.3103448275862069,
+  "raw_density_calibrated_assumption": 0.1337006247233017,
+  "production_sensitivity": [
+    {
+      "gap": 615,
+      "candidate_survival_assumption": 0.06685031236165084,
+      "precision_assumption_not_confidence_bound": 0.95,
+      "mean_candidates_per_dialogue": 5.645833333333333,
+      "model_survivors_required": 648,
+      "dialogues_estimated": 1718,
+      "candidate_reviews_each_model": 9700,
+      "calls_each_model": 1213,
+      "calls_both_models": 2426,
+      "tokens_both_models_estimated": null,
+      "manual_positive_confirmations_required_for_individual_gold": 615,
+      "conditional_only": true,
+      "gold_adopted": false,
+      "kind": "raw candidate density sensitivity, conditional",
+      "density_scale": 0.5,
+      "reserve_sufficient": false
+    },
+    {
+      "gap": 615,
+      "candidate_survival_assumption": 0.1337006247233017,
+      "precision_assumption_not_confidence_bound": 0.95,
+      "mean_candidates_per_dialogue": 5.645833333333333,
+      "model_survivors_required": 648,
+      "dialogues_estimated": 859,
+      "candidate_reviews_each_model": 4850,
+      "calls_each_model": 607,
+      "calls_both_models": 1214,
+      "tokens_both_models_estimated": null,
+      "manual_positive_confirmations_required_for_individual_gold": 615,
+      "conditional_only": true,
+      "gold_adopted": false,
+      "kind": "raw candidate density sensitivity, conditional",
+      "density_scale": 1.0,
+      "reserve_sufficient": true
+    },
+    {
+      "gap": 615,
+      "candidate_survival_assumption": 0.2674012494466034,
+      "precision_assumption_not_confidence_bound": 0.95,
+      "mean_candidates_per_dialogue": 5.645833333333333,
+      "model_survivors_required": 648,
+      "dialogues_estimated": 430,
+      "candidate_reviews_each_model": 2428,
+      "calls_each_model": 304,
+      "calls_both_models": 608,
+      "tokens_both_models_estimated": null,
+      "manual_positive_confirmations_required_for_individual_gold": 615,
+      "conditional_only": true,
+      "gold_adopted": false,
+      "kind": "raw candidate density sensitivity, conditional",
+      "density_scale": 2.0,
+      "reserve_sufficient": true
+    }
+  ],
+  "conditional_after_audit_max3": {
+    "hypothetical_reliable_points": 347,
+    "gap": 353,
+    "plan": {
+      "gap": 353,
+      "candidate_survival_assumption": 0.1337006247233017,
+      "precision_assumption_not_confidence_bound": 0.95,
+      "mean_candidates_per_dialogue": 5.645833333333333,
+      "model_survivors_required": 372,
+      "dialogues_estimated": 493,
+      "candidate_reviews_each_model": 2784,
+      "calls_each_model": 348,
+      "calls_both_models": 696,
+      "tokens_both_models_estimated": null,
+      "manual_positive_confirmations_required_for_individual_gold": 615,
+      "conditional_only": true,
+      "gold_adopted": false,
+      "scenario_goal": "reliable-pool deficit after conditional audit acceptance; individual confirmations remain separate"
+    },
+    "not_adopted": true
+  },
+  "judges": {
+    "excluded_vendors": [
+      "ByteDance",
+      "DeepSeek",
+      "Tencent"
+    ],
+    "technically_eligible_vendors_from_existing_evidence": [
+      "Zhipu"
+    ],
+    "main_candidate": "Ark:glm-5-2-260617",
+    "stable_backup_count": 0,
+    "backup_gap": 1,
+    "human_calibration_complete": false,
+    "formal_pool_ready": false,
+    "new_quota_probes": 0
+  },
+  "historical_error_gate": {
+    "correct": 8,
+    "n": 9,
+    "version": "prior Ark DeepSeek+TokenHub HY4; owner accepted for this workflow",
+    "not_retested_for_new_pair": true
+  },
+  "protected_hashes": {
+    ".local/phase1/round3/reviews/ecd-manual-120.csv": "c5e56d41c72194d7a56327e76b5fcc6051fcb397ef2dcdf4d120e1729686fb8a",
+    ".local/phase1/round3/reviews/dulemon-native-reference/audit-blind.csv": "5a5619eba70448eae9dbaead978ef8729e3936c561274fbc77b9b811901c08a3",
+    ".local/phase1/round3/reviews/ecd-manual-120.jsonl": "392b53fd6d21d9d47f17233a08bf2f39cc11c08b4a013753ddbc3148f1501927",
+    ".local/phase1/round3/reviews/ecd-negative-local.jsonl": "34072968d613f45a0bea699f64e0204da5a476cc4a7a890fc1b33ee6eb7f568b",
+    ".local/phase1/round3/reviews/dulemon-native-reference/audit-blind.jsonl": "aa001b678ce1f122775d69411c6e815643f08c430c6cd90ff237ac69834f5eb7"
+  },
+  "unchanged_hashes": {
+    "docs/evals/human-confirmed-current.json": "40e65e9f2b4f76428407f047ac9b2453ae9efe67053c0a24260e5f4e13693d10",
+    "docs/evals/chinese-query-current.json": "6228efaae3bd70f660083eff796ba407b582e19ce8228a92080492428e520ac4",
+    "src/agent_memory/evals/evidence_v3.py": "794e29ac3721b29e77a29bbd7c8bc976ab5ad3a99cba8e43bc67c8aaf4da886d",
+    "src/agent_memory/evals/metrics.py": "d772a80c84cbe0f6e636631051bf04a045a8694ad2361a5f797c0c71e15b4c81",
+    "docs/evals/prompts/labeling-guide-v3-evidence-v3.txt": "442729716b606803b4900639177e62ca46a2e0dfd987046271f32f5f48b35d17"
+  },
+  "official_parameter_reference": "https://cloud.tencent.com/document/product/1823/132248",
+  "audit_delivery_message_id": "om_x100b62a37abe34a4ce5cc355b3f11fb"
+}
