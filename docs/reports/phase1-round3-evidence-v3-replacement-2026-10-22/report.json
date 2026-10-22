@@ -1,0 +1,485 @@
+{
+  "version": "labeling-guide-v3-evidence-v1",
+  "manifest_sha256": "de15f43af3bc07c2964f5027347040b7e6f56d016dc45a5b6aec61fef4a040d4",
+  "models": [
+    "deepseek-v4-pro-ga-260813",
+    "hy4-preview"
+  ],
+  "providers": {
+    "deepseek-v4-pro-ga-260813": "Ark",
+    "hy4-preview": "TokenHub"
+  },
+  "source_files": {
+    "src/agent_memory/evals/evidence_v3.py": "794e29ac3721b29e77a29bbd7c8bc976ab5ad3a99cba8e43bc67c8aaf4da886d",
+    "/home/ubuntu/project/WorkPlan/agent-memory/scripts/run-evidence-v3-replacement.py": "d7b52bce865e928dec9b501f72b7203807cda3f6242ba941d501ee8742cc6fee",
+    "docs/evals/prompts/labeling-guide-v3-evidence-v1.txt": "57de6e00a577918f28e946b4b3d107d885bb4fcf40e2c914637ec58faed4af75"
+  },
+  "source_commit": "d4b6d0c",
+  "source_modified": false,
+  "frozen": {
+    "version": "labeling-guide-v3-evidence-v1",
+    "models": [
+      "deepseek-v4-pro-ga-260813",
+      "hy4-preview"
+    ],
+    "providers": {
+      "deepseek-v4-pro-ga-260813": "Ark",
+      "hy4-preview": "TokenHub"
+    },
+    "batch_size": 8,
+    "created_beijing": "2026-10-22T08:56:47.661927+08:00",
+    "split_seed": 20261024,
+    "new_blind_sample_seed": 20261023,
+    "files": {
+      ".local/phase1/chinese-expansion-v2/dulemon/items.jsonl": "41dd160364690ffedf45d49f038cf33bde3e65cb996b4804cf9c3a9552f91279",
+      ".local/phase1/round3/verbatim-filter/run-final/human-confirmed-labels.jsonl": "8e2c7e032652e59ab304bedb49e58e99763adbb3119defb18cc805f704963099",
+      ".local/phase1/round3/approved-followup/joint-audit-72-v1/opaque-map-private.json": "c807c9329903059bc770952d6d2c675f2d2a74418715480a001f89ddb5995755",
+      "docs/evals/prompts/labeling-guide-v3-evidence-v1.txt": "57de6e00a577918f28e946b4b3d107d885bb4fcf40e2c914637ec58faed4af75",
+      "src/agent_memory/evals/evidence_v3.py": "794e29ac3721b29e77a29bbd7c8bc976ab5ad3a99cba8e43bc67c8aaf4da886d",
+      "/home/ubuntu/project/WorkPlan/agent-memory/scripts/run-evidence-v3-replacement.py": "d7b52bce865e928dec9b501f72b7203807cda3f6242ba941d501ee8742cc6fee",
+      ".local/phase1/round3/evidence-v3-replacement/split-private.json": "23ce6604aa8f678e5c954947fb78626ad73927f5aa19f386f448960fa2a2124a",
+      ".local/phase1/round3/evidence-v3-replacement/development-items.jsonl": "3193435bc539bd5d33701422f5e77db06df29c25d93a58290719f1196fcb0333",
+      ".local/phase1/round3/evidence-v3-replacement/final-items.jsonl": "6e13c584ba57ca15619e0b17c43dedf21251c1dcacb44c70e73421f78b202645"
+    },
+    "prompt_variants_allowed_this_run": 1,
+    "final_evaluation_runs_allowed": 1,
+    "development_counts": {
+      "native157-keep": 11,
+      "native157-discard": 68,
+      "blind72-keep": 32,
+      "blind72-discard": 4
+    },
+    "final_counts": {
+      "native157-discard": 67,
+      "blind72-keep": 31,
+      "native157-keep": 11,
+      "blind72-discard": 5
+    },
+    "conversation_overlap": 0,
+    "historical_exposure": "All 229 owner answers existed before this protocol; previous filter used 72. New holdout is reserved for this prompt version, not a historically unseen benchmark.",
+    "thresholds": {
+      "known_error_block": 0.8888888888888888,
+      "blind_correct_retention": 0.6,
+      "native_correct_retention": 0.6,
+      "next_audit_max_errors": 3
+    },
+    "gate_scope": "joint validated keep; development AND final AND aggregate separately pass; final small-error stratum requires ceil(8/9*n) blocked",
+    "human_current_positive": 85,
+    "minimum": 700,
+    "target": 1500,
+    "authorization": "om_x100b62a1a369a4a8df614586d52e52c",
+    "full_relabel": "only after complete offline validation passes; same models, new complete batch"
+  },
+  "development": {
+    "complete": true,
+    "per_model": {
+      "deepseek-v4-pro-ga-260813": {
+        "blind72-discard": {
+          "expected": 4,
+          "observed": 4,
+          "correct": 4,
+          "rate": 1.0
+        },
+        "blind72-keep": {
+          "expected": 32,
+          "observed": 32,
+          "correct": 14,
+          "rate": 0.4375
+        },
+        "native157-discard": {
+          "expected": 68,
+          "observed": 68,
+          "correct": 68,
+          "rate": 1.0
+        },
+        "native157-keep": {
+          "expected": 11,
+          "observed": 11,
+          "correct": 1,
+          "rate": 0.09090909090909091
+        }
+      },
+      "hy4-preview": {
+        "blind72-discard": {
+          "expected": 4,
+          "observed": 4,
+          "correct": 4,
+          "rate": 1.0
+        },
+        "blind72-keep": {
+          "expected": 32,
+          "observed": 32,
+          "correct": 12,
+          "rate": 0.375
+        },
+        "native157-discard": {
+          "expected": 68,
+          "observed": 68,
+          "correct": 67,
+          "rate": 0.9852941176470589
+        },
+        "native157-keep": {
+          "expected": 11,
+          "observed": 11,
+          "correct": 2,
+          "rate": 0.18181818181818182
+        }
+      }
+    },
+    "joint": {
+      "blind72-discard": {
+        "expected": 4,
+        "observed": 4,
+        "correct": 4,
+        "rate": 1.0
+      },
+      "blind72-keep": {
+        "expected": 32,
+        "observed": 32,
+        "correct": 9,
+        "rate": 0.28125
+      },
+      "native157-discard": {
+        "expected": 68,
+        "observed": 68,
+        "correct": 68,
+        "rate": 1.0
+      },
+      "native157-keep": {
+        "expected": 11,
+        "observed": 11,
+        "correct": 1,
+        "rate": 0.09090909090909091
+      }
+    },
+    "passed": false
+  },
+  "final": {
+    "complete": true,
+    "per_model": {
+      "deepseek-v4-pro-ga-260813": {
+        "blind72-discard": {
+          "expected": 5,
+          "observed": 5,
+          "correct": 3,
+          "rate": 0.6
+        },
+        "blind72-keep": {
+          "expected": 31,
+          "observed": 31,
+          "correct": 16,
+          "rate": 0.5161290322580645
+        },
+        "native157-discard": {
+          "expected": 67,
+          "observed": 67,
+          "correct": 67,
+          "rate": 1.0
+        },
+        "native157-keep": {
+          "expected": 11,
+          "observed": 11,
+          "correct": 5,
+          "rate": 0.45454545454545453
+        }
+      },
+      "hy4-preview": {
+        "blind72-discard": {
+          "expected": 5,
+          "observed": 5,
+          "correct": 4,
+          "rate": 0.8
+        },
+        "blind72-keep": {
+          "expected": 31,
+          "observed": 31,
+          "correct": 14,
+          "rate": 0.45161290322580644
+        },
+        "native157-discard": {
+          "expected": 67,
+          "observed": 67,
+          "correct": 67,
+          "rate": 1.0
+        },
+        "native157-keep": {
+          "expected": 11,
+          "observed": 11,
+          "correct": 7,
+          "rate": 0.6363636363636364
+        }
+      }
+    },
+    "joint": {
+      "blind72-discard": {
+        "expected": 5,
+        "observed": 5,
+        "correct": 4,
+        "rate": 0.8
+      },
+      "blind72-keep": {
+        "expected": 31,
+        "observed": 31,
+        "correct": 10,
+        "rate": 0.3225806451612903
+      },
+      "native157-discard": {
+        "expected": 67,
+        "observed": 67,
+        "correct": 67,
+        "rate": 1.0
+      },
+      "native157-keep": {
+        "expected": 11,
+        "observed": 11,
+        "correct": 3,
+        "rate": 0.2727272727272727
+      }
+    },
+    "passed": false
+  },
+  "all_229_joint": {
+    "blind72-discard": {
+      "expected": 9,
+      "observed": 9,
+      "correct": 8,
+      "rate": 0.8888888888888888
+    },
+    "blind72-keep": {
+      "expected": 63,
+      "observed": 63,
+      "correct": 19,
+      "rate": 0.30158730158730157
+    },
+    "native157-discard": {
+      "expected": 135,
+      "observed": 135,
+      "correct": 135,
+      "rate": 1.0
+    },
+    "native157-keep": {
+      "expected": 22,
+      "observed": 22,
+      "correct": 4,
+      "rate": 0.18181818181818182
+    }
+  },
+  "offline_passed": false,
+  "status": "failed",
+  "actual_calls": 62,
+  "http_counts": {
+    "200": 62
+  },
+  "reported_total_tokens": 387909,
+  "usage_missing_calls": 0,
+  "failures": [],
+  "full_relabel_complete": false,
+  "new_audit_generated": false,
+  "human_positive_points": 85,
+  "gap_to_minimum": 615,
+  "phase1_accepted": false,
+  "incremental_annotation_started": false,
+  "mechanical_checker_limitation": "Only checks source identity, user role and exact quote substrings. Cannot prove semantic entailment, complete detail enumeration, or absence of negation/question/attribution errors inside a quote; models must judge these, then fresh human audit.",
+  "validation": {
+    "pytest": 398,
+    "seconds": 17.89,
+    "ruff": "pass",
+    "strict_mypy": "pass",
+    "foundation": "8/8; tenant_leaks=0; deleted_memory_hits=0",
+    "log_sha256": "515efa60f8c49b81e55de4aa8fc7a09532aed3112214f0019ec9218b5c3eb7c6"
+  },
+  "historical_preflight": [
+    {
+      "path": ".local/phase1/round3/closeout/preflight-deepseek-v4-pro-ga-260813/deepseek-v4-pro-ga-260813-summary.json",
+      "sha256": "a62845c1e8d340964075af73f35192613227ce38fa48012b845f99cce6459a49",
+      "summary": {
+        "model": "deepseek-v4-pro-ga-260813",
+        "calls": 106,
+        "format_valid": 100,
+        "format_n": 100,
+        "consistent_5": true,
+        "preflight_pass": true,
+        "observed_disabled_thinking": true,
+        "sampling_control_eligible": true,
+        "latency_ms": {
+          "n": 106,
+          "p50": 1567.8893805015832,
+          "p95": 2063.63081978634,
+          "p99": 2221.902625449002
+        },
+        "http_429": 0
+      }
+    },
+    {
+      "path": ".local/phase1/round3/preflight-hy4-preview/hy4-preview-summary.json",
+      "sha256": "be8ffe5f4ebbfc8690e200cfbfe862782a0f6f22525996ba86351fd3d8ff2c41",
+      "summary": {
+        "model": "hy4-preview",
+        "calls": 106,
+        "format_valid": 100,
+        "format_n": 100,
+        "consistent_5": true,
+        "preflight_pass": true,
+        "observed_disabled_thinking": true,
+        "sampling_control_eligible": true,
+        "latency_ms": {
+          "n": 106,
+          "p50": 2383.148904540576,
+          "p95": 3226.829555409495,
+          "p99": 3700.2937713288707
+        },
+        "http_429": 0
+      }
+    }
+  ],
+  "availability_probes": [
+    {
+      "provider": "Ark",
+      "model": "deepseek-v4-pro-ga-260813",
+      "timestamp": 1792630544.0615563,
+      "http": 200,
+      "usage": {
+        "completion_tokens": 9,
+        "prompt_tokens": 146,
+        "total_tokens": 155,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "returned_model": "deepseek-v4-pro-ga-260813",
+      "format_ok": true
+    },
+    {
+      "provider": "TokenHub",
+      "model": "hy4-preview",
+      "timestamp": 1792630544.1376956,
+      "http": 200,
+      "usage": {
+        "prompt_tokens": 49,
+        "completion_tokens": 10,
+        "total_tokens": 59,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        }
+      },
+      "returned_model": "hy4-preview",
+      "format_ok": true
+    }
+  ],
+  "availability_calls": 2,
+  "all_actual_calls": 64,
+  "all_reported_tokens": 388123,
+  "actual_schema_preflight_complete": true,
+  "diagnosis": {
+    "development:deepseek-v4-pro-ga-260813": {
+      "labels": {
+        "uncertain": 79,
+        "keep": 15,
+        "discard": 21
+      },
+      "model_labels_before_validation": {
+        "uncertain": 66,
+        "keep": 28,
+        "discard": 21
+      },
+      "citation_invalid": 13,
+      "human_keep_rejected": 28,
+      "human_keep_rejected_by_model": 16,
+      "human_keep_downgraded_by_citation_check": 12,
+      "citation_failure_codes": {
+        "not-user-source": 2,
+        "missing-subject-or-relation-evidence": 12
+      }
+    },
+    "development:hy4-preview": {
+      "labels": {
+        "uncertain": 52,
+        "keep": 15,
+        "discard": 48
+      },
+      "model_labels_before_validation": {
+        "uncertain": 40,
+        "keep": 27,
+        "discard": 48
+      },
+      "citation_invalid": 12,
+      "human_keep_rejected": 29,
+      "human_keep_rejected_by_model": 17,
+      "human_keep_downgraded_by_citation_check": 12,
+      "citation_failure_codes": {
+        "missing-subject-or-relation-evidence": 11,
+        "not-user-source": 4
+      }
+    },
+    "final:deepseek-v4-pro-ga-260813": {
+      "labels": {
+        "uncertain": 73,
+        "keep": 23,
+        "discard": 18
+      },
+      "model_labels_before_validation": {
+        "uncertain": 63,
+        "keep": 33,
+        "discard": 18
+      },
+      "citation_invalid": 10,
+      "human_keep_rejected": 21,
+      "human_keep_rejected_by_model": 11,
+      "human_keep_downgraded_by_citation_check": 10,
+      "citation_failure_codes": {
+        "missing-subject-or-relation-evidence": 9,
+        "not-user-source": 2
+      }
+    },
+    "final:hy4-preview": {
+      "labels": {
+        "uncertain": 35,
+        "keep": 22,
+        "discard": 57
+      },
+      "model_labels_before_validation": {
+        "uncertain": 25,
+        "keep": 32,
+        "discard": 57
+      },
+      "citation_invalid": 11,
+      "human_keep_rejected": 21,
+      "human_keep_rejected_by_model": 12,
+      "human_keep_downgraded_by_citation_check": 9,
+      "citation_failure_codes": {
+        "not-user-source": 4,
+        "missing-subject-or-relation-evidence": 8,
+        "quote-not-exact-substring": 1
+      }
+    }
+  },
+  "full_label_counts": {},
+  "new_audit": null,
+  "split_identical_to_original": true,
+  "split_sha256": "23ce6604aa8f678e5c954947fb78626ad73927f5aa19f386f448960fa2a2124a",
+  "date_beijing": "2026-10-22",
+  "target_gap": 1415,
+  "protected_hashes": {
+    ".local/phase1/round3/reviews/ecd-manual-120.csv": "c5e56d41c72194d7a56327e76b5fcc6051fcb397ef2dcdf4d120e1729686fb8a",
+    ".local/phase1/round3/reviews/dulemon-native-reference/audit-blind.csv": "5a5619eba70448eae9dbaead978ef8729e3936c561274fbc77b9b811901c08a3",
+    ".local/phase1/round3/reviews/ecd-manual-120.jsonl": "392b53fd6d21d9d47f17233a08bf2f39cc11c08b4a013753ddbc3148f1501927",
+    ".local/phase1/round3/reviews/ecd-negative-local.jsonl": "34072968d613f45a0bea699f64e0204da5a476cc4a7a890fc1b33ee6eb7f568b",
+    ".local/phase1/round3/reviews/dulemon-native-reference/audit-blind.jsonl": "aa001b678ce1f122775d69411c6e815643f08c430c6cd90ff237ac69834f5eb7"
+  },
+  "unchanged_hashes": {
+    "docs/evals/human-confirmed-current.json": "40e65e9f2b4f76428407f047ac9b2453ae9efe67053c0a24260e5f4e13693d10",
+    "docs/evals/chinese-query-current.json": "6228efaae3bd70f660083eff796ba407b582e19ce8228a92080492428e520ac4",
+    "src/agent_memory/evals/metrics.py": "d772a80c84cbe0f6e636631051bf04a045a8694ad2361a5f797c0c71e15b4c81",
+    "docs/plans/2026-10-21-agent-memory-interview-plan-v2.md": "da1126e8e77b5b91835cfc6b9849dd4915e1bdaba7524c7774c8fd09312c58e9"
+  },
+  "data_license_note": "DuLeMon original source and owner data remain server-local; public report hashes and counts only.",
+  "judge_implication": "This new batch has DeepSeek/Tencent annotators: exclude those plus answer vendor ByteDance. Old public HY4 judge backup is ineligible for new table; Ark GLM5.2 independent but lacks stable backup/calibration.",
+  "delivery": "current group; no p2p",
+  "phase2_started": false
+}
