@@ -1,0 +1,383 @@
+{
+  "status": "blocked-by-provider-usage-cap",
+  "pool": 701,
+  "models": {
+    "deepseek-v4-pro-ga-260813": {
+      "completed": 8,
+      "total": 701,
+      "complete": false,
+      "labels": {
+        "keep": 8
+      },
+      "keep_rate": null,
+      "citation_invalid": 0,
+      "citation_failure_codes": {},
+      "usage_prompt_tokens": 4758,
+      "usage_completion_tokens": 1191,
+      "reported_tokens_per_completed_item": 743.625,
+      "calls": 3,
+      "remaining_min_requests": 87
+    },
+    "hy4-preview": {
+      "completed": 701,
+      "total": 701,
+      "complete": true,
+      "labels": {
+        "keep": 333,
+        "uncertain": 308,
+        "discard": 60
+      },
+      "keep_rate": 0.47503566333808844,
+      "citation_invalid": 6,
+      "citation_failure_codes": {
+        "not-user-source": 6
+      },
+      "usage_prompt_tokens": 426240,
+      "usage_completion_tokens": 57637,
+      "reported_tokens_per_completed_item": 690.2667617689016,
+      "calls": 88,
+      "remaining_min_requests": 0
+    }
+  },
+  "joint_complete": false,
+  "joint_keep": null,
+  "joint_rate": null,
+  "joint_keep_completion_bounds": [
+    7,
+    333
+  ],
+  "unexposed_joint_completion_bounds": [
+    7,
+    294
+  ],
+  "bounds_are_not_sampling_ci": true,
+  "completed_both_items": 8,
+  "partial_items_sorted_not_random": true,
+  "do_not_extrapolate_partial_joint_rate": true,
+  "actual_calls_current_prompt": 91,
+  "http_current": {
+    "429": 2,
+    "200": 89
+  },
+  "actual_calls_retired_format_attempt": 6,
+  "actual_calls_all": 97,
+  "reported_tokens_current": 489826,
+  "reported_tokens_retired": 32975,
+  "missing_usage_calls_current": 2,
+  "retired_attempt_not_mixed": true,
+  "errors": [
+    {
+      "model": "deepseek-v4-pro-ga-260813",
+      "stage": "pool-shard-0",
+      "offset": 0,
+      "http": 429,
+      "code": "SetLimitExceeded",
+      "error_type": null,
+      "meaning": "model paused by account-configured safety usage limit",
+      "raw_response_sha256": "fa09f077a0148e5f59d045fbb1b444ef12d5646a9115e9bda9e421caed493cf3"
+    },
+    {
+      "model": "deepseek-v4-pro-ga-260813",
+      "stage": "pool-shard-1",
+      "offset": 8,
+      "http": 429,
+      "code": "SetLimitExceeded",
+      "error_type": null,
+      "meaning": "model paused by account-configured safety usage limit",
+      "raw_response_sha256": "ac7cd1d59e1441a1a7dd0d1a229e31884fb0316bd7a2a0a4ada5550c871c817a"
+    }
+  ],
+  "historical_quality_gate": {
+    "correct": 8,
+    "total": 9,
+    "meets_owner_gate": true,
+    "source": "docs/reports/phase1-round3-evidence-v3-replacement-2026-10-22/report.json",
+    "not_a_new_prompt_validation": true
+  },
+  "retention_is_gate": false,
+  "historical_retention_report_only": {
+    "blind_correct": [
+      19,
+      63
+    ],
+    "native_correct": [
+      4,
+      22
+    ]
+  },
+  "new_prompt_human_retention": "not newly evaluated; owner prohibited another offline evaluation",
+  "human_confirmed_positive": 85,
+  "gap_to_700": 615,
+  "gap_to_1500": 1415,
+  "reserve": {
+    "scope": "DuLeMon/both/train.json",
+    "raw_sizes": {
+      "DuLeMon/self/train.json": 23000,
+      "DuLeMon/self/dev.json": 750,
+      "DuLeMon/self/test.json": 750,
+      "DuLeMon/both/train.json": 2401,
+      "DuLeMon/both/dev.json": 300,
+      "DuLeMon/both/test.json": 300
+    },
+    "raw_train_dialogues": 2401,
+    "annotation_used_unique": 740,
+    "query_used_unique": 386,
+    "annotation_query_overlap": 117,
+    "used_union": 1009,
+    "remaining_before_field_and_dedup": 1392,
+    "available_field_valid_unique": 1392,
+    "available_native_candidate_slots": 7859,
+    "candidates_per_available_dialogue": 5.645833333333333,
+    "excluded_counts": {
+      "used-source-index": 1009
+    },
+    "inherited_split_counts": {
+      "test": 968,
+      "dev": 424
+    },
+    "self_schema_excluded": 24500,
+    "native_dev_test_held_out": 600,
+    "definition": "Never selected for known annotation/review export nor frozen Chinese queries; normalized full archive parsing is not counted as task use. Exact normalized role/text hashes deduplicate, not semantic near-duplicates. Full negative dialogues require separate owner confirmation.",
+    "origin_manifests": {
+      ".local/phase1/chinese-expansion-v1/dulemon/manifest.json": {
+        "used_indices": 740
+      },
+      ".local/phase1/chinese-expansion-v2/dulemon/manifest.json": {
+        "used_indices": 740
+      },
+      ".local/phase1/round3/approved-followup/chinese-queries-v2/contexts.jsonl": {
+        "query_source_indices": 386
+      },
+      ".local/phase1/round3/followup/chinese-queries-v1-final/contexts.jsonl": {
+        "query_source_indices": 386
+      },
+      ".local/phase1/round3/followup/chinese-queries-v1-ready/contexts.jsonl": {
+        "query_source_indices": 386
+      }
+    },
+    "input_hashes": {
+      ".local/phase1/data/DuLeMon.zip": "797680b350dcb401cbe6255362c84e32c37363c983ffccaa0c0000bc75e3bde3",
+      ".local/phase1/chinese-expansion-v1/dulemon/manifest.json": "f18e25aeb59da6dd4e96ac7dcd68d1ed754722793a32e05d612b56d5058d4b0b",
+      ".local/phase1/chinese-expansion-v2/dulemon/manifest.json": "7c98741aef04012e7e032a825704c2d864d7bee203623dc09a4258084ce2373d",
+      ".local/phase1/round3/approved-followup/chinese-queries-v2/contexts.jsonl": "76966e16e8053ec7902e4fd2d2c503f06983a06628309175b4a5b2f3add107af",
+      ".local/phase1/round3/followup/chinese-queries-v1-final/contexts.jsonl": "433ccef55564212564ce4b6bf036a2edb5e6fc2cd82b6bfa20a934b67f2218e0",
+      ".local/phase1/round3/followup/chinese-queries-v1-ready/contexts.jsonl": "433ccef55564212564ce4b6bf036a2edb5e6fc2cd82b6bfa20a934b67f2218e0",
+      ".local/phase1/normalized-v3/dulemon-split.json": "77f79f9a3a69fe8ef7b344ada6668b77352297fbc7652ad1611f221e69412874"
+    },
+    "incremental_sampling_started": false
+  },
+  "production_scenarios": [
+    {
+      "gap": 615,
+      "candidate_survival_assumption": 0.05,
+      "precision_assumption_not_confidence_bound": 0.95,
+      "mean_candidates_per_dialogue": 5.645833333333333,
+      "model_survivors_required": 648,
+      "dialogues_estimated": 2296,
+      "candidate_reviews_each_model": 12963,
+      "calls_each_model": 1621,
+      "calls_both_models": 3242,
+      "tokens_both_models_estimated": null,
+      "manual_positive_confirmations_required_for_individual_gold": 615,
+      "conditional_only": true,
+      "gold_adopted": false,
+      "reserve_dialogues_sufficient": false
+    },
+    {
+      "gap": 615,
+      "candidate_survival_assumption": 0.1,
+      "precision_assumption_not_confidence_bound": 0.95,
+      "mean_candidates_per_dialogue": 5.645833333333333,
+      "model_survivors_required": 648,
+      "dialogues_estimated": 1148,
+      "candidate_reviews_each_model": 6482,
+      "calls_each_model": 811,
+      "calls_both_models": 1622,
+      "tokens_both_models_estimated": null,
+      "manual_positive_confirmations_required_for_individual_gold": 615,
+      "conditional_only": true,
+      "gold_adopted": false,
+      "reserve_dialogues_sufficient": true
+    },
+    {
+      "gap": 615,
+      "candidate_survival_assumption": 0.2,
+      "precision_assumption_not_confidence_bound": 0.95,
+      "mean_candidates_per_dialogue": 5.645833333333333,
+      "model_survivors_required": 648,
+      "dialogues_estimated": 574,
+      "candidate_reviews_each_model": 3241,
+      "calls_each_model": 406,
+      "calls_both_models": 812,
+      "tokens_both_models_estimated": null,
+      "manual_positive_confirmations_required_for_individual_gold": 615,
+      "conditional_only": true,
+      "gold_adopted": false,
+      "reserve_dialogues_sufficient": true
+    }
+  ],
+  "optimistic_calibration": {
+    "gap": 615,
+    "candidate_survival_assumption": 0.1474248610359585,
+    "precision_assumption_not_confidence_bound": 0.95,
+    "mean_candidates_per_dialogue": 5.645833333333333,
+    "model_survivors_required": 648,
+    "dialogues_estimated": 779,
+    "candidate_reviews_each_model": 4399,
+    "calls_each_model": 550,
+    "calls_both_models": 1100,
+    "tokens_both_models_estimated": null,
+    "manual_positive_confirmations_required_for_individual_gold": 615,
+    "conditional_only": true,
+    "gold_adopted": false,
+    "kind": "optimistic partial-bound calibration, not observed joint yield",
+    "assumptions": [
+      "old joint density transports to new conversations",
+      "all missing DeepSeek results among HY4 keeps also keep",
+      "95% future manual precision assumption, not confidence bound"
+    ],
+    "reserve_dialogues_sufficient": true
+  },
+  "old_selection_density_for_calibration": 0.3103448275862069,
+  "new_pair_direct_review_cost": "2*ceil(native_candidates/8); original annotation pair not invoked; native candidate enumeration has zero LLM calls",
+  "individual_manual_gold_note": "To reach 700 individually human-confirmed positives still requires 615 additional individual confirmations; model survivors do not count. Whole-pool acceptance is conditional on a passed independent audit and reported separately.",
+  "audit_generated": false,
+  "audit_seed": 20261025,
+  "required_sample": 72,
+  "maximum_errors": 3,
+  "phase1_accepted": false,
+  "incremental_started": false,
+  "offline_evaluation_new_calls": 0,
+  "manifest_sha256": "cc09df87c94624f519252e574fda107fba2d441f5293d521d84fd136a4107392",
+  "reserve_summary_sha256": "d34646de32827de2022970c1796d67859d5cac01bbb883f062da6beac946cde6",
+  "frozen": {
+    "version": "pool-refresh-v3-evidence-v3",
+    "authorization": "om_x100b62a2ee4f8ca0cffd78d2b53c6ef",
+    "created_beijing": "2026-10-22T09:47:00.316624+08:00",
+    "models": [
+      "deepseek-v4-pro-ga-260813",
+      "hy4-preview"
+    ],
+    "providers": {
+      "deepseek-v4-pro-ga-260813": "Ark",
+      "hy4-preview": "TokenHub"
+    },
+    "old_joint_keep": 711,
+    "human_rejected_in_joint": 10,
+    "pool": 701,
+    "previously_exposed_in_pool": 82,
+    "unexposed_before_refresh": 619,
+    "exclusions": 229,
+    "seed": 20261025,
+    "sample": 72,
+    "maximum_errors": 3,
+    "shards_per_model": 2,
+    "batch_size": 8,
+    "development_diagnosis_only": {
+      "deepseek-v4-pro-ga-260813": {
+        "development_records": 115,
+        "model_keep": 28,
+        "keep_empty_subject": 0,
+        "keep_empty_relation": 12
+      },
+      "hy4-preview": {
+        "development_records": 115,
+        "model_keep": 27,
+        "keep_empty_subject": 0,
+        "keep_empty_relation": 11
+      }
+    },
+    "historical_error_block": {
+      "correct": 8,
+      "total": 9,
+      "meets_owner_gate": true,
+      "source": "docs/reports/phase1-round3-evidence-v3-replacement-2026-10-22/report.json",
+      "not_a_new_prompt_validation": true
+    },
+    "retention_is_gate": false,
+    "no_new_offline_evaluation": true,
+    "no_final_response_read_for_prompt": true,
+    "old_prompt_history": "docs/evals/prompts/labeling-guide-v3-evidence-v1.txt",
+    "files": {
+      ".local/phase1/chinese-expansion-v2/dulemon/items.jsonl": "41dd160364690ffedf45d49f038cf33bde3e65cb996b4804cf9c3a9552f91279",
+      ".local/phase1/round3/verbatim-filter/run-final/human-confirmed-labels.jsonl": "8e2c7e032652e59ab304bedb49e58e99763adbb3119defb18cc805f704963099",
+      ".local/phase1/round3/evidence-v3-replacement/split-private.json": "23ce6604aa8f678e5c954947fb78626ad73927f5aa19f386f448960fa2a2124a",
+      ".local/phase1/chinese-guide-v2-full-fallback-resume1/dulemon/labels-deepseek-v4-pro-run1/labels.jsonl": "0931b3a0938746f4370ba32cad56ca7b9d75dfd1703cf7f2bb747d136c590e1a",
+      ".local/phase1/chinese-guide-v2-full-fallback-resume1/dulemon/labels-mimo-v2.6-flash-run1/labels.jsonl": "2f2866613cadd918b5f14ea815ffa209e363fedbd547e30663a61d0b70a16f66",
+      "docs/evals/prompts/labeling-guide-v3-evidence-v3.txt": "442729716b606803b4900639177e62ca46a2e0dfd987046271f32f5f48b35d17",
+      "scripts/run-evidence-v3-replacement.py": "d7b52bce865e928dec9b501f72b7203807cda3f6242ba941d501ee8742cc6fee",
+      "src/agent_memory/evals/evidence_v3.py": "794e29ac3721b29e77a29bbd7c8bc976ab5ad3a99cba8e43bc67c8aaf4da886d",
+      "/home/ubuntu/project/WorkPlan/agent-memory/scripts/refresh-evidence-pool-v3-v3.py": "b85825165916e0b503220de4849e088f7816ab7ae588164aa6c1d17d1ee06374",
+      ".local/phase1/round3/pool-refresh-v3-v3/pool-items.jsonl": "724afcbbfa8f31f2eb7c2cb60ce37abfe2578ae61dfe77244161519f1cabffcb",
+      ".local/phase1/round3/pool-refresh-v3-v3/audit-exclusions.jsonl": "1ff73f2600ef3b4c32557dbd3131292b3cc28773af503667c1a442a79d8c446b",
+      ".local/phase1/round3/pool-refresh-v3-v3/audit-exclusions-all.jsonl": "b5b09026b6de1938236cabb0361db5b96561d8efe42673c7b18bca2c81e5f2f1",
+      ".local/phase1/round3/pool-refresh-v3-v3/pool-shard-0-items.jsonl": "42874dc7e5c7aaee93906b9966988debf9fc8d1802d5d1da3b5116d7bfbcae5b",
+      ".local/phase1/round3/pool-refresh-v3-v3/pool-shard-1-items.jsonl": "0746bb7bb73c9a7d370ddcdecd74a2036107d97ce4d9554aba3830d3e4530205"
+    },
+    "phase1_accepted": false
+  },
+  "validation": {
+    "pytest": 405,
+    "seconds": 17.94,
+    "ruff": "pass",
+    "strict_mypy": "pass",
+    "foundation": "8/8; tenant_leaks=0; deleted_memory_hits=0",
+    "log_sha256": "a6ad49a467ec59aa1da2f3726cb72fb6a2ee1c69cc05c168ffc49104cdc513db"
+  },
+  "judges": {
+    "answer_vendor": "ByteDance",
+    "annotation_vendors": [
+      "DeepSeek",
+      "Tencent"
+    ],
+    "excluded_vendors": [
+      "ByteDance",
+      "DeepSeek",
+      "Tencent"
+    ],
+    "technically_eligible_vendors_from_existing_evidence": [
+      "Zhipu"
+    ],
+    "main_candidate": "Ark:glm-5-2-260617",
+    "evidence_sha256": "ae162f70b910a360d51a725450d963104ea6fbb709ac22ff51837c10853b49bc",
+    "new_call_this_round": false,
+    "qualified_stable_backups": 0,
+    "minimum_backups": 1,
+    "backup_gap": 1,
+    "human_calibration_complete": false,
+    "formal_judge_pool_ready": false
+  },
+  "source_commit": "231b8de",
+  "source_modified": false,
+  "date_beijing": "2026-10-22",
+  "source_hashes": {
+    "scripts/refresh-evidence-pool-v3-v3.py": "b85825165916e0b503220de4849e088f7816ab7ae588164aa6c1d17d1ee06374",
+    "scripts/complete-pool-refresh-v3.py": "4744d486863f71560d339b7ceb7419507e0951af2d9e1085997aad27c1a700c3",
+    "scripts/inventory-dulemon-reserve.py": "4ce90ab547de818d154cf30b49b1e6477cc0130e9ef8d44f32995c62249f6eeb",
+    "scripts/summarize-pool-refresh-v3.py": "323ff9714bdeb214992976181117baa1b7837e298f86ced4adba6455c9f566b7",
+    "src/agent_memory/evals/pool_planning.py": "5ffccfedcd7618e502787b2efdd28df803750d88763fbf3b633a3bf4dae5ed42"
+  },
+  "protected_hashes": {
+    ".local/phase1/round3/reviews/ecd-manual-120.csv": "c5e56d41c72194d7a56327e76b5fcc6051fcb397ef2dcdf4d120e1729686fb8a",
+    ".local/phase1/round3/reviews/dulemon-native-reference/audit-blind.csv": "5a5619eba70448eae9dbaead978ef8729e3936c561274fbc77b9b811901c08a3",
+    ".local/phase1/round3/reviews/ecd-manual-120.jsonl": "392b53fd6d21d9d47f17233a08bf2f39cc11c08b4a013753ddbc3148f1501927",
+    ".local/phase1/round3/reviews/ecd-negative-local.jsonl": "34072968d613f45a0bea699f64e0204da5a476cc4a7a890fc1b33ee6eb7f568b",
+    ".local/phase1/round3/reviews/dulemon-native-reference/audit-blind.jsonl": "aa001b678ce1f122775d69411c6e815643f08c430c6cd90ff237ac69834f5eb7"
+  },
+  "unchanged_hashes": {
+    "docs/evals/human-confirmed-current.json": "40e65e9f2b4f76428407f047ac9b2453ae9efe67053c0a24260e5f4e13693d10",
+    "docs/evals/chinese-query-current.json": "6228efaae3bd70f660083eff796ba407b582e19ce8228a92080492428e520ac4",
+    "src/agent_memory/evals/evidence_v3.py": "794e29ac3721b29e77a29bbd7c8bc976ab5ad3a99cba8e43bc67c8aaf4da886d",
+    "src/agent_memory/evals/metrics.py": "d772a80c84cbe0f6e636631051bf04a045a8694ad2361a5f797c0c71e15b4c81",
+    "docs/plans/2026-10-21-agent-memory-interview-plan-v2.md": "da1126e8e77b5b91835cfc6b9849dd4915e1bdaba7524c7774c8fd09312c58e9"
+  },
+  "unfinished": [
+    "DeepSeek remaining pool annotation",
+    "complete joint production rate",
+    "independent audit72",
+    "incremental sampling",
+    "700 reliable real Chinese points",
+    "whole negative dialogue gates",
+    "judge backup and calibration"
+  ]
+}
