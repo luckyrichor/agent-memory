@@ -26,3 +26,5 @@
 - [共同保留池抽检失败与逐字过滤试验](2026-10-21-phase1-verbatim-filter.md)
 
 - [标注规程v3与离线额度阻塞](2026-10-22-phase1-evidence-v3.md)
+
+- [v3替代组合真实离线验证失败](2026-10-22-phase1-evidence-v3-replacement.md)

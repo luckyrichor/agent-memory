@@ -1,0 +1,25 @@
+{
+  "version": "public-chinese-v3-replacement-1",
+  "authorization": "om_x100b62a1a369a4a8df614586d52e52c",
+  "scope": "agent-memory phase1 DuLeMon entire frozen candidate corpus; phase1 unaccepted",
+  "models": [
+    {"provider": "Ark", "model": "deepseek-v4-pro-ga-260813", "vendor": "DeepSeek"},
+    {"provider": "TokenHub", "model": "hy4-preview", "vendor": "Tencent"}
+  ],
+  "prompt": "docs/evals/prompts/labeling-guide-v3-evidence-v1.txt",
+  "execution": "scripts/run-evidence-v3-replacement.py",
+  "private_artifacts": ".local/phase1/round3/evidence-v3-replacement",
+  "previous_attempt": ".local/phase1/round3/evidence-v3",
+  "previous_models": ["deepseek-v4-pro", "mimo-v2.6-flash"],
+  "previous_attempt_status": "quota-blocked before any scored results; historical only",
+  "split": "inherit identical original conversation-disjoint dev/final split, no redraw",
+  "old_labels_mixed": false,
+  "full_relabel_gate": "complete v3 offline development/final evaluation must pass before full batch",
+  "human_adoption_gate": "new independent unreviewed audit72, errors <=3",
+  "incremental_gate": "only after new independent audit passes",
+  "automatic_model_rotation_after_freeze": false,
+  "judges_for_this_new_table_must_exclude_vendors": ["ByteDance", "DeepSeek", "Tencent"],
+  "old_public_table_judge_pool_not_transferable": "TokenHub hy4-preview is now an annotator; cannot judge this v3 table. Ark GLM-5.2 remains vendor-independent but backup/calibration gap persists.",
+  "ecd_unchanged": true,
+  "delivery": "current group, no p2p"
+}
