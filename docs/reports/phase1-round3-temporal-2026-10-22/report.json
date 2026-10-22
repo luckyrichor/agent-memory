@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-22T05:44:35.957768+00:00",
-  "code_commit": "8470dc37295ed707d1fae08c55fe400bbd727095",
+  "generated_at": "2026-10-22T05:54:55.085098+00:00",
+  "code_commit": "8cad522852d50aae830aa5f2254be04f7a1bfc4f",
   "tracked_changes": true,
   "python": "3.12.3",
   "plan": {
@@ -19,6 +19,26 @@
       "role-table still lists old DeepSeek/MiMo; actual replacements explicitly authorized",
       "native22/old711 references remain historical; use verified owner returns/current registry"
     ]
+  },
+  "production_projection": {
+    "target_joint_survivors": 549,
+    "historical_joint_rate": 0.43081312410841655,
+    "temporal_pool_survival_rate": 0.8150943396226416,
+    "estimated_joint_rate": 0.3511533388959169,
+    "candidate_estimate": 1564,
+    "dialogue_estimate": 278,
+    "post_call_estimate_both_models": 392,
+    "assumption_only": true,
+    "not_a_claim_of_reliable_points": true,
+    "reserve_before_increment": 1392
+  },
+  "validation": {
+    "pytest_passed": 419,
+    "pytest_seconds": 18.0,
+    "ruff_passed": true,
+    "strict_mypy_source_files": 96,
+    "foundation_passed": true,
+    "log_sha256": "90b25ff25e54dfaed8964181dd90f5d214a3dbe56c8f93c4118eddd7d017de1d"
   },
   "screen": {
     "created_at": "2026-10-22T05:36:20.707891+00:00",
@@ -150,6 +170,10 @@
       "DeepSeek",
       "Zhipu"
     ],
+    "increment_models": [
+      "deepseek-v4.1-flash-1017",
+      "glm-5-2-260617"
+    ],
     "old_pool_qualified_available_judges": [],
     "qualified_backup_count": 0,
     "required_backups": 1,
@@ -157,17 +181,136 @@
     "main_judge_missing": true,
     "note": "Ark GLM-5.2 becomes annotator/filter and cannot judge these data. Tencent HY4 remains vendor-independent for new DeepSeek+Zhipu increment but its current HTTP402 means unavailable. Other independent vendors require successful strict preflight and human calibration; no gate relaxed."
   },
+  "new_replacement_qualification": [
+    {
+      "model": "deepseek/deepseek-flash",
+      "provider": "TokenHub",
+      "calls": 105,
+      "consistent_5": true,
+      "format_n": 100,
+      "format_valid": 100,
+      "observed_disabled_thinking": true,
+      "temperature_requested": 0,
+      "api_json_mode": false,
+      "reported_tokens": 7455,
+      "passed": true
+    },
+    {
+      "model": "deepseek-v4-flash-202605",
+      "provider": "TokenHub",
+      "calls": 105,
+      "consistent_5": true,
+      "format_n": 100,
+      "format_valid": 68,
+      "observed_disabled_thinking": false,
+      "temperature_requested": 0,
+      "api_json_mode": false,
+      "reported_tokens": 5183,
+      "passed": false
+    },
+    {
+      "model": "hy-role",
+      "provider": "TokenHub",
+      "calls": 105,
+      "consistent_5": true,
+      "format_n": 100,
+      "format_valid": 55,
+      "observed_disabled_thinking": false,
+      "temperature_requested": 0,
+      "api_json_mode": false,
+      "reported_tokens": 4084,
+      "passed": false
+    },
+    {
+      "model": "hy3",
+      "provider": "TokenHub",
+      "calls": 1,
+      "consistent_5": false,
+      "format_n": 0,
+      "format_valid": 0,
+      "observed_disabled_thinking": false,
+      "temperature_requested": 0,
+      "api_json_mode": false,
+      "reported_tokens": 0,
+      "passed": false
+    },
+    {
+      "model": "hy4-preview",
+      "provider": "TokenHub",
+      "calls": 1,
+      "consistent_5": false,
+      "format_n": 0,
+      "format_valid": 0,
+      "observed_disabled_thinking": false,
+      "temperature_requested": 0,
+      "api_json_mode": false,
+      "reported_tokens": 0,
+      "passed": false
+    },
+    {
+      "model": "mimo-v2.6-flash",
+      "provider": "TokenHub",
+      "calls": 1,
+      "consistent_5": false,
+      "format_n": 0,
+      "format_valid": 0,
+      "observed_disabled_thinking": false,
+      "temperature_requested": 0,
+      "api_json_mode": false,
+      "reported_tokens": 0,
+      "passed": false
+    },
+    {
+      "model": "minimax-m3",
+      "provider": "TokenHub",
+      "calls": 1,
+      "consistent_5": false,
+      "format_n": 0,
+      "format_valid": 0,
+      "observed_disabled_thinking": false,
+      "temperature_requested": 0,
+      "api_json_mode": false,
+      "reported_tokens": 0,
+      "passed": false
+    }
+  ],
+  "ordinary429_repaired_qualification": [
+    {
+      "model": "deepseek-v4-flash-202605",
+      "provider": "TokenHub",
+      "qualified_at": "2026-10-22T05:53:45.338685+00:00",
+      "consistent_5": true,
+      "format_n": 100,
+      "format_valid": 100,
+      "observed_disabled_thinking": true,
+      "new_post_attempts": 32,
+      "cached_successes": 73,
+      "new_reported_tokens": 2272,
+      "original_failed_report_sha256": "f770d1926e297bd75d3bed2e0ae2fef51462032aef761a05dd8fb8c8e2642992",
+      "temperature_requested": 0,
+      "same_virtual_requests": true,
+      "retry_rule": "only ordinary429, at most two retries/request; 3.1s minimum pacing plus30s after429; no quota/limit modification",
+      "passed": true
+    }
+  ],
   "calls": {
-    "post_attempts": 99,
-    "reported_tokens": 608823,
+    "qualification_attempts": 351,
+    "post_attempts": 231,
+    "reported_tokens": 1088580,
     "by_model": {
-      "deepseek-v4.1-flash-1017": 44,
-      "glm-5-2-260617": 44,
+      "deepseek-v4.1-flash-1017": 117,
+      "glm-5-2-260617": 103,
       "hy4-preview": 11
     }
   },
   "private_evidence_hashes": {
     ".local/phase1/round3/temporal-v1/ecd-owner/report.json": "6d11a9528511987c5b67ea404ddb7e68915bac0a9af68191a2543f37aa0b3d5d",
+    ".local/phase1/round3/temporal-v1/increment/batch-000/manifest.json": "1dbea5920bc69409e4206e17aa2a464d9ff208ba28108ac84fea3312782bcdc9",
+    ".local/phase1/round3/temporal-v1/increment/batch-000/shard-0/deepseek-v4.1-flash-1017/ledger.json": "e150f9901e1a350399d151cf912c2e65ca11199b8d28ad8f87c78d56d9ef210b",
+    ".local/phase1/round3/temporal-v1/increment/batch-000/shard-0/glm-5-2-260617/ledger.json": "b9f9e4a5d1b7f48e21cedd0bec60e5f02c9558e68ed80231e211b047ed89a6d0",
+    ".local/phase1/round3/temporal-v1/increment/batch-000/shard-1/deepseek-v4.1-flash-1017/ledger.json": "a8a43b49b129843c15a343f3814ffe45cd0cea7587e4d3505117452747351516",
+    ".local/phase1/round3/temporal-v1/increment/batch-000/shard-1/glm-5-2-260617/ledger.json": "e9aa02efded5dca743b4776de212a57d60522efe7e5bc3e50b01d51febe04881",
+    ".local/phase1/round3/temporal-v1/increment/manifest.json": "49dc25e6b9f0b07990b5f9c3b10396b32bf4d7f59074bc53ad4aafdc413d1371",
     ".local/phase1/round3/temporal-v1/owner-final/report.json": "f7249e84d03a8e47b8d8dd3c92bf4a26b867ccb80a8a2372cca31f77d85b908b",
     ".local/phase1/round3/temporal-v1/screen/deepseek-v4.1-flash-1017/ledger.json": "15763b3381687a00c5987bc22f03e70aa69ed7818258c53964829b1138875a50",
     ".local/phase1/round3/temporal-v1/screen/glm-5-2-260617/ledger.json": "4db92baed58159054c3c6779e00c9d321ed31a090b4361721491ed3651857293",
