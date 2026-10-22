@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-22T07:18:21.438876+00:00",
-  "code_commit": "e1b36a613e41274fe8f122d8963b95edb6b2ba4d",
+  "generated_at": "2026-10-22T08:01:26.552632+00:00",
+  "code_commit": "d9b2936b79b1ac67b14474a418cf0a88f91be978",
   "tracked_changes": true,
   "python": "3.12.3",
   "plan": {
@@ -10,16 +10,167 @@
     "source_message_id": "om_x100b62ae48d290b8dd72c5b51feec54",
     "execution": "latest plan plus latest explicit owner temporal/audit instructions; phase1 only",
     "changes": [
-      "PAL-Set optional after phase2, excluded from phase1 gold and recall",
-      "long-term/short-term design: phase1 long-term only",
-      "quota-based annotator replacement now automatic; whole affected side relabeled"
+      "新增PAL-Set：阶段2之后可选，不计入阶段1金标或召回",
+      "新增两层记忆设计：阶段1只做长期记忆；短期TTL以后可选，本轮未实现",
+      "额度不足可自动替换标注模型；受影响侧按冻结批整批重标，旧标签留历史不混用"
     ],
     "remaining_internal_conflicts": [
-      "role-table says two backups but explicit judge selection says one; execute one",
-      "role-table still lists old DeepSeek/MiMo; actual replacements explicitly authorized",
-      "native22/old711 references remain historical; use verified owner returns/current registry"
+      "旧角色表写两个备选，与负责人后续至少一个不一致，按后续至少一个执行",
+      "旧角色表仍列DeepSeek/MiMo，实际采用负责人已授权的替代组合，按每批来源记录",
+      "原生22/旧711属于历史规模，当前使用真实回填及当前登记，不沿用旧总数"
     ]
   },
+  "current_candidate_catalog": {
+    "at": "2026-10-22T07:28:41.383387+00:00",
+    "http": 200,
+    "models": [
+      {
+        "id": "deepseek/deepseek-flash",
+        "name": "DeepSeek-V4.1-Flash-1017",
+        "status": "online",
+        "owned_by": null
+      },
+      {
+        "id": "deepseek/deepseek-v4-flash-vision-exp",
+        "name": "DeepSeek-V4-Flash-Vision-Exp",
+        "status": "online",
+        "owned_by": null
+      },
+      {
+        "id": "glm-5.2",
+        "name": "GLM-5.2",
+        "status": "online",
+        "owned_by": null
+      },
+      {
+        "id": "hunyuan-turbos-vision-video-20250728",
+        "name": "HY-Vision-Video",
+        "status": "online",
+        "owned_by": null
+      },
+      {
+        "id": "hy-role",
+        "name": "Hy-Role",
+        "status": "online",
+        "owned_by": null
+      },
+      {
+        "id": "hunyuan-role-latest",
+        "name": "Hy-Role-Latest",
+        "status": "online",
+        "owned_by": null
+      },
+      {
+        "id": "youtu-vita",
+        "name": "YT-VITA",
+        "status": "discontinued",
+        "owned_by": null
+      }
+    ]
+  },
+  "json_schema_api_probe": {
+    "at": "2026-10-22T07:54:06.277400+00:00",
+    "model": "hunyuan-turbos-vision-video-20250728",
+    "fictional_only": true,
+    "quality_evidence": false,
+    "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
+    "schema_unmodified": true,
+    "calls": 1,
+    "http": 200,
+    "usage": {
+      "prompt_tokens": 1884,
+      "completion_tokens": 1023,
+      "total_tokens": 2907,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens_details": {
+        "reasoning_tokens": 0
+      }
+    },
+    "schema_valid": 0,
+    "citation_valid": 0,
+    "items": 8,
+    "observed_disabled_thinking": true
+  },
+  "packet_size_transport_probe": [
+    {
+      "size": 1,
+      "transport_complete": true,
+      "schema_valid": 1,
+      "citation_valid": 1,
+      "items": 1,
+      "model": "hunyuan-turbos-vision-video-20250728",
+      "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
+      "quality_evidence": false,
+      "candidate_modified": false,
+      "validation_relaxed": false
+    },
+    {
+      "size": 2,
+      "transport_complete": true,
+      "schema_valid": 0,
+      "citation_valid": 0,
+      "items": 2,
+      "model": "hunyuan-turbos-vision-video-20250728",
+      "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
+      "quality_evidence": false,
+      "candidate_modified": false,
+      "validation_relaxed": false
+    },
+    {
+      "size": 4,
+      "transport_complete": true,
+      "schema_valid": 0,
+      "citation_valid": 0,
+      "items": 4,
+      "model": "hunyuan-turbos-vision-video-20250728",
+      "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
+      "quality_evidence": false,
+      "candidate_modified": false,
+      "validation_relaxed": false
+    }
+  ],
+  "single_packet_actual_controls": {
+    "controls": [
+      {
+        "position": 0,
+        "complete": true,
+        "schema_valid": true,
+        "citation_valid": true
+      },
+      {
+        "position": 100,
+        "complete": true,
+        "schema_valid": true,
+        "citation_valid": true
+      },
+      {
+        "position": 200,
+        "complete": true,
+        "schema_valid": true,
+        "citation_valid": true
+      },
+      {
+        "position": 400,
+        "complete": true,
+        "schema_valid": true,
+        "citation_valid": true
+      },
+      {
+        "position": 550,
+        "complete": true,
+        "schema_valid": true,
+        "citation_valid": true
+      }
+    ],
+    "all_format_and_quote_checks_passed": true,
+    "human_quality_evidence": false,
+    "prompt_unchanged": true,
+    "validation_unchanged": true,
+    "blind_pool_excluded_debug_items": 8
+  },
+  "private_audit_structure_verification": null,
   "cache_refresh_incident": {
     "duplicate_current_other_side": {
       "completed_posts": 14,
@@ -36,10 +187,11 @@
   },
   "remaining_source_inventory": {
     "eligible_unused_before_increment": 1392,
-    "unique_dialogues_selected_in_any_increment_attempt": 400,
-    "unused_not_selected_remaining": 992,
-    "selected_candidate_slots": 2291,
-    "unfinished_selected_batches_not_claimed_unused": true
+    "unique_dialogues_selected_in_any_increment_attempt": 500,
+    "unused_not_selected_remaining": 892,
+    "selected_candidate_slots": 2849,
+    "unfinished_selected_batches_not_claimed_unused": true,
+    "selected_not_in_complete_batches": 100
   },
   "adoption_projection": {
     "human_confirmed": 154,
@@ -109,10 +261,10 @@
       "batch": 3,
       "model": "deepseek/deepseek-v4-flash-vision-exp",
       "expected": 568,
-      "completed": 296,
-      "keep": 43,
-      "temporary": 8,
-      "citation_invalid": 2
+      "completed": 568,
+      "keep": 80,
+      "temporary": 12,
+      "citation_invalid": 7
     },
     {
       "batch": 3,
@@ -122,16 +274,34 @@
       "keep": 140,
       "temporary": 50,
       "citation_invalid": 87
+    },
+    {
+      "batch": 4,
+      "model": "deepseek/deepseek-v4-flash-vision-exp",
+      "expected": 558,
+      "completed": 558,
+      "keep": 75,
+      "temporary": 23,
+      "citation_invalid": 3
+    },
+    {
+      "batch": 4,
+      "model": "hunyuan-turbos-vision-video-20250728",
+      "expected": 558,
+      "completed": 255,
+      "keep": 26,
+      "temporary": 222,
+      "citation_invalid": 26
     }
   ],
   "production_projection": {
     "target_joint_survivors": 549,
     "historical_joint_rate": 0.43081312410841655,
     "temporal_pool_survival_rate": 0.8150943396226416,
-    "estimated_joint_rate": 0.12362159024956472,
-    "candidate_estimate": 4441,
-    "dialogue_estimate": 787,
-    "post_call_estimate_both_models": 1112,
+    "estimated_joint_rate": 0.12090790048013968,
+    "candidate_estimate": 4541,
+    "dialogue_estimate": 805,
+    "post_call_estimate_both_models": 1136,
     "assumption_only": true,
     "not_a_claim_of_reliable_points": true,
     "reserve_before_increment": 1392,
@@ -150,7 +320,7 @@
     "optimistic_candidate_estimate": 4066,
     "optimistic_dialogue_estimate": 721,
     "optimistic_post_call_estimate": 1018,
-    "joint_precision_or_yield_unknown_until_both_sides_complete": true,
+    "joint_precision_or_yield_unknown_until_both_sides_complete": false,
     "retired_preselected_projection": {
       "candidate_estimate": 1564,
       "dialogue_estimate": 278,
@@ -158,16 +328,44 @@
       "estimated_joint_rate": 0.3511533388959169
     },
     "estimate_kind": "conditional completed-batch joint yield extrapolation; not quality or adopted count",
-    "observed_joint_keep": 213,
-    "observed_joint_candidates": 1723
+    "observed_joint_keep": 277,
+    "observed_joint_candidates": 2291,
+    "remaining_joint_target": 272,
+    "remaining_candidate_estimate": 2250,
+    "remaining_dialogue_estimate": 399,
+    "remaining_post_estimate_two_sides_at_batch8": 564,
+    "executable_model_pair_currently_available": null,
+    "assumption": "future fully qualified pair must become available; observed yield may not transfer to another pair; no capacity or quality claim",
+    "transport_packet_sizes": {
+      "deepseek/deepseek-v4-flash-vision-exp": 8,
+      "hunyuan-turbos-vision-video-20250728": 1
+    },
+    "single_packet_complete_candidate_call_estimate": 5109,
+    "single_packet_remaining_candidate_call_estimate": 2532,
+    "single_packet_observed_token_means": {
+      "deepseek/deepseek-v4-flash-vision-exp": {
+        "observed_requests": 141,
+        "observed_candidate_items": 1126,
+        "reported_tokens": 530876,
+        "mean_tokens_per_item": 471.47069271758437
+      },
+      "hunyuan-turbos-vision-video-20250728": {
+        "observed_requests": 257,
+        "observed_candidate_items": 257,
+        "reported_tokens": 537568,
+        "mean_tokens_per_item": 2091.704280155642
+      }
+    },
+    "quota_sufficiency_not_inferred": true,
+    "single_packet_remaining_tokens_conditional_estimate": 5767144
   },
   "validation": {
-    "pytest_passed": 428,
-    "pytest_seconds": 18.15,
+    "pytest_passed": 430,
+    "pytest_seconds": 18.14,
     "ruff_passed": true,
     "strict_mypy_source_files": 98,
     "foundation_passed": true,
-    "log_sha256": "69adc1fa9c97e2e1daeb3aab2c5cde4f1bad384dddaeeca75caccc6afc75e749"
+    "log_sha256": "76ca36742d33347a08225510857e9e3a390f960288c9002ab9a754b973ba9f96"
   },
   "screen": {
     "created_at": "2026-10-22T05:36:20.707891+00:00",
@@ -369,6 +567,36 @@
         "program_uncertain": 82,
         "path": ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-002-attempt-00/batch-002",
         "whole_batch_frozen": true
+      },
+      {
+        "batch": 3,
+        "conversations": 100,
+        "candidates": 568,
+        "joint_keep": 64,
+        "temporal_removed": 57,
+        "citation_invalid": 80,
+        "per_model": {
+          "deepseek/deepseek-v4-flash-vision-exp": {
+            "keep": 80,
+            "temporary": 12,
+            "citation_invalid": 7
+          },
+          "hy-role": {
+            "keep": 140,
+            "temporary": 50,
+            "citation_invalid": 87
+          }
+        },
+        "models": [
+          "deepseek/deepseek-v4-flash-vision-exp",
+          "hy-role"
+        ],
+        "gold_adopted": false,
+        "invalid_evidence_total": 92,
+        "schema_invalid": 12,
+        "program_uncertain": 92,
+        "path": ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-003-attempt-00/batch-003",
+        "whole_batch_frozen": true
       }
     ],
     "new_points_adopted": 0
@@ -387,6 +615,14 @@
       "batch": 3,
       "from": "deepseek-v4-flash-202605",
       "to": "deepseek/deepseek-v4-flash-vision-exp",
+      "reason": "quota",
+      "scope": "entire affected side of current fixed batch",
+      "retired_partial_used": false
+    },
+    {
+      "batch": 4,
+      "from": "hy-role",
+      "to": "hunyuan-turbos-vision-video-20250728",
       "reason": "quota",
       "scope": "entire affected side of current fixed batch",
       "retired_partial_used": false
@@ -410,7 +646,9 @@
       "Tencent"
     ],
     "increment_models": [
+      "deepseek-v4-flash-202605",
       "deepseek/deepseek-v4-flash-vision-exp",
+      "hunyuan-role-latest",
       "hy-role"
     ],
     "increment_vendor_independent_historically_preflighted_judge_vendors": [
@@ -423,13 +661,13 @@
       "MiniMax",
       "Moonshot"
     ],
-    "latest_availability_issue": "Ark GLM SetLimitExceeded during actual increment; Tencent GLM historical402; no new judge calls made",
+    "latest_availability_issue": "Ark GLM SetLimitExceeded during actual increment; Tencent GLM current full-schema control on 2026-10-22 also HTTP402/code401008; no formal judge scoring calls made",
     "old_pool_qualified_available_judges": [],
     "qualified_backup_count": 0,
     "required_backups": 1,
     "backup_gap": 1,
     "main_judge_missing": true,
-    "note": "Old265 pool uses GLM temporal screening, so Zhipu cannot judge that pool. New increment uses DeepSeek+Tencent and may use Zhipu by vendor independence, but Ark GLM hit SetLimitExceeded this run; Tencent GLM last HTTP402 is historical, current availability not reverified. No currently available qualified judge is asserted. Other listed vendor-independent options are not technical qualification; human calibration remains incomplete."
+    "note": "Old265 pool uses GLM temporal screening, so Zhipu cannot judge that pool. New increment uses DeepSeek+Tencent and may use Zhipu by vendor independence, but Ark GLM hit SetLimitExceeded this run; Tencent GLM on 2026-10-22 again HTTP402/code401008. No currently available qualified judge is asserted. Other listed vendor-independent options are not technical qualification; human calibration remains incomplete."
   },
   "new_replacement_qualification": [
     {
@@ -596,6 +834,23 @@
   ],
   "full_schema_qualification": [
     {
+      "model": "deepseek/deepseek-flash",
+      "provider": "TokenHub",
+      "qualified_at": "2026-10-22T07:24:19.461738+00:00",
+      "fictional_only": true,
+      "schema": "full v3 plus temporal",
+      "consistent_5": true,
+      "format_n": 100,
+      "format_valid": 100,
+      "distinct_inputs": 100,
+      "observed_disabled_thinking": true,
+      "calls": 105,
+      "reported_tokens": 142662,
+      "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
+      "temperature_requested": 0,
+      "passed": true
+    },
+    {
       "model": "deepseek/deepseek-v4-flash-vision-exp",
       "provider": "TokenHub",
       "qualified_at": "2026-10-22T06:55:09.057753+00:00",
@@ -611,6 +866,40 @@
       "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
       "temperature_requested": 0,
       "passed": true
+    },
+    {
+      "model": "deepseek-v4-flash-0731",
+      "provider": "TokenHub",
+      "qualified_at": "2026-10-22T07:23:44.741705+00:00",
+      "fictional_only": true,
+      "schema": "full v3 plus temporal",
+      "consistent_5": false,
+      "format_n": 0,
+      "format_valid": 0,
+      "distinct_inputs": 0,
+      "observed_disabled_thinking": false,
+      "calls": 1,
+      "reported_tokens": 0,
+      "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
+      "temperature_requested": 0,
+      "passed": false
+    },
+    {
+      "model": "glm-5.2",
+      "provider": "TokenHub",
+      "qualified_at": "2026-10-22T07:26:00.262373+00:00",
+      "fictional_only": true,
+      "schema": "full v3 plus temporal",
+      "consistent_5": false,
+      "format_n": 0,
+      "format_valid": 0,
+      "distinct_inputs": 0,
+      "observed_disabled_thinking": false,
+      "calls": 1,
+      "reported_tokens": 0,
+      "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
+      "temperature_requested": 0,
+      "passed": false
     },
     {
       "model": "hunyuan-turbos-vision-video-20250728",
@@ -730,6 +1019,26 @@
       "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f",
       "temperature_requested": 0,
       "passed": false
+    },
+    {
+      "model": "youtu-vita",
+      "provider": "TokenHub",
+      "qualified_at": "2026-10-22T07:29:10.648822+00:00",
+      "fictional_only": true,
+      "schema": "full v3 plus temporal",
+      "consistent_5": true,
+      "format_n": 55,
+      "format_valid": 17,
+      "distinct_inputs": 55,
+      "observed_disabled_thinking": false,
+      "calls": 60,
+      "reported_tokens": 85006,
+      "potential_interrupted_request_usage_unknown": 1,
+      "passed": false,
+      "catalog_status": "discontinued",
+      "stopped_reason": "current catalog marks discontinued; stop preflight, do not enroll despite successful virtual responses",
+      "source_status_file": ".local/phase1/round3/temporal-v1/candidate-current-status.json",
+      "temperature_requested": 0
     }
   ],
   "retired_repeated_probe": [
@@ -745,36 +1054,50 @@
     }
   ],
   "calls": {
-    "qualification_attempts": 913,
+    "qualification_attempts": 1079,
+    "qualification_potential_inflight_without_response": 2,
+    "qualification_attempts_upper_bound": 1081,
+    "qualification_reported_tokens": 924303,
     "transport_extra_attempts": 13,
     "transport_schema_invalid_attempts": 13,
-    "post_attempts": 931,
-    "reported_tokens": 3731683,
+    "post_attempts": 1338,
+    "reported_tokens": 4832641,
     "unique_ledger_records_by_model": {
       "deepseek-v4.1-flash-1017": 117,
       "glm-5-2-260617": 103,
       "deepseek-v4-flash-202605": 416,
-      "hy-role": 266,
+      "hy-role": 292,
+      "deepseek/deepseek-v4-flash-vision-exp": 297,
+      "hunyuan-turbos-vision-video-20250728": 285,
       "hunyuan-role-latest": 253,
-      "deepseek/deepseek-v4-flash-vision-exp": 55,
       "hy4-preview": 11
     },
     "post_attempts_by_model": {
       "deepseek-v4-flash-202605": 269,
       "deepseek-v4.1-flash-1017": 117,
-      "deepseek/deepseek-v4-flash-vision-exp": 37,
+      "deepseek/deepseek-v4-flash-vision-exp": 141,
       "glm-5-2-260617": 103,
       "hunyuan-role-latest": 190,
-      "hy-role": 191,
+      "hunyuan-turbos-vision-video-20250728": 277,
+      "hy-role": 217,
       "hy4-preview": 11
     },
-    "potential_inflight_without_response": 6,
-    "genuine_cached_response_replays": 293
+    "potential_inflight_without_response": 8,
+    "genuine_cached_response_replays": 437,
+    "transport_schema_probe_calls": 1,
+    "transport_schema_probe_reported_tokens": 2907,
+    "total_known_post_attempts": 2418,
+    "total_potential_unknown_requests": 10,
+    "total_reported_tokens": 5759851,
+    "catalog_gets": 1
   },
   "private_evidence_hashes": {
     ".local/phase1/round3/temporal-v1/diverse-annotation-qualification/hunyuan-role-latest/report.json": "ab9e4e9d24da03b22df36229db27625d4c9b415616db00b450fbca70f8734b38",
     ".local/phase1/round3/temporal-v1/ecd-owner/report.json": "6d11a9528511987c5b67ea404ddb7e68915bac0a9af68191a2543f37aa0b3d5d",
+    ".local/phase1/round3/temporal-v1/full-annotation-qualification/deepseek-deepseek-flash/report.json": "363eaae78ce446a50b6fdc9b3ae1f38b2789c668e4f363ed1708f979908c899d",
     ".local/phase1/round3/temporal-v1/full-annotation-qualification/deepseek-deepseek-v4-flash-vision-exp/report.json": "1341db40bd0159f53985939f8c5caa90f123cf8c277e64277cca662400e9a147",
+    ".local/phase1/round3/temporal-v1/full-annotation-qualification/deepseek-v4-flash-0731/report.json": "9d72b354b5e4f506c709d0a7ccc301534bd7751e28fce97f5594e58efdef784a",
+    ".local/phase1/round3/temporal-v1/full-annotation-qualification/glm-5.2/report.json": "d0d53f23f879003bdc1b512a19e8027d0caf985161809001db6413debd39aa27",
     ".local/phase1/round3/temporal-v1/full-annotation-qualification/hunyuan-turbos-vision-video-20250728/report.json": "78bab90047552f025fe6893ba1208ccd1dd10c9c02692a61d4d72d2aa32a8def",
     ".local/phase1/round3/temporal-v1/full-annotation-qualification/hy-role/report.json": "2b6e7f8823cceaee2e614f5c7dcd964b3374f83c92be930818bdbee3b85e0d79",
     ".local/phase1/round3/temporal-v1/full-annotation-qualification/hy-vision-2.0-instruct/report.json": "aeaf4f1b058b51d78073437574ec5077d88fa045e8056014748c74f8e54852e1",
@@ -782,6 +1105,7 @@
     ".local/phase1/round3/temporal-v1/full-annotation-qualification/mimo-v2.6-pro/report.json": "e479adce5eda4bf8e1d4405d16e947073121277a58461155bb54517abd205e50",
     ".local/phase1/round3/temporal-v1/full-annotation-qualification/minimax-m3.1-flash/report.json": "86c9ebf34ee5a59d738d98ddfb2474ce9c76d697391568bb408509f470963947",
     ".local/phase1/round3/temporal-v1/full-annotation-qualification/step-5-preview/report.json": "4f87c91b2a4c10e5d69d343015ee53be34e5168f6c5286f195df8586b665fcc3",
+    ".local/phase1/round3/temporal-v1/full-annotation-qualification/youtu-vita/report.json": "18a920ba26722888e845b15bbcd0849d200b5f6933d35fbcff1a2c186445ffb6",
     ".local/phase1/round3/temporal-v1/increment/batch-000/manifest.json": "1dbea5920bc69409e4206e17aa2a464d9ff208ba28108ac84fea3312782bcdc9",
     ".local/phase1/round3/temporal-v1/increment/batch-000/shard-0/deepseek-v4.1-flash-1017/ledger.json": "e150f9901e1a350399d151cf912c2e65ca11199b8d28ad8f87c78d56d9ef210b",
     ".local/phase1/round3/temporal-v1/increment/batch-000/shard-0/glm-5-2-260617/ledger.json": "b9f9e4a5d1b7f48e21cedd0bec60e5f02c9558e68ed80231e211b047ed89a6d0",
@@ -797,6 +1121,12 @@
     ".local/phase1/round3/temporal-v1/increment-attempt-2/batch-000/shard-1/hy-role/failed-before-strict-retry/ledger.json": "32121934b1957d6e724d83370f5a0a9b840866b8101af2bb8419cce6feea6cdc",
     ".local/phase1/round3/temporal-v1/increment-attempt-2/batch-000/shard-1/hy-role/ledger.json": "8eb35b2c583fbbf088be1d0c41b1464f2d2a9b9cc1d1a5e6dda98fff41a6f465",
     ".local/phase1/round3/temporal-v1/increment-attempt-2/manifest.json": "a021839ed5b42f5dd04067145462b7e215e92758294b1323479ffc2186ec235f",
+    ".local/phase1/round3/temporal-v1/increment-batches-single-packet-v1/cohort-004-attempt-00/batch-004/manifest.json": "57f396c8c67a084e3843a01f6447dc0f62d7b758a8e237e409013d7f2146ef0c",
+    ".local/phase1/round3/temporal-v1/increment-batches-single-packet-v1/cohort-004-attempt-00/batch-004/shard-0/deepseek-deepseek-v4-flash-vision-exp/ledger.json": "279edce67ab78613e4096216ac4b66b03e99b2c226ea106f2a06586cba35a72b",
+    ".local/phase1/round3/temporal-v1/increment-batches-single-packet-v1/cohort-004-attempt-00/batch-004/shard-0/hunyuan-turbos-vision-video-20250728/ledger.json": "f47a060f9154392355f13bf8f750d6a1cd3bc5a6927549b7a1c2003280c018d8",
+    ".local/phase1/round3/temporal-v1/increment-batches-single-packet-v1/cohort-004-attempt-00/batch-004/shard-1/deepseek-deepseek-v4-flash-vision-exp/ledger.json": "598d6681988910239ed6bc78a2d6473ccb237c43c4fe33cbd917d86e365095d1",
+    ".local/phase1/round3/temporal-v1/increment-batches-single-packet-v1/cohort-004-attempt-00/batch-004/shard-1/hunyuan-turbos-vision-video-20250728/ledger.json": "46687457a13c8211dca864d3708792c24b8d478b46ce61ad3f70a8401d96f237",
+    ".local/phase1/round3/temporal-v1/increment-batches-single-packet-v1/manifest.json": "36537ecbdb43dbc38647eadc2818a47ed4e243764369529b5f402c8b3436a21b",
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/audit72/manifest.json": "edb464ef8317a1b4ee2a898ba3477aa180fa312d3085f5882b5607af75a7023d",
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/cohort-000-attempt-00/batch-000/manifest.json": "00abf170b1c0d508dab0857b86681cedad84c107cc6f88ae0828a25929c48672",
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v1/cohort-000-attempt-00/batch-000/report.json": "f5f4b2ef6d51e2574c207cc846c1796046e0996d7aaefc28c6564817273fc920",
@@ -835,12 +1165,25 @@
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/cohort-003-attempt-01/batch-003/shard-1/hy-role/ledger.json": "18a03f31167e4a5477b69365cb0d61c8d149d0bcedc5694fee9d76afc4a39599",
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/manifest.json": "c6422c7615e37d7ff392832c010b86b28358c6b53ee870711a21cb4e8550c590",
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v2/report.json": "8d693aedb965612252dedc1a77decaf8a0fe046b0184b29324a96137e7901a4f",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/audit72/manifest.json": "2ca4ab0d0a2e168429cfa6272a5315f403560259ed4813dc4650b96af1f560f7",
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-003-attempt-00/batch-003/manifest.json": "21f2dc796a8805de6ced79b756c116ba997636aca39bb1ec190e77d97ea76843",
-    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-003-attempt-00/batch-003/shard-0/deepseek-deepseek-v4-flash-vision-exp/ledger.json": "0dadb445e0033296b075330318bab286e094da2d5efe71cc168cd0914714086b",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-003-attempt-00/batch-003/report.json": "bd62cc2937608422b5b0d357af9aaa7a92a72e3c85a3dbbccb8f520fc93dc0a2",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-003-attempt-00/batch-003/shard-0/deepseek-deepseek-v4-flash-vision-exp/ledger.json": "c497c1a1ac08cd7eefdc97349d99a311e52ec49c99a3b8e2e838bbc4139c8240",
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-003-attempt-00/batch-003/shard-0/hy-role/ledger.json": "60b555fc286274a66ae595ab15e94ada8800cf9c4e3d991ae372d12d2bac3c67",
-    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-003-attempt-00/batch-003/shard-1/deepseek-deepseek-v4-flash-vision-exp/ledger.json": "c8929fafb517967be2211e16867ed455328773283d184dbd4ca7477c5fbdaadc",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-003-attempt-00/batch-003/shard-1/deepseek-deepseek-v4-flash-vision-exp/ledger.json": "836352cde90f7751d19dbacb80c194efae2831ca6d23c649b6e0a82949c0b90c",
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-003-attempt-00/batch-003/shard-1/hy-role/ledger.json": "58041041e113a336b9bb382c6587eac0a83ed1ce31ffc14c52cb2c0750c8fef2",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-004-attempt-00/batch-004/manifest.json": "80819c2ec0686189a83e86d678ff8a9d8880f004a4caa7402a28b13edbc1a44c",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-004-attempt-00/batch-004/shard-0/deepseek-deepseek-v4-flash-vision-exp/ledger.json": "bdfff4ecbf772cd43ba5c3149282f25912059785d7ac4664d2864aa424547a8b",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-004-attempt-00/batch-004/shard-0/hy-role/ledger.json": "4f666ced42f3c6e83fd238e022c09655d26a04c92646684e93971793947ae4b2",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-004-attempt-00/batch-004/shard-1/deepseek-deepseek-v4-flash-vision-exp/ledger.json": "1e443515eefa1ff4c9de40ff52ed6840ea378ca7dad28ccb2c4177a377f951d3",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-004-attempt-00/batch-004/shard-1/hy-role/ledger.json": "a20402ec51997f0a1329fc0db49b00e1ef2d2d1514ac75f06ca7e9b88620f6d8",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-004-attempt-01/batch-004/manifest.json": "57f396c8c67a084e3843a01f6447dc0f62d7b758a8e237e409013d7f2146ef0c",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-004-attempt-01/batch-004/shard-0/deepseek-deepseek-v4-flash-vision-exp/ledger.json": "7e76327ae089cb640d90fa98456d49b90c25ccfca7e95bd57b0b07a09d4b9d56",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-004-attempt-01/batch-004/shard-0/hunyuan-turbos-vision-video-20250728/ledger.json": "9f6202aafcfb7b348724e4b9febed80fd56abb80eae0e0509e8f11c777e7d051",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-004-attempt-01/batch-004/shard-1/deepseek-deepseek-v4-flash-vision-exp/ledger.json": "10435d64bf0261faa5090917d5ce67165dd8befa6c7932346a7dae41e1a16c5f",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-004-attempt-01/batch-004/shard-1/hunyuan-turbos-vision-video-20250728/ledger.json": "923fd694d62f83fb83e301aa080dc49b07f8edc1dded3289b9253a9cf5a2ecea",
     ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/manifest.json": "b82bedcc332cb8b0ce7f031ca8c6ca8c600dc97786e3899721dd8bc9adb7ded1",
+    ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/report.json": "52f60a1182c92e10d5ed2de5ef149e12795508f86a737c24c0fd9604947b6a9e",
     ".local/phase1/round3/temporal-v1/increment-batches-v1/cohort-000-attempt-00/batch-000/manifest.json": "00abf170b1c0d508dab0857b86681cedad84c107cc6f88ae0828a25929c48672",
     ".local/phase1/round3/temporal-v1/increment-batches-v1/cohort-000-attempt-00/batch-000/shard-0/deepseek-v4-flash-202605/failed-before-strict-retry/ledger.json": "ee8ae66d60f8fb7275e6e779630fc5e215eb8d3d9110a6293dadb7d22492aa4f",
     ".local/phase1/round3/temporal-v1/increment-batches-v1/cohort-000-attempt-00/batch-000/shard-0/deepseek-v4-flash-202605/ledger.json": "e8a1946e8bdc926d59271b24c7ca2a73598e17c1db9e4b33a1767da14c4d3447",
@@ -849,12 +1192,23 @@
     ".local/phase1/round3/temporal-v1/increment-batches-v1/cohort-000-attempt-00/batch-000/shard-1/hunyuan-role-latest/ledger.json": "0c1171f4051f9c14794e4b784dea542f5fd39a0753dcc2e4858acfcde2d0daa8",
     ".local/phase1/round3/temporal-v1/increment-batches-v1/manifest.json": "f670c9f219a43eab0a98e1953c72b49b113b312c225dbf88ff0379a252240975",
     ".local/phase1/round3/temporal-v1/increment-batches-v1/report.json": "4bbf284bc7de903e1f1eac3f6110bfbbf524189e1c077e5022a41d71c919336f",
+    ".local/phase1/round3/temporal-v1/json-schema-probe-v1/report.json": "85a441d89517baef584d9a91dd85a2c82014c27e0e9891d9b827b23d83f7ace2",
     ".local/phase1/round3/temporal-v1/owner-final/report.json": "f7249e84d03a8e47b8d8dd3c92bf4a26b867ccb80a8a2372cca31f77d85b908b",
+    ".local/phase1/round3/temporal-v1/packet-size-probe-v1/report.json": "aa6f28673edcb265dd0ac42fa0e75d63f5a2e380e61f5bb6bfa2c0b1d66e36c8",
+    ".local/phase1/round3/temporal-v1/packet-size-probe-v1/size-1/hunyuan-turbos-vision-video-20250728/ledger.json": "dabbc2dc200adf2ddf4d5976531965d2ff53b9555a1c46ef7fed72b1d299f3a2",
+    ".local/phase1/round3/temporal-v1/packet-size-probe-v1/size-2/hunyuan-turbos-vision-video-20250728/ledger.json": "5b3e442cf1f303468343bf044b56b266f3bea4d34417a01485c113a4987e91f9",
+    ".local/phase1/round3/temporal-v1/packet-size-probe-v1/size-4/hunyuan-turbos-vision-video-20250728/ledger.json": "4c9b107feb23e4063d39e382dcfa7383ac71e2c81dc8c0624ba7dda175c72b0b",
     ".local/phase1/round3/temporal-v1/screen/deepseek-v4.1-flash-1017/ledger.json": "15763b3381687a00c5987bc22f03e70aa69ed7818258c53964829b1138875a50",
     ".local/phase1/round3/temporal-v1/screen/glm-5-2-260617/ledger.json": "4db92baed58159054c3c6779e00c9d321ed31a090b4361721491ed3651857293",
     ".local/phase1/round3/temporal-v1/screen/hy4-preview/ledger.json": "9012febc4225168ae6622e585ddef66d053487482564ae538eb3fbae225cad5e",
     ".local/phase1/round3/temporal-v1/screen/manifest.json": "def2154b38d5752682c892e54aa76d985b28e0a3fb5af0741e5979648b529114",
     ".local/phase1/round3/temporal-v1/screen/report.json": "76f3701d709ea584b0bd0985d2a04412b1f75eaf1732066daf782114ddb2712a",
+    ".local/phase1/round3/temporal-v1/single-packet-real-controls-v1/position-0/hunyuan-turbos-vision-video-20250728/ledger.json": "f50d015d38e71777ae651bf671cd5130f31cf865011bf0a0d5784ca974c5ec7e",
+    ".local/phase1/round3/temporal-v1/single-packet-real-controls-v1/position-100/hunyuan-turbos-vision-video-20250728/ledger.json": "fad269046a273fa69dfaedcafcf32bb31ef0bd52546460ddc67345c6cc24cd11",
+    ".local/phase1/round3/temporal-v1/single-packet-real-controls-v1/position-200/hunyuan-turbos-vision-video-20250728/ledger.json": "6dc0fcfff02891546127f15146067a4ab389b2cf76bf58e60835260a3c494874",
+    ".local/phase1/round3/temporal-v1/single-packet-real-controls-v1/position-400/hunyuan-turbos-vision-video-20250728/ledger.json": "e5d02942ba21cf8f33423646a7f3a4c963681923d17e01075c58a76a304518b5",
+    ".local/phase1/round3/temporal-v1/single-packet-real-controls-v1/position-550/hunyuan-turbos-vision-video-20250728/ledger.json": "0ebbd0c959024f3556c85c19c94677b28a492e55b549e58c28efb72dd9fa89a6",
+    ".local/phase1/round3/temporal-v1/single-packet-real-controls-v1/report.json": "dd686374e2b9deb71a5fa1b9fd94db3302e3b917115010c72f06ef4fd1fceddb",
     ".local/phase1/round3/temporal-v1/transport-retries/002f51b76c8548a382547e5cd123fe69/ledger.json": "e209a3ad8d249aff2d3ac5466223142cb983941272f50331cb0f7bd9362ffddd",
     ".local/phase1/round3/temporal-v1/transport-retries/04fc3d986d424803bd426124206f1e40/ledger.json": "c4b106d84b484c465d1a1608e11dce5a62717972d69b122ea7fcb3912ceb0db3",
     ".local/phase1/round3/temporal-v1/transport-retries/06b846ee1cf74092bb80300fb6eb921e/ledger.json": "aa50ff8ed166b4d328bf306d755eb31d5cf2ff3af7f828f9019531d086674c2a",
@@ -956,19 +1310,19 @@
   "phase1_accepted": false,
   "owner_adoption_decision_pending": true,
   "increment_runtime_state": {
-    "active_batch_path": ".local/phase1/round3/temporal-v1/increment-batches-strict-output-v3/cohort-003-attempt-00/batch-003",
-    "completed_batches": 3,
+    "active_batch_path": ".local/phase1/round3/temporal-v1/increment-batches-single-packet-v1/cohort-004-attempt-00/batch-004",
+    "completed_batches": 4,
     "models": [
       "deepseek/deepseek-v4-flash-vision-exp",
-      "hy-role"
+      "hunyuan-turbos-vision-video-20250728"
     ],
     "blocked": null
   },
   "unfinished": [
-    "owner decision on old-pool temporal screening",
-    "incremental annotation/export incomplete",
-    "judge main/backup/calibration gaps",
-    "full negative dialogue count/proportion confirmation",
-    "ECD system false-extraction evaluation not run; intake only"
+    "旧池时效性筛选是否采用，等待负责人决定",
+    "增量标注或审核表导出未完成",
+    "当前可用裁判主备与人工校准仍有缺口",
+    "完整负样本会话数与负样本比例两个闸门尚未共同确认",
+    "ECD只完成真实回填接入；系统误抽评测未运行"
   ]
 }

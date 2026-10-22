@@ -343,3 +343,15 @@ hunyuan-role-latest在当前未完成批返回402；完整v3格式预检合格�
 {"duplicate_current_other_side": {"completed_posts": 14, "known_tokens": 56291, "interrupted_unknown_requests": 2}, "new_deepseek_side_not_duplicate": {"completed_posts": 14, "known_tokens": 54192, "interrupted_unknown_requests": 2}, "raw_ledgers_unchanged": true, "regression_test": "tests/unit/test_temporal_response_replay.py"}
 
 已完成的重复调用明确计入用量；中断时无响应usage未知，不按零推断。不是格式/引用标准的放宽。新备选预检仍在进行，不把未完成预检列为合格。阶段1仍未验收，新增候选未采纳。
+
+### 额度与调用分组故障分开；单条请求恢复（最新进行中）
+
+负责人询问是否所有模型额度耗尽，已明确回复：不是。部分型号真实402，另有仍可调用的腾讯型号却持续返回不合规多候选根结构；不能从局部调用失败推断所有余额。旧失败尝试已关闭并冻结完整批快照，未把失败侧纳入金标，也未发阶段性盲审包。
+
+继续定位发现相同模型/提示词/候选/严格校验下，单条请求可用，多条请求不合规。真实分组探测与分散真实输入控制均独立保留；这不是语义质量验证，不使用人工标签调提示词。用于排查的真实ID保守排除后续盲审与可采纳池。新的V5入口只改腾讯请求分组；当前受影响侧整批重标，旧无效响应不修复、不混入，另一完整侧真实响应缓存重验复用。先前“无可用批量组合”的结论仅属于旧多候选调用方式，不能据此说所有模型或所有额度不可用。
+
+脚本读取控制结果：
+
+{"packet_probe": [{"size": 1, "transport_complete": true, "schema_valid": 1, "citation_valid": 1, "items": 1, "model": "hunyuan-turbos-vision-video-20250728", "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f", "quality_evidence": false, "candidate_modified": false, "validation_relaxed": false}, {"size": 2, "transport_complete": true, "schema_valid": 0, "citation_valid": 0, "items": 2, "model": "hunyuan-turbos-vision-video-20250728", "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f", "quality_evidence": false, "candidate_modified": false, "validation_relaxed": false}, {"size": 4, "transport_complete": true, "schema_valid": 0, "citation_valid": 0, "items": 4, "model": "hunyuan-turbos-vision-video-20250728", "prompt_sha256": "a52a79fd5c027f4cfc09d54de409f220ba88eec1a2bb45b0fa3c8c782dbeab6f", "quality_evidence": false, "candidate_modified": false, "validation_relaxed": false}], "single_packet_controls": {"controls": [{"position": 0, "complete": true, "schema_valid": true, "citation_valid": true}, {"position": 100, "complete": true, "schema_valid": true, "citation_valid": true}, {"position": 200, "complete": true, "schema_valid": true, "citation_valid": true}, {"position": 400, "complete": true, "schema_valid": true, "citation_valid": true}, {"position": 550, "complete": true, "schema_valid": true, "citation_valid": true}], "all_format_and_quote_checks_passed": true, "human_quality_evidence": false, "prompt_unchanged": true, "validation_unchanged": true, "blind_pool_excluded_debug_items": 8}}
+
+接口JSON Schema参数另做一次完全虚构探测，实际返回仍不满足原严格结构，未采用。新增单条调用预算与token按真实响应均值重算，不能沿用双侧每请求八条的旧预算；不推断剩余额度足够。补量继续，当前人工规模不变、新增未采纳、阶段1未验收。完整四门日志check-final.log。

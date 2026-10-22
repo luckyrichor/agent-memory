@@ -11,12 +11,14 @@ from agent_memory.evals.temporal_preflight import virtual_item
 
 
 @pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "client_path",
+    ["scripts/temporal-annotation-client-v2.py", "scripts/temporal-annotation-client-v3.py"],
+)
 async def test_side_refreshes_completed_response_cache_before_batch_replacement(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, client_path: str
 ) -> None:
-    spec = importlib.util.spec_from_file_location(
-        "temporal_replay_regression", "scripts/temporal-annotation-client-v2.py"
-    )
+    spec = importlib.util.spec_from_file_location("temporal_replay_regression", client_path)
     assert spec and spec.loader
     client = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(client)
@@ -86,3 +88,55 @@ async def test_side_refreshes_completed_response_cache_before_batch_replacement(
     assert ledger[0]["attempts"] == []
     assert "usage" not in ledger[0]
     assert ledger[0]["cached_original_usage"]["total_tokens"] == 10
+
+
+@pytest.mark.asyncio
+async def test_turbo_uses_one_candidate_packets_without_repairing_model_output(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    spec = importlib.util.spec_from_file_location(
+        "temporal_single_packet_regression", "scripts/temporal-annotation-client-v3.py"
+    )
+    assert spec and spec.loader
+    client = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(client)
+    client.BASE = tmp_path / "private"
+    prompt = tmp_path / "prompt.txt"
+    prompt.write_text("Entirely fictional packet format regression.")
+    packets = []
+
+    async def fake_post(
+        http_client: Any, body: Any, token: Any, base: Any, entry: Any, directory: Any, offset: Any
+    ) -> dict[str, Any]:
+        payload = json.loads(body["messages"][-1]["content"])
+        packets.append(payload)
+        assert len(payload["items"]) == 1
+        entry.update(http=200, attempts=[{"http": 200}])
+        label = {
+            "item_id": payload["items"][0]["item_id"],
+            "label": "discard",
+            "reason": "missing",
+            "temporal": "长期",
+            "evidence": {dimension: [] for dimension in DIMENSIONS},
+        }
+        return {
+            "model": body["model"],
+            "choices": [
+                {"message": {"content": json.dumps({"labels": [label]})}, "finish_reason": "stop"}
+            ],
+            "usage": {"total_tokens": 10},
+        }
+
+    monkeypatch.setattr(client, "post", fake_post)
+    monkeypatch.setenv("TENCENT_BASE_URL", "https://example.invalid")
+    monkeypatch.setenv("TENCENT_API_KEY", "fictional-test-value")
+    rows = [virtual_item(0), virtual_item(1)]
+    model = "hunyuan-turbos-vision-video-20250728"
+    output = tmp_path / "single-packet"
+    assert await client.side(output, model, rows, prompt, "annotation")
+    assert len(packets) == 2
+    checked = [
+        json.loads(line) for line in (output / model / "checked.jsonl").read_text().splitlines()
+    ]
+    assert {row["item_id"] for row in checked} == {row["item_id"] for row in rows}
+    assert all(row["schema_valid"] and row["citation_valid"] for row in checked)
