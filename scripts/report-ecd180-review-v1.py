@@ -96,6 +96,8 @@ def main():
 
 > 🤖 由 Codex 生成 · {r['created_beijing'][:10]} · 来源 agent-memory@{code[:12]} · 工具 lark-cli profile codex
 
+生成时工作区存在未提交产物：{r['source_dirty']}；报告代码来源如上，当前新报告与文档提交会另行记录。
+
 ## 结论
 
 真实中文记忆点 {r['reliable_memory_points']}，最低规模已满足，未改采纳池。当前确认负会话 {n}/{d}={n/d:.4%}，尚未达到 30%。本次只准备人工审核和补充区间，新增 180 段不预先计作正/负；阶段1尚未由负责人验收，不进入阶段2。模型调用 {r['model_calls']}、新增模型 token {r['new_model_tokens']}。
