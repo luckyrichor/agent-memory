@@ -1,0 +1,16 @@
+{
+  "seed": 42,
+  "conversations_per_dataset": {
+    "longmemeval_s": 5,
+    "longmemeval_oracle": 5,
+    "locomo": 3,
+    "perltqa_zh": 5,
+    "chinese_queries_v2": 10,
+    "dulemon_gold": 8,
+    "ecd_negative": 8
+  },
+  "questions_per_conversation": 10,
+  "system_context_budget": 100000,
+  "purpose": "transparent frozen seeded dev sample; complete source histories; three fresh repeats; no held-out test run",
+  "workload_basis": "docs/baselines/b0/workload-estimate-v1.json; measured pilot input/output costs"
+}

@@ -1,0 +1,7 @@
+{
+  "seed": 42,
+  "conversations_per_dataset": {"longmemeval_s": 1, "longmemeval_oracle": 1, "locomo": 1, "perltqa_zh": 1, "chinese_queries_v2": 1, "dulemon_gold": 1, "ecd_negative": 1},
+  "questions_per_conversation": 1,
+  "system_context_budget": 100000,
+  "purpose": "operational pilot only; no quality claim or formal B0 completion"
+}

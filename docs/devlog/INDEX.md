@@ -44,3 +44,5 @@
 - [2026-10-23 ECD180预备审核与精确区间](2026-10-23-ecd180-preparation-and-exact-ci.md)
 
 - [ECD180真实回填与负会话双闸门](2026-10-23-ecd180-human-confirmed.md)
+
+- [阶段2 B0测量准备与执行](2026-10-23-phase2-b0.md)

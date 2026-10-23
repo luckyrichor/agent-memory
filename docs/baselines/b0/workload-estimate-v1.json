@@ -1,0 +1,177 @@
+{
+  "pilot": {
+    "at": "2026-10-23T02:15:41.227667+00:00",
+    "source_commit": "5951bf60a5563168b88a259fe325b761b943724f",
+    "baseline_commit": "1e9d6f3b25b58c85792344000d7e1b5a71a79737",
+    "dev_only": true,
+    "dataset": "longmemeval_oracle",
+    "dataset_sha256": "7548a44f09bcb15adedcff249e9a02b9ef0e2f5a7535da7963efb8b7aca24a65",
+    "split_sha256": "331d2ca3c9cf370e7099004e3f87eb6b36e28da9535c29f253f61a596e08795f",
+    "sample_conversations": 1,
+    "sample_selection": "first source-ordered frozen dev conversation, operational pilot not quality sample",
+    "truncated_document_for_single_event": false,
+    "records": [
+      {
+        "role": "extraction",
+        "requested_model": "doubao-seed-2-1-pro-260915",
+        "response_model": "doubao-seed-2-1-pro-260915",
+        "http": 200,
+        "error_code": null,
+        "usage": {
+          "completion_tokens": 49,
+          "prompt_tokens": 283,
+          "total_tokens": 332,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "seconds": 2.977820396889001,
+        "request_sha256": "325b35202f4fc1c680feabcbb96945fde25b405bb58cabfc4a34677a5d8888b3",
+        "quota_blocked": false
+      },
+      {
+        "role": "embedding",
+        "requested_model": "doubao-embedding-vision-251215",
+        "response_model": "doubao-embedding-vision-251215",
+        "http": 200,
+        "error_code": null,
+        "usage": {
+          "prompt_tokens": 72,
+          "prompt_tokens_details": {
+            "image_tokens": 0,
+            "text_tokens": 72
+          },
+          "total_tokens": 72
+        },
+        "seconds": 0.9533047007862478,
+        "request_sha256": "9de6d1d185003c28d95cb2490c380db886338fca92f7b8b353d8b0bf75e75190",
+        "quota_blocked": false
+      },
+      {
+        "role": "answer",
+        "requested_model": "doubao-seed-2-1-pro-260915",
+        "response_model": "doubao-seed-2-1-pro-260915",
+        "http": 200,
+        "error_code": null,
+        "usage": {
+          "completion_tokens": 28,
+          "prompt_tokens": 90,
+          "total_tokens": 118,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "seconds": 2.5204185859765857,
+        "request_sha256": "86162cd073707e68272cd46da92ef20ee92ffd7a24b6a453f48f135e6b8034e7",
+        "quota_blocked": false
+      }
+    ],
+    "calls": 3,
+    "runtime_switches": 0,
+    "full_evaluation_started": false,
+    "complete": true
+  },
+  "full_dev_estimates": {
+    "longmemeval_s": {
+      "dev_documents": 74049,
+      "dev_questions": 150,
+      "extraction_calls_estimate": 222147,
+      "embedding_calls_estimate": 445194,
+      "answer_calls_estimate": 3600,
+      "judge_calls_estimate": 3600,
+      "combined_calls_estimate": 674541,
+      "extraction_tokens_estimate": 73752804,
+      "embedding_tokens_estimate": 32053968,
+      "answer_tokens_no_memory_lower_context_estimate": 424800
+    },
+    "longmemeval_oracle": {
+      "dev_documents": 3191,
+      "dev_questions": 150,
+      "extraction_calls_estimate": 9573,
+      "embedding_calls_estimate": 20046,
+      "answer_calls_estimate": 3600,
+      "judge_calls_estimate": 3600,
+      "combined_calls_estimate": 36819,
+      "extraction_tokens_estimate": 3178236,
+      "embedding_tokens_estimate": 1443312,
+      "answer_tokens_no_memory_lower_context_estimate": 424800
+    },
+    "locomo": {
+      "dev_documents": 1973,
+      "dev_questions": 692,
+      "extraction_calls_estimate": 5919,
+      "embedding_calls_estimate": 15990,
+      "answer_calls_estimate": 16608,
+      "judge_calls_estimate": 16608,
+      "combined_calls_estimate": 55125,
+      "extraction_tokens_estimate": 1965108,
+      "embedding_tokens_estimate": 1151280,
+      "answer_tokens_no_memory_lower_context_estimate": 1959744
+    },
+    "perltqa_zh": {
+      "dev_documents": 2761,
+      "dev_questions": 2413,
+      "extraction_calls_estimate": 8283,
+      "embedding_calls_estimate": 31044,
+      "answer_calls_estimate": 57912,
+      "judge_calls_estimate": 57912,
+      "combined_calls_estimate": 155151,
+      "extraction_tokens_estimate": 2749956,
+      "embedding_tokens_estimate": 2235168,
+      "answer_tokens_no_memory_lower_context_estimate": 6833616
+    },
+    "chinese_queries_v2": {
+      "dev_documents": 3440,
+      "dev_questions": 672,
+      "extraction_calls_estimate": 10320,
+      "embedding_calls_estimate": 24672,
+      "answer_calls_estimate": 16128,
+      "judge_calls_estimate": 16128,
+      "combined_calls_estimate": 67248,
+      "extraction_tokens_estimate": 3426240,
+      "embedding_tokens_estimate": 1776384,
+      "answer_tokens_no_memory_lower_context_estimate": 1903104
+    },
+    "dulemon_gold": {
+      "dev_documents": 2574,
+      "dev_questions": 0,
+      "extraction_calls_estimate": 7722,
+      "embedding_calls_estimate": 15444,
+      "answer_calls_estimate": 0,
+      "judge_calls_estimate": 0,
+      "combined_calls_estimate": 23166,
+      "extraction_tokens_estimate": 2563704,
+      "embedding_tokens_estimate": 1111968,
+      "answer_tokens_no_memory_lower_context_estimate": 0
+    },
+    "ecd_negative": {
+      "dev_documents": 606,
+      "dev_questions": 0,
+      "extraction_calls_estimate": 1818,
+      "embedding_calls_estimate": 3636,
+      "answer_calls_estimate": 0,
+      "judge_calls_estimate": 0,
+      "combined_calls_estimate": 5454,
+      "extraction_tokens_estimate": 603576,
+      "embedding_tokens_estimate": 261792,
+      "answer_tokens_no_memory_lower_context_estimate": 0
+    }
+  },
+  "assumptions": [
+    "Document counts are a lower bound before 4000-character bounded import chunks",
+    "Full-chain extracted memory count unknown; embedding estimate assumes one output memory per input document; it is not a claimed production yield",
+    "Answer estimate uses real no-memory pilot and underestimates full-context inputs; long histories separately dominate tokens",
+    "No invented judge token observations: pre-run 1100 tokens/call is plan assumption until real grading",
+    "Counts include 3 fresh extraction/answer/judge repeats; cached replay is not an independent repeat",
+    "Actual call ledger supersedes estimates; runtime quota pauses and cannot auto-rotate models"
+  ],
+  "measured_pilot_calls": 3,
+  "decision": "use transparently sampled dev conversations and stratified questions for functional measurement; full dev S alone has large input workload; preserve all history of each selected conversation; test excluded",
+  "not_quality_evidence": true
+}

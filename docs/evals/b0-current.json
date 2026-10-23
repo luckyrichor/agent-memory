@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-23T13:24:34.502298+08:00",
+  "phase2_started": true,
+  "phase2_accepted": false,
+  "owner_message_id": "om_x100b62986bf4a0a8b0f170f0116e796",
+  "baseline_tag": "B0",
+  "baseline_commit": "1e9d6f3b25b58c85792344000d7e1b5a71a79737",
+  "status": "operational pilot running; functional sample and calibration not complete",
+  "calibration_exported": false,
+  "public_load_test_started": false,
+  "test_set_executed": false,
+  "phase3_started": false
+}

@@ -1,0 +1,157 @@
+{
+  "longmemeval_s": {
+    "path": ".local/phase2/b0/data-v2/longmemeval_s-dev.jsonl",
+    "sha256": "2333df04b08179c4e5faf33b6f795537a55391663de24c62523ae30b8a8452ba",
+    "inputs_sha256": {
+      ".local/phase1/normalized-v3/longmemeval_s.jsonl": "1bf7442f458afe20c0418ee2567e2816858a2ecdf0fb71fa83717c26aeaa8164",
+      ".local/phase1/normalized-v3/longmemeval_s-split.json": "331d2ca3c9cf370e7099004e3f87eb6b36e28da9535c29f253f61a596e08795f"
+    },
+    "data_level": "A: public benchmark; model-judged scores not comparable to official GPT4o scores",
+    "full_conversations": 500,
+    "dev_conversations": 150,
+    "dev_documents": 74049,
+    "dev_questions": 150,
+    "dev_question_types": {
+      "single-session-user": 23,
+      "abstention": 8,
+      "multi-session": 34,
+      "single-session-preference": 12,
+      "temporal-reasoning": 37,
+      "knowledge-update": 24,
+      "single-session-assistant": 12
+    },
+    "dev_memory_points": 0,
+    "dev_only": true,
+    "test_executed": false
+  },
+  "longmemeval_oracle": {
+    "path": ".local/phase2/b0/data-v2/longmemeval_oracle-dev.jsonl",
+    "sha256": "d584ee193cd972f2ed3d2efc5ce8d7bff23d73d1a75fb1ac4441e0ceb4c36037",
+    "inputs_sha256": {
+      ".local/phase1/normalized-v3/longmemeval_oracle.jsonl": "7548a44f09bcb15adedcff249e9a02b9ef0e2f5a7535da7963efb8b7aca24a65",
+      ".local/phase1/normalized-v3/longmemeval_oracle-split.json": "331d2ca3c9cf370e7099004e3f87eb6b36e28da9535c29f253f61a596e08795f"
+    },
+    "data_level": "A: public benchmark; model-judged scores not comparable to official GPT4o scores",
+    "full_conversations": 500,
+    "dev_conversations": 150,
+    "dev_documents": 3191,
+    "dev_questions": 150,
+    "dev_question_types": {
+      "temporal-reasoning": 37,
+      "abstention": 8,
+      "multi-session": 34,
+      "knowledge-update": 24,
+      "single-session-preference": 12,
+      "single-session-assistant": 12,
+      "single-session-user": 23
+    },
+    "dev_memory_points": 0,
+    "dev_only": true,
+    "test_executed": false
+  },
+  "locomo": {
+    "path": ".local/phase2/b0/data-v2/locomo-dev.jsonl",
+    "sha256": "3827d2f4a087c549c15d38cdf35c6ff7d53359c784b33fdada589974b72a109e",
+    "inputs_sha256": {
+      ".local/phase1/normalized-v3/locomo.jsonl": "7f9672088cd079572353be859d50d00c7e8d118a3e40fb1f99d17058512cfcad",
+      ".local/phase1/normalized-v3/locomo-split.json": "44b025602d7bee65bc9ef51471018d837ac80659a3a2d59a00c333abade39bc9"
+    },
+    "data_level": "A: public benchmark; model-judged scores not comparable to official GPT4o scores",
+    "full_conversations": 10,
+    "dev_conversations": 3,
+    "dev_documents": 1973,
+    "dev_questions": 692,
+    "dev_question_types": {
+      "2": 109,
+      "1": 89,
+      "3": 29,
+      "4": 315,
+      "5": 150
+    },
+    "dev_memory_points": 0,
+    "dev_only": true,
+    "test_executed": false
+  },
+  "perltqa_zh": {
+    "path": ".local/phase2/b0/data-v2/perltqa_zh-dev.jsonl",
+    "sha256": "e650b3bd7150469d1992075a516338f81cf70ffa7eddf128f84f670cb6f1bf61",
+    "inputs_sha256": {
+      ".local/phase1/normalized-v3/perltqa_zh.jsonl": "37cbda77157247b19b2d876332828bf8c1df6b838cb35f92b164373895eaffcc",
+      ".local/phase1/normalized-v3/perltqa_zh-split.json": "a5c34e5ce0efc421979015cf8a58b2c67d34086673d344204ae843d07beee3e3"
+    },
+    "data_level": "A: public benchmark; model-judged scores not comparable to official GPT4o scores",
+    "full_conversations": 141,
+    "dev_conversations": 42,
+    "dev_documents": 2761,
+    "dev_questions": 2413,
+    "dev_question_types": {
+      "profile": 107,
+      "social_relationship": 240,
+      "events": 1335,
+      "dialogues": 731
+    },
+    "dev_memory_points": 0,
+    "dev_only": true,
+    "test_executed": false
+  },
+  "chinese_queries_v2": {
+    "path": ".local/phase2/b0/data-v2/chinese_queries_v2-dev.jsonl",
+    "sha256": "1d4b6314651436071d63dca3b18fd8fbb5222fa074f8c4d12b9afc3e5f9162f9",
+    "inputs_sha256": {
+      ".local/phase1/round3/approved-followup/chinese-queries-v2/corpus.jsonl": "2af07b8f1ef1f22264e25ed65dc5ff5d7a27e6119cdaba6a8ab3214baf9c783c",
+      ".local/phase1/round3/approved-followup/chinese-queries-v2/split.json": "8bbbc1cef886db241e3c06b8582de3d408617b632f75b933864769dff8940437",
+      ".local/phase1/round3/approved-followup/chinese-queries-v2/queries.jsonl": "a7a25b616c495988b2921f1d5981df4a1bc9d13c708c60452077020570dfb32a"
+    },
+    "data_level": "B/C: frozen source provenance; constructed temporal/update/multi-session FLOW ONLY",
+    "full_conversations": 745,
+    "dev_conversations": 225,
+    "dev_documents": 3440,
+    "dev_questions": 672,
+    "dev_question_types": {
+      "temporal-reasoning": 77,
+      "knowledge-update": 77,
+      "multi-session": 77,
+      "abstention": 74,
+      "preference": 79,
+      "single-session": 288
+    },
+    "dev_memory_points": 0,
+    "dev_only": true,
+    "test_executed": false
+  },
+  "dulemon_gold": {
+    "path": ".local/phase2/b0/data-v2/dulemon_gold-dev.jsonl",
+    "sha256": "112bb85573e5c2d09b48dad14af884c37206c9c6b782cc8743d7fdf276bae4ac",
+    "inputs_sha256": {
+      ".local/phase1/round3/new-accounts-v1/blind-adoption-v1/accepted-union-private.jsonl": "2a5173365af41f912f7894d8ce97d746fc9cf90895f2b4d1ae42aa82d38c161b",
+      ".local/phase1/normalized-v3/dulemon-split.json": "77f79f9a3a69fe8ef7b344ada6668b77352297fbc7652ad1611f221e69412874"
+    },
+    "data_level": "B: AI candidates plus owner confirmation/audit-approved pools; not exhaustive human annotation",
+    "full_conversations": 533,
+    "dev_conversations": 158,
+    "dev_documents": 2574,
+    "dev_questions": 0,
+    "dev_question_types": {},
+    "dev_memory_points": 220,
+    "dev_only": true,
+    "test_executed": false
+  },
+  "ecd_negative": {
+    "path": ".local/phase2/b0/data-v2/ecd_negative-dev.jsonl",
+    "sha256": "f025b8715ab8a0895d58ba4e7d5b2228c7e6a539e11dab43cf754bab086021a3",
+    "inputs_sha256": {
+      ".local/phase1/round3/ecd180-review-v1/sample/split-extended-private.json": "727e02b061197da22775a2c31954ac26bd8b07278a23b7d05ee896aad7997fcb",
+      ".local/phase1/round3/temporal-v1/ecd-owner/negative-private.jsonl": "1e880a82474d51ae506be7895a1f411821ce2fee0ca53eccf7065f6cc0937300",
+      ".local/phase1/round3/ecd180-review-v1/owner-final/negative-private.jsonl": "69d8d213b4ee311871464beea96479bada716b71c9bd92c0e53aaa3d941049cb"
+    },
+    "data_level": "B: AI draft plus owner confirmation, customer service only",
+    "full_conversations": 282,
+    "dev_conversations": 80,
+    "dev_documents": 606,
+    "dev_questions": 0,
+    "dev_question_types": {},
+    "dev_memory_points": 0,
+    "dev_only": true,
+    "test_executed": false
+  }
+}
