@@ -2,7 +2,7 @@
 
 B0为已有不可覆盖标签，提交 `1e9d6f3b25b58c85792344000d7e1b5a71a79737`。评测脚本从只读worktree加载该版本API、领域、存储和worker；评测辅助代码与数据从当前仓库加载。当前检索代码曾在阶段1改动，不用于冒充原B0。
 
-当前策略：[b0-policy-v1.json](../../evals/b0-policy-v1.json)。负责人本轮仅授权测量，不作优化、改阈值或进入阶段3；阶段1已验收。
+当前策略：[b0-policy-v2.json](../../evals/b0-policy-v2.json)。负责人本轮仅授权测量，不作优化、改阈值或进入阶段3；阶段1已验收。
 
 ## 单一运行入口
 
@@ -11,7 +11,7 @@ uv run python scripts/with-llm-account.py ark-secondary \
  .venv/bin/python scripts/with-llm-account.py tokenhub-secondary \
  .venv/bin/python scripts/run-b0.py \
  --dataset all --mode both \
- --config docs/baselines/b0/config-sample-v1.json \
+ --config docs/baselines/b0/config-sample-v3.json \
  --metrics EX,LC,RT,CX,E,RL,SC \
  --output .local/phase2/b0/REPLACE_WITH_NEW_IMMUTABLE_RUN
 ```
@@ -43,3 +43,14 @@ uv run python scripts/with-llm-account.py ark-secondary \
 ## 当前边界
 
 本目录是正在建立的测量入口及阶段记录，不是已经完成的B0全指标报告。缺失的观察适配器、正式裁判校准、独立压测、完整报告与负责人验收须如实列出，不自动进入下一阶段。公开基准训练污染未验证，替代裁判问答分数不与论文GPT4o绝对分数等同。
+
+
+## 运行时额度暂停与离线返工
+
+原development-sample-v1因Ark运行时抽取返回429/SetLimitExceeded暂停，数据库与全部原始响应留在私有目录；尚无正式B0评分和300校准表。随后确认并修正朴素向量输入错误：直写模式必须覆盖系统拒绝的原文，不能复用系统入库后集合；系统向量写入改走冻结embedding worker，不直接插入派生向量。旧轮只留操作/失败记录，不作正式对比。
+
+续跑配置v2使用B0原接口默认上下文预算2000；旧操作小样显式设100000，非原默认，不能混称默认B0。LongMemEval改为仅按开发集题型元数据固定种子分层，未使用模型成绩或测试集筛选；旧配置保留历史。真实向量缓存仅作测量重放与恢复进度，不能把其零新调用延迟/费用当作B0系统缓存优化收益，也不能把重放当新的独立模型重复。
+
+## 负责人本轮明确授权换型
+
+消息 `om_x100b62846f735ca8df833bd67f54736` 允许本次更换运行时模型。抽取拟改TokenHub deepseek-v4.1-flash-1017，沿用原预检标准，实际预检成功后才运行；embedding仍为冻结Ark1024维，同模型同输入的真实向量可校验重放。新目录整组重跑，不拼接旧pro抽取；不可覆盖B0源码标签。答题按既有整表切换规则，实际所用型号逐表记录。额外抽取诊断中的五次全文JSON不同，不等同于原预检的五次标签不一致；二者分开报告，不能暗中增加或放宽原预检标准。

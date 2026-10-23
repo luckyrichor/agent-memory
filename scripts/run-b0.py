@@ -1,11 +1,14 @@
 """Single B0 entry: frozen runtime, dev-only inputs, private raw traces, no optimization."""
-import argparse,asyncio,hashlib,json,os,random,subprocess,sys,time,threading,socket
+import argparse,asyncio,hashlib,json,os,random,subprocess,sys,time,threading,socket,math
 from pathlib import Path
 from datetime import datetime,timezone,timedelta
 from uuid import uuid4,UUID
 
 REPO=Path(__file__).resolve().parents[1]
 SOURCE=REPO/'.local/phase2/b0/source-B0'
+if '--config' in sys.argv:
+ early=json.loads(Path(sys.argv[sys.argv.index('--config')+1]).read_text())
+ if early.get('offline_fixture'):SOURCE=REPO
 # Application package always resolves from B0; only eval helpers come from the current harness.
 sys.path.insert(0,str(SOURCE/'src'))
 import agent_memory.evals
@@ -31,10 +34,13 @@ from agent_memory.domain.principal import RequestPrincipal
 from agent_memory.application.extraction_worker import ExtractionWorker
 from agent_memory.application.outbox_dispatcher import OutboxDispatcher
 from agent_memory.infrastructure.llm_extractor import build_extractor
+from agent_memory.application.embedding import EmbeddingWorker
+from agent_memory.infrastructure.embedding import HTTPEmbeddingProvider,PostgresEmbeddingBackend
+from agent_memory.evals.api_import import source_time
 from agent_memory.infrastructure.db import create_session_factory,session_for_principal
 from agent_memory.infrastructure.event_repositories import PostgresExtractionBackend,PostgresOutboxRepository
 from agent_memory.evals.datasets import file_hash
-from agent_memory.evals.b0 import cosine_rank,calibration_sample
+from agent_memory.evals.b0 import cosine_rank,calibration_sample,chunk_source_documents
 from agent_memory.evals.metrics import ratio,evidence_retrieval,latency
 
 
@@ -50,7 +56,22 @@ def digest(value):return hashlib.sha256(json.dumps(value,sort_keys=True,ensure_a
 
 
 class ModelIO:
- def __init__(self,out):
+ def __init__(self,out,cache_roots=(),fixture=False):
+  self.fixture=fixture
+  self.vector_cache={}
+  for root in cache_roots:
+   root=Path(root)
+   if not (root/"usage.jsonl").exists():continue
+   for record in rows(root/"usage.jsonl"):
+    if record.get("role")!="embedding" or record.get("http")!=200 or record.get("cache_hit") or record.get("fixture_only") or record.get("new_http_call") is False:continue
+    request=root/f"calls/{record['call_id']:07d}-request-private.json";response=root/f"calls/{record['call_id']:07d}-response-{record['attempt']}-private.json"
+    if not request.exists() or not response.exists():continue
+    body=json.loads(request.read_text());data=json.loads(response.read_text())
+    if body.get("model")!="doubao-embedding-vision-251215" or body.get("dimensions")!=1024:continue
+    if data.get("model")!="doubao-embedding-vision-251215" or not isinstance(data.get("data",{}),dict) or len(data["data"].get("embedding",[]))!=1024:continue
+    vector=data["data"]["embedding"]
+    if not all(isinstance(x,(int,float)) and math.isfinite(x) for x in vector) or not any(vector):continue
+    self.vector_cache.setdefault(digest(body),(response,file_hash(response)))
   self.out=out;self.clients={};self.semaphores={};self.counter_lock=threading.Lock();self.index=0;self.calls=[];self.runtime_blocked=False;self.exhausted=set()
  async def request(self,role,body,*,provider='Ark'):
   if self.runtime_blocked:raise RuntimeError('RUNTIME_QUOTA_PAUSED')
@@ -62,8 +83,22 @@ class ModelIO:
    if (role,provider,body['model']) in self.exhausted:raise RuntimeError('EVALUATION_MODEL_QUOTA')
    with self.counter_lock:self.index+=1;index=self.index
    request_path=self.out/f'calls/{index:07d}-request-private.json';write(request_path,body)
-   endpoint='embeddings/multimodal' if role=='embedding' else 'chat/completions'
-   base='https://ark.cn-beijing.volces.com/api/v3' if provider=='Ark' else os.environ['TENCENT_BASE_URL'].rstrip('/')
+   endpoint='tokenization' if role=='tokenizer' else ('embeddings/multimodal' if role=='embedding' else 'chat/completions')
+   base='https://ark.cn-beijing.volces.com/api/v3' if provider=='Ark' else os.environ.get('TENCENT_BASE_URL','https://tokenhub.tencentmaas.com/v1').rstrip('/')
+   if self.fixture:
+    if role=='embedding':data={'model':'offline-fixture-not-a-real-model','data':{'embedding':[1.0]+[0.0]*1023}}
+    elif role=='tokenizer':data={'model':'offline-fixture-not-a-real-model','data':[{'total_tokens':len(body['text'][0])}]}
+    else:
+     content=json.dumps({'memories':[{'content':'Synthetic fixture memory.'}]}) if role=='extraction' else (json.dumps({'correct':True,'reason_code':'MATCH'}) if role in ('judge','cross-reference') else 'fixture answer')
+     data={'model':'offline-fixture-not-a-real-model','choices':[{'message':{'content':content}}]}
+    write(self.out/f'calls/{index:07d}-response-fixture-private.json',data)
+    record={'call_id':index,'attempt':0,'at':datetime.now(timezone.utc).isoformat(),'role':role,'provider':'offline-fixture','model':body['model'],'response_model':data.get('model'),'http':200,'usage':None,'seconds':0,'input_bytes':0,'cache_hit':False,'new_http_call':False,'fixture_only':True}
+    self.calls.append(record);append(self.out/'usage.jsonl',record);return data
+   if role=='embedding' and digest(body) in self.vector_cache:
+    origin,expected=self.vector_cache[digest(body)];assert file_hash(origin)==expected
+    data=json.loads(origin.read_text());write(self.out/f'calls/{index:07d}-response-cached-private.json',data)
+    record={'call_id':index,'attempt':0,'at':datetime.now(timezone.utc).isoformat(),'role':role,'provider':provider,'model':body['model'],'response_model':data.get('model'),'http':200,'usage':None,'historical_usage_not_new_tokens':data.get('usage'),'seconds':0,'input_bytes':0,'request_sha256':digest(body),'cache_hit':True,'new_http_call':False,'source_response_path':str(origin),'source_response_sha256':expected}
+    self.calls.append(record);append(self.out/'usage.jsonl',record);return data
    token=os.environ['ARK_API_KEY' if provider=='Ark' else 'TENCENT_API_KEY']
    start=time.monotonic();response=None
    for attempt in range(3):
@@ -116,8 +151,8 @@ class ModelIO:
 
 
 async def measure(args,appurl):
- out=args.output;io=ModelIO(out)
- manifest=json.loads((REPO/'docs/baselines/b0/datasets-v1.json').read_text());names=list(manifest) if args.dataset=='all' else args.dataset.split(',')
+ out=args.output;config=json.loads(args.config.read_text());io=ModelIO(out,config.get('embedding_cache_roots',[]),config.get('offline_fixture',False))
+ manifest=json.loads((Path(config['datasets_manifest']) if config.get('offline_fixture') else REPO/'docs/baselines/b0/datasets-v1.json').read_text());names=[] if args.dataset=='correctness' else (list(manifest) if args.dataset=='all' else args.dataset.split(','))
  config=json.loads(args.config.read_text());seed=config['seed'];all_results=[];imports=[]
  with socket.socket() as s:s.bind(('127.0.0.1',0));port=s.getsockname()[1]
  proxy=FastAPI()
@@ -126,7 +161,8 @@ async def measure(args,appurl):
   body=await request.json()
   # Sampling configuration only; no changes to frozen extraction text/schema.
   if role=='extraction':body['temperature']=0
-  try:data=await io.request(role,body)
+  provider=config.get('extraction_provider','Ark') if role=='extraction' else 'Ark'
+  try:data=await io.request(role,body,provider=provider)
   except RuntimeError:return Response('{}',status_code=402)
   return Response(json.dumps(data),media_type='application/json')
  server=uvicorn.Server(uvicorn.Config(proxy,host='127.0.0.1',port=port,log_level='error',access_log=False))
@@ -134,12 +170,14 @@ async def measure(args,appurl):
  while not server.started:await asyncio.sleep(.05)
  key=rsa.generate_private_key(public_exponent=65537,key_size=2048)
  public=key.public_key().public_bytes(serialization.Encoding.PEM,serialization.PublicFormat.SubjectPublicKeyInfo).decode()
- settings=Settings(database_url=appurl,jwt_public_key=public,jwt_issuer='b0-eval',jwt_audience='b0-eval',embedding_model='doubao-embedding-vision-251215',embedding_protocol='ark',embedding_endpoint=f'http://127.0.0.1:{port}/embedding',embedding_token='private-local-forwarder',embedding_trust_env=False,extraction_model='doubao-seed-2-1-pro-260915',extraction_endpoint=f'http://127.0.0.1:{port}/extraction',extraction_token='private-local-forwarder',log_level='ERROR',trace_exporter='none',metrics_exporter='none')
+ settings=Settings(database_url=appurl,jwt_public_key=public,jwt_issuer='b0-eval',jwt_audience='b0-eval',embedding_model='doubao-embedding-vision-251215',embedding_protocol='ark',embedding_endpoint=f'http://127.0.0.1:{port}/embedding',embedding_token='private-local-forwarder',embedding_trust_env=False,extraction_model=config.get('extraction_model','doubao-seed-2-1-pro-260915'),extraction_endpoint=f'http://127.0.0.1:{port}/extraction',extraction_token='private-local-forwarder',log_level='ERROR',trace_exporter='none',metrics_exporter='none')
  app=create_app(settings);sessions=create_session_factory(app.state.engine)
+ from b0_correctness import measure_correctness
+ await measure_correctness(app,sessions,key,out,runtime_label='offline fixture on current source' if config.get('offline_fixture') else 'B0')
  async def run_conversation(dataset,conv,mode,repeat):
   tenant,user=uuid4(),uuid4();workspace='b0';scope=MemoryScope(ScopeKind.WORKSPACE,workspace,None)
   token=jwt.encode({'iss':'b0-eval','aud':'b0-eval','sub':str(user),'tenant_id':str(tenant),'roles':['developer'],'permissions':['memory:read','memory:write'],'allowed_workspace_ids':[workspace],'exp':datetime.now(timezone.utc)+timedelta(hours=12)},key,algorithm='RS256')
-  mapping=[];rejected=[];chunks=[]
+  mapping=[];rejected=[];chunks=[];naive_source=chunk_source_documents(conv['documents'])
   cid=conv['conversation_id'];at=datetime.now(timezone.utc)
   async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app),base_url='http://b0-eval') as api:
    sdk=MemoryClient(api,token=token)
@@ -153,7 +191,11 @@ async def measure(args,appurl):
        chunk.update(version_id=str(value.version_id),memory_id=str(value.memory_id));mapping.append(chunk)
       else:
        role=doc['role'];payload=ConversationPayloadRequest(role=role,summary=content) if role in ('user','assistant') else ToolResultPayloadRequest(tool_name='public-benchmark-source-record',exit_code=0,summary=content)
-       event=EventRequest(idempotency_key=stable,session_id='b0:'+digest([cid,doc['session_id']]),sequence_number=len(chunks)+1,event_type='conversation.message' if role in ('user','assistant') else 'tool.result',agent_id='b0-eval',occurred_at=at,scope={'kind':'workspace','workspace_id':workspace},payload=payload)
+       occurred=at
+       if doc.get('occurred_at'):
+        try:occurred=source_time(doc['occurred_at'])
+        except ValueError:pass
+       event=EventRequest(idempotency_key=stable,session_id='b0:'+digest([cid,doc['session_id']]),sequence_number=len(chunks)+1,event_type='conversation.message' if role in ('user','assistant') else 'tool.result',agent_id='b0-eval',occurred_at=occurred,scope={'kind':'workspace','workspace_id':workspace},payload=payload)
        value=await sdk.ingest_events(EventBatchRequest(events=[event]));chunk['event_id']=str(value.items[0].event_id);mapping.append(chunk)
       chunks.append(chunk)
      except MemoryAPIError as error:
@@ -182,15 +224,33 @@ async def measure(args,appurl):
      values=(await session.execute(text('SELECT v.memory_version_id,v.content,m.memory_id,m.status,e.event_id FROM memory_versions v JOIN memories m ON m.tenant_id=v.tenant_id AND m.current_version_id=v.memory_version_id JOIN evidence e ON e.tenant_id=v.tenant_id AND e.memory_version_id=v.memory_version_id WHERE v.tenant_id=:tenant'),{'tenant':tenant})).all()
     eventmap={r['event_id']:r for r in mapping};mapping=[{**eventmap[str(eid)],'version_id':str(vid),'memory_id':str(mid),'text':content,'memory_status':status} for vid,content,mid,status,eid in values]
    else:outcomes=[]
-   vectors=await asyncio.gather(*(io.embedding(r['text']) for r in mapping))
-   # Populate the vector index for explicit direct writes as offline import preparation.
-   # Internal SQL only writes frozen provider outputs, never changes lifecycle/content.
-   if mapping:
-    principal=RequestPrincipal(tenant,UUID(int=0),frozenset({'embedding_worker'}),frozenset({'queue:work'}),frozenset())
-    async with session_for_principal(sessions,principal) as session:
-     for item,vec in zip(mapping,vectors,strict=True):
-      await session.execute(text('INSERT INTO memory_embeddings (tenant_id,memory_version_id,model,embedding,updated_at) VALUES (:tenant,:version,:model,CAST(:vector AS vector),now()) ON CONFLICT DO NOTHING'),{'tenant':tenant,'version':UUID(item['version_id']),'model':settings.embedding_model,'vector':'['+','.join(map(str,vec))+']'})
-   import_record={'dataset':dataset,'conversation_id':cid,'mode':mode,'repeat':repeat,'source_documents':len(conv['documents']),'chunks':len(chunks),'memories':len(mapping),'rejected':rejected,'extraction_outcomes':outcomes,'source_role_unknown_as_tool_result':sum(d['role']=='source' for d in conv['documents']),'event_occurred_at_basis':'import receipt time, not fabricated historical chronology; original source time retained in mapping','active_memories':sum(r.get('memory_status','active')=='active' for r in mapping)}
+   # Run the actual frozen embedding worker. Do not bypass the public ingestion pipeline.
+   embedding_http=httpx.AsyncClient(timeout=10,trust_env=False)
+   embedding_backend=PostgresEmbeddingBackend(sessions)
+   embedding_worker=EmbeddingWorker(embedding_backend,HTTPEmbeddingProvider(embedding_http,endpoint=settings.embedding_endpoint,model=settings.embedding_model,token=settings.embedding_token.get_secret_value(),protocol='ark'))
+   embedding_outcomes=[]
+   principal=RequestPrincipal(tenant,UUID(int=0),frozenset({'embedding_worker'}),frozenset({'queue:work'}),frozenset())
+   while True:
+    result=await embedding_worker.run_once(tenant,'b0-embedding-worker')
+    embedding_outcomes.append({'outcome':result.outcome,'reason_code':result.reason_code})
+    if io.runtime_blocked:raise RuntimeError('RUNTIME_QUOTA_PAUSED')
+    if result.outcome=='no_job':
+     async with session_for_principal(sessions,principal) as session:
+      pending=await session.scalar(text("SELECT count(*) FROM jobs WHERE tenant_id=:tenant AND job_type='embed_memory' AND status IN ('pending','running','retry_wait')"),{'tenant':tenant})
+     if not pending:break
+     await asyncio.sleep(2)
+   await embedding_http.aclose()
+   async with session_for_principal(sessions,principal) as session:
+    loaded=(await session.execute(text('SELECT e.memory_version_id,e.embedding::text,v.content FROM memory_embeddings e JOIN memory_versions v ON v.memory_version_id=e.memory_version_id AND v.tenant_id=e.tenant_id WHERE e.tenant_id=:tenant AND e.model=:model'),{'tenant':tenant,'model':settings.embedding_model})).all()
+   by_text={content:json.loads(vec) for _vid,vec,content in loaded}
+   # Direct naive-vector receives EVERY original bounded source chunk, even those rejected
+   # by the tested system's content policy. Full mode receives all extracted candidates,
+   # without filtering their lifecycle, subject, type, workspace or other metadata.
+   naive_mapping=naive_source if mode=='direct' else list(mapping)
+   async def external_vector(item):
+    return by_text[item['text']] if item['text'] in by_text else await io.embedding(item['text'])
+   vectors=await asyncio.gather(*(external_vector(r) for r in naive_mapping))
+   import_record={'dataset':dataset,'conversation_id':cid,'mode':mode,'repeat':repeat,'source_documents':len(conv['documents']),'chunks':len(chunks),'memories':len(mapping),'naive_corpus_count':len(naive_mapping),'naive_includes_system_rejected_source_chunks':mode=='direct','embedding_outcomes':embedding_outcomes,'rejected':rejected,'extraction_outcomes':outcomes,'source_role_unknown_as_tool_result':sum(d['role']=='source' for d in conv['documents']),'event_occurred_at_basis':'original source time when parseable, otherwise explicit import receipt time; source text/time retained in mapping','active_memories':sum(r.get('memory_status','active')=='active' for r in mapping)}
    imports.append(import_record);append(out/'imports-private.jsonl',import_record);write(out/f'mappings/{digest([dataset,cid,mode,repeat])}.json',mapping)
    questions=list(conv['questions']);rng=random.Random(seed);rng.shuffle(questions);questions=questions[:config['questions_per_conversation']]
    for q in questions:
@@ -199,7 +259,7 @@ async def measure(args,appurl):
     packet=await sdk.context(ContextRequest(query=q['text'],workspace_id=workspace,limit=10,token_budget=config['system_context_budget']))
     by_version={r['version_id']:r for r in mapping};level=conv.get('metadata',{}).get('evidence_level')
     sourcekey='session_id' if level=='session' else 'source_id'
-    groups={'no-memory':([],[]),'full-context':([{'text':d['text'],'role':d['role'],'occurred_at':d.get('occurred_at')} for d in conv['documents']],[]),'naive-vector':([mapping[i]['text'] for i in rank],[[mapping[i][sourcekey]] for i in rank]),'system':(packet.rendered,[[by_version[str(hit.version_id)][sourcekey]] if str(hit.version_id) in by_version else ['unmapped:'+str(hit.version_id)] for hit in observed.items])}
+    groups={'no-memory':([],[]),'full-context':([{'text':d['text'],'role':d['role'],'occurred_at':d.get('occurred_at')} for d in conv['documents']],[]),'naive-vector':([naive_mapping[i]['text'] for i in rank],[[naive_mapping[i][sourcekey]] for i in rank]),'system':(packet.rendered,[[by_version[str(hit.version_id)][sourcekey]] if str(hit.version_id) in by_version else ['unmapped:'+str(hit.version_id)] for hit in observed.items])}
     for group,(context,evidence) in groups.items():
      answer,data=None,{}
      row={'row_id':digest([dataset,cid,q['question_id'],mode,group,repeat]),'dataset':dataset,'conversation_id':cid,'question_id':q['question_id'],'category':q['category'],'mode':mode,'system':group,'repeat':repeat,'question':q['text'],'reference':q['answer'],'answer':answer,'answer_model':data.get('model'),'answer_usage':data.get('usage'),'answer_valid':answer is not None,'ranked_evidence_sets':evidence,'retrieval':{str(k):evidence_retrieval(evidence,q['relevant'],k) for k in (1,3,5,10)} if q['evidence_available'] and not q['abstention'] and group in ('system','naive-vector') else {},'system_vector_status':observed.vector_status if group=='system' else None,'RT6':float(not evidence) if q['abstention'] and group in ('system','naive-vector') else None,'flow_only':q['category'] in conv.get('metadata',{}).get('flow_only_categories',[]),'full_context_truncated':False,'full_context_input_bytes':len(json.dumps(context,ensure_ascii=False).encode()),'system_context':{'used_tokens':packet.used_tokens,'budget':packet.budget,'truncated':packet.truncated,'counter':packet.counter} if group=='system' else None,'judge_correct':None,'judge_model':'glm-5.2','formal_score':False}
@@ -212,13 +272,25 @@ async def measure(args,appurl):
    corpus=rows(source)
    if dataset not in ('dulemon_gold','ecd_negative'):corpus=[c for c in corpus if c['questions']]
    rng=random.Random(seed);rng.shuffle(corpus)
-   selected=corpus[:config['conversations_per_dataset'].get(dataset,1)]
+   if dataset.startswith('longmemeval') and config.get('conversations_per_question_type'):
+    by_category={}
+    for conv in corpus:by_category.setdefault(conv['questions'][0]['category'],[]).append(conv)
+    selected=[conv for category in sorted(by_category) for conv in by_category[category][:config['conversations_per_question_type']]]
+   else:selected=corpus[:config['conversations_per_dataset'].get(dataset,1)]
    write(out/(dataset+'-selection-private.json'),{'ids':[r['conversation_id'] for r in selected],'source_sha256':file_hash(source),'seed':seed})
    for repeat in range(3):
     for mode in (['direct','full'] if args.mode=='both' else [args.mode]):
      finished=await asyncio.gather(*(run_conversation(dataset,conv,mode,repeat) for conv in selected),return_exceptions=True)
      errors=[x for x in finished if isinstance(x,BaseException)]
      if errors:raise errors[0]
+  # Measure the frozen byte counter; never replace it with the target-model tokenizer.
+  async def context_tokens(row):
+   if row['system']!='system':return
+   try:
+    data=await io.request('tokenizer',{'model':'doubao-seed-2-1-pro-260915','text':[row['context']]})
+    row['actual_rendered_context_tokens']=data['data'][0]['total_tokens']
+   except (RuntimeError,KeyError,TypeError,IndexError):row['actual_rendered_context_tokens']=None
+  await asyncio.gather(*(context_tokens(row) for row in all_results))
   # Failover is table-wide: discard partial answers or grades and restart all systems/repeats.
   tables={}
   for row in all_results:tables.setdefault((row['dataset'],row['mode']),[]).append(row)
@@ -226,7 +298,7 @@ async def measure(args,appurl):
   for (dataset,mode),table in tables.items():
    print(json.dumps({'stage':'answer-and-judge','dataset':dataset,'mode':mode,'rows':len(table)}),flush=True)
    answers_complete=False
-   for model in ('doubao-seed-2-1-pro-260915','mimo-v2.6-flash','minimax-m3'):
+   for model in config.get('answer_models',['doubao-seed-2-1-pro-260915','mimo-v2.6-flash','minimax-m3']):
     answered=await asyncio.gather(*(io.answer(row['question'],row['context'],model,row['question_date']) for row in table),return_exceptions=True)
     attempt=[v for v in answered if not isinstance(v,BaseException)];failed=len(attempt)!=len(table)
     append(out/'table-attempts.jsonl',{'dataset':dataset,'mode':mode,'role':'answer','model':model,'completed':len(attempt),'failed':failed,'whole_table':True})
@@ -249,12 +321,12 @@ async def measure(args,appurl):
    write(out/f"table-{dataset}-{mode}-private.json",table)
   write(out/'graded-results-private.json',all_results)
   valid=[r for r in all_results if r['judge_correct'] is not None]
-  if len(valid)>=300:
+  if len(valid)>=300 and not config.get('offline_fixture'):
    chosen=calibration_sample(valid,300,seed=seed);write(out/'calibration-mapping-private.json',chosen)
    import csv
    with (out/'calibration-300-private.csv').open('w',encoding='utf-8-sig',newline='') as f:
     writer=csv.DictWriter(f,fieldnames=['item_id','question','reference','answer','human_correct','human_reason']);writer.writeheader()
-    for i,row in enumerate(chosen):writer.writerow({'item_id':'c-'+digest([seed,row['row_id']])[:20],'question':row['question'],'reference':row['reference'],'answer':row['answer'],'human_correct':'','human_reason':''})
+    for i,row in enumerate(chosen):writer.writerow({'item_id':'c-'+digest([seed,row['row_id']])[:20],**{k:__import__('agent_memory.evals.human_review',fromlist=['csv_text']).csv_text(row[k]) for k in ('question','reference','answer')},'human_correct':'','human_reason':''})
    (out/'calibration-300-private.csv').chmod(0o600)
    cross=[]
    try:
@@ -262,14 +334,14 @@ async def measure(args,appurl):
    except RuntimeError:
     write(out/'cross-reference-incomplete.json',{'completed':len(cross),'required':len(chosen),'model':'hunyuan-role-latest','reason':'quota; no unqualified cross-reference substitution'})
    status='paused_for_owner_calibration'
-  else:status='incomplete_calibration_population'
+  else:status='offline_fixture_completed' if config.get('offline_fixture') else 'incomplete_calibration_population'
  except Exception as error:
   status='runtime_quota_paused' if io.runtime_blocked else 'failed'
   write(out/'failure.json',{'exception_type':type(error).__name__,'reason_code':str(error) if str(error) in ('RUNTIME_QUOTA_PAUSED','EVALUATION_MODEL_QUOTA') else 'details_private','completed_rows':len(all_results)})
   import traceback
   (out/'traceback-private.txt').write_text(traceback.format_exc());(out/'traceback-private.txt').chmod(0o600)
  finally:
-  write(out/'status.json',{'status':status,'rows':len(all_results),'model_attempts':len(io.calls),'dev_only':True,'formal_scores':False,'baseline_commit':subprocess.check_output(['git','rev-parse','B0^{}'],cwd=REPO,text=True).strip(),'runtime_source':str(SOURCE),'full_evaluation_complete':False,'phase2_accepted':False})
+  write(out/'status.json',{'status':status,'rows':len(all_results),'model_records_including_replays':len(io.calls),'model_attempts':sum(r.get('new_http_call',not r.get('cache_hit',False)) for r in io.calls),'vector_cache_replays':sum(r.get('cache_hit',False) for r in io.calls),'dev_only':True,'formal_scores':False,'baseline_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=SOURCE,text=True).strip(),'runtime_source':str(SOURCE),'full_evaluation_complete':False,'phase2_accepted':False})
   # Proxy clients belong to their original event loop; shut down proxy before main-loop client.
   await app.state.engine.dispose();server.should_exit=True;thread.join(timeout=5)
   client=io.clients.get(id(asyncio.get_running_loop()))
@@ -280,10 +352,22 @@ async def measure(args,appurl):
 def main():
  p=argparse.ArgumentParser();p.add_argument('--dataset',required=True);p.add_argument('--mode',choices=['direct','full','both'],required=True);p.add_argument('--config',type=Path,required=True);p.add_argument('--metrics',required=True);p.add_argument('--output',type=Path,required=True)
  a=p.parse_args();assert '.local' in a.output.resolve().parts
+ catalog=json.loads((REPO/'docs/evals/metric-catalog.json').read_text())
+ identifiers={r['id'] for r in catalog};families={r.rstrip('0123456789') for r in identifiers}
+ requested=set(a.metrics.split(','))
+ if requested-identifiers-families:p.error('unknown metric identifier or family')
+ a.expanded_metrics=sorted({mid for mid in identifiers if mid in requested or mid.rstrip('0123456789') in requested})
+ config=json.loads(a.config.read_text())
+ allowed={'seed','conversations_per_dataset','conversations_per_question_type','questions_per_conversation','system_context_budget','purpose','workload_basis','embedding_cache_roots','datasets_manifest','offline_fixture','extraction_model','extraction_provider','runtime_change_authorization','answer_models'}
+ if set(config)-allowed:p.error('unknown system configuration fields; credentials must use the private environment')
+ if config.get('extraction_model','doubao-seed-2-1-pro-260915')!='doubao-seed-2-1-pro-260915' and config.get('runtime_change_authorization')!='om_x100b62846f735ca8df833bd67f54736':p.error('runtime replacement requires the recorded explicit owner authorization')
+ if config.get('offline_fixture') and a.dataset!='offline-fixture':p.error('fixture configuration cannot measure actual benchmark data')
+ if config.get('datasets_manifest') and not config.get('offline_fixture'):p.error('real runs require frozen dev registry')
  a.output.mkdir(parents=True,exist_ok=False,mode=0o700)
- assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=SOURCE,text=True).strip()==subprocess.check_output(['git','rev-parse','B0^{}'],cwd=REPO,text=True).strip()
- assert not subprocess.check_output(['git','status','--porcelain'],cwd=SOURCE,text=True)
- write(a.output/'run-manifest.json',{'harness_uncommitted_changes':bool(subprocess.check_output(['git','status','--porcelain'],cwd=REPO,text=True).strip()),'harness_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip(),'harness_script_sha256':file_hash(Path(__file__)),'config':json.loads(a.config.read_text()),'config_sha256':file_hash(a.config),'dataset':a.dataset,'mode':a.mode,'metrics_requested':a.metrics.split(','),'runtime_application_file':__import__('agent_memory.api.app',fromlist=['x']).__file__,'prompt_hashes':{str(x.relative_to(REPO)):file_hash(x) for x in (REPO/'docs/evals/prompts').glob('b0-*')},'seed':42,'dev_only':True,'test_execution':False,'grade_status':'pre-calibration diagnostic only'})
+ if not config.get('offline_fixture'):
+  assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=SOURCE,text=True).strip()==subprocess.check_output(['git','rev-parse','B0^{}'],cwd=REPO,text=True).strip()
+  assert not subprocess.check_output(['git','status','--porcelain'],cwd=SOURCE,text=True)
+ write(a.output/'run-manifest.json',{'harness_uncommitted_changes':bool(subprocess.check_output(['git','status','--porcelain'],cwd=REPO,text=True).strip()),'harness_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip(),'harness_script_sha256':file_hash(Path(__file__)),'harness_support_sha256':{str(p.relative_to(REPO)):file_hash(p) for p in [REPO/'scripts/b0_correctness.py',REPO/'src/agent_memory/evals/b0.py',REPO/'src/agent_memory/evals/metrics.py']},'config':json.loads(a.config.read_text()),'config_sha256':file_hash(a.config),'dataset':a.dataset,'mode':a.mode,'metrics_requested':a.metrics.split(','),'metrics_expanded':a.expanded_metrics,'runtime_application_file':__import__('agent_memory.api.app',fromlist=['x']).__file__,'prompt_hashes':{str(x.relative_to(REPO)):file_hash(x) for x in [*(REPO/'docs/evals/prompts').glob('b0-*'),REPO/'docs/evals/prompts/judge-v1.txt'] if x.is_file()},'seed':42,'dev_only':True,'test_execution':False,'offline_fixture_only':bool(config.get('offline_fixture')),'grade_status':'pre-calibration diagnostic only'})
  with PostgresContainer('pgvector/pgvector:pg16',username='agent_memory',password='disposable-b0-only',dbname='agent_memory',driver='psycopg') as pg:
   url=pg.get_connection_url();cfg=Config(str(SOURCE/'alembic.ini'));cfg.set_main_option('script_location',str(SOURCE/'migrations'));cfg.set_main_option('sqlalchemy.url',url);command.upgrade(cfg,'head')
   engine=create_engine(url)

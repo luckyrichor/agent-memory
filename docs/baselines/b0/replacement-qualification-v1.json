@@ -1,0 +1,17 @@
+{
+  "model": "deepseek-v4.1-flash-1017",
+  "provider": "TokenHub",
+  "standard_source": "src/agent_memory/evals/model_preflight.py",
+  "prompt_sha256": "d4f9d30b34c28049829f15cb8cdb2d5a6013665b6533e39a8f9d8602ef4596ef",
+  "temperature": 0,
+  "thinking_requested": "disabled",
+  "consistent_5_labels": true,
+  "format_n": 100,
+  "format_valid": 100,
+  "observed_disabled_thinking": true,
+  "calls": 106,
+  "passed": true,
+  "evidence_path": ".local/phase2/b0/replacement-policy-preflight-v1/summary.json",
+  "evidence_sha256": "0bc4b484610e5f18dcfe033b159cb41ed2bf70c934ec7aac5f8552946fc3d408",
+  "exact_extraction_diagnostic": "docs/baselines/b0/replacement-extraction-diagnostics-v1.json"
+}

@@ -37,3 +37,30 @@ def test_calibration_covers_errors_and_groups_and_is_reproducible():
     assert strata(chosen) == strata(rows)
     with pytest.raises(ValueError):
         calibration_sample(rows[:20])
+
+
+def test_paired_difference_preserves_clusters_signed_changes_and_coverage():
+    from agent_memory.evals.b0 import clustered_paired
+
+    before = {('a', 'q1', 0): True, ('a', 'q1', 1): True, ('b', 'q2', 0): False}
+    after = {('a', 'q1', 0): False, ('a', 'q1', 1): True, ('b', 'q2', 0): True}
+    result = clustered_paired(before, after)
+    assert result['delta'] == 0
+    assert result['paired_rows'] == 3
+    assert result['conversation_clusters'] == 2
+    assert result['improved_rows'] == result['worsened_rows'] == 1
+    assert result['ci95'][0] <= 0 <= result['ci95'][1]
+    with pytest.raises(ValueError):
+        clustered_paired(before, {})
+
+
+def test_external_vector_corpus_keeps_policy_rejected_source_and_all_chunks():
+    from agent_memory.evals.b0 import chunk_source_documents
+
+    original = [{'source_id': 'long', 'text': '中' * 4001, 'role': 'source'},
+                {'source_id': 'policy-rejected', 'text': 'alice@example.test', 'role': 'user'}]
+    chunks = chunk_source_documents(original)
+    assert len(chunks) == 3
+    assert ''.join(r['text'] for r in chunks if r['source_id'] == 'long') == '中' * 4001
+    assert chunks[-1]['text'] == original[-1]['text']
+    assert {r['source_id'] for r in chunks} == {'long', 'policy-rejected'}

@@ -1,0 +1,37 @@
+{
+  "scope": "additional frozen-extractor diagnostic, not a replacement for the existing label-consistency qualification standard",
+  "records": [
+    {
+      "model": "doubao-seed-2-1-lite-260915",
+      "provider": "Ark",
+      "passed": false,
+      "consistent_5": false,
+      "format_valid": 99,
+      "format_n": 100,
+      "calls": 105,
+      "temperature": 0,
+      "thinking_requested": "disabled",
+      "fictional_only": true,
+      "prompt_sha256": "cb92bf650c82c0465fbfcfe13cbc1f0103188ae8ab7f5f95c6d789230a1bbe23",
+      "response_versions": [
+        "doubao-seed-2-1-lite-260915"
+      ]
+    },
+    {
+      "model": "deepseek-v4.1-flash-1017",
+      "provider": "TokenHub",
+      "passed": false,
+      "consistent_5": false,
+      "format_valid": 100,
+      "format_n": 100,
+      "calls": 105,
+      "temperature": 0,
+      "thinking_requested": "disabled",
+      "fictional_only": true,
+      "prompt_sha256": "cb92bf650c82c0465fbfcfe13cbc1f0103188ae8ab7f5f95c6d789230a1bbe23",
+      "response_versions": [
+        "deepseek-v4.1-flash-1017"
+      ]
+    }
+  ]
+}

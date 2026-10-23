@@ -1,0 +1,42 @@
+{
+  "status": {
+    "status": "incomplete_calibration_population",
+    "rows": 24,
+    "model_attempts": 593,
+    "dev_only": true,
+    "formal_scores": false,
+    "baseline_commit": "1e9d6f3b25b58c85792344000d7e1b5a71a79737",
+    "runtime_source": "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/source-B0",
+    "full_evaluation_complete": false,
+    "phase2_accepted": false
+  },
+  "actual_pilot_by_role": {
+    "answer": {
+      "attempts": 24,
+      "known_usage_calls": 24,
+      "total_tokens": 80753,
+      "mean_total_tokens": 3364.7083333333335
+    },
+    "embedding": {
+      "attempts": 385,
+      "known_usage_calls": 385,
+      "total_tokens": 42638,
+      "mean_total_tokens": 110.74805194805195
+    },
+    "extraction": {
+      "attempts": 159,
+      "known_usage_calls": 159,
+      "total_tokens": 73697,
+      "mean_total_tokens": 463.50314465408803
+    },
+    "judge": {
+      "attempts": 25,
+      "known_usage_calls": 24,
+      "total_tokens": 3417,
+      "mean_total_tokens": 142.375
+    }
+  },
+  "decision": "sample-v1 fixed dev conversation counts; no test execution; actual sampled complete histories, no optimization",
+  "sample_config": "docs/baselines/b0/config-sample-v1.json",
+  "small_pilot_not_quality_evidence": true
+}

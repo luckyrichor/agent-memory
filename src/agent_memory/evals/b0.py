@@ -72,3 +72,44 @@ def calibration_sample(
                 chosen.append(strata[key].pop())
     rng.shuffle(chosen)
     return chosen
+
+
+def clustered_paired(
+    before: dict[tuple[str, str, int], bool],
+    after: dict[tuple[str, str, int], bool],
+) -> dict[str, Any]:
+    """Paired accuracy change, resampling conversations including all repeats.
+
+    An affine shift keeps ratio's nonnegative count representation; subtracting
+    one from its result gives exactly the original signed mean difference.
+    """
+    from agent_memory.evals.metrics import ratio
+
+    if not before or before.keys() != after.keys():
+        raise ValueError("paired comparison needs identical valid question/repeat coverage")
+    clusters: dict[str, list[int]] = defaultdict(list)
+    for key in sorted(before):
+        clusters[key[0]].append(int(after[key]) - int(before[key]))
+    shifted = ratio([(float(sum(ds) + len(ds)), float(len(ds))) for ds in clusters.values()])
+    assert shifted.value is not None and shifted.ci95 is not None
+    return {
+        "delta": shifted.value - 1,
+        "ci95": [bound - 1 for bound in shifted.ci95],
+        "conversation_clusters": shifted.n,
+        "paired_rows": len(before),
+        "improved_rows": sum(not before[k] and after[k] for k in before),
+        "worsened_rows": sum(before[k] and not after[k] for k in before),
+        "method": "paired conversation-cluster ratio-of-sums bootstrap1000 seed42",
+    }
+
+
+def chunk_source_documents(documents: Sequence[dict[str, Any]]) -> list[dict[str, Any]]:
+    """All raw-source chunks for the external baseline, independent of SUT admission."""
+    chunks: list[dict[str, Any]] = []
+    for document in documents:
+        if not isinstance(document.get("text"), str):
+            raise TypeError("source text required")
+        for start in range(0, len(document["text"]), 4000):
+            chunks.append({**document, "text": document["text"][start:start + 4000],
+                           "part": start // 4000})
+    return chunks
