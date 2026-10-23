@@ -11,7 +11,7 @@ uv run python scripts/with-llm-account.py ark-secondary \
  .venv/bin/python scripts/with-llm-account.py tokenhub-secondary \
  .venv/bin/python scripts/run-b0.py \
  --dataset all --mode both \
- --config docs/baselines/b0/config-sample-v4.json \
+ --config docs/baselines/b0/config-sample-v5.json \
  --metrics EX,LC,RT,CX,E,RL,SC \
  --output .local/phase2/b0/REPLACE_WITH_NEW_IMMUTABLE_RUN
 ```
@@ -56,3 +56,5 @@ uv run python scripts/with-llm-account.py ark-secondary \
 消息 `om_x100b62846f735ca8df833bd67f54736` 允许本次更换运行时模型。抽取拟改TokenHub deepseek-v4.1-flash-1017，沿用原预检标准，实际预检成功后才运行；embedding仍为冻结Ark1024维，同模型同输入的真实向量可校验重放。新目录整组重跑，不拼接旧pro抽取；不可覆盖B0源码标签。答题按既有整表切换规则，实际所用型号逐表记录。额外抽取诊断中的五次全文JSON不同，不等同于原预检的五次标签不一致；二者分开报告，不能暗中增加或放宽原预检标准。
 
 DeepSeek新抽取轮在实际运行中返回402，故该轮保留历史。Ark lite按原预检标准实际106次、五标签一致、格式100/100、关闭思考，通过后成为本次抽取与答题的主模型；不再反复探测已知额度失败的pro。独立裁判仍为GLM，向量仍是原Ark模型。超长全文只在供应商明确上下文超限时确定性从最旧端截断，并记录序列化字符保留比例；该比例不是token截断率。
+
+实测替代小样完成后，按replacement-sample-budget-v1.json选择固定开发集抽样sample-v5；保留完整选中会话而非随意裁短历史，未覆盖题型在报告中留空。每个数据集先完成两模式三次并整表判分后写检查点，再处理后续数据；校准导出仍在本轮所选数据全部完成后执行。

@@ -1,0 +1,179 @@
+{
+  "basis": "actual API lite pilot; not a price or available-balance quote",
+  "pilot_status": {
+    "status": "incomplete_calibration_population",
+    "rows": 24,
+    "model_records_including_replays": 216,
+    "model_attempts": 156,
+    "vector_cache_replays": 60,
+    "dev_only": true,
+    "formal_scores": false,
+    "baseline_commit": "1e9d6f3b25b58c85792344000d7e1b5a71a79737",
+    "runtime_source": "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/source-B0",
+    "full_evaluation_complete": false,
+    "phase2_accepted": false
+  },
+  "pilot_measured_by_role": {
+    "answer": {
+      "new_http_attempts": 24,
+      "usage_reported": 24,
+      "usage_unknown": 0,
+      "total_reported_tokens": 48311,
+      "mean_reported_tokens": 2012.9583333333333
+    },
+    "embedding": {
+      "new_http_attempts": 54,
+      "usage_reported": 54,
+      "usage_unknown": 0,
+      "total_reported_tokens": 5192,
+      "mean_reported_tokens": 96.14814814814815
+    },
+    "extraction": {
+      "new_http_attempts": 48,
+      "usage_reported": 48,
+      "usage_unknown": 0,
+      "total_reported_tokens": 29925,
+      "mean_reported_tokens": 623.4375
+    },
+    "judge": {
+      "new_http_attempts": 24,
+      "usage_reported": 24,
+      "usage_unknown": 0,
+      "total_reported_tokens": 10290,
+      "mean_reported_tokens": 428.75
+    },
+    "tokenizer": {
+      "new_http_attempts": 6,
+      "usage_reported": 0,
+      "usage_unknown": 6,
+      "total_reported_tokens": 0,
+      "mean_reported_tokens": null
+    }
+  },
+  "selected_configuration": "docs/baselines/b0/config-sample-v5.json",
+  "sampling_decision": "fixed seeded sample; no performance-based or answer-based selection, complete source histories; no per-type representativeness claim",
+  "datasets": {
+    "longmemeval_s": {
+      "selected_dev_conversations": 2,
+      "complete_source_documents": 907,
+      "source_chunks": 913,
+      "selected_questions": 2,
+      "question_categories": {
+        "multi-session": 1,
+        "knowledge-update": 1
+      },
+      "prepared_answer_rows_3repeats_2modes_4systems": 48,
+      "extraction_source_event_upper_estimate_3repeats": 2739,
+      "embedding_attempt_upper_estimate": 10992,
+      "tokenization_attempt_estimate": 12
+    },
+    "longmemeval_oracle": {
+      "selected_dev_conversations": 5,
+      "complete_source_documents": 82,
+      "source_chunks": 82,
+      "selected_questions": 5,
+      "question_categories": {
+        "single-session-preference": 1,
+        "multi-session": 2,
+        "abstention": 1,
+        "single-session-assistant": 1
+      },
+      "prepared_answer_rows_3repeats_2modes_4systems": 120,
+      "extraction_source_event_upper_estimate_3repeats": 246,
+      "embedding_attempt_upper_estimate": 1074,
+      "tokenization_attempt_estimate": 30
+    },
+    "locomo": {
+      "selected_dev_conversations": 1,
+      "complete_source_documents": 629,
+      "source_chunks": 629,
+      "selected_questions": 10,
+      "question_categories": {
+        "5": 2,
+        "2": 2,
+        "4": 2,
+        "3": 1,
+        "1": 3
+      },
+      "prepared_answer_rows_3repeats_2modes_4systems": 240,
+      "extraction_source_event_upper_estimate_3repeats": 1887,
+      "embedding_attempt_upper_estimate": 7728,
+      "tokenization_attempt_estimate": 60
+    },
+    "perltqa_zh": {
+      "selected_dev_conversations": 3,
+      "complete_source_documents": 193,
+      "source_chunks": 193,
+      "selected_questions": 30,
+      "question_categories": {
+        "events": 22,
+        "dialogues": 6,
+        "profile": 2
+      },
+      "prepared_answer_rows_3repeats_2modes_4systems": 720,
+      "extraction_source_event_upper_estimate_3repeats": 579,
+      "embedding_attempt_upper_estimate": 2856,
+      "tokenization_attempt_estimate": 180
+    },
+    "chinese_queries_v2": {
+      "selected_dev_conversations": 10,
+      "complete_source_documents": 132,
+      "source_chunks": 132,
+      "selected_questions": 18,
+      "question_categories": {
+        "abstention": 2,
+        "preference": 4,
+        "temporal-reasoning": 4,
+        "multi-session": 4,
+        "knowledge-update": 4
+      },
+      "prepared_answer_rows_3repeats_2modes_4systems": 432,
+      "extraction_source_event_upper_estimate_3repeats": 396,
+      "embedding_attempt_upper_estimate": 1908,
+      "tokenization_attempt_estimate": 108
+    },
+    "dulemon_gold": {
+      "selected_dev_conversations": 8,
+      "complete_source_documents": 128,
+      "source_chunks": 128,
+      "selected_questions": 0,
+      "question_categories": {},
+      "prepared_answer_rows_3repeats_2modes_4systems": 0,
+      "extraction_source_event_upper_estimate_3repeats": 384,
+      "embedding_attempt_upper_estimate": 1536,
+      "tokenization_attempt_estimate": 0
+    },
+    "ecd_negative": {
+      "selected_dev_conversations": 8,
+      "complete_source_documents": 84,
+      "source_chunks": 84,
+      "selected_questions": 0,
+      "question_categories": {},
+      "prepared_answer_rows_3repeats_2modes_4systems": 0,
+      "extraction_source_event_upper_estimate_3repeats": 252,
+      "embedding_attempt_upper_estimate": 1008,
+      "tokenization_attempt_estimate": 0
+    }
+  },
+  "approximate_upper_attempts_before_retries_or_failover": {
+    "extraction": 6483,
+    "embedding": 27102,
+    "answer": 1560,
+    "judge": 1560,
+    "tokenizer": 390
+  },
+  "approximate_tokens_using_pilot_role_means": {
+    "extraction": 4041745.3125,
+    "embedding": 2605807.111111111,
+    "answer": 3140215.0,
+    "judge": 668850.0,
+    "tokenizer": null
+  },
+  "limitations": [
+    "source length and model output differ across datasets: pilot mean is a planning approximation, not measured future usage",
+    "embedding bound allows 3 extracted memories per event and query calls; genuine replay and rejected inputs may reduce new HTTP",
+    "tokenizer usage not reported, never costed as zero",
+    "format failure and retries/failover add calls; calibration cross-reference adds up to300 calls",
+    "all dev data hashes and source splits unchanged; omitted dev rows and unseen types are not claimed measured"
+  ]
+}

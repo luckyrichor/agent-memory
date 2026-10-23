@@ -435,3 +435,7 @@ hunyuan-role-latest在当前未完成批返回402；完整v3格式预检合格�
 ### 新抽取轮再次额度失败后的换型
 
 DeepSeek运行时返回402，新轮84条仅为未答题上下文，最终usage文件与status关机快照计数有晚到记录差异，最终以usage全文件为准。负责人继续要求有效，Ark lite复验原判断标签一致性/格式标准：106实际调用，五标签一致、格式100/100且关闭思考。新冻结policy-v3、sample-v4：抽取和答题改Ark lite，embedding保持原模型，GLM裁判独立；先做替换模型真实小样成本核算，再决定抽样运行。超长全文实现仅对明确上下文超限错误作从最旧端确定性截断，记录字符口径比例，非token比例；离线回归覆盖超限重试与其他错误不得触发截断。447 passed in27.97s、ruff、strict mypy99文件、foundation8/8通过。B0标签不变、阶段2未验收。
+
+### 替换模型小样完成与固定抽样
+
+api-pilot-lite-v1已完成四组、两模式、三次：24答题/判分行、156新HTTP、60校验向量重放；未达300校准总体不是质量失败，仍非正式分数。实际角色token与后续抽样上界由scripts/report-b0-sample-budget.py生成，见replacement-sample-budget-v1.json。采用固定seed42、sample-v5，完整选中会话历史；开发集抽样预计1560答题行。不承诺未覆盖题型，不以答案好坏选样，不执行测试集。评测工具新增每数据集完成后立即答题判分与检查点，避免末尾数据额度失败使此前答题也未开始；全部模型/组切换规则不变。447 passed in27.04s、ruff、strict mypy与foundation通过。阶段2未验收。

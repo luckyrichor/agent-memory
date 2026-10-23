@@ -280,23 +280,7 @@ async def measure(args,appurl):
      row.update(context=context,question_date=conv.get('metadata',{}).get('question_date'))
      all_results.append(row);append(out/'results-private.jsonl',row)
      print(json.dumps({'dataset':dataset,'mode':mode,'repeat':repeat,'group':group,'completed_rows':len(all_results),'model_calls':len(io.calls)}),flush=True)
- try:
-  for dataset in names:
-   source=REPO/manifest[dataset]['path'];assert file_hash(source)==manifest[dataset]['sha256']
-   corpus=rows(source)
-   if dataset not in ('dulemon_gold','ecd_negative'):corpus=[c for c in corpus if c['questions']]
-   rng=random.Random(seed);rng.shuffle(corpus)
-   if dataset.startswith('longmemeval') and config.get('conversations_per_question_type'):
-    by_category={}
-    for conv in corpus:by_category.setdefault(conv['questions'][0]['category'],[]).append(conv)
-    selected=[conv for category in sorted(by_category) for conv in by_category[category][:config['conversations_per_question_type']]]
-   else:selected=corpus[:config['conversations_per_dataset'].get(dataset,1)]
-   write(out/(dataset+'-selection-private.json'),{'ids':[r['conversation_id'] for r in selected],'source_sha256':file_hash(source),'seed':seed})
-   for repeat in range(3):
-    for mode in (['direct','full'] if args.mode=='both' else [args.mode]):
-     finished=await asyncio.gather(*(run_conversation(dataset,conv,mode,repeat) for conv in selected),return_exceptions=True)
-     errors=[x for x in finished if isinstance(x,BaseException)]
-     if errors:raise errors[0]
+ async def finish_tables(table_rows):
   # Measure the frozen byte counter; never replace it with the target-model tokenizer.
   async def context_tokens(row):
    if row['system']!='system':return
@@ -304,10 +288,10 @@ async def measure(args,appurl):
     data=await io.request('tokenizer',{'model':config.get('answer_models',['doubao-seed-2-1-pro-260915'])[0],'text':[row['context']]})
     row['actual_rendered_context_tokens']=data['data'][0]['total_tokens'];row['context_tokenizer_model']=data.get('model')
    except (RuntimeError,KeyError,TypeError,IndexError):row['actual_rendered_context_tokens']=None
-  await asyncio.gather(*(context_tokens(row) for row in all_results))
+  await asyncio.gather(*(context_tokens(row) for row in table_rows))
   # Failover is table-wide: discard partial answers or grades and restart all systems/repeats.
   tables={}
-  for row in all_results:tables.setdefault((row['dataset'],row['mode']),[]).append(row)
+  for row in table_rows:tables.setdefault((row['dataset'],row['mode']),[]).append(row)
   pools=json.loads((REPO/'docs/evals/judge-pools-new-accounts-v1.json').read_text())['new-pool']
   for (dataset,mode),table in tables.items():
    print(json.dumps({'stage':'answer-and-judge','dataset':dataset,'mode':mode,'rows':len(table)}),flush=True)
@@ -333,6 +317,26 @@ async def measure(args,appurl):
     break
    else:raise RuntimeError('EVALUATION_MODEL_QUOTA')
    write(out/f"table-{dataset}-{mode}-private.json",table)
+
+ try:
+  for dataset in names:
+   source=REPO/manifest[dataset]['path'];assert file_hash(source)==manifest[dataset]['sha256']
+   corpus=rows(source)
+   if dataset not in ('dulemon_gold','ecd_negative'):corpus=[c for c in corpus if c['questions']]
+   rng=random.Random(seed);rng.shuffle(corpus)
+   if dataset.startswith('longmemeval') and config.get('conversations_per_question_type'):
+    by_category={}
+    for conv in corpus:by_category.setdefault(conv['questions'][0]['category'],[]).append(conv)
+    selected=[conv for category in sorted(by_category) for conv in by_category[category][:config['conversations_per_question_type']]]
+   else:selected=corpus[:config['conversations_per_dataset'].get(dataset,1)]
+   write(out/(dataset+'-selection-private.json'),{'ids':[r['conversation_id'] for r in selected],'source_sha256':file_hash(source),'seed':seed})
+   for repeat in range(3):
+    for mode in (['direct','full'] if args.mode=='both' else [args.mode]):
+     finished=await asyncio.gather(*(run_conversation(dataset,conv,mode,repeat) for conv in selected),return_exceptions=True)
+     errors=[x for x in finished if isinstance(x,BaseException)]
+     if errors:raise errors[0]
+   await finish_tables([r for r in all_results if r['dataset']==dataset])
+   write(out/'graded-results-private.json',all_results)
   write(out/'graded-results-private.json',all_results)
   valid=[r for r in all_results if r['judge_correct'] is not None]
   if len(valid)>=300 and not config.get('offline_fixture'):
