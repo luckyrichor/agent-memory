@@ -1,0 +1,155 @@
+{
+  "created_beijing": "2026-10-23T09:49:22.514480+08:00",
+  "source_commit": "1607b430fd8dc37869b4f1595d36d1b33355a5fd",
+  "source_dirty": true,
+  "plan": "docs/plans/2026-10-22-agent-memory-interview-plan-v3.md",
+  "plan_sha256": "06ad7319525c6b0f4eb7333c981b094dd1ed6ec41ae2e5ea1b46009306389418",
+  "same_plan_as_previous_handoff": true,
+  "plan_differences": [
+    "Owner authorized additional random ECD180 beyond original small 100-150 target; old120 retained",
+    "Actual ECD annotation provenance is AI draft plus human confirmation, including owner corrections, not independent human labeling",
+    "Owner assigns judge human calibration and ECD system false-extraction evaluation to phase2; neither is a phase1 remaining item"
+  ],
+  "intake": {
+    "source": "ECD180",
+    "annotation_method": "AI 草稿加人工确认",
+    "independent_human_annotation": false,
+    "counts": {
+      "negative": 174,
+      "positive": 6,
+      "uncertain": 0
+    },
+    "conversations": 180,
+    "manual_change_marker_count": 4,
+    "manual_change_classifications": {
+      "positive": 4
+    },
+    "agent_modified_owner_labels": false,
+    "submitted_sha256": "4d088f3135fda85db94c4936b07d8539d26283ff0331a581e7bca1debdf10262",
+    "template_sha256": "b4105d19c9667d655fe8516a900b754da27ca20d8989a8ffe0c738cd7bd52d39",
+    "actual_attachment_filename": "ecd180-human-labeled.csv",
+    "owner_referred_filename": "ecd180-human-labeled-final.csv",
+    "owner_message_id": "om_x100b629f8cd6c8b0ddff05b215cb9ef",
+    "attachment_message_id": "om_x100b629f8f5920acdefb86f8b83452b",
+    "raw_private_only": true,
+    "frozen_fields_and_record_hashes_verified": true,
+    "old_splits_unchanged": true,
+    "new_split_verified": true,
+    "split_counts": {
+      "test": 126,
+      "dev": 54
+    },
+    "source_domain": "customer service; not representative of general dialogue",
+    "positive_conversations_are_not_additional_memory_point_count": true
+  },
+  "negative_gate": {
+    "numerator": 282,
+    "denominator": 828,
+    "fraction": 0.34057971014492755,
+    "required_negative_fraction": 0.3,
+    "minimum_classifiable_conversations": 300,
+    "count_passed": true,
+    "fraction_passed": true,
+    "both_passed": true,
+    "uncertain_excluded": 5,
+    "formula": "(108+174)/(648+174+6)",
+    "source_rows": [
+      {
+        "source": "DuLeMon",
+        "negative": 0,
+        "positive": 533,
+        "uncertain_excluded": 0,
+        "annotation_method": "AI 草稿加人工确认（模型候选双标，抽检通过整池采纳；非逐条人工确认）"
+      },
+      {
+        "source": "ECD 旧120",
+        "negative": 108,
+        "positive": 7,
+        "uncertain_excluded": 5,
+        "annotation_method": "AI 草稿加人工确认"
+      },
+      {
+        "source": "ECD 新180",
+        "negative": 174,
+        "positive": 6,
+        "uncertain_excluded": 0,
+        "annotation_method": "AI 草稿加人工确认"
+      }
+    ],
+    "denominator_scope": "deduplicated adopted-positive DuLeMon conversations and human-confirmed classifiable ECD conversations; not all raw/model-input conversations",
+    "ecd_total_negative": 282,
+    "dulemon_total_negative": 0,
+    "candidate_discards_inferred_negative": 0,
+    "phase1_accepted": false,
+    "phase2_started": false,
+    "report": "docs/reports/phase1-ecd180-confirmed-2026-10-23/report.json"
+  },
+  "reliable_memory_points": {
+    "basis": "old-owner-approved-and-new-blind-audit-approved-union-human",
+    "individually_human_confirmed": 226,
+    "previous_human": 154,
+    "new_human": 72,
+    "old_audited_model_pool": 262,
+    "new_pool_adopted": 409,
+    "human_old_overlap": 69,
+    "human_new_overlap": 72,
+    "old_new_overlap": 0,
+    "old_model_only_not_individually_confirmed": 193,
+    "new_model_only_not_individually_confirmed": 337,
+    "model_only_not_individually_confirmed": 530,
+    "accepted_union": 756,
+    "minimum_700_passed": true,
+    "gap_1500": 744,
+    "old_temporal_screen_applied": false,
+    "new_temporal_screen_applied": true,
+    "phase1_accepted": false,
+    "report": "docs/reports/phase1-blind-adoption-2026-10-23/report.json",
+    "items_sha256": "2a5173365af41f912f7894d8ce97d746fc9cf90895f2b4d1ae42aa82d38c161b",
+    "provenance_sha256": "8ff4b3be01f207bfd4da3d9b5bf7fde528cb73c9119c4a7ae49c3dec97c9c0de"
+  },
+  "audit": {
+    "successes": 72,
+    "trials": 72,
+    "precision": 1.0,
+    "conversation_clusters": 69,
+    "conversation_bootstrap_ci95": [
+      1.0,
+      1.0
+    ],
+    "bootstrap_resamples": 1000,
+    "bootstrap_seed": 42,
+    "clopper_pearson_ci95": [
+      0.9500559162941453,
+      1.0
+    ],
+    "clopper_pearson_method": "two-sided equal-tailed exact binomial; binomial-tail inversion; all-success lower=(0.025)^(1/n), upper=1",
+    "clopper_pearson_assumptions": "independent Bernoulli item observations, no cluster adjustment or finite-population correction; supplementary only",
+    "reference": "https://www.itl.nist.gov/div898/handbook/prc/section2/prc241.htm"
+  },
+  "model_calls": 0,
+  "owner_labels_rewritten": 0,
+  "protected_registries_sha256": {
+    "docs/evals/reliable-chinese-current.json": "6ddf5ca79f31a3bd8af170425d3729e192493786971ba733b9e9d4ad524653eb",
+    "docs/evals/human-confirmed-current.json": "6aeb05aa8b4ec5404ea288517e045e2be77cf0ede5c4c524c4302b6d0571030a",
+    "docs/evals/ecd-human-current.json": "6d11a9528511987c5b67ea404ddb7e68915bac0a9af68191a2543f37aa0b3d5d"
+  },
+  "all_protected_inputs_unchanged": true,
+  "phase1_minimum_scale_and_negative_gates_met": true,
+  "phase1_accepted": false,
+  "phase2_started": false,
+  "remaining_phase1": [
+    "owner final acceptance; no remaining quantitative gate in the owner-defined scope"
+  ],
+  "phase2_scope_only": [
+    "judge human calibration",
+    "ECD system false-extraction evaluation"
+  ],
+  "validation": {
+    "pytest": 440,
+    "pytest_seconds": 18.51,
+    "ruff": true,
+    "strict_mypy": true,
+    "foundation_8_of_8": true,
+    "log_sha256": "dfbea4544f4a0cc91e5d42f69e9d980c9b7ab803229d010024eeaa735940d361"
+  }
+}

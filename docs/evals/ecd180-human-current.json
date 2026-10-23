@@ -1,0 +1,32 @@
+{
+  "source": "ECD180",
+  "annotation_method": "AI 草稿加人工确认",
+  "independent_human_annotation": false,
+  "counts": {
+    "negative": 174,
+    "positive": 6,
+    "uncertain": 0
+  },
+  "conversations": 180,
+  "manual_change_marker_count": 4,
+  "manual_change_classifications": {
+    "positive": 4
+  },
+  "agent_modified_owner_labels": false,
+  "submitted_sha256": "4d088f3135fda85db94c4936b07d8539d26283ff0331a581e7bca1debdf10262",
+  "template_sha256": "b4105d19c9667d655fe8516a900b754da27ca20d8989a8ffe0c738cd7bd52d39",
+  "actual_attachment_filename": "ecd180-human-labeled.csv",
+  "owner_referred_filename": "ecd180-human-labeled-final.csv",
+  "owner_message_id": "om_x100b629f8cd6c8b0ddff05b215cb9ef",
+  "attachment_message_id": "om_x100b629f8f5920acdefb86f8b83452b",
+  "raw_private_only": true,
+  "frozen_fields_and_record_hashes_verified": true,
+  "old_splits_unchanged": true,
+  "new_split_verified": true,
+  "split_counts": {
+    "test": 126,
+    "dev": 54
+  },
+  "source_domain": "customer service; not representative of general dialogue",
+  "positive_conversations_are_not_additional_memory_point_count": true
+}

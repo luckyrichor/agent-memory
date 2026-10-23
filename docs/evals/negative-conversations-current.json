@@ -1,0 +1,42 @@
+{
+  "numerator": 282,
+  "denominator": 828,
+  "fraction": 0.34057971014492755,
+  "required_negative_fraction": 0.3,
+  "minimum_classifiable_conversations": 300,
+  "count_passed": true,
+  "fraction_passed": true,
+  "both_passed": true,
+  "uncertain_excluded": 5,
+  "formula": "(108+174)/(648+174+6)",
+  "source_rows": [
+    {
+      "source": "DuLeMon",
+      "negative": 0,
+      "positive": 533,
+      "uncertain_excluded": 0,
+      "annotation_method": "AI 草稿加人工确认（模型候选双标，抽检通过整池采纳；非逐条人工确认）"
+    },
+    {
+      "source": "ECD 旧120",
+      "negative": 108,
+      "positive": 7,
+      "uncertain_excluded": 5,
+      "annotation_method": "AI 草稿加人工确认"
+    },
+    {
+      "source": "ECD 新180",
+      "negative": 174,
+      "positive": 6,
+      "uncertain_excluded": 0,
+      "annotation_method": "AI 草稿加人工确认"
+    }
+  ],
+  "denominator_scope": "deduplicated adopted-positive DuLeMon conversations and human-confirmed classifiable ECD conversations; not all raw/model-input conversations",
+  "ecd_total_negative": 282,
+  "dulemon_total_negative": 0,
+  "candidate_discards_inferred_negative": 0,
+  "phase1_accepted": false,
+  "phase2_started": false,
+  "report": "docs/reports/phase1-ecd180-confirmed-2026-10-23/report.json"
+}
