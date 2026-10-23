@@ -59,6 +59,59 @@ def ratio(observations: Sequence[tuple[float, float]], *, seed: int = 42) -> Est
     return Estimate(numerator / denominator, len(observations), numerator, denominator, ci)
 
 
+def clopper_pearson(
+    successes: int, trials: int, *, confidence: float = 0.95
+) -> tuple[float, float] | None:
+    """Equal-tailed exact binomial interval, supplementary to cluster bootstrap.
+
+    Assumes independent Bernoulli trials: this does not adjust for conversation
+    clustering or sampling without replacement. Invert binomial tails directly;
+    edge cases use their closed forms, not a degenerate resampling interval.
+    """
+    if not 0 <= successes <= trials or not math.isfinite(confidence) or not 0 < confidence < 1:
+        raise ValueError("invalid binomial counts or confidence")
+    if trials == 0:
+        return None
+    tail = (1 - confidence) / 2
+    if successes == trials:
+        return tail ** (1 / trials), 1.0
+    if successes == 0:
+        return 0.0, 1 - tail ** (1 / trials)
+
+    def probability(p: float, start: int, end: int) -> float:
+        if p == 0:
+            return float(start == 0)
+        if p == 1:
+            return float(end == trials)
+        return math.fsum(
+            math.exp(
+                math.lgamma(trials + 1)
+                - math.lgamma(k + 1)
+                - math.lgamma(trials - k + 1)
+                + k * math.log(p)
+                + (trials - k) * math.log1p(-p)
+            )
+            for k in range(start, end + 1)
+        )
+
+    lo, hi = 0.0, 1.0
+    for _ in range(80):
+        mid = (lo + hi) / 2
+        if probability(mid, successes, trials) < tail:
+            lo = mid
+        else:
+            hi = mid
+    lower = (lo + hi) / 2
+    lo, hi = 0.0, 1.0
+    for _ in range(80):
+        mid = (lo + hi) / 2
+        if probability(mid, 0, successes) > tail:
+            lo = mid
+        else:
+            hi = mid
+    return lower, (lo + hi) / 2
+
+
 def f1(precision: float | None, recall: float | None) -> float | None:
     if precision is None or recall is None:
         return None

@@ -40,3 +40,5 @@
 - [旧池采纳、新增账户预检与未完成批整批重做](2026-10-22-phase1-new-accounts.md)
 
 - [2026-10-23-phase1-blind-adoption](2026-10-23-phase1-blind-adoption.md)
+
+- [2026-10-23 ECD180预备审核与精确区间](2026-10-23-ecd180-preparation-and-exact-ci.md)
