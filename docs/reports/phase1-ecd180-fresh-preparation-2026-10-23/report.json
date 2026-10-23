@@ -1,0 +1,201 @@
+{
+  "created_beijing": "2026-10-23T09:26:33.137035+08:00",
+  "source_commit": "735deffdb09e15b76091e09ac549aa479083f3f8",
+  "source_dirty": true,
+  "plan": "docs/plans/2026-10-22-agent-memory-interview-plan-v3.md",
+  "plan_sha256": "06ad7319525c6b0f4eb7333c981b094dd1ed6ec41ae2e5ea1b46009306389418",
+  "same_plan_as_previous_handoff": true,
+  "owner_task_message": "om_x100b629f797834b0df841804501f188",
+  "owner_source_decision": "om_x100b629f278d18a8dd5f2ee1bf3a6fe",
+  "plan_execution_difference": [
+    "Original ECD small reference target 100-150; owner now asks an additional independent random 180 preparation, original 120 unchanged",
+    "Add item-level exact binomial interval as supplement, not a replacement for frozen conversation bootstrap or an added pass threshold",
+    "Owner identifies only negative-session fraction as remaining phase1 gate; no new gate introduced"
+  ],
+  "audit": {
+    "successes": 72,
+    "trials": 72,
+    "precision": 1.0,
+    "conversation_clusters": 69,
+    "conversation_bootstrap_ci95": [
+      1.0,
+      1.0
+    ],
+    "bootstrap_resamples": 1000,
+    "bootstrap_seed": 42,
+    "clopper_pearson_ci95": [
+      0.9500559162941453,
+      1.0
+    ],
+    "clopper_pearson_method": "two-sided equal-tailed exact binomial; binomial-tail inversion; all-success lower=(0.025)^(1/n), upper=1",
+    "clopper_pearson_assumptions": "independent Bernoulli item observations, no cluster adjustment or finite-population correction; supplementary only",
+    "reference": "https://www.itl.nist.gov/div898/handbook/prc/section2/prc241.htm"
+  },
+  "confirmed_sources": {
+    "DuLeMon": {
+      "negative": 0,
+      "positive": 533
+    },
+    "ECD": {
+      "negative": 108,
+      "positive": 7,
+      "uncertain_excluded": 5,
+      "annotation_method": "AI 草稿加人工确认",
+      "domain": "customer service, not representative of general dialogue"
+    }
+  },
+  "negative_gate": {
+    "numerator": 108,
+    "denominator": 648,
+    "fraction": 0.16666666666666666,
+    "required_fraction": 0.3,
+    "passed": false,
+    "count_300_passed": true,
+    "additional_negative_only_needed": 124,
+    "pending_new_classifications_counted": 0,
+    "after_owner_confirmation_formula": "(confirmed_old_negative + new_negative)/(confirmed_old_classifiable + new_negative + new_positive); new_uncertain excluded",
+    "all_new_180_negative_scenario": 0.34782608695652173,
+    "scenario_not_observed": true,
+    "scenarios": [
+      {
+        "new_uncertain": 0,
+        "new_classifiable": 180,
+        "minimum_new_negative": 141,
+        "minimum_new_positive_or_negative_denominator": 828
+      },
+      {
+        "new_uncertain": 5,
+        "new_classifiable": 175,
+        "minimum_new_negative": 139,
+        "minimum_new_positive_or_negative_denominator": 823
+      },
+      {
+        "new_uncertain": 20,
+        "new_classifiable": 160,
+        "minimum_new_negative": 135,
+        "minimum_new_positive_or_negative_denominator": 808
+      }
+    ]
+  },
+  "reliable_memory_points": 756,
+  "new_manual_preparation": {
+    "mode": "fresh",
+    "owner_decision": "om_x100b629f278d18a8dd5f2ee1bf3a6fe",
+    "seed": 20261101,
+    "conversations": 180,
+    "sampling_population": 386077,
+    "sampling": "simple random without replacement; no model scores or label files read; full source conversations, no truncation",
+    "old_human_review_overlap": 0,
+    "all_previous_model_source_overlap": 0,
+    "prior_used_conversations": 400,
+    "previously_human_reviewed": 120,
+    "split_counts": {
+      "test": 126,
+      "dev": 54
+    },
+    "stratum_counts": {
+      "no_personal_information_hint": 166,
+      "personal_information_hint": 14
+    },
+    "human_columns_all_blank": true,
+    "columns": [
+      "conversation_id",
+      "stratum",
+      "split",
+      "source",
+      "record_sha256",
+      "human_memories",
+      "human_no_memories",
+      "human_reason"
+    ],
+    "row_order_shuffled": true,
+    "source_counts": {
+      "positive_response_rows": 500000,
+      "unrelated_negative_response_rows_excluded": 500000,
+      "unique_contexts": 386477,
+      "duplicate_context_rows": 113523,
+      "prior_used_excluded": 400,
+      "source_archive_sha256": "41f09f0312b7611863794fb46d9f7f4061d8171901232ac3c17929295e4878b2"
+    },
+    "source_inventory_sha256": {
+      ".local/phase1/chinese-expansion-v1/ecd/corpus.jsonl": "aeb8e439c546637da351737e5f19fa1525e8af83c108fbf286829a06737cde97",
+      ".local/phase1/chinese-expansion-v2/ecd/corpus.jsonl": "aeb8e439c546637da351737e5f19fa1525e8af83c108fbf286829a06737cde97",
+      ".local/phase1/chinese-expansion-v1/ecd/items.jsonl": "35f4e64cd6eb6d3a36d9fcde3516e5978d64ba9cb9762368fd671babd48014ad",
+      ".local/phase1/chinese-expansion-v2/ecd/items.jsonl": "35f4e64cd6eb6d3a36d9fcde3516e5978d64ba9cb9762368fd671babd48014ad",
+      ".local/phase1/chinese-guide-v2-pilot-data/ecd/items.jsonl": "a46171be485ea6070a69da3964cb0d7f7e8ec501ba741c762b65cf7cba1514fc"
+    },
+    "protected_files_sha256": {
+      ".local/phase1/round3/reviews/ecd-manual-120.csv": "c5e56d41c72194d7a56327e76b5fcc6051fcb397ef2dcdf4d120e1729686fb8a",
+      ".local/phase1/chinese-expansion-v2/ecd/split.json": "12ea5989fccea2991b6e40efa090668d9af5b78b3c706baa6660c0ff29472a8d",
+      ".local/phase1/round3/reviews/dulemon-native-reference/audit-blind.csv": "5a5619eba70448eae9dbaead978ef8729e3936c561274fbc77b9b811901c08a3",
+      ".local/phase1/round3/reviews/ecd-manual-120.jsonl": "392b53fd6d21d9d47f17233a08bf2f39cc11c08b4a013753ddbc3148f1501927",
+      ".local/phase1/round3/reviews/ecd-negative-local.jsonl": "34072968d613f45a0bea699f64e0204da5a476cc4a7a890fc1b33ee6eb7f568b",
+      ".local/phase1/round3/reviews/dulemon-native-reference/audit-blind.jsonl": "aa001b678ce1f122775d69411c6e815643f08c430c6cd90ff237ac69834f5eb7",
+      "docs/evals/ecd-human-current.json": "6d11a9528511987c5b67ea404ddb7e68915bac0a9af68191a2543f37aa0b3d5d",
+      ".local/phase1/round3/temporal-v1/ecd-owner/report.json": "6d11a9528511987c5b67ea404ddb7e68915bac0a9af68191a2543f37aa0b3d5d",
+      ".local/ecd120-human-labeled.csv": "95c81861d698d93e453d8c511da12e3470c2608c4368fc5823708f6b7fad5d15"
+    },
+    "old_frozen_split_unchanged": true,
+    "split_extension_seed": 42,
+    "private_csv_sha256": "b4105d19c9667d655fe8516a900b754da27ca20d8989a8ffe0c738cd7bd52d39",
+    "private_csv_bytes": 282699,
+    "private_jsonl_sha256": "b0752caee5b31bce12459246af8a7cdabfb694eb7b2a89b56a2446d774ff3f59",
+    "raw_private_only": true,
+    "raw_text_not_published": true,
+    "model_calls": 0,
+    "provisional_only": true,
+    "owner_confirmed_new_negative": 0,
+    "adoption_changed": false,
+    "no_model_memory_judgment_filter": true,
+    "no_stratum_filter": true,
+    "stratum_computed_after_sampling": true,
+    "stratum_method": "same descriptive regex as ECD120; anonymous source text only, not verified personal facts",
+    "extended_split_sha256": "727e02b061197da22775a2c31954ac26bd8b07278a23b7d05ee896aad7997fcb",
+    "response_label_note": "ECD 1 identifies the matched response; 0 is an unrelated candidate response, not a memory-negative label",
+    "source_domain": "customer service; not representative of general dialogue"
+  },
+  "preparation_verification": {
+    "reproduced_sha256": {
+      "ecd180-preparation.csv": "b4105d19c9667d655fe8516a900b754da27ca20d8989a8ffe0c738cd7bd52d39",
+      "ecd180-preparation.jsonl": "b0752caee5b31bce12459246af8a7cdabfb694eb7b2a89b56a2446d774ff3f59",
+      "split-extended-private.json": "727e02b061197da22775a2c31954ac26bd8b07278a23b7d05ee896aad7997fcb"
+    },
+    "row_hashes_verified": 180,
+    "original_split_prefixes_unchanged": true,
+    "protected_files_unchanged": true,
+    "current_adoption_registries_unchanged": true,
+    "human_columns_blank": true
+  },
+  "preparation_status": "exported; waiting owner confirmation of labels",
+  "protected_current_registry_sha256": {
+    "docs/evals/reliable-chinese-current.json": "6ddf5ca79f31a3bd8af170425d3729e192493786971ba733b9e9d4ad524653eb",
+    "docs/evals/human-confirmed-current.json": "6aeb05aa8b4ec5404ea288517e045e2be77cf0ede5c4c524c4302b6d0571030a",
+    "docs/evals/ecd-human-current.json": "6d11a9528511987c5b67ea404ddb7e68915bac0a9af68191a2543f37aa0b3d5d"
+  },
+  "model_calls": 0,
+  "new_model_tokens": 0,
+  "model_cost": 0,
+  "inferred_new_labels": 0,
+  "existing_labels_changed": false,
+  "ecd_raw_private_only": true,
+  "new_180_adopted": false,
+  "phase1_accepted": false,
+  "phase2_started": false,
+  "gates": {
+    "pytest_passed": 440,
+    "pytest_seconds": 18.24,
+    "ruff": true,
+    "strict_mypy": true,
+    "foundation_8_of_8": true,
+    "log_sha256": "2a28007e8cb9c7cbf5428561c576d18a07b68d853e18c1192dd636e381ae0f7f"
+  },
+  "environment": {
+    "python": "3.12.3",
+    "platform": "Linux-6.8.0-139-generic-x86_64-with-glibc2.39"
+  },
+  "remaining": [
+    "owner to label the new 180 full conversations; uncertainty not counted as positive or negative",
+    "recalculate and pass negative-session share only from confirmed labels; no assumed ECD negative prevalence",
+    "owner phase1 acceptance required; no stage2 or model execution in this task"
+  ]
+}
