@@ -41,6 +41,7 @@ from agent_memory.infrastructure.db import create_session_factory,session_for_pr
 from agent_memory.infrastructure.event_repositories import PostgresExtractionBackend,PostgresOutboxRepository
 from agent_memory.evals.datasets import file_hash
 from agent_memory.evals.b0 import cosine_rank,calibration_sample,chunk_source_documents,measurement_signature,complete_checkpoint
+from agent_memory.evals.b0_rotation import vendor
 from agent_memory.evals.metrics import ratio,evidence_retrieval,latency
 
 
@@ -56,20 +57,22 @@ def digest(value):return hashlib.sha256(json.dumps(value,sort_keys=True,ensure_a
 
 
 class ModelIO:
- def __init__(self,out,cache_roots=(),fixture=False):
-  self.fixture=fixture
+ def __init__(self,out,cache_roots=(),fixture=False,config=None):
+  self.config=config or {};self.embedding_model=self.config.get('embedding_model','doubao-embedding-vision-251215');self.embedding_provider=self.config.get('embedding_provider','Ark');self.embedding_protocol=self.config.get('embedding_protocol','ark')
+  self.fixture=fixture;self.credentials={}
   self.vector_cache={}
   for root in cache_roots:
    root=Path(root)
    if not (root/"usage.jsonl").exists():continue
    for record in rows(root/"usage.jsonl"):
-    if record.get("role")!="embedding" or record.get("http")!=200 or record.get("cache_hit") or record.get("fixture_only") or record.get("new_http_call") is False:continue
+    if record.get("role")!="embedding" or record.get("provider")!=self.embedding_provider or record.get("http")!=200 or record.get("cache_hit") or record.get("fixture_only") or record.get("new_http_call") is False:continue
     request=root/f"calls/{record['call_id']:07d}-request-private.json";response=root/f"calls/{record['call_id']:07d}-response-{record['attempt']}-private.json"
     if not request.exists() or not response.exists():continue
     body=json.loads(request.read_text());data=json.loads(response.read_text())
-    if body.get("model")!="doubao-embedding-vision-251215" or body.get("dimensions")!=1024:continue
-    if data.get("model")!="doubao-embedding-vision-251215" or not isinstance(data.get("data",{}),dict) or len(data["data"].get("embedding",[]))!=1024:continue
-    vector=data["data"]["embedding"]
+    if body.get("model")!=self.embedding_model or body.get("dimensions")!=1024:continue
+    if data.get("model")!=self.embedding_model:continue
+    vector=(data.get("data",{}).get("embedding",[]) if isinstance(data.get("data"),dict) else (data.get("data") or [{}])[0].get("embedding",[]))
+    if len(vector)!=1024:continue
     if not all(isinstance(x,(int,float)) and math.isfinite(x) for x in vector) or not any(vector):continue
     self.vector_cache.setdefault(digest(body),(response,file_hash(response)))
   self.out=out;self.clients={};self.semaphores={};self.counter_lock=threading.Lock();self.index=0;self.calls=[];self.runtime_blocked=False;self.exhausted=set()
@@ -83,10 +86,10 @@ class ModelIO:
    if (role,provider,body['model']) in self.exhausted:raise RuntimeError('EVALUATION_MODEL_QUOTA')
    with self.counter_lock:self.index+=1;index=self.index
    request_path=self.out/f'calls/{index:07d}-request-private.json';write(request_path,body)
-   endpoint='tokenization' if role=='tokenizer' else ('embeddings/multimodal' if role=='embedding' else 'chat/completions')
+   endpoint='tokenization' if role=='tokenizer' else (('embeddings/multimodal' if self.embedding_protocol=='ark' else 'embeddings') if role=='embedding' else 'chat/completions')
    base='https://ark.cn-beijing.volces.com/api/v3' if provider=='Ark' else os.environ.get('TENCENT_BASE_URL','https://tokenhub.tencentmaas.com/v1').rstrip('/')
    if self.fixture:
-    if role=='embedding':data={'model':'offline-fixture-not-a-real-model','data':{'embedding':[1.0]+[0.0]*1023}}
+    if role=='embedding':data={'model':'offline-fixture-not-a-real-model','data':{'embedding':[1.0]+[0.0]*1023} if self.embedding_protocol=='ark' else [{'index':0,'embedding':[1.0]+[0.0]*1023}]}
     elif role=='tokenizer':data={'model':'offline-fixture-not-a-real-model','data':[{'total_tokens':len(body['text'][0])}]}
     else:
      content=json.dumps({'memories':[{'content':'Synthetic fixture memory.'}]}) if role=='extraction' else (json.dumps({'correct':True,'reason_code':'MATCH'}) if role in ('judge','cross-reference') else 'fixture answer')
@@ -99,7 +102,12 @@ class ModelIO:
     data=json.loads(origin.read_text());write(self.out/f'calls/{index:07d}-response-cached-private.json',data)
     record={'call_id':index,'attempt':0,'at':datetime.now(timezone.utc).isoformat(),'role':role,'provider':provider,'model':body['model'],'response_model':data.get('model'),'http':200,'usage':None,'historical_usage_not_new_tokens':data.get('usage'),'seconds':0,'input_bytes':0,'request_sha256':digest(body),'cache_hit':True,'new_http_call':False,'source_response_path':str(origin),'source_response_sha256':expected}
     self.calls.append(record);append(self.out/'usage.jsonl',record);return data
-   token=os.environ['ARK_API_KEY' if provider=='Ark' else 'TENCENT_API_KEY']
+   from b0_accounts import credential
+   choices=self.config.get('role_accounts',{}).get(role,{})
+   account=choices.get(provider,os.environ.get('AGENT_MEMORY_ARK_ACCOUNT' if provider=='Ark' else 'AGENT_MEMORY_TOKENHUB_ACCOUNT','ark-secondary' if provider=='Ark' else 'tokenhub-secondary'))
+   if account not in self.credentials:self.credentials[account]=credential(account)
+   actual_provider,base,token=self.credentials[account]
+   if actual_provider!=provider:raise ValueError('ACCOUNT_PROVIDER_MISMATCH')
    start=time.monotonic();response=None
    for attempt in range(3):
     try:
@@ -110,7 +118,7 @@ class ModelIO:
     status=response.status_code if response is not None else None
     write(self.out/f'calls/{index:07d}-response-{attempt}-private.json',data)
     usage=data.get('usage');code=(data.get('error') or {}).get('code')
-    record={'call_id':index,'attempt':attempt,'at':datetime.now(timezone.utc).isoformat(),'role':role,'provider':provider,'model':body['model'],'response_model':data.get('model'),'http':status,'error_code':code,'usage':usage,'seconds':time.monotonic()-start,'input_bytes':len(json.dumps(body,ensure_ascii=False).encode()),'request_sha256':digest(body),'cache_hit':False}
+    record={'call_id':index,'attempt':attempt,'at':datetime.now(timezone.utc).isoformat(),'role':role,'provider':provider,'model':body['model'],'response_model':data.get('model'),'http':status,'error_code':code,'usage':usage,'seconds':time.monotonic()-start,'input_bytes':len(json.dumps(body,ensure_ascii=False).encode()),'request_sha256':digest(body),'cache_hit':False,'account':account}
     self.calls.append(record);append(self.out/'usage.jsonl',record)
     quota=status==402 or code in ('SetLimitExceeded','401010','QuotaExceeded','InsufficientBalance')
     if quota and role in ('extraction','embedding'):
@@ -124,15 +132,17 @@ class ModelIO:
     await asyncio.sleep(2**attempt)
    return {'error':data.get('error',{'code':'INVALID_RESPONSE'})}
  async def embedding(self,content):
-  data=await self.request('embedding',{'model':'doubao-embedding-vision-251215','input':[{'type':'text','text':content}],'dimensions':1024,'encoding_format':'float'})
+  body={'model':self.embedding_model,'input':[{'type':'text','text':content}] if self.embedding_protocol=='ark' else content,'dimensions':1024,'encoding_format':'float'}
+  data=await self.request('embedding',body,provider=self.embedding_provider)
   if 'data' not in data:raise ValueError('INVALID_EMBEDDING_RESPONSE')
-  vector=data['data']['embedding'];assert len(vector)==1024
+  vector=data['data']['embedding'] if isinstance(data['data'],dict) else data['data'][0]['embedding']
+  if len(vector)!=1024 or not all(isinstance(x,(int,float)) and math.isfinite(x) for x in vector) or not any(vector):raise ValueError('INVALID_EMBEDDING_RESPONSE')
   return vector
  async def answer(self,question,context,model='doubao-seed-2-1-pro-260915',when=None,full_history=False):
   body={'model':model,'temperature':0,'thinking':{'type':'disabled'},'max_tokens':512,'messages':[{'role':'system','content':(REPO/'docs/evals/prompts/b0-answer-v1.txt').read_text()},{'role':'user','content':json.dumps({'context':context,'question':question,'question_date':when},ensure_ascii=False)}]}
   original_chars=len(json.dumps(context,ensure_ascii=False));truncated=False
   for _ in range(24):
-   data=await self.request('answer',body,provider='Ark' if model.startswith('doubao') else 'TokenHub')
+   data=await self.request('answer',body,provider=self.config.get('answer_provider','Ark' if model.startswith('doubao') else 'TokenHub'))
    error_text=str((data.get('error') or {}).get('message','')).lower()
    context_error=any(t in error_text for t in ('context length','maximum context','context window','input token','input length','prompt is too long'))
    if 'choices' in data or not (full_history and context_error):break
@@ -156,7 +166,7 @@ class ModelIO:
    content=json.dumps({k:row[k] for k in ('question','reference','answer')},ensure_ascii=False)
   else:content=json.dumps({k:row[k] for k in ('question','reference','answer')},ensure_ascii=False)
   body={'model':model,'temperature':0,'thinking':{'type':'disabled'},'max_tokens':256,'response_format':{'type':'json_object'},'messages':[{'role':'system','content':prompt},{'role':'user','content':content}]}
-  data=await self.request(role,body,provider='TokenHub')
+  data=await self.request(role,body,provider=self.config.get('judge_provider','TokenHub') if role=='judge' else self.config.get('cross_reference_provider','TokenHub'))
   try:
    value=json.loads(data['choices'][0]['message']['content'])
    assert set(value)=={'correct','reason_code'} and type(value['correct']) is bool and value['reason_code'] in ('MATCH','MISMATCH')
@@ -165,7 +175,7 @@ class ModelIO:
 
 
 async def measure(args,appurl):
- out=args.output;config=json.loads(args.config.read_text());io=ModelIO(out,config.get('embedding_cache_roots',[]),config.get('offline_fixture',False))
+ out=args.output;config=json.loads(args.config.read_text());io=ModelIO(out,config.get('embedding_cache_roots',[]),config.get('offline_fixture',False),config=config)
  manifest=json.loads((Path(config['datasets_manifest']) if config.get('offline_fixture') else REPO/'docs/baselines/b0/datasets-v1.json').read_text());names=[] if args.dataset=='correctness' else (list(manifest) if args.dataset=='all' else args.dataset.split(','))
  config=json.loads(args.config.read_text());seed=config['seed'];all_results=[];imports=[];status='interrupted'
  with socket.socket() as s:s.bind(('127.0.0.1',0));port=s.getsockname()[1]
@@ -175,7 +185,7 @@ async def measure(args,appurl):
   body=await request.json()
   # Sampling configuration only; no changes to frozen extraction text/schema.
   if role=='extraction':body['temperature']=0
-  provider=config.get('extraction_provider','Ark') if role=='extraction' else 'Ark'
+  provider=config.get('extraction_provider','Ark') if role=='extraction' else config.get('embedding_provider','Ark')
   try:data=await io.request(role,body,provider=provider)
   except RuntimeError:return Response('{}',status_code=402)
   return Response(json.dumps(data),media_type='application/json')
@@ -184,7 +194,7 @@ async def measure(args,appurl):
  while not server.started:await asyncio.sleep(.05)
  key=rsa.generate_private_key(public_exponent=65537,key_size=2048)
  public=key.public_key().public_bytes(serialization.Encoding.PEM,serialization.PublicFormat.SubjectPublicKeyInfo).decode()
- settings=Settings(database_url=appurl,jwt_public_key=public,jwt_issuer='b0-eval',jwt_audience='b0-eval',embedding_model='doubao-embedding-vision-251215',embedding_protocol='ark',embedding_endpoint=f'http://127.0.0.1:{port}/embedding',embedding_token='private-local-forwarder',embedding_trust_env=False,extraction_model=config.get('extraction_model','doubao-seed-2-1-pro-260915'),extraction_endpoint=f'http://127.0.0.1:{port}/extraction',extraction_token='private-local-forwarder',log_level='ERROR',trace_exporter='none',metrics_exporter='none')
+ settings=Settings(database_url=appurl,jwt_public_key=public,jwt_issuer='b0-eval',jwt_audience='b0-eval',embedding_model=config.get('embedding_model','doubao-embedding-vision-251215'),embedding_protocol=config.get('embedding_protocol','ark'),embedding_endpoint=f'http://127.0.0.1:{port}/embedding',embedding_token='private-local-forwarder',embedding_trust_env=False,extraction_model=config.get('extraction_model','doubao-seed-2-1-pro-260915'),extraction_endpoint=f'http://127.0.0.1:{port}/extraction',extraction_token='private-local-forwarder',log_level='ERROR',trace_exporter='none',metrics_exporter='none')
  app=create_app(settings);sessions=create_session_factory(app.state.engine)
  from b0_correctness import measure_correctness
  await measure_correctness(app,sessions,key,out,runtime_label='offline fixture on current source' if config.get('offline_fixture') else 'B0')
@@ -241,7 +251,7 @@ async def measure(args,appurl):
    # Run the actual frozen embedding worker. Do not bypass the public ingestion pipeline.
    embedding_http=httpx.AsyncClient(timeout=10,trust_env=False)
    embedding_backend=PostgresEmbeddingBackend(sessions)
-   embedding_worker=EmbeddingWorker(embedding_backend,HTTPEmbeddingProvider(embedding_http,endpoint=settings.embedding_endpoint,model=settings.embedding_model,token=settings.embedding_token.get_secret_value(),protocol='ark'))
+   embedding_worker=EmbeddingWorker(embedding_backend,HTTPEmbeddingProvider(embedding_http,endpoint=settings.embedding_endpoint,model=settings.embedding_model,token=settings.embedding_token.get_secret_value(),protocol=settings.embedding_protocol))
    embedding_outcomes=[]
    principal=RequestPrincipal(tenant,UUID(int=0),frozenset({'embedding_worker'}),frozenset({'queue:work'}),frozenset())
    while True:
@@ -306,6 +316,7 @@ async def measure(args,appurl):
    if expected and not all(p.exists() for p in tables):continue
    saved=[r for p in tables if p.exists() for r in json.loads(p.read_text())]
    if not complete_checkpoint(saved,expected):continue
+   if not config.get('offline_fixture') and any(r.get('answer_model')!=config.get('answer_models',['doubao-seed-2-1-pro-260915'])[0] or r.get('judge_model')!=config.get('judge_model','glm-5.2') for r in saved):continue
    if bool(prior.get('offline_fixture_only'))!=bool(config.get('offline_fixture')) or prior['runtime_application_file']!=str(SOURCE/'src/agent_memory/api/app.py'):raise ValueError('RESUME_NOT_FROZEN_B0')
    all_results.extend(saved);imports.extend(imported)
    for r in saved:append(out/'results-private.jsonl',r)
@@ -340,8 +351,8 @@ async def measure(args,appurl):
     for row,(answer,data) in zip(table,attempt,strict=True):row.update(answer=answer,answer_valid=answer is not None,answer_model=data.get('model'),answer_usage=data.get('usage'),full_context_truncation=data.get('_b0_full_context_truncation'),full_context_truncated=(data.get('_b0_full_context_truncation') or {}).get('truncated',False))
     answers_complete=True;break
    if not answers_complete:raise RuntimeError('EVALUATION_MODEL_QUOTA')
-   answer_vendor='ByteDance' if model.startswith('doubao') else ('Xiaomi' if model.startswith('mimo') else 'MiniMax')
-   judge_options=[pools['primary'],*pools['backups']]
+   answer_vendor=vendor(model)
+   judge_options=([{'model':config['judge_model'],'vendor':vendor(config['judge_model'])}] if config.get('judge_model') else [pools['primary'],*pools['backups']])
    for judge in judge_options:
     if judge['vendor']==answer_vendor or (dataset=='chinese_queries_v2' and judge['vendor']=='MiniMax'):continue
     async def one_grade(row):return await io.grade(row,judge['model']) if row['answer_valid'] else None
@@ -415,11 +426,14 @@ def main():
  if requested-identifiers-families:p.error('unknown metric identifier or family')
  a.expanded_metrics=sorted({mid for mid in identifiers if mid in requested or mid.rstrip('0123456789') in requested})
  config=json.loads(a.config.read_text())
- allowed={'seed','conversations_per_dataset','conversations_per_question_type','questions_per_conversation','system_context_budget','purpose','workload_basis','embedding_cache_roots','datasets_manifest','offline_fixture','extraction_model','extraction_provider','runtime_change_authorization','answer_models','resume_roots'}
+ allowed={'seed','conversations_per_dataset','conversations_per_question_type','questions_per_conversation','system_context_budget','purpose','workload_basis','embedding_cache_roots','datasets_manifest','offline_fixture','extraction_model','extraction_provider','runtime_change_authorization','answer_models','resume_roots','role_accounts','answer_provider','judge_model','judge_provider','embedding_model','embedding_provider','embedding_protocol','cross_reference_provider','four_key_authorization'}
  if set(config)-allowed:p.error('unknown system configuration fields; credentials must use the private environment')
  if config.get('extraction_model','doubao-seed-2-1-pro-260915')!='doubao-seed-2-1-pro-260915' and config.get('runtime_change_authorization')!='om_x100b62846f735ca8df833bd67f54736':p.error('runtime replacement requires the recorded explicit owner authorization')
  if config.get('offline_fixture') and a.dataset!='offline-fixture':p.error('fixture configuration cannot measure actual benchmark data')
  if config.get('datasets_manifest') and not config.get('offline_fixture'):p.error('real runs require frozen dev registry')
+ if not config.get('offline_fixture') and config.get('judge_model'):
+  answer_vendor=vendor(config.get('answer_models',['doubao-seed-2-1-pro-260915'])[0]);judge_vendor=vendor(config['judge_model'])
+  if answer_vendor is None or judge_vendor is None or judge_vendor in {answer_vendor,'DeepSeek','Tencent','MiniMax'}:p.error('judge vendor cannot be verified independent from answer and table annotation vendors')
  a.output.mkdir(parents=True,exist_ok=False,mode=0o700)
  if not config.get('offline_fixture'):
   assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=SOURCE,text=True).strip()==subprocess.check_output(['git','rev-parse','B0^{}'],cwd=REPO,text=True).strip()

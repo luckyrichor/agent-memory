@@ -77,3 +77,23 @@ def test_checkpoint_requires_complete_unique_rows_and_frozen_measurement_config(
         **original, 'embedding_cache_roots': ['new'], 'resume_roots': ['verified']})
     assert measurement_signature(original) != measurement_signature({
         **original, 'extraction_model': 'changed'})
+    assert measurement_signature({**original, 'answer_provider': 'Ark'}) != measurement_signature({
+        **original, 'answer_provider': 'TokenHub'})
+
+
+def test_rotation_tries_other_key_and_preserves_vendor_gates():
+    from agent_memory.evals.b0_rotation import candidates, quota
+
+    options = candidates('extraction', 'doubao-seed-2-1-lite-260915', 'Ark',
+                         {'TokenHub': ['mimo-v2.6-flash']},
+                         {('ark-secondary', 'doubao-seed-2-1-lite-260915')},
+                         answer_vendor='ByteDance', judge_vendor='Zhipu')
+    assert options[0] == ('Ark', 'ark-primary', 'doubao-seed-2-1-lite-260915')
+    assert ('TokenHub', 'tokenhub-primary', 'mimo-v2.6-flash') in options
+    judges = candidates('judge', 'glm-5.2', 'TokenHub',
+                        {'TokenHub': ['hy4-preview', 'deepseek-v4.1-flash-1017',
+                                      'mimo-v2.6-flash', 'minimax-m3']}, set(),
+                        answer_vendor='Xiaomi', judge_vendor='Zhipu')
+    assert all(model == 'glm-5.2' for _, _, model in judges)
+    assert quota({'http': 429, 'error_code': 'SetLimitExceeded'})
+    assert not quota({'http': 429, 'error_code': 'RateLimitExceeded'})

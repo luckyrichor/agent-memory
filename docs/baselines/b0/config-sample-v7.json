@@ -1,0 +1,58 @@
+{
+  "seed": 42,
+  "conversations_per_dataset": {
+    "longmemeval_oracle": 5,
+    "longmemeval_s": 2,
+    "locomo": 1,
+    "perltqa_zh": 3,
+    "chinese_queries_v2": 10,
+    "dulemon_gold": 8,
+    "ecd_negative": 8
+  },
+  "questions_per_conversation": 10,
+  "system_context_budget": 2000,
+  "purpose": "same frozen sample-v5 measurement; resume complete identical oracle tables after interrupted CLI lifetime, use independent service process",
+  "workload_basis": "docs/baselines/b0/workload-estimate-v1.json; measured pilot input/output costs",
+  "embedding_cache_roots": [
+    ".local/phase2/b0/api-pilot-v1",
+    ".local/phase2/b0/api-pilot-v2",
+    ".local/phase2/b0/development-sample-v1",
+    ".local/phase2/b0/development-sample-v3",
+    ".local/phase2/b0/api-pilot-lite-v1",
+    ".local/phase2/b0/development-sample-v4",
+    ".local/phase2/b0/development-sample-v5"
+  ],
+  "extraction_model": "doubao-seed-2-1-lite-260915",
+  "extraction_provider": "Ark",
+  "runtime_change_authorization": "om_x100b62846f735ca8df833bd67f54736",
+  "answer_models": [
+    "doubao-seed-2-1-lite-260915"
+  ],
+  "resume_roots": [
+    ".local/phase2/b0/development-sample-v5"
+  ],
+  "role_accounts": {
+    "extraction": {
+      "Ark": "ark-primary"
+    },
+    "answer": {
+      "Ark": "ark-primary"
+    },
+    "tokenizer": {
+      "Ark": "ark-primary"
+    },
+    "embedding": {
+      "Ark": "ark-secondary"
+    },
+    "judge": {
+      "TokenHub": "tokenhub-secondary"
+    },
+    "cross-reference": {
+      "TokenHub": "tokenhub-secondary"
+    }
+  },
+  "answer_provider": "Ark",
+  "judge_model": "glm-5.2",
+  "judge_provider": "TokenHub",
+  "four_key_authorization": "om_x100b6280467a68a4c3cc0005fe78816"
+}

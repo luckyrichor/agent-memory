@@ -28,7 +28,7 @@ def main():
  runs=[inspect(name) for name in names if (ROOT/name).exists()]
  check=ROOT/'check-checkpoint.log';log=check.read_text();match=re.search(r'(\d+) passed in ([\d.]+)s',log);assert match
  commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip();baseline=subprocess.check_output(['git','rev-parse','B0^{}'],text=True).strip()
- plan=Path('docs/plans/2026-10-22-agent-memory-interview-plan-v3.md');policy=read(Path('docs/evals/b0-policy-v3.json'))
+ plan=Path('docs/plans/2026-10-22-agent-memory-interview-plan-v3.md');policy=read(Path(read(Path('docs/evals/b0-current.json')).get('policy','docs/evals/b0-policy-v4.json')))
  tokenizer=read(ROOT/'context-tokens-snapshot-v1/report-private.json',{})
  tokenizer={k:v for k,v in tokenizer.items() if k not in ('records','dataset_snapshot_sha256')}
  tokenizer['historical_source_log_sha256_at_end_not_snapshot']=read(ROOT/'context-tokens-snapshot-v1/report-private.json',{}).get('dataset_snapshot_sha256')

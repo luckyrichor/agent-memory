@@ -118,9 +118,20 @@ def chunk_source_documents(documents: Sequence[dict[str, Any]]) -> list[dict[str
 def measurement_signature(config: dict[str, Any]) -> dict[str, Any]:
     """Only non-measurement recovery metadata may differ across checkpoints."""
     keys = ('seed', 'conversations_per_dataset', 'conversations_per_question_type',
-            'questions_per_conversation', 'system_context_budget', 'extraction_model',
-            'extraction_provider', 'answer_models', 'offline_fixture')
-    return {key: config.get(key) for key in keys}
+            'questions_per_conversation', 'system_context_budget', 'offline_fixture')
+    result = {key: config.get(key) for key in keys}
+    result.update(extraction_model=config.get('extraction_model', 'doubao-seed-2-1-pro-260915'),
+                  extraction_provider=config.get('extraction_provider', 'Ark'),
+                  embedding_model=config.get('embedding_model', 'doubao-embedding-vision-251215'),
+                  embedding_provider=config.get('embedding_provider', 'Ark'),
+                  embedding_protocol=config.get('embedding_protocol', 'ark'),
+                  answer_model=config.get('answer_models', ['doubao-seed-2-1-pro-260915'])[0],
+                  answer_provider=config.get('answer_provider', 'Ark' if config.get(
+                      'answer_models', ['doubao-seed-2-1-pro-260915'])[0].startswith('doubao') else 'TokenHub'),
+                  judge_model=config.get('judge_model', 'glm-5.2'),
+                  judge_provider=config.get('judge_provider', 'TokenHub'))
+    return result
+
 
 
 def complete_checkpoint(rows: Sequence[dict[str, Any]], expected_ids: set[str]) -> bool:

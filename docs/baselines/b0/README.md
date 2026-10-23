@@ -2,7 +2,7 @@
 
 B0为已有不可覆盖标签，提交 `1e9d6f3b25b58c85792344000d7e1b5a71a79737`。评测脚本从只读worktree加载该版本API、领域、存储和worker；评测辅助代码与数据从当前仓库加载。当前检索代码曾在阶段1改动，不用于冒充原B0。
 
-当前策略：[b0-policy-v3.json](../../evals/b0-policy-v3.json)。负责人本轮仅授权测量，不作优化、改阈值或进入阶段3；阶段1已验收。
+当前策略：[b0-policy-v4.json](../../evals/b0-policy-v4.json)。负责人本轮仅授权测量，不作优化、改阈值或进入阶段3；阶段1已验收。
 
 ## 单一运行入口
 
@@ -11,7 +11,7 @@ uv run python scripts/with-llm-account.py ark-secondary \
  .venv/bin/python scripts/with-llm-account.py tokenhub-secondary \
  .venv/bin/python scripts/run-b0.py \
  --dataset all --mode both \
- --config docs/baselines/b0/config-sample-v6.json \
+ --config docs/baselines/b0/config-sample-v7.json \
  --metrics EX,LC,RT,CX,E,RL,SC \
  --output .local/phase2/b0/REPLACE_WITH_NEW_IMMUTABLE_RUN
 ```
@@ -64,3 +64,9 @@ DeepSeek新抽取轮在实际运行中返回402，故该轮保留历史。Ark li
 旧development-sample-v4在LoCoMo首轮抽取期间进程消失，末条调用成功且未留下关闭状态，不能冒称额度停止。oracle两模式三次共120行已完成，恢复只接纳配置/模型、提示词哈希、原始数据哈希、种子、选中ID、全部预期行和导入组合完全匹配的完整数据集。部分表不拼接，恢复不是新的独立模型重复；原始实际调用仍保留在父目录台账。恢复只恢复测量结果，不声称数据库状态已恢复。
 
 可用scripts/start-b0-managed.py在当前用户systemd临时服务中启动相同单一测量入口，独立于聊天CLI子进程寿命；私有文件0600、umask0077，不把凭据写到命令或unit。正常任务不自动重启，校准导出后仍按入口逻辑暂停。启动后通过systemctl --user show对应unit核对进程；需要停止测量时由助手停止该任务unit，不能只凭CLI结束推断计算已停止。
+
+## 负责人授权四Key自动接续
+
+最新授权允许两家平台各两个Key及其可用模型切换。四个不同凭据的目录均HTTP200；目录中有型号不代表实际有额度或通过预检。只记录代号，不保存密钥值到命令/报告。运行时按role_accounts分别选Key，不再只访问第二个Key。额度错误由托管控制器识别后，先试同型号另一Key，再按已发现目录尝试任务适用且厂商合规的型号，逐候选按原标准与虚构角色控制实际预检。失败原始记录私有保留。
+
+新模型/提供方重新开完整比较，不拼接旧模型结果；换向量空间清空旧向量重放与旧表采纳。仅同提供方同实际模型的完整结果允许跨Key恢复，旧三次调用不算新独立重复；新HTTP台账记实际Key代号。自动接续只处理已识别额度错误，不将普通限流、程序错误或人工校准暂停当作换型理由。标注B只尝试同型号的两个Key，未完成如实列出。控制器最终发送聚合报告，校准CSV仍私有，绝不自动进入阶段3。

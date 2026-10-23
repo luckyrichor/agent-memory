@@ -86,7 +86,7 @@ import asyncio, importlib.util, copy
 spec=importlib.util.spec_from_file_location('driver','scripts/run-b0.py')
 m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
 class Stub:
- def __init__(self,error):self.error=error;self.bodies=[]
+ def __init__(self,error):self.error=error;self.bodies=[];self.config={}
  async def request(self,role,body,**kwargs):
   self.bodies.append(copy.deepcopy(body))
   if len(self.bodies)==1:return {'error':{'message':self.error}}
@@ -106,4 +106,43 @@ async def run():
 asyncio.run(run())
 """
     subprocess.run([sys.executable, '-c', program, '--config', str(config)],
+                   cwd=repo, check=True, capture_output=True, text=True, timeout=30)
+
+
+def test_four_key_routing_never_serializes_credentials(tmp_path):
+    repo = Path(__file__).resolve().parents[2]
+    config = tmp_path / 'fixture-source.json'
+    config.write_text(json.dumps({'offline_fixture': True}))
+    program = r"""
+import asyncio, importlib.util, json, sys
+from pathlib import Path
+sys.path.insert(0,'scripts')
+import b0_accounts
+spec=importlib.util.spec_from_file_location('driver','scripts/run-b0.py')
+m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+root=Path(sys.argv[1]);secret='fictional-private-credential-for-mock-only'
+def fake(account):
+ return b0_accounts.ACCOUNTS[account][0],'https://fixture.invalid',secret
+b0_accounts.credential=fake
+async def run():
+ for account,(provider,*_) in b0_accounts.ACCOUNTS.items():
+  calls=[]
+  def respond(request):
+   calls.append(request.headers['Authorization'])
+   return m.httpx.Response(200,json={'model':'fictional','choices':[{'message':{'content':'ok'}}]})
+  io=m.ModelIO(root/account,config={'role_accounts':{'extraction':{provider:account}}})
+  io.clients[id(asyncio.get_running_loop())]=m.httpx.AsyncClient(transport=m.httpx.MockTransport(respond))
+  await io.request('extraction',{'model':'fictional','messages':[]},provider=provider)
+  assert calls==['Bearer '+secret] and io.calls[0]['account']==account
+  for path in (root/account).rglob('*.json*'):assert secret not in path.read_text()
+  for client in io.clients.values():await client.aclose()
+ io=m.ModelIO(root/'openai-fixture',fixture=True,config={'embedding_model':'fictional-1024','embedding_provider':'TokenHub','embedding_protocol':'openai'})
+ vector=await io.embedding('Fictional embedding fixture')
+ assert len(vector)==1024 and io.calls[0]['fixture_only'] and not io.calls[0]['new_http_call']
+ body=json.loads((root/'openai-fixture/calls/0000001-request-private.json').read_text())
+ assert isinstance(body['input'],str) and body['dimensions']==1024
+ for client in io.clients.values():await client.aclose()
+asyncio.run(run())
+"""
+    subprocess.run([sys.executable, '-c', program, str(tmp_path / 'ledger'), '--config', str(config)],
                    cwd=repo, check=True, capture_output=True, text=True, timeout=30)
