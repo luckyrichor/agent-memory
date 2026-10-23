@@ -1,0 +1,194 @@
+{
+  "created_beijing": "2026-10-23T08:23:45.750981+08:00",
+  "source_commit": "fbc38f05eaadc8493063bc1d317daa6adcc6528d",
+  "uncommitted_changes_at_generation": true,
+  "script_sha256": "42b244409c1e3d5b57919f3fa4e2275a7bc18e36f28e4558ff1e793fc7f90440",
+  "plan": "docs/plans/2026-10-22-agent-memory-interview-plan-v3.md",
+  "plan_sha256": "06ad7319525c6b0f4eb7333c981b094dd1ed6ec41ae2e5ea1b46009306389418",
+  "submitted_sha256": "3be624714c49f62191fc9bcfc83be009f5520922aaa51475faeba8ec1a408552",
+  "submitted_bytes": 211087,
+  "template_and_inputs_verified": true,
+  "blank_human_reasons_preserved": 72,
+  "audit": {
+    "labels": {
+      "keep": 72
+    },
+    "errors": 0,
+    "maximum_errors": 3,
+    "passed": true,
+    "precision": {
+      "value": 1.0,
+      "n": 69,
+      "numerator": 72,
+      "denominator": 72,
+      "ci95": [
+        1.0,
+        1.0
+      ]
+    },
+    "bootstrap": 1000,
+    "bootstrap_seed": 42,
+    "sample_seed": 20261030
+  },
+  "counts": {
+    "individually_human_confirmed": 226,
+    "previous_human": 154,
+    "new_human": 72,
+    "old_audited_model_pool": 262,
+    "new_pool_adopted": 409,
+    "human_old_overlap": 69,
+    "human_new_overlap": 72,
+    "old_new_overlap": 0,
+    "old_model_only_not_individually_confirmed": 193,
+    "new_model_only_not_individually_confirmed": 337,
+    "model_only_not_individually_confirmed": 530,
+    "accepted_union": 756,
+    "minimum_700_passed": true,
+    "gap_1500": 744
+  },
+  "negative_gates": {
+    "denominator_definition": "distinct adopted-positive DuLeMon conversation IDs union reviewed ECD positive/negative IDs; ECD uncertain excluded",
+    "dulemon_positive_conversations": 533,
+    "ecd_negative": 108,
+    "ecd_positive": 7,
+    "ecd_uncertain_excluded": 5,
+    "classified_conversations": 648,
+    "minimum_conversations": 300,
+    "count_passed": true,
+    "negative_numerator": 108,
+    "negative_denominator": 648,
+    "negative_fraction": 0.16666666666666666,
+    "minimum_negative_fraction": 0.3,
+    "negative_fraction_passed": false,
+    "additional_confirmed_negative_conversations_needed_if_other_counts_fixed": 124,
+    "both_passed": false,
+    "complete_conversation_gold_coverage_confirmed": false,
+    "scope": "classified evidence union only; not a frozen exhaustive full-conversation extraction gold registry",
+    "increment_source_coverage_conversations_not_gold_negatives": 600,
+    "complete_negative_labels_required": true,
+    "candidate_discards_inferred_negative": 0
+  },
+  "new_model_batches": [
+    {
+      "batch": 0,
+      "models": [
+        "deepseek-v4-flash-202605",
+        "hunyuan-role-latest"
+      ],
+      "conversations": 100,
+      "candidates": 585,
+      "joint_keep": 77
+    },
+    {
+      "batch": 1,
+      "models": [
+        "deepseek-v4-flash-202605",
+        "hunyuan-role-latest"
+      ],
+      "conversations": 100,
+      "candidates": 567,
+      "joint_keep": 78
+    },
+    {
+      "batch": 2,
+      "models": [
+        "deepseek-v4-flash-202605",
+        "hy-role"
+      ],
+      "conversations": 100,
+      "candidates": 571,
+      "joint_keep": 58
+    },
+    {
+      "batch": 3,
+      "models": [
+        "deepseek/deepseek-v4-flash-vision-exp",
+        "hy-role"
+      ],
+      "conversations": 100,
+      "candidates": 568,
+      "joint_keep": 64
+    },
+    {
+      "batch": 4,
+      "models": [
+        "deepseek-v4.1-flash-1017",
+        "hunyuan-role-latest"
+      ],
+      "conversations": 100,
+      "candidates": 558,
+      "joint_keep": 56
+    },
+    {
+      "batch": 5,
+      "models": [
+        "deepseek-v4.1-flash-1017",
+        "hunyuan-role-latest"
+      ],
+      "conversations": 100,
+      "candidates": 557,
+      "joint_keep": 78
+    }
+  ],
+  "inputs_sha256": {
+    ".local/phase1/round3/new-accounts-v1/increment-batches-v6/audit-items.jsonl": "fda4c8126530731ab4a6fec809812b9858424fcf60eabc19026b21925d351b91",
+    ".local/phase1/round3/new-accounts-v1/increment-batches-v6/audit-left.jsonl": "8e440e145940cdd91181d1317ba2533a9f1022115fcb63ae35b0db30ddb0e9bf",
+    ".local/phase1/round3/new-accounts-v1/increment-batches-v6/audit-right.jsonl": "544a468c459a5e7eecc3075a57ab70a5aac6eec74a8c926c593c73f738f02d7d",
+    ".local/phase1/round3/new-accounts-v1/increment-batches-v6/audit-human-projection.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".local/phase1/round3/new-accounts-v1/increment-batches-v6/audit72/audit-blind.csv": "1c26fb5f8c4fcdfd4de00edf62d893c85458c17f395ec634572024bf7491ca46",
+    ".local/phase1/round3/new-accounts-v1/increment-batches-v6/audit72/audit-blind.jsonl": "2564072209189a531391bac1c993824417a7c6eecf7f87d25953873563fd6d9c",
+    ".local/phase1/round3/new-accounts-v1/increment-batches-v6/audit72/opaque-map-private.json": "0d00b72911135a12d8a0dd6880965cdfcaf74351b02078729f673288dbdce3c8",
+    ".local/phase1/round3/new-accounts-v1/increment-batches-v6/report.json": "f7b3e6b24d44e34b6c41e6175ad03c20f040d29332d13baccf35f0e268cf717b",
+    ".local/phase1/round3/new-accounts-v1/increment-batches-v6/batch-registry.json": "88dbf7743cb054751c457551076428349a04ce3b2cbac0b0080529fcd1fed938",
+    ".local/phase1/round3/new-accounts-v1/adopted-old-pool-private.jsonl": "a3d97e2f7c6e5035d3bb8e2cb4386a98c42811f949d20e5772b09b2f56997fa0",
+    ".local/phase1/round3/new-accounts-v1/accepted-base-union-private.jsonl": "8287c00bebf2b4b33cc58f030b1cae0018e0cc5082abb800ec7ab690f8bcc9a0",
+    ".local/phase1/round3/new-accounts-v1/accepted-base-provenance-private.json": "9927f041cbb37efafbcdd580d2096819583330c24f6e525772498bc7386d5889"
+  },
+  "private_outputs_sha256": {
+    ".local/phase1/round3/new-accounts-v1/blind-adoption-v1/accepted-union-private.jsonl": "2a5173365af41f912f7894d8ce97d746fc9cf90895f2b4d1ae42aa82d38c161b",
+    ".local/phase1/round3/new-accounts-v1/blind-adoption-v1/human-labels-projection-private.jsonl": "e97714d9df949382f57155eec9cc839328a4d9d3fe54624c32a28e736a69014f",
+    ".local/phase1/round3/new-accounts-v1/blind-adoption-v1/adopted-new-pool-private.jsonl": "9fb3d56d2c922f087cbdac527d7576affd6bf02f771029eedb65ea05c681375d",
+    ".local/phase1/round3/new-accounts-v1/blind-adoption-v1/accepted-provenance-private.json": "8ff4b3be01f207bfd4da3d9b5bf7fde528cb73c9119c4a7ae49c3dec97c9c0de",
+    ".local/phase1/round3/new-accounts-v1/blind-adoption-v1/human-positive-items-private.jsonl": "d75ccc27ab9a071ea3c9aa5d2b78e06cdde0d142f70f44b943f7a48b8d4c53bc",
+    ".local/phase1/round3/new-accounts-v1/blind-adoption-v1/classified-conversations-private.json": "efdc04f4da75dd8f2b1ece268b4bfbccafb14510fbf602014931cdffeb28d336",
+    ".local/phase1/round3/new-accounts-v1/blind-adoption-v1/human-positive-labels-private.jsonl": "f076e7e300427f3aecb4b100c2d2d98a25b094a649780eee673fde91eac81ed0"
+  },
+  "protected_hashes_verified": {
+    "docs/evals/ecd-human-current.json": "6d11a9528511987c5b67ea404ddb7e68915bac0a9af68191a2543f37aa0b3d5d",
+    ".local/phase1/round3/temporal-v1/ecd-owner/report.json": "6d11a9528511987c5b67ea404ddb7e68915bac0a9af68191a2543f37aa0b3d5d",
+    ".local/ecd120-human-labeled.csv": "95c81861d698d93e453d8c511da12e3470c2608c4368fc5823708f6b7fad5d15",
+    ".local/phase1/round3/reviews/ecd-manual-120.csv": "c5e56d41c72194d7a56327e76b5fcc6051fcb397ef2dcdf4d120e1729686fb8a",
+    ".local/phase1/round3/reviews/dulemon-native-reference/audit-blind.csv": "5a5619eba70448eae9dbaead978ef8729e3936c561274fbc77b9b811901c08a3",
+    ".local/phase1/round3/reviews/ecd-manual-120.jsonl": "392b53fd6d21d9d47f17233a08bf2f39cc11c08b4a013753ddbc3148f1501927",
+    ".local/phase1/round3/reviews/ecd-negative-local.jsonl": "34072968d613f45a0bea699f64e0204da5a476cc4a7a890fc1b33ee6eb7f568b",
+    ".local/phase1/round3/reviews/dulemon-native-reference/audit-blind.jsonl": "aa001b678ce1f122775d69411c6e815643f08c430c6cd90ff237ac69834f5eb7"
+  },
+  "environment": {
+    "platform": "Linux-6.8.0-139-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "hostname": "VM-0-15-ubuntu"
+  },
+  "judge_pools_sha256": "23dbd0a86c76743a327e6abc62b3c5c68cb48f83101bacf54c308c0e125d5542",
+  "validation_controls": {
+    "tamper_rejected": {
+      "source": true,
+      "record_sha256": true,
+      "duplicate": true,
+      "invalid_label": true
+    },
+    "actual_untouched": true,
+    "model_calls": 0
+  },
+  "uv_lock_sha256": "4720221b17f876e708cd39508f9bd6a7bb6ec4ba89d01025c4c6677388fc57aa",
+  "metrics_sha256": "d772a80c84cbe0f6e636631051bf04a045a8694ad2361a5f797c0c71e15b4c81",
+  "model_calls_this_task": 0,
+  "new_model_tokens_this_task": 0,
+  "formal_scores_allowed": false,
+  "phase1_accepted": false,
+  "validation": {
+    "completed": true,
+    "pytest_passed": 432,
+    "pytest_seconds": 18.2,
+    "log_sha256": "d9b09ab936c98c1e6c0a819f77ef15d92a0a725aa5ad539ad0638de88a59d92b"
+  }
+}

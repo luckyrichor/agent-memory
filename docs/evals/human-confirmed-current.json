@@ -1,15 +1,15 @@
 {
-  "basis": "owner-confirmed-subset-only",
-  "whole_joint_pool_accepted": false,
-  "confirmed_positive_points": 154,
+  "basis": "owner-individually-confirmed-original-id-union",
+  "confirmed_positive_points": 226,
+  "whole_joint_pool_individually_confirmed": false,
   "labels": {
-    "path": ".local/phase1/round3/temporal-v1/human-positive-labels.jsonl",
-    "sha256": "8a3ee5ae56acad1b3d9162b39f108ffbf1e9e00153ddc8fd036ffbd267dc22a2"
+    "path": ".local/phase1/round3/new-accounts-v1/blind-adoption-v1/human-positive-labels-private.jsonl",
+    "sha256": "f076e7e300427f3aecb4b100c2d2d98a25b094a649780eee673fde91eac81ed0"
   },
   "items": {
-    "path": ".local/phase1/round3/temporal-v1/human-positive-items.jsonl",
-    "sha256": "173e5f31b07118d21b8f6f0902cd4653340f499abbf65d69dd0a5029172a4916"
+    "path": ".local/phase1/round3/new-accounts-v1/blind-adoption-v1/human-positive-items-private.jsonl",
+    "sha256": "d75ccc27ab9a071ea3c9aa5d2b78e06cdde0d142f70f44b943f7a48b8d4c53bc"
   },
-  "new_owner_return_sha256": "5be99e4f6dcc8eb206fd672880efccb8ad96d45eef9f39a9b207016479e31397",
+  "new_owner_return_sha256": "3be624714c49f62191fc9bcfc83be009f5520922aaa51475faeba8ec1a408552",
   "phase1_accepted": false
 }

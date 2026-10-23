@@ -38,3 +38,5 @@
 - [时效性增量：严格输出与固定批返工](phase1-temporal-output-2026-10-22.md)
 
 - [旧池采纳、新增账户预检与未完成批整批重做](2026-10-22-phase1-new-accounts.md)
+
+- [2026-10-23-phase1-blind-adoption](2026-10-23-phase1-blind-adoption.md)
