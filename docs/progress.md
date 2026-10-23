@@ -396,3 +396,14 @@ hunyuan-role-latest在当前未完成批返回402；完整v3格式预检合格�
 原八列、完整逐轮JSON与空白人工栏已核验；CSV仅在 `.local/phase1/round3/ecd180-review-v1/sample/ecd180-preparation.csv`，SHA256 `b4105d19c9667d655fe8516a900b754da27ca20d8989a8ffe0c738cd7bd52d39`。同种子独立重跑的CSV、JSONL、扩展切分哈希一致。既有采纳与人工标签注册表未改，模型调用 0，不提前推断新标签。当前负会话 108/648，等待人工确认后按冻结公式重算。
 
 全门 440 passed in 18.24s；ruff、strict mypy、foundation通过。新交接 `docs/reports/phase1-ecd180-fresh-preparation-2026-10-23/delivery.md`，旧等待口径报告保留为历史。方案文件及哈希与前轮一致，负责人追加源池/切分授权的出入已列。未完成：人工确认、负占比通过和阶段1负责人验收；不进入阶段2。
+
+
+## 2026-10-23 ECD180真实回填与阶段1负会话双闸门（Codex）
+
+附件冻结字段、逐行摘要、ID覆盖、新旧切分与全部保护文件核验通过。ECD新180：无应记 174、有应记 6、不确定 0；人工修改标记 4，分类 `{'positive': 4}`，未改任何负责人标签。来源均记AI草稿加人工确认，ECD客服领域不代表一般对话。原文/人工内容/理由只在服务器私有目录；文件名差异和哈希见报告。
+
+按冻结公式 `(108+174)/(648+174+6)`，负会话 282/828=34.0580%，会话数门与负占比门均通过。逐来源计数由附件与旧私有注册表去重生成，汇总注册表 `docs/evals/negative-conversations-current.json`；ECD旧120注册表原样保留，新180另存 `docs/evals/ecd180-human-current.json`。真实中文记忆点仍 756，不因ECD正会话数自动增加。
+
+全门 440 passed in 18.51s，ruff/strict mypy/foundation通过。另用内存变体验证source篡改、摘要篡改、重复ID、矛盾人工答案均拒绝；未修改实际附件。执行入口 `scripts/finalize-ecd180-owner-review-v1.py`，交接 `docs/reports/phase1-ecd180-confirmed-2026-10-23/delivery.md`。
+
+负责人认定的阶段1量化门已齐，待负责人最终验收，未自行宣告验收、不开始阶段2。裁判人工校准与ECD系统误抽评测明确属于阶段2，不列阶段1遗留。目标1500差距照实保留，不新增质量门。

@@ -42,3 +42,5 @@
 - [2026-10-23-phase1-blind-adoption](2026-10-23-phase1-blind-adoption.md)
 
 - [2026-10-23 ECD180预备审核与精确区间](2026-10-23-ecd180-preparation-and-exact-ci.md)
+
+- [ECD180真实回填与负会话双闸门](2026-10-23-ecd180-human-confirmed.md)
