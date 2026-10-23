@@ -137,3 +137,35 @@ def measurement_signature(config: dict[str, Any]) -> dict[str, Any]:
 def complete_checkpoint(rows: Sequence[dict[str, Any]], expected_ids: set[str]) -> bool:
     ids = [row['row_id'] for row in rows]
     return len(ids) == len(set(ids)) and set(ids) == expected_ids
+
+
+FAMILY_CONTINUATION_AUTH = "om_x100b628d31ba14a0df2cc7d1869eac1"
+
+
+def compatible_measurement(previous: dict[str, Any], current: dict[str, Any]) -> bool:
+    """Owner-authorized family mixtures; embedding space remains exact, never family-only."""
+    from agent_memory.evals.b0_rotation import vendor
+
+    before, after = measurement_signature(previous), measurement_signature(current)
+    if before == after:
+        return True
+    if current.get('family_continuation_authorization') != FAMILY_CONTINUATION_AUTH:
+        return False
+    for role in ('extraction', 'answer', 'judge'):
+        old, new = str(before[role + '_model']), str(after[role + '_model'])
+        if not vendor(old) or vendor(old) != vendor(new):
+            return False
+        before.pop(role + '_model')
+        after.pop(role + '_model')
+        before.pop(role + '_provider')
+        after.pop(role + '_provider')
+    return before == after
+
+
+def compatible_result_model(actual: str | None, configured: str, config: dict[str, Any]) -> bool:
+    from agent_memory.evals.b0_rotation import vendor
+
+    return actual == configured or (
+        config.get('family_continuation_authorization') == FAMILY_CONTINUATION_AUTH
+        and vendor(configured) is not None and actual is not None
+        and vendor(actual) == vendor(configured))

@@ -19,7 +19,7 @@ async def main():
   elif role=='answer':
    answer,_=await io.answer('What is the fictional color?','The fictional color is green.',config['answer_models'][0]);valid=isinstance(answer,str) and bool(answer.strip())
   else:
-   model=config.get('judge_model','glm-5.2') if role=='judge' else 'hunyuan-role-latest';valid=await io.grade({'dataset':'fictional','question':'What is the fictional color?','reference':'green','answer':'green'},model,role=role) is not None
+   model=config.get('judge_model','glm-5.2') if role=='judge' else config.get('cross_reference_model','hunyuan-role-latest');valid=await io.grade({'dataset':'fictional','question':'What is the fictional color?','reference':'green','answer':'green'},model,role=role) is not None
  except (RuntimeError,ValueError,KeyError,TypeError,AssertionError):valid=False
  finally:
   for client in io.clients.values():await client.aclose()

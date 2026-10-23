@@ -40,7 +40,7 @@ from agent_memory.evals.api_import import source_time
 from agent_memory.infrastructure.db import create_session_factory,session_for_principal
 from agent_memory.infrastructure.event_repositories import PostgresExtractionBackend,PostgresOutboxRepository
 from agent_memory.evals.datasets import file_hash
-from agent_memory.evals.b0 import cosine_rank,calibration_sample,chunk_source_documents,measurement_signature,complete_checkpoint
+from agent_memory.evals.b0 import cosine_rank,calibration_sample,chunk_source_documents,measurement_signature,complete_checkpoint,compatible_measurement,compatible_result_model
 from agent_memory.evals.b0_rotation import vendor
 from agent_memory.evals.metrics import ratio,evidence_retrieval,latency
 
@@ -274,7 +274,7 @@ async def measure(args,appurl):
    async def external_vector(item):
     return by_text[item['text']] if item['text'] in by_text else await io.embedding(item['text'])
    vectors=await asyncio.gather(*(external_vector(r) for r in naive_mapping))
-   import_record={'dataset':dataset,'conversation_id':cid,'mode':mode,'repeat':repeat,'source_documents':len(conv['documents']),'chunks':len(chunks),'memories':len(mapping),'naive_corpus_count':len(naive_mapping),'naive_includes_system_rejected_source_chunks':mode=='direct','embedding_outcomes':embedding_outcomes,'rejected':rejected,'extraction_outcomes':outcomes,'source_role_unknown_as_tool_result':sum(d['role']=='source' for d in conv['documents']),'event_occurred_at_basis':'original source time when parseable, otherwise explicit import receipt time; source text/time retained in mapping','active_memories':sum(r.get('memory_status','active')=='active' for r in mapping)}
+   import_record={'extraction_model':config.get('extraction_model','doubao-seed-2-1-pro-260915') if mode=='full' else None,'embedding_model':io.embedding_model,'embedding_provider':io.embedding_provider,'dataset':dataset,'conversation_id':cid,'mode':mode,'repeat':repeat,'source_documents':len(conv['documents']),'chunks':len(chunks),'memories':len(mapping),'naive_corpus_count':len(naive_mapping),'naive_includes_system_rejected_source_chunks':mode=='direct','embedding_outcomes':embedding_outcomes,'rejected':rejected,'extraction_outcomes':outcomes,'source_role_unknown_as_tool_result':sum(d['role']=='source' for d in conv['documents']),'event_occurred_at_basis':'original source time when parseable, otherwise explicit import receipt time; source text/time retained in mapping','active_memories':sum(r.get('memory_status','active')=='active' for r in mapping)}
    imports.append(import_record);append(out/'imports-private.jsonl',import_record);write(out/f'mappings/{digest([dataset,cid,mode,repeat])}.json',mapping)
    questions=list(conv['questions']);rng=random.Random(seed);rng.shuffle(questions);questions=questions[:config['questions_per_conversation']]
    for q in questions:
@@ -286,7 +286,7 @@ async def measure(args,appurl):
     groups={'no-memory':([],[]),'full-context':([{'text':d['text'],'role':d['role'],'occurred_at':d.get('occurred_at')} for d in conv['documents']],[]),'naive-vector':([naive_mapping[i]['text'] for i in rank],[[naive_mapping[i][sourcekey]] for i in rank]),'system':(packet.rendered,[[by_version[str(hit.version_id)][sourcekey]] if str(hit.version_id) in by_version else ['unmapped:'+str(hit.version_id)] for hit in observed.items])}
     for group,(context,evidence) in groups.items():
      answer,data=None,{}
-     row={'row_id':digest([dataset,cid,q['question_id'],mode,group,repeat]),'dataset':dataset,'conversation_id':cid,'question_id':q['question_id'],'category':q['category'],'mode':mode,'system':group,'repeat':repeat,'question':q['text'],'reference':q['answer'],'answer':answer,'answer_model':data.get('model'),'answer_usage':data.get('usage'),'answer_valid':answer is not None,'ranked_evidence_sets':evidence,'retrieval':{str(k):evidence_retrieval(evidence,q['relevant'],k) for k in (1,3,5,10)} if q['evidence_available'] and not q['abstention'] and group in ('system','naive-vector') else {},'system_vector_status':observed.vector_status if group=='system' else None,'RT6':float(not evidence) if q['abstention'] and group in ('system','naive-vector') else None,'flow_only':q['category'] in conv.get('metadata',{}).get('flow_only_categories',[]),'full_context_truncated':False,'full_context_input_bytes':len(json.dumps(context,ensure_ascii=False).encode()),'system_context':{'used_tokens':packet.used_tokens,'budget':packet.budget,'truncated':packet.truncated,'counter':packet.counter} if group=='system' else None,'judge_correct':None,'judge_model':'glm-5.2','formal_score':False}
+     row={'pipeline_extraction_model':config.get('extraction_model','doubao-seed-2-1-pro-260915') if mode=='full' else None,'pipeline_embedding_model':io.embedding_model,'pipeline_embedding_provider':io.embedding_provider,'row_id':digest([dataset,cid,q['question_id'],mode,group,repeat]),'dataset':dataset,'conversation_id':cid,'question_id':q['question_id'],'category':q['category'],'mode':mode,'system':group,'repeat':repeat,'question':q['text'],'reference':q['answer'],'answer':answer,'answer_model':data.get('model'),'answer_usage':data.get('usage'),'answer_valid':answer is not None,'ranked_evidence_sets':evidence,'retrieval':{str(k):evidence_retrieval(evidence,q['relevant'],k) for k in (1,3,5,10)} if q['evidence_available'] and not q['abstention'] and group in ('system','naive-vector') else {},'system_vector_status':observed.vector_status if group=='system' else None,'RT6':float(not evidence) if q['abstention'] and group in ('system','naive-vector') else None,'flow_only':q['category'] in conv.get('metadata',{}).get('flow_only_categories',[]),'full_context_truncated':False,'full_context_input_bytes':len(json.dumps(context,ensure_ascii=False).encode()),'system_context':{'used_tokens':packet.used_tokens,'budget':packet.budget,'truncated':packet.truncated,'counter':packet.counter} if group=='system' else None,'judge_correct':None,'judge_model':'glm-5.2','formal_score':False}
      row.update(context=context,question_date=conv.get('metadata',{}).get('question_date'))
      all_results.append(row);append(out/'results-private.jsonl',row)
      print(json.dumps({'dataset':dataset,'mode':mode,'repeat':repeat,'group':group,'completed_rows':len(all_results),'model_calls':len(io.calls)}),flush=True)
@@ -301,7 +301,7 @@ async def measure(args,appurl):
       for group in ('no-memory','full-context','naive-vector','system'):expected.add(digest([dataset,conv['conversation_id'],q['question_id'],mode,group,repeat]))
   for path in config.get('resume_roots',[]):
    root=Path(path);prior=json.loads((root/'run-manifest.json').read_text())
-   if measurement_signature(prior['config'])!=measurement_signature(config) or prior['mode']!=args.mode:raise ValueError('RESUME_MEASUREMENT_CONFIG_MISMATCH')
+   if not compatible_measurement(prior['config'],config) or prior['mode']!=args.mode:raise ValueError('RESUME_MEASUREMENT_CONFIG_MISMATCH')
    current_prompts=json.loads((out/'run-manifest.json').read_text())['prompt_hashes']
    if prior['prompt_hashes']!=current_prompts:raise ValueError('RESUME_PROMPT_MISMATCH')
    selection=root/(dataset+'-selection-private.json')
@@ -316,27 +316,73 @@ async def measure(args,appurl):
    if expected and not all(p.exists() for p in tables):continue
    saved=[r for p in tables if p.exists() for r in json.loads(p.read_text())]
    if not complete_checkpoint(saved,expected):continue
-   if not config.get('offline_fixture') and any(r.get('answer_model')!=config.get('answer_models',['doubao-seed-2-1-pro-260915'])[0] or r.get('judge_model')!=config.get('judge_model','glm-5.2') for r in saved):continue
+   if not config.get('offline_fixture') and any(not compatible_result_model(r.get('answer_model'),config.get('answer_models',['doubao-seed-2-1-pro-260915'])[0],config) or not compatible_result_model(r.get('judge_model'),config.get('judge_model','glm-5.2'),config) for r in saved):continue
    if bool(prior.get('offline_fixture_only'))!=bool(config.get('offline_fixture')) or prior['runtime_application_file']!=str(SOURCE/'src/agent_memory/api/app.py'):raise ValueError('RESUME_NOT_FROZEN_B0')
    all_results.extend(saved);imports.extend(imported)
    for r in saved:append(out/'results-private.jsonl',r)
    for r in imported:append(out/'imports-private.jsonl',r)
    for p in tables:
     if p.exists():write(out/p.name,json.loads(p.read_text()))
-   append(out/'resumed-datasets.jsonl',{'dataset':dataset,'from_run':str(root),'actual_original_repeats':3,'new_answer_calls':0,'rows':len(saved),'table_hashes':{p.name:file_hash(p) for p in tables if p.exists()},'parent_run_manifest_sha256':file_hash(root/'run-manifest.json'),'parent_harness_commit':prior['harness_commit'],'measurement_signature':measurement_signature(config),'same_source_prompt_data_model_required':True,'database_state_restored':False,'scope':'complete evaluation rows and import observations only; previous DB is not restored; parent actual calls remain in their original ledger'})
+   append(out/'resumed-datasets.jsonl',{'dataset':dataset,'from_run':str(root),'actual_original_repeats':3,'new_answer_calls':0,'rows':len(saved),'table_hashes':{p.name:file_hash(p) for p in tables if p.exists()},'parent_run_manifest_sha256':file_hash(root/'run-manifest.json'),'parent_harness_commit':prior['harness_commit'],'measurement_signature':measurement_signature(config),'same_source_prompt_data_required':True,'family_continuation_authorization':config.get('family_continuation_authorization'),'actual_answer_models':sorted({r.get('answer_model') for r in saved if r.get('answer_model')}),'actual_judge_models':sorted({r.get('judge_model') for r in saved if r.get('judge_model')}),'database_state_restored':False,'scope':'complete evaluation rows and import observations only; previous DB is not restored; parent actual calls remain in their original ledger'})
    print(json.dumps({'stage':'resumed-complete-dataset','dataset':dataset,'rows':len(saved),'new_calls':0}),flush=True)
    return True
   return False
+ def resume_conversation(dataset,conv,mode,repeat):
+  # Only a complete immutable conversation/mode/repeat checkpoint is reusable.
+  questions=list(conv['questions']);random.Random(seed).shuffle(questions)
+  expected={digest([dataset,conv['conversation_id'],q['question_id'],mode,group,repeat]) for q in questions[:config['questions_per_conversation']] for group in ('no-memory','full-context','naive-vector','system')}
+  current_manifest=json.loads((out/'run-manifest.json').read_text())
+  for path in config.get('resume_roots',[]):
+   root=Path(path);prior=json.loads((root/'run-manifest.json').read_text())
+   if not compatible_measurement(prior['config'],config) or prior['mode']!=args.mode:raise ValueError('RESUME_MEASUREMENT_CONFIG_MISMATCH')
+   if prior['prompt_hashes']!=current_manifest['prompt_hashes'] or prior['runtime_application_file']!=current_manifest['runtime_application_file'] or prior['baseline_commit']!=current_manifest['baseline_commit'] or bool(prior.get('offline_fixture_only'))!=bool(config.get('offline_fixture')):raise ValueError('RESUME_NOT_FROZEN_B0')
+   selection=root/(dataset+'-selection-private.json')
+   if not selection.exists():continue
+   if json.loads(selection.read_text())!=json.loads((out/selection.name).read_text()):raise ValueError('RESUME_DATA_MISMATCH')
+   imported=[r for r in rows(root/'imports-private.jsonl') if r['dataset']==dataset and r['conversation_id']==conv['conversation_id'] and r['mode']==mode and r['repeat']==repeat] if (root/'imports-private.jsonl').exists() else []
+   raw=root/'results-private.jsonl'
+   saved=[r for r in rows(raw) if r['row_id'] in expected] if raw.exists() else []
+   if len(imported)!=1 or not complete_checkpoint(saved,expected):continue
+   all_results.extend(saved);imports.extend(imported)
+   for row in saved:append(out/'results-private.jsonl',row)
+   append(out/'imports-private.jsonl',imported[0])
+   append(out/'resumed-conversations.jsonl',{'dataset':dataset,'conversation_id':conv['conversation_id'],'mode':mode,'repeat':repeat,'from_run':str(root),'rows':len(saved),'new_model_calls':0,'database_state_restored':False,'parent_manifest_sha256':file_hash(root/'run-manifest.json'),'parent_results_sha256':file_hash(raw),'parent_imports_sha256':file_hash(root/'imports-private.jsonl'),'family_continuation_authorization':config.get('family_continuation_authorization')})
+   return True
+  return False
+ def saved_stages(table):
+  # Per-row successes survive quota failures; never adopt them across a family/space change.
+  saved={};wanted={r['row_id'] for r in table};current=json.loads((out/'run-manifest.json').read_text())
+  for path in reversed(config.get('resume_roots',[])):
+   root=Path(path);prior=json.loads((root/'run-manifest.json').read_text())
+   if not compatible_measurement(prior['config'],config) or prior['mode']!=args.mode or prior['prompt_hashes']!=current['prompt_hashes']:raise ValueError('RESUME_STAGE_CONFIG_MISMATCH')
+   for name in ('answers-checkpoint-private.jsonl','grades-checkpoint-private.jsonl',*[p.name for p in sorted(root.glob('table-*-private.json'))]):
+    source=root/name
+    if not source.exists():continue
+    for item in (json.loads(source.read_text()) if source.suffix=='.json' else rows(source)):
+     if 'context_sha256' not in item:item['context_sha256']=digest(item['context'])
+     if item['row_id'] not in wanted:continue
+     saved.setdefault(item['row_id'],{}).update(item)
+     saved[item['row_id']]['checkpoint_origin']={'path':str(source),'sha256':file_hash(source),'manifest_sha256':file_hash(root/'run-manifest.json')}
+  for row in table:
+   item=saved.get(row['row_id'])
+   if not item or item.get('context_sha256')!=digest(row['context']) or any(item.get(field)!=row[field] for field in ('question','reference','category')):continue
+   if not (config.get('offline_fixture') and item.get('answer_model')=='offline-fixture-not-a-real-model') and not compatible_result_model(item.get('answer_model'),config.get('answer_models',['doubao-seed-2-1-pro-260915'])[0],config):continue
+   for field in ('answer','answer_valid','answer_model','answer_usage','full_context_truncation','full_context_truncated'):row[field]=item[field]
+   row['_answer_checkpoint']=True
+   if 'judge_correct' in item and compatible_result_model(item.get('judge_model'),config.get('judge_model','glm-5.2'),config):
+    row.update(judge_correct=item['judge_correct'],judge_model=item['judge_model'],_grade_checkpoint=True)
+   append(out/'resumed-stages-private.jsonl',{'row_id':row['row_id'],'answer_model':row['answer_model'],'judge_model':row.get('judge_model') if row.get('_grade_checkpoint') else None,'context_sha256':item['context_sha256'],'new_answer_calls':0,'origin':item['checkpoint_origin'],'family_continuation_authorization':config.get('family_continuation_authorization')})
  async def finish_tables(table_rows):
+  saved_stages(table_rows)
   # Measure the frozen byte counter; never replace it with the target-model tokenizer.
   async def context_tokens(row):
-   if row['system']!='system':return
+   if row['system']!='system' or row.get('_answer_checkpoint'):return
    try:
     data=await io.request('tokenizer',{'model':config.get('answer_models',['doubao-seed-2-1-pro-260915'])[0],'text':[row['context']]})
     row['actual_rendered_context_tokens']=data['data'][0]['total_tokens'];row['context_tokenizer_model']=data.get('model')
    except (RuntimeError,KeyError,TypeError,IndexError):row['actual_rendered_context_tokens']=None
   await asyncio.gather(*(context_tokens(row) for row in table_rows))
-  # Failover is table-wide: discard partial answers or grades and restart all systems/repeats.
+  # Quota recovery retains authenticated row checkpoints only under the owner family policy.
   tables={}
   for row in table_rows:tables.setdefault((row['dataset'],row['mode']),[]).append(row)
   pools=json.loads((REPO/'docs/evals/judge-pools-new-accounts-v1.json').read_text())['new-pool']
@@ -344,7 +390,13 @@ async def measure(args,appurl):
    print(json.dumps({'stage':'answer-and-judge','dataset':dataset,'mode':mode,'rows':len(table)}),flush=True)
    answers_complete=False
    for model in config.get('answer_models',['doubao-seed-2-1-pro-260915','mimo-v2.6-flash','minimax-m3']):
-    answered=await asyncio.gather(*(io.answer(row['question'],row['context'],model,row['question_date'],row['system']=='full-context') for row in table),return_exceptions=True)
+    async def answer_one(row):
+     if row.get('_answer_checkpoint'):return row['answer'],{'model':row['answer_model'],'usage':row['answer_usage'],'_b0_full_context_truncation':row.get('full_context_truncation')}
+     answer,data=await io.answer(row['question'],row['context'],model,row['question_date'],row['system']=='full-context')
+     row.update(answer=answer,answer_valid=answer is not None,answer_model=data.get('model'),answer_usage=data.get('usage'),full_context_truncation=data.get('_b0_full_context_truncation'),full_context_truncated=(data.get('_b0_full_context_truncation') or {}).get('truncated',False))
+     append(out/'answers-checkpoint-private.jsonl',{**row,'context_sha256':digest(row['context'])})
+     return answer,data
+    answered=await asyncio.gather(*(answer_one(row) for row in table),return_exceptions=True)
     attempt=[v for v in answered if not isinstance(v,BaseException)];failed=len(attempt)!=len(table)
     append(out/'table-attempts.jsonl',{'dataset':dataset,'mode':mode,'role':'answer','model':model,'completed':len(attempt),'failed':failed,'whole_table':True})
     if failed:continue
@@ -355,12 +407,17 @@ async def measure(args,appurl):
    judge_options=([{'model':config['judge_model'],'vendor':vendor(config['judge_model'])}] if config.get('judge_model') else [pools['primary'],*pools['backups']])
    for judge in judge_options:
     if judge['vendor']==answer_vendor or (dataset=='chinese_queries_v2' and judge['vendor']=='MiniMax'):continue
-    async def one_grade(row):return await io.grade(row,judge['model']) if row['answer_valid'] else None
+    async def one_grade(row):
+     if row.get('_grade_checkpoint'):return row['judge_correct']
+     grade=await io.grade(row,judge['model']) if row['answer_valid'] else None
+     row.update(judge_correct=grade,judge_model=judge['model'])
+     append(out/'grades-checkpoint-private.jsonl',{**row,'context_sha256':digest(row['context'])})
+     return grade
     graded=await asyncio.gather(*(one_grade(row) for row in table),return_exceptions=True)
     attempt=[v for v in graded if not isinstance(v,BaseException)];failed=len(attempt)!=len(table)
     append(out/'table-attempts.jsonl',{'dataset':dataset,'mode':mode,'role':'judge','model':judge['model'],'completed':len(attempt),'failed':failed,'whole_table':True})
     if failed:continue
-    for row,grade in zip(table,attempt,strict=True):row.update(judge_correct=grade,judge_model=judge['model'])
+    for row,grade in zip(table,attempt,strict=True):row.update(judge_correct=grade)
     break
    else:raise RuntimeError('EVALUATION_MODEL_QUOTA')
    write(out/f"table-{dataset}-{mode}-private.json",table)
@@ -382,7 +439,7 @@ async def measure(args,appurl):
     continue
    for repeat in range(3):
     for mode in (['direct','full'] if args.mode=='both' else [args.mode]):
-     finished=await asyncio.gather(*(run_conversation(dataset,conv,mode,repeat) for conv in selected),return_exceptions=True)
+     finished=await asyncio.gather(*(run_conversation(dataset,conv,mode,repeat) for conv in selected if not resume_conversation(dataset,conv,mode,repeat)),return_exceptions=True)
      errors=[x for x in finished if isinstance(x,BaseException)]
      if errors:raise errors[0]
    await finish_tables([r for r in all_results if r['dataset']==dataset])
@@ -398,9 +455,9 @@ async def measure(args,appurl):
    (out/'calibration-300-private.csv').chmod(0o600)
    cross=[]
    try:
-    for row in chosen:cross.append({'row_id':row['row_id'],'model':'hunyuan-role-latest','correct':await io.grade(row,'hunyuan-role-latest',role='cross-reference')});write(out/'cross-reference-private.json',cross)
+    for row in chosen:cross.append({'row_id':row['row_id'],'model':config.get('cross_reference_model','hunyuan-role-latest'),'correct':await io.grade(row,config.get('cross_reference_model','hunyuan-role-latest'),role='cross-reference')});write(out/'cross-reference-private.json',cross)
    except RuntimeError:
-    write(out/'cross-reference-incomplete.json',{'completed':len(cross),'required':len(chosen),'model':'hunyuan-role-latest','reason':'quota; no unqualified cross-reference substitution'})
+    write(out/'cross-reference-incomplete.json',{'completed':len(cross),'required':len(chosen),'model':config.get('cross_reference_model','hunyuan-role-latest'),'reason':'quota; no unqualified cross-reference substitution'})
    status='paused_for_owner_calibration'
   else:status='offline_fixture_completed' if config.get('offline_fixture') else 'incomplete_calibration_population'
  except Exception as error:
@@ -426,7 +483,7 @@ def main():
  if requested-identifiers-families:p.error('unknown metric identifier or family')
  a.expanded_metrics=sorted({mid for mid in identifiers if mid in requested or mid.rstrip('0123456789') in requested})
  config=json.loads(a.config.read_text())
- allowed={'seed','conversations_per_dataset','conversations_per_question_type','questions_per_conversation','system_context_budget','purpose','workload_basis','embedding_cache_roots','datasets_manifest','offline_fixture','extraction_model','extraction_provider','runtime_change_authorization','answer_models','resume_roots','role_accounts','answer_provider','judge_model','judge_provider','embedding_model','embedding_provider','embedding_protocol','cross_reference_provider','four_key_authorization'}
+ allowed={'seed','conversations_per_dataset','conversations_per_question_type','questions_per_conversation','system_context_budget','purpose','workload_basis','embedding_cache_roots','datasets_manifest','offline_fixture','extraction_model','extraction_provider','runtime_change_authorization','answer_models','resume_roots','role_accounts','answer_provider','judge_model','judge_provider','embedding_model','embedding_provider','embedding_protocol','cross_reference_provider','four_key_authorization','family_continuation_authorization','cross_reference_model'}
  if set(config)-allowed:p.error('unknown system configuration fields; credentials must use the private environment')
  if config.get('extraction_model','doubao-seed-2-1-pro-260915')!='doubao-seed-2-1-pro-260915' and config.get('runtime_change_authorization')!='om_x100b62846f735ca8df833bd67f54736':p.error('runtime replacement requires the recorded explicit owner authorization')
  if config.get('offline_fixture') and a.dataset!='offline-fixture':p.error('fixture configuration cannot measure actual benchmark data')

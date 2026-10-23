@@ -1,0 +1,70 @@
+{
+  "seed": 42,
+  "conversations_per_dataset": {
+    "longmemeval_oracle": 5,
+    "longmemeval_s": 2,
+    "locomo": 1,
+    "perltqa_zh": 3,
+    "chinese_queries_v2": 10,
+    "dulemon_gold": 8,
+    "ecd_negative": 8
+  },
+  "questions_per_conversation": 10,
+  "system_context_budget": 2000,
+  "purpose": "Owner-authorized same-family continuation. Keep verified complete units and per-row successes; preserve models/key aliases/origin hashes. Different families or vector spaces still restart.",
+  "workload_basis": "docs/baselines/b0/workload-estimate-v1.json; measured pilot input/output costs",
+  "embedding_cache_roots": [
+    ".local/phase2/b0/api-pilot-v1",
+    ".local/phase2/b0/api-pilot-v2",
+    ".local/phase2/b0/development-sample-v1",
+    ".local/phase2/b0/development-sample-v3",
+    ".local/phase2/b0/api-pilot-lite-v1",
+    ".local/phase2/b0/development-sample-v4",
+    ".local/phase2/b0/development-sample-v5",
+    "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/development-sample-v6",
+    "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/development-sample-v6-rotation/attempt-001",
+    "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/development-sample-v6-rotation/attempt-002",
+    "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/development-sample-v6-rotation/attempt-003",
+    ".local/phase2/b0/development-sample-v6-rotation/attempt-004",
+    ".local/phase2/b0/development-sample-v6-rotation/attempt-001",
+    ".local/phase2/b0/development-sample-v6-rotation/attempt-002",
+    ".local/phase2/b0/development-sample-v6-rotation/attempt-003"
+  ],
+  "extraction_model": "hy4-preview",
+  "extraction_provider": "TokenHub",
+  "runtime_change_authorization": "om_x100b62846f735ca8df833bd67f54736",
+  "answer_models": [
+    "hy4-preview"
+  ],
+  "resume_roots": [
+    ".local/phase2/b0/development-sample-v6-rotation/attempt-004"
+  ],
+  "role_accounts": {
+    "extraction": {
+      "Ark": "ark-primary",
+      "TokenHub": "tokenhub-secondary"
+    },
+    "answer": {
+      "Ark": "ark-primary",
+      "TokenHub": "tokenhub-secondary"
+    },
+    "tokenizer": {
+      "Ark": "ark-primary",
+      "TokenHub": "tokenhub-secondary"
+    },
+    "embedding": {
+      "Ark": "ark-secondary"
+    },
+    "judge": {
+      "TokenHub": "tokenhub-secondary"
+    },
+    "cross-reference": {
+      "TokenHub": "tokenhub-secondary"
+    }
+  },
+  "answer_provider": "TokenHub",
+  "judge_model": "glm-5.2",
+  "judge_provider": "TokenHub",
+  "four_key_authorization": "om_x100b6280467a68a4c3cc0005fe78816",
+  "family_continuation_authorization": "om_x100b628d31ba14a0df2cc7d1869eac1"
+}

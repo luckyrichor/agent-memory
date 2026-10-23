@@ -3,7 +3,7 @@ import copy,hashlib,json,os,subprocess,sys
 from pathlib import Path
 import httpx
 from b0_accounts import ACCOUNTS,credential
-from agent_memory.evals.b0 import measurement_signature
+from agent_memory.evals.b0 import measurement_signature,compatible_measurement,FAMILY_CONTINUATION_AUTH
 from agent_memory.evals.b0_rotation import candidates,quota,vendor
 
 AUTH='om_x100b6280467a68a4c3cc0005fe78816'
@@ -27,7 +27,7 @@ def apply(config,role,provider,account,model):
  elif role=='embedding':result.update(embedding_model=model,embedding_provider=provider,embedding_protocol='ark' if provider=='Ark' and model.startswith('doubao-embedding-vision') else 'openai')
  elif role=='answer':result.update(answer_models=[model],answer_provider=provider);result.setdefault('role_accounts',{}).setdefault('tokenizer',{})[provider]=account
  elif role=='judge':result.update(judge_model=model,judge_provider=provider)
- elif role=='cross-reference':result.update(cross_reference_provider=provider)
+ elif role=='cross-reference':result.update(cross_reference_provider=provider,cross_reference_model=model)
  return result
 
 class Rotation:
@@ -91,6 +91,10 @@ class Rotation:
   save(self.root/'unavailable-model-accounts.json',{'pairs':sorted(self.unavailable),'scope':'actual quota responses only; not all-model balance conclusions'})
   catalog=self.models()
   options=candidates(role,model,provider,catalog,self.unavailable,answer_vendor=vendor(config.get('answer_models',['doubao-seed-2-1-pro-260915'])[0]),judge_vendor=vendor(config.get('judge_model','glm-5.2')))
+  if config.get('family_continuation_authorization')==FAMILY_CONTINUATION_AUTH:
+   if role=='cross-reference':
+    options=[o for o in candidates('answer',model,provider,catalog,self.unavailable,answer_vendor=vendor(config.get('answer_models',['doubao-seed-2-1-pro-260915'])[0]),judge_vendor=vendor(config.get('judge_model','glm-5.2'))) if vendor(o[2])==vendor(model)]
+   options.sort(key=lambda option:(option[2]!=model, vendor(option[2])!=vendor(model)))
   for new_provider,new_account,new_model in options:
    updated=apply(config,role,new_provider,new_account,new_model)
    if not self.qualify(updated,role,new_provider,new_account,new_model):continue
@@ -100,10 +104,11 @@ class Rotation:
     updated=apply(updated,'answer',new_provider,new_account,new_model)
     if not self.qualify(updated,'answer',new_provider,new_account,new_model):continue
    changed=measurement_signature(updated)!=measurement_signature(config)
-   updated['resume_roots']=[] if changed else [str(run),*config.get('resume_roots',[])]
-   if role=='embedding' and new_model!=model:updated['embedding_cache_roots']=[]
+   compatible=compatible_measurement(config,updated)
+   updated['resume_roots']=[] if not compatible else list(dict.fromkeys([str(run),*config.get('resume_roots',[])]))
+   if role=='embedding' and changed:updated['embedding_cache_roots']=[]
    else:updated['embedding_cache_roots']=list(dict.fromkeys([*config.get('embedding_cache_roots',[]),*map(str,history)]))
-   updated['purpose']='owner-authorized four-key continuation; new model means complete fresh comparison, exact same model may resume verified complete tables'
-   save(self.root/f'rotation-{len(list(self.root.glob("rotation-*.json"))):04d}.json',{'role':role,'old_provider':provider,'old_account':account,'old_model':model,'provider':new_provider,'account':new_account,'model':new_model,'measurement_profile_changed':changed,'complete_comparison_restarted':changed,'credential_values_logged':False})
+   updated['purpose']='owner-authorized continuation: same chat family retains verified completed work; different family or vector space restarts comparison'
+   save(self.root/f'rotation-{len(list(self.root.glob("rotation-*.json"))):04d}.json',{'role':role,'old_provider':provider,'old_account':account,'old_model':model,'provider':new_provider,'account':new_account,'model':new_model,'measurement_profile_changed':changed,'complete_comparison_restarted':not compatible,'same_family_continuation':changed and compatible,'owner_authorization':config.get('family_continuation_authorization'),'credential_values_logged':False})
    return updated
   save(self.root/'no-qualified-candidate.json',{'role':role,'considered':len(options),'status':'no eligible qualified candidate in discovered catalog and four configured keys','not_all_models_balance_exhausted_claim':True});return None

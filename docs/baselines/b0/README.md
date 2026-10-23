@@ -2,7 +2,7 @@
 
 B0为已有不可覆盖标签，提交 `1e9d6f3b25b58c85792344000d7e1b5a71a79737`。评测脚本从只读worktree加载该版本API、领域、存储和worker；评测辅助代码与数据从当前仓库加载。当前检索代码曾在阶段1改动，不用于冒充原B0。
 
-当前策略：[b0-policy-v4.json](../../evals/b0-policy-v4.json)。负责人本轮仅授权测量，不作优化、改阈值或进入阶段3；阶段1已验收。
+当前策略：[b0-policy-v5.json](../../evals/b0-policy-v5.json)。负责人本轮仅授权测量，不作优化、改阈值或进入阶段3；阶段1已验收。
 
 ## 单一运行入口
 
@@ -11,7 +11,7 @@ uv run python scripts/with-llm-account.py ark-secondary \
  .venv/bin/python scripts/with-llm-account.py tokenhub-secondary \
  .venv/bin/python scripts/run-b0.py \
  --dataset all --mode both \
- --config docs/baselines/b0/config-sample-v7.json \
+ --config docs/baselines/b0/config-sample-v8.json \
  --metrics EX,LC,RT,CX,E,RL,SC \
  --output .local/phase2/b0/REPLACE_WITH_NEW_IMMUTABLE_RUN
 ```
@@ -70,3 +70,14 @@ DeepSeek新抽取轮在实际运行中返回402，故该轮保留历史。Ark li
 最新授权允许两家平台各两个Key及其可用模型切换。四个不同凭据的目录均HTTP200；目录中有型号不代表实际有额度或通过预检。只记录代号，不保存密钥值到命令/报告。运行时按role_accounts分别选Key，不再只访问第二个Key。额度错误由托管控制器识别后，先试同型号另一Key，再按已发现目录尝试任务适用且厂商合规的型号，逐候选按原标准与虚构角色控制实际预检。失败原始记录私有保留。
 
 新模型/提供方重新开完整比较，不拼接旧模型结果；换向量空间清空旧向量重放与旧表采纳。仅同提供方同实际模型的完整结果允许跨Key恢复，旧三次调用不算新独立重复；新HTTP台账记实际Key代号。自动接续只处理已识别额度错误，不将普通限流、程序错误或人工校准暂停当作换型理由。标注B只尝试同型号的两个Key，未完成如实列出。控制器最终发送聚合报告，校准CSV仍私有，绝不自动进入阶段3。
+
+
+## 同系列续跑（2026-10-24 北京时间）
+
+负责人消息 om_x100b628d31ba14a0df2cc7d1869eac1 优先于旧整组换型规则：policy-v5/sample-v8允许同一已识别系列的合格聊天模型续跑，先同型号其他Key、再同系列、最后其他系列。不同系列或向量空间改变仍重跑；温度0、关闭思考、五次一致、100格式与实际角色预检、厂商独立性、人工校准均不放宽。
+
+检查点扩至完整会话/模式/重复组合及逐题答题/判分；校验来源数据、提示词、源码、配置、上下文和父文件哈希，不把重放计作新调用或独立重复。当前未完成单会话仍需重建，不声称恢复数据库。报告保留实际抽取/答题/裁判型号及版本混用计数，不能冒称同一精确型号实验；跨型号两模式差值仍标为不可直接比较。交叉参照B只允许原同系列的合格替代。
+
+部署时暂停旧v6托管进程，保留全部目录，使用其当前hy4-preview配置和匹配检查点接续；不回收跨系列旧表作为当前成绩。实际新规则触发同系列额度切换尚未验证。阶段2仍未完成，300人工校准与独立PF仍待；不进入阶段3。
+
+脚本生成发布门证据见family-continuation-verification-v1.json：453 passed in 44.87s，ruff、strict mypy、foundation全部通过；最初检查的导入排序问题已修复后全量重验。

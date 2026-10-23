@@ -1,0 +1,79 @@
+{
+  "version": "b0-v5-authorized-same-family-continuation",
+  "owner_message_id": "om_x100b62986bf4a0a8b0f170f0116e796",
+  "baseline_tag": "B0",
+  "baseline_commit": "1e9d6f3b25b58c85792344000d7e1b5a71a79737",
+  "tag_object": "6ac2cc18744bc8f8a1237675dfc522c47fe6bbfb",
+  "dev_only": true,
+  "test_execution_allowed": false,
+  "modes": [
+    "direct",
+    "full"
+  ],
+  "groups": [
+    "no-memory",
+    "full-context",
+    "naive-vector",
+    "system"
+  ],
+  "answer_model": "doubao-seed-2-1-lite-260915",
+  "extraction_model": "doubao-seed-2-1-lite-260915",
+  "embedding_model": "doubao-embedding-vision-251215",
+  "embedding_dimensions": 1024,
+  "temperature": 0,
+  "runtime_model_auto_switch": true,
+  "repeats": 3,
+  "seed": 42,
+  "judge_pool": "docs/evals/judge-pools-new-accounts-v1.json",
+  "judge_primary": "glm-5.2",
+  "judge_formal_scores_allowed_before_human_calibration": false,
+  "calibration_rows": 300,
+  "self_consistency_rows": 100,
+  "self_consistency_repeats": 3,
+  "calibration_max_rounds": 3,
+  "calibration_policy": "report kappa and accuracy; per phase2 acceptance use kappa >=0.7 or manual metric; do not silently replace with accuracy-only acceptance",
+  "answer_prompt_sha256": "652aa8042f9a87d1a526314ce0585a6172c7b2c71092772e100978735b8069f8",
+  "plan": "docs/plans/2026-10-22-agent-memory-interview-plan-v3.md",
+  "plan_sha256": "06ad7319525c6b0f4eb7333c981b094dd1ed6ec41ae2e5ea1b46009306389418",
+  "plan_differences": [
+    "B0 all metrics dev only; test deferred to final evaluation",
+    "Independent cross-region Linux cloud load generator replaces Mac",
+    "Phase1 accepted union756 and classifiable conversations828, ECD negative282; counts are global not dev counts",
+    "Old pool no temporal screen; new pool screened; owner-confirmed AI drafts not independent human labeling",
+    "Judge selection based on actual per-table annotation vendors and >=1 backup; historical role table is not current freeze",
+    "Human calibration and ECD false extraction belong to phase2, not remaining phase1 tasks",
+    "Owner now explicitly allows same-family model mixtures without whole-group rerun; supersedes original exact-model freeze for continuation, not preflight or calibration"
+  ],
+  "supersedes": "b0-policy-v4.json",
+  "runtime_change_owner_message_id": "om_x100b62846f735ca8df833bd67f54736",
+  "extraction_provider": "Ark",
+  "qualification_required": "original model_preflight criteria plus actual frozen-extractor format observations",
+  "prior_runtime_extraction_model": "doubao-seed-2-1-pro-260915",
+  "runtime_change_rule": "Same known chat model family can continue completed conversations and per-row answers/grades after quota; preserve exact actual model/key and parent hashes. Cross-family changes restart full comparison. Any embedding model/provider/protocol change restarts and clears vectors.",
+  "runtime_replacement_qualification": "docs/baselines/b0/replacement-lite-qualification-v1.json",
+  "prior_replacement_failure": "TokenHub deepseek-v4.1-flash-1017 returned HTTP402 in development-sample-v3; partial extraction not reused",
+  "four_key_owner_message_id": "om_x100b6280467a68a4c3cc0005fe78816",
+  "configured_account_aliases": [
+    "ark-primary",
+    "ark-secondary",
+    "tokenhub-primary",
+    "tokenhub-secondary"
+  ],
+  "inventory": "docs/baselines/b0/four-key-inventory-v1.json",
+  "switch_order": [
+    "same model on another qualified key",
+    "other qualified models in same known family across providers",
+    "other eligible qualified families; restart complete comparison"
+  ],
+  "switch_invariants": [
+    "temperature0, thinking disabled, 5 consistent labels and100 format cases, actual role probe before use",
+    "same provider and reported model profile may reuse verified complete tables; account aliases recorded for new HTTP calls",
+    "embedding space change clears all old vector caches and complete-table adoption",
+    "judge vendor independence retained; no official score before human calibration",
+    "human calibration pause and non-quota faults never automatically restart",
+    "no credential values in command lines, reports or request ledgers",
+    "same family may mix model versions only under explicit owner authorization; report each actual model and counts, never label as a single exact-model experiment",
+    "unknown or different family restarts complete comparison; exact vector space still mandatory"
+  ],
+  "family_continuation_owner_message_id": "om_x100b628d31ba14a0df2cc7d1869eac1"
+}

@@ -1,0 +1,15 @@
+{
+  "at_beijing": "2026-10-24T01:29:56.178667+08:00",
+  "pytest_passed": 453,
+  "pytest_seconds": 44.87,
+  "ruff_passed": true,
+  "strict_mypy_passed": true,
+  "foundation": {
+    "total": 8,
+    "passed": 8,
+    "failed": 0
+  },
+  "log_sha256": "ebba8780959224636970e5633420550708a425842e1214740fd3b300cace059b",
+  "offline_recovery_test": "complete direct conversation units and persisted answer/grade rows reused; unique row IDs; no external model calls",
+  "actual_quota_new_family_switch_after_deployment": "not yet observed"
+}

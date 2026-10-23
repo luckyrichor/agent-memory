@@ -76,6 +76,35 @@ def test_unfiltered_baseline_and_worker_pipeline_offline():
     assert len(provenance) == 1 and not provenance[0]['database_state_restored']
 
 
+    # Simulate a quota/interruption after completed direct units, before a complete table.
+    import shutil
+
+    partial = root / 'partial'
+    shutil.copytree(root / 'run', partial)
+    for table in partial.glob('table-*-private.json'):
+        table.unlink()
+    (partial / 'graded-results-private.json').unlink()
+    for filename in ('results-private.jsonl', 'imports-private.jsonl'):
+        records = [json.loads(line) for line in (partial / filename).read_text().splitlines()]
+        (partial / filename).write_text(''.join(json.dumps(r) + '\n'
+                                               for r in records if r['mode'] == 'direct'))
+    resumed_config.write_text(json.dumps({**json.loads(config.read_text()),
+                                         'resume_roots': [str(partial)]}))
+    continuation = subprocess.run([
+        sys.executable, 'scripts/run-b0.py', '--dataset', 'offline-fixture', '--mode', 'both',
+        '--config', str(resumed_config), '--metrics', 'RT,E', '--output', str(root / 'partial-resumed'),
+    ], cwd=repo, env=env, capture_output=True, text=True, timeout=120, check=False)
+    assert continuation.returncode == 0, continuation.stderr[-2000:]
+    units = [json.loads(line) for line in
+             (root / 'partial-resumed/resumed-conversations.jsonl').read_text().splitlines()]
+    assert len(units) == 3 and all(r['mode'] == 'direct' for r in units)
+    continued = json.loads((root / 'partial-resumed/graded-results-private.json').read_text())
+    assert len(continued) == 24 and len({r['row_id'] for r in continued}) == 24
+    assert all(r['answer_valid'] for r in continued)
+    stage_replays = [json.loads(line) for line in (root / 'partial-resumed/resumed-stages-private.jsonl').read_text().splitlines()]
+    assert stage_replays and all(r['new_answer_calls'] == 0 and r['origin']['sha256'] for r in stage_replays)
+
+
 
 def test_full_history_truncates_only_on_context_length_rejection(tmp_path):
     repo = Path(__file__).resolve().parents[2]
