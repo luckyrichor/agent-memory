@@ -1,7 +1,7 @@
 {
-  "generated_beijing": "2026-10-23T15:10:10.203390+08:00",
-  "generator_commit": "cf798b3f279e439fcbf96897ce573eca193f42a3",
-  "uncommitted_changes": true,
+  "generated_beijing": "2026-10-23T15:12:18.184369+08:00",
+  "generator_commit": "87a7da9f25242628281f80a79c4c4b966578a618",
+  "uncommitted_changes": false,
   "baseline_tag": "B0",
   "baseline_commit": "1e9d6f3b25b58c85792344000d7e1b5a71a79737",
   "plan_path": "docs/plans/2026-10-22-agent-memory-interview-plan-v3.md",
@@ -63,7 +63,7 @@
   "phase2_complete": false,
   "phase2_accepted": false,
   "formal_quality_scores_allowed": false,
-  "active_run": "api-pilot-lite-v1",
+  "active_run": "development-sample-v4",
   "runs": [
     {
       "name": "runtime-pilot-v1",
@@ -516,6 +516,56 @@
       "quota_pause": {},
       "run_manifest_sha256": "56609adcbcc18f03257e20be2a960563a0c5798b12a3866f58558954d805914e",
       "harness_commit": "cf798b3f279e439fcbf96897ce573eca193f42a3",
+      "calibration_exported": false
+    },
+    {
+      "name": "development-sample-v4",
+      "status": {
+        "status": "running or interrupted; inspect process separately"
+      },
+      "ledger_sha256": "a2f0979fa27c3cf26d2093d50438687428be328b0c64866ba8310f3375ed7526",
+      "prepared_context_rows": 60,
+      "completed_answer_and_grade_rows": 0,
+      "usage_by_role": {
+        "embedding": {
+          "http_attempt_records": 119,
+          "cache_replays": 198,
+          "usage_reported": 119,
+          "usage_unknown": 0,
+          "reported_tokens": 8309,
+          "http": {
+            "200": 119
+          },
+          "models": [
+            "doubao-embedding-vision-251215"
+          ],
+          "response_models": [
+            "doubao-embedding-vision-251215"
+          ]
+        },
+        "extraction": {
+          "http_attempt_records": 108,
+          "cache_replays": 0,
+          "usage_reported": 108,
+          "usage_unknown": 0,
+          "reported_tokens": 54928,
+          "http": {
+            "200": 108
+          },
+          "models": [
+            "doubao-seed-2-1-lite-260915"
+          ],
+          "response_models": [
+            "doubao-seed-2-1-lite-260915"
+          ]
+        }
+      },
+      "request_ids_without_usage_record": 4,
+      "record_count_including_replays": 425,
+      "snapshot": null,
+      "quota_pause": {},
+      "run_manifest_sha256": "37c02c66905bcc6d1dc50b2c4677ede64f9fe191aba608a7a82ab11dc67a985d",
+      "harness_commit": "87a7da9f25242628281f80a79c4c4b966578a618",
       "calibration_exported": false
     }
   ],

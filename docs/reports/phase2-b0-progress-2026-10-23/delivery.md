@@ -1,10 +1,10 @@
 # agent-memory 阶段2 B0执行交接（进行中，非验收报告）
 
-生成：2026-10-23T15:10:10.203390+08:00；工具源码：cf798b3f279e439fcbf96897ce573eca193f42a3；B0：1e9d6f3b25b58c85792344000d7e1b5a71a79737。报告生成时是否存在未提交修改：True。业务源码标签未覆盖。
+生成：2026-10-23T15:12:18.184369+08:00；工具源码：87a7da9f25242628281f80a79c4c4b966578a618；B0：1e9d6f3b25b58c85792344000d7e1b5a71a79737。报告生成时是否存在未提交修改：False。业务源码标签未覆盖。
 
 ## 当前状态
 
-当前轮：api-pilot-lite-v1。阶段2尚未完成，正式质量分数尚未获准，未进入阶段3。旧pro因429/SetLimitExceeded暂停；更换DeepSeek后的新轮因402暂停。负责人明确授权换型后，Ark lite按原标准复验通过，正在新的独立目录运行。失败仅代表相应型号/身份的实际失败，不是所有模型余额结论。
+当前轮：development-sample-v4。阶段2尚未完成，正式质量分数尚未获准，未进入阶段3。旧pro因429/SetLimitExceeded暂停；更换DeepSeek后的新轮因402暂停。负责人明确授权换型后，Ark lite按原标准复验通过，正在新的独立目录运行。失败仅代表相应型号/身份的实际失败，不是所有模型余额结论。
 
 ## 方案与数据口径
 
@@ -28,6 +28,7 @@
 | development-sample-v1 | runtime_quota_paused | 240 | 0 | 3741 | 0 |
 | development-sample-v3 | runtime_quota_paused | 84 | 0 | 393 | 92 |
 | api-pilot-lite-v1 | incomplete_calibration_population | 24 | 24 | 156 | 60 |
+| development-sample-v4 | running or interrupted; inspect process separately | 60 | 0 | 227 | 198 |
 
 每轮角色、型号、HTTP、已报告token、未知usage与未配对请求见JSON；关机status可能早于晚到usage，最终以完整台账核算。价格和余额未验证，不以未知usage当0。旧操作小样有基线实现问题，不能用于正式对比；旧上下文预算显式100000，不是B0默认2000。
 
