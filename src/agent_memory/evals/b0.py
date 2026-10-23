@@ -113,3 +113,16 @@ def chunk_source_documents(documents: Sequence[dict[str, Any]]) -> list[dict[str
             chunks.append({**document, "text": document["text"][start:start + 4000],
                            "part": start // 4000})
     return chunks
+
+
+def measurement_signature(config: dict[str, Any]) -> dict[str, Any]:
+    """Only non-measurement recovery metadata may differ across checkpoints."""
+    keys = ('seed', 'conversations_per_dataset', 'conversations_per_question_type',
+            'questions_per_conversation', 'system_context_budget', 'extraction_model',
+            'extraction_provider', 'answer_models', 'offline_fixture')
+    return {key: config.get(key) for key in keys}
+
+
+def complete_checkpoint(rows: Sequence[dict[str, Any]], expected_ids: set[str]) -> bool:
+    ids = [row['row_id'] for row in rows]
+    return len(ids) == len(set(ids)) and set(ids) == expected_ids

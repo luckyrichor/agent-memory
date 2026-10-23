@@ -40,7 +40,7 @@ from agent_memory.evals.api_import import source_time
 from agent_memory.infrastructure.db import create_session_factory,session_for_principal
 from agent_memory.infrastructure.event_repositories import PostgresExtractionBackend,PostgresOutboxRepository
 from agent_memory.evals.datasets import file_hash
-from agent_memory.evals.b0 import cosine_rank,calibration_sample,chunk_source_documents
+from agent_memory.evals.b0 import cosine_rank,calibration_sample,chunk_source_documents,measurement_signature,complete_checkpoint
 from agent_memory.evals.metrics import ratio,evidence_retrieval,latency
 
 
@@ -147,7 +147,7 @@ class ModelIO:
   data['_b0_full_context_truncation']={'truncated':truncated,'original_serialized_chars':original_chars,'retained_serialized_chars':len(json.dumps(context,ensure_ascii=False)),'basis':'serialized Unicode characters, not model token ratio; drop oldest only on explicit context-length rejection'}
   if 'choices' not in data:return None,data
   return data['choices'][0]['message']['content'],data
- async def grade(self,row,model='glm-5.2'):
+ async def grade(self,row,model='glm-5.2',*,role='judge'):
   prompt=(REPO/'docs/evals/prompts/judge-v1.txt').read_text()
   if row['dataset'].startswith('longmemeval'):
    rubrics=json.loads((REPO/'docs/evals/prompts/b0-lme-judge-rubrics-v1.json').read_text())['templates']
@@ -156,7 +156,7 @@ class ModelIO:
    content=json.dumps({k:row[k] for k in ('question','reference','answer')},ensure_ascii=False)
   else:content=json.dumps({k:row[k] for k in ('question','reference','answer')},ensure_ascii=False)
   body={'model':model,'temperature':0,'thinking':{'type':'disabled'},'max_tokens':256,'response_format':{'type':'json_object'},'messages':[{'role':'system','content':prompt},{'role':'user','content':content}]}
-  data=await self.request('judge' if model=='glm-5.2' else 'cross-reference',body,provider='TokenHub')
+  data=await self.request(role,body,provider='TokenHub')
   try:
    value=json.loads(data['choices'][0]['message']['content'])
    assert set(value)=={'correct','reason_code'} and type(value['correct']) is bool and value['reason_code'] in ('MATCH','MISMATCH')
@@ -167,7 +167,7 @@ class ModelIO:
 async def measure(args,appurl):
  out=args.output;config=json.loads(args.config.read_text());io=ModelIO(out,config.get('embedding_cache_roots',[]),config.get('offline_fixture',False))
  manifest=json.loads((Path(config['datasets_manifest']) if config.get('offline_fixture') else REPO/'docs/baselines/b0/datasets-v1.json').read_text());names=[] if args.dataset=='correctness' else (list(manifest) if args.dataset=='all' else args.dataset.split(','))
- config=json.loads(args.config.read_text());seed=config['seed'];all_results=[];imports=[]
+ config=json.loads(args.config.read_text());seed=config['seed'];all_results=[];imports=[];status='interrupted'
  with socket.socket() as s:s.bind(('127.0.0.1',0));port=s.getsockname()[1]
  proxy=FastAPI()
  @proxy.post('/{role}')
@@ -280,6 +280,42 @@ async def measure(args,appurl):
      row.update(context=context,question_date=conv.get('metadata',{}).get('question_date'))
      all_results.append(row);append(out/'results-private.jsonl',row)
      print(json.dumps({'dataset':dataset,'mode':mode,'repeat':repeat,'group':group,'completed_rows':len(all_results),'model_calls':len(io.calls)}),flush=True)
+ def resume_dataset(dataset,selected):
+  modes=['direct','full'] if args.mode=='both' else [args.mode]
+  expected=set()
+  for conv in selected:
+   questions=list(conv['questions']);random.Random(seed).shuffle(questions)
+   for q in questions[:config['questions_per_conversation']]:
+    for repeat in range(3):
+     for mode in modes:
+      for group in ('no-memory','full-context','naive-vector','system'):expected.add(digest([dataset,conv['conversation_id'],q['question_id'],mode,group,repeat]))
+  for path in config.get('resume_roots',[]):
+   root=Path(path);prior=json.loads((root/'run-manifest.json').read_text())
+   if measurement_signature(prior['config'])!=measurement_signature(config) or prior['mode']!=args.mode:raise ValueError('RESUME_MEASUREMENT_CONFIG_MISMATCH')
+   current_prompts=json.loads((out/'run-manifest.json').read_text())['prompt_hashes']
+   if prior['prompt_hashes']!=current_prompts:raise ValueError('RESUME_PROMPT_MISMATCH')
+   selection=root/(dataset+'-selection-private.json')
+   if not selection.exists():continue
+   selection=json.loads(selection.read_text())
+   if selection['source_sha256']!=manifest[dataset]['sha256'] or selection['ids']!=[c['conversation_id'] for c in selected]:raise ValueError('RESUME_DATA_MISMATCH')
+   imported=[r for r in rows(root/'imports-private.jsonl') if r['dataset']==dataset]
+   keys=[(r['conversation_id'],r['mode'],r['repeat']) for r in imported]
+   expected_imports={(c['conversation_id'],mode,repeat) for c in selected for mode in modes for repeat in range(3)}
+   if len(keys)!=len(set(keys)) or set(keys)!=expected_imports:continue
+   tables=[root/f'table-{dataset}-{mode}-private.json' for mode in modes]
+   if expected and not all(p.exists() for p in tables):continue
+   saved=[r for p in tables if p.exists() for r in json.loads(p.read_text())]
+   if not complete_checkpoint(saved,expected):continue
+   if bool(prior.get('offline_fixture_only'))!=bool(config.get('offline_fixture')) or prior['runtime_application_file']!=str(SOURCE/'src/agent_memory/api/app.py'):raise ValueError('RESUME_NOT_FROZEN_B0')
+   all_results.extend(saved);imports.extend(imported)
+   for r in saved:append(out/'results-private.jsonl',r)
+   for r in imported:append(out/'imports-private.jsonl',r)
+   for p in tables:
+    if p.exists():write(out/p.name,json.loads(p.read_text()))
+   append(out/'resumed-datasets.jsonl',{'dataset':dataset,'from_run':str(root),'actual_original_repeats':3,'new_answer_calls':0,'rows':len(saved),'table_hashes':{p.name:file_hash(p) for p in tables if p.exists()},'parent_run_manifest_sha256':file_hash(root/'run-manifest.json'),'parent_harness_commit':prior['harness_commit'],'measurement_signature':measurement_signature(config),'same_source_prompt_data_model_required':True,'database_state_restored':False,'scope':'complete evaluation rows and import observations only; previous DB is not restored; parent actual calls remain in their original ledger'})
+   print(json.dumps({'stage':'resumed-complete-dataset','dataset':dataset,'rows':len(saved),'new_calls':0}),flush=True)
+   return True
+  return False
  async def finish_tables(table_rows):
   # Measure the frozen byte counter; never replace it with the target-model tokenizer.
   async def context_tokens(row):
@@ -330,6 +366,9 @@ async def measure(args,appurl):
     selected=[conv for category in sorted(by_category) for conv in by_category[category][:config['conversations_per_question_type']]]
    else:selected=corpus[:config['conversations_per_dataset'].get(dataset,1)]
    write(out/(dataset+'-selection-private.json'),{'ids':[r['conversation_id'] for r in selected],'source_sha256':file_hash(source),'seed':seed})
+   if resume_dataset(dataset,selected):
+    write(out/'graded-results-private.json',all_results)
+    continue
    for repeat in range(3):
     for mode in (['direct','full'] if args.mode=='both' else [args.mode]):
      finished=await asyncio.gather(*(run_conversation(dataset,conv,mode,repeat) for conv in selected),return_exceptions=True)
@@ -348,7 +387,7 @@ async def measure(args,appurl):
    (out/'calibration-300-private.csv').chmod(0o600)
    cross=[]
    try:
-    for row in chosen:cross.append({'row_id':row['row_id'],'model':'hunyuan-role-latest','correct':await io.grade(row,'hunyuan-role-latest')});write(out/'cross-reference-private.json',cross)
+    for row in chosen:cross.append({'row_id':row['row_id'],'model':'hunyuan-role-latest','correct':await io.grade(row,'hunyuan-role-latest',role='cross-reference')});write(out/'cross-reference-private.json',cross)
    except RuntimeError:
     write(out/'cross-reference-incomplete.json',{'completed':len(cross),'required':len(chosen),'model':'hunyuan-role-latest','reason':'quota; no unqualified cross-reference substitution'})
    status='paused_for_owner_calibration'
@@ -376,7 +415,7 @@ def main():
  if requested-identifiers-families:p.error('unknown metric identifier or family')
  a.expanded_metrics=sorted({mid for mid in identifiers if mid in requested or mid.rstrip('0123456789') in requested})
  config=json.loads(a.config.read_text())
- allowed={'seed','conversations_per_dataset','conversations_per_question_type','questions_per_conversation','system_context_budget','purpose','workload_basis','embedding_cache_roots','datasets_manifest','offline_fixture','extraction_model','extraction_provider','runtime_change_authorization','answer_models'}
+ allowed={'seed','conversations_per_dataset','conversations_per_question_type','questions_per_conversation','system_context_budget','purpose','workload_basis','embedding_cache_roots','datasets_manifest','offline_fixture','extraction_model','extraction_provider','runtime_change_authorization','answer_models','resume_roots'}
  if set(config)-allowed:p.error('unknown system configuration fields; credentials must use the private environment')
  if config.get('extraction_model','doubao-seed-2-1-pro-260915')!='doubao-seed-2-1-pro-260915' and config.get('runtime_change_authorization')!='om_x100b62846f735ca8df833bd67f54736':p.error('runtime replacement requires the recorded explicit owner authorization')
  if config.get('offline_fixture') and a.dataset!='offline-fixture':p.error('fixture configuration cannot measure actual benchmark data')
@@ -385,7 +424,7 @@ def main():
  if not config.get('offline_fixture'):
   assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=SOURCE,text=True).strip()==subprocess.check_output(['git','rev-parse','B0^{}'],cwd=REPO,text=True).strip()
   assert not subprocess.check_output(['git','status','--porcelain'],cwd=SOURCE,text=True)
- write(a.output/'run-manifest.json',{'harness_uncommitted_changes':bool(subprocess.check_output(['git','status','--porcelain'],cwd=REPO,text=True).strip()),'harness_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip(),'harness_script_sha256':file_hash(Path(__file__)),'harness_support_sha256':{str(p.relative_to(REPO)):file_hash(p) for p in [REPO/'scripts/b0_correctness.py',REPO/'src/agent_memory/evals/b0.py',REPO/'src/agent_memory/evals/metrics.py']},'config':json.loads(a.config.read_text()),'config_sha256':file_hash(a.config),'dataset':a.dataset,'mode':a.mode,'metrics_requested':a.metrics.split(','),'metrics_expanded':a.expanded_metrics,'runtime_application_file':__import__('agent_memory.api.app',fromlist=['x']).__file__,'prompt_hashes':{str(x.relative_to(REPO)):file_hash(x) for x in [*(REPO/'docs/evals/prompts').glob('b0-*'),REPO/'docs/evals/prompts/judge-v1.txt'] if x.is_file()},'seed':42,'dev_only':True,'test_execution':False,'offline_fixture_only':bool(config.get('offline_fixture')),'grade_status':'pre-calibration diagnostic only'})
+ write(a.output/'run-manifest.json',{'baseline_tag':None if config.get('offline_fixture') else 'B0','baseline_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=SOURCE,text=True).strip(),'harness_uncommitted_changes':bool(subprocess.check_output(['git','status','--porcelain'],cwd=REPO,text=True).strip()),'harness_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip(),'harness_script_sha256':file_hash(Path(__file__)),'harness_support_sha256':{str(p.relative_to(REPO)):file_hash(p) for p in [REPO/'scripts/b0_correctness.py',REPO/'src/agent_memory/evals/b0.py',REPO/'src/agent_memory/evals/metrics.py']},'config':json.loads(a.config.read_text()),'config_sha256':file_hash(a.config),'dataset':a.dataset,'mode':a.mode,'metrics_requested':a.metrics.split(','),'metrics_expanded':a.expanded_metrics,'runtime_application_file':__import__('agent_memory.api.app',fromlist=['x']).__file__,'prompt_hashes':{str(x.relative_to(REPO)):file_hash(x) for x in [*(REPO/'docs/evals/prompts').glob('b0-*'),REPO/'docs/evals/prompts/judge-v1.txt'] if x.is_file()},'seed':42,'dev_only':True,'test_execution':False,'offline_fixture_only':bool(config.get('offline_fixture')),'grade_status':'pre-calibration diagnostic only'})
  with PostgresContainer('pgvector/pgvector:pg16',username='agent_memory',password='disposable-b0-only',dbname='agent_memory',driver='psycopg') as pg:
   url=pg.get_connection_url();cfg=Config(str(SOURCE/'alembic.ini'));cfg.set_main_option('script_location',str(SOURCE/'migrations'));cfg.set_main_option('sqlalchemy.url',url);command.upgrade(cfg,'head')
   engine=create_engine(url)

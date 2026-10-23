@@ -64,3 +64,16 @@ def test_external_vector_corpus_keeps_policy_rejected_source_and_all_chunks():
     assert ''.join(r['text'] for r in chunks if r['source_id'] == 'long') == '中' * 4001
     assert chunks[-1]['text'] == original[-1]['text']
     assert {r['source_id'] for r in chunks} == {'long', 'policy-rejected'}
+
+
+def test_checkpoint_requires_complete_unique_rows_and_frozen_measurement_config():
+    from agent_memory.evals.b0 import complete_checkpoint, measurement_signature
+
+    assert complete_checkpoint([{'row_id': 'one'}, {'row_id': 'two'}], {'one', 'two'})
+    assert not complete_checkpoint([{'row_id': 'one'}], {'one', 'two'})
+    assert not complete_checkpoint([{'row_id': 'one'}, {'row_id': 'one'}], {'one'})
+    original = {'seed': 42, 'extraction_model': 'frozen', 'embedding_cache_roots': ['old']}
+    assert measurement_signature(original) == measurement_signature({
+        **original, 'embedding_cache_roots': ['new'], 'resume_roots': ['verified']})
+    assert measurement_signature(original) != measurement_signature({
+        **original, 'extraction_model': 'changed'})

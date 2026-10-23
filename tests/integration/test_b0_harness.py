@@ -55,6 +55,26 @@ def test_unfiltered_baseline_and_worker_pipeline_offline():
     usage = [json.loads(line) for line in (root / 'run/usage.jsonl').open()]
     assert usage and all(r.get('fixture_only') and not r.get('new_http_call') for r in usage)
     assert not (root / 'run/calibration-300-private.csv').exists()
+    controls = json.loads((root / 'run/correctness-observations.json').read_text())
+    filtering = [r for r in controls['observations'] if r['id'] in ('LC4', 'RT10')]
+    assert len(filtering) == 6 and all(r['setup_valid'] for r in filtering)
+    resumed_config = root / 'resumed-config.json'
+    resumed_config.write_text(json.dumps({**json.loads(config.read_text()),
+                                         'resume_roots': [str(root / 'run')]}))
+    resumed = subprocess.run([
+        sys.executable, 'scripts/run-b0.py', '--dataset', 'offline-fixture', '--mode', 'both',
+        '--config', str(resumed_config), '--metrics', 'RT,E', '--output', str(root / 'resumed'),
+    ], cwd=repo, env=env, capture_output=True, text=True, timeout=120, check=False)
+    assert resumed.returncode == 0, resumed.stderr[-2000:]
+    resumed_status = json.loads((root / 'resumed/status.json').read_text())
+    assert resumed_status['status'] == 'offline_fixture_completed'
+    assert resumed_status['model_records_including_replays'] == 0
+    assert {r['row_id']: r for r in json.loads(
+        (root / 'resumed/graded-results-private.json').read_text())} == {
+            r['row_id']: r for r in json.loads((root / 'run/graded-results-private.json').read_text())}
+    provenance = [json.loads(line) for line in (root / 'resumed/resumed-datasets.jsonl').open()]
+    assert len(provenance) == 1 and not provenance[0]['database_state_restored']
+
 
 
 def test_full_history_truncates_only_on_context_length_rejection(tmp_path):

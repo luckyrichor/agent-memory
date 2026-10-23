@@ -1,0 +1,334 @@
+{
+  "data_level": "C synthetic functional correctness; not semantic quality",
+  "runtime_commit": "B0",
+  "observations": [
+    {
+      "id": "LC5",
+      "dataset": "synthetic exhaustive enum transition matrix",
+      "scale": 51,
+      "method": "enumerate every disallowed status pair against frozen Memory.disable; successor supplied so missing successor cannot mask illegal transitions",
+      "baseline": "B0",
+      "estimate": {
+        "value": 1.0,
+        "n": 51,
+        "numerator": 51.0,
+        "denominator": 51.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "repeats": 1,
+      "scope": "finite exhaustive domain matrix; degenerate bootstrap does not infer general request correctness"
+    },
+    {
+      "id": "RL1",
+      "dataset": "synthetic concurrent idempotency fixture",
+      "scale": 101,
+      "repeat": 0,
+      "method": "100 concurrent identical requests plus same key different body",
+      "baseline": "B0",
+      "duplicate_memory_count": 0,
+      "same_key_different_body_http": 409,
+      "invalid_http": 0,
+      "success_responses": 100,
+      "all_consistent": true
+    },
+    {
+      "id": "RL2",
+      "dataset": "synthetic compare-and-swap fixture",
+      "scale": 20,
+      "repeat": 0,
+      "method": "20 concurrent corrections with same expected_revision",
+      "baseline": "B0",
+      "successful_mutations": 1,
+      "conflicts": 19,
+      "lost_update_count": 0,
+      "unexpected_http": 0
+    },
+    {
+      "id": "SC1",
+      "dataset": "synthetic cross-tenant known-ID fixture",
+      "scale": 2,
+      "repeat": 0,
+      "method": "non-owner API principal attempts foreign known-ID read and write; no successful response allowed",
+      "baseline": "B0",
+      "cross_tenant_successes": 0,
+      "http_statuses": [
+        404,
+        404
+      ]
+    },
+    {
+      "id": "SC3",
+      "dataset": "synthetic permission-denied fixture",
+      "scale": 3,
+      "repeat": 0,
+      "method": "valid JWT with empty permission set tries read/write/search",
+      "baseline": "B0",
+      "unauthorized_successes": 0,
+      "explicit_forbidden": 3,
+      "http_statuses": [
+        403,
+        403,
+        403
+      ]
+    },
+    {
+      "id": "LC7",
+      "dataset": "synthetic logical deletion residue fixture",
+      "scale": 1,
+      "repeat": 0,
+      "method": "public logical delete, then internal observation of retained version rows",
+      "baseline": "B0",
+      "delete_http": 202,
+      "retained_body_versions": 2,
+      "residue_zero": false,
+      "scope": "body versions only; vectors/events/index/backup residue not fully inspected, so not full deletion completeness; known B0 pending physical cleanup boundary, not a newly introduced optimization regression"
+    },
+    {
+      "id": "RL1",
+      "dataset": "synthetic concurrent idempotency fixture",
+      "scale": 101,
+      "repeat": 1,
+      "method": "100 concurrent identical requests plus same key different body",
+      "baseline": "B0",
+      "duplicate_memory_count": 0,
+      "same_key_different_body_http": 409,
+      "invalid_http": 0,
+      "success_responses": 100,
+      "all_consistent": true
+    },
+    {
+      "id": "RL2",
+      "dataset": "synthetic compare-and-swap fixture",
+      "scale": 20,
+      "repeat": 1,
+      "method": "20 concurrent corrections with same expected_revision",
+      "baseline": "B0",
+      "successful_mutations": 1,
+      "conflicts": 19,
+      "lost_update_count": 0,
+      "unexpected_http": 0
+    },
+    {
+      "id": "SC1",
+      "dataset": "synthetic cross-tenant known-ID fixture",
+      "scale": 2,
+      "repeat": 1,
+      "method": "non-owner API principal attempts foreign known-ID read and write; no successful response allowed",
+      "baseline": "B0",
+      "cross_tenant_successes": 0,
+      "http_statuses": [
+        404,
+        404
+      ]
+    },
+    {
+      "id": "SC3",
+      "dataset": "synthetic permission-denied fixture",
+      "scale": 3,
+      "repeat": 1,
+      "method": "valid JWT with empty permission set tries read/write/search",
+      "baseline": "B0",
+      "unauthorized_successes": 0,
+      "explicit_forbidden": 3,
+      "http_statuses": [
+        403,
+        403,
+        403
+      ]
+    },
+    {
+      "id": "LC7",
+      "dataset": "synthetic logical deletion residue fixture",
+      "scale": 1,
+      "repeat": 1,
+      "method": "public logical delete, then internal observation of retained version rows",
+      "baseline": "B0",
+      "delete_http": 202,
+      "retained_body_versions": 2,
+      "residue_zero": false,
+      "scope": "body versions only; vectors/events/index/backup residue not fully inspected, so not full deletion completeness; known B0 pending physical cleanup boundary, not a newly introduced optimization regression"
+    },
+    {
+      "id": "RL1",
+      "dataset": "synthetic concurrent idempotency fixture",
+      "scale": 101,
+      "repeat": 2,
+      "method": "100 concurrent identical requests plus same key different body",
+      "baseline": "B0",
+      "duplicate_memory_count": 0,
+      "same_key_different_body_http": 409,
+      "invalid_http": 0,
+      "success_responses": 100,
+      "all_consistent": true
+    },
+    {
+      "id": "RL2",
+      "dataset": "synthetic compare-and-swap fixture",
+      "scale": 20,
+      "repeat": 2,
+      "method": "20 concurrent corrections with same expected_revision",
+      "baseline": "B0",
+      "successful_mutations": 1,
+      "conflicts": 19,
+      "lost_update_count": 0,
+      "unexpected_http": 0
+    },
+    {
+      "id": "SC1",
+      "dataset": "synthetic cross-tenant known-ID fixture",
+      "scale": 2,
+      "repeat": 2,
+      "method": "non-owner API principal attempts foreign known-ID read and write; no successful response allowed",
+      "baseline": "B0",
+      "cross_tenant_successes": 0,
+      "http_statuses": [
+        404,
+        404
+      ]
+    },
+    {
+      "id": "SC3",
+      "dataset": "synthetic permission-denied fixture",
+      "scale": 3,
+      "repeat": 2,
+      "method": "valid JWT with empty permission set tries read/write/search",
+      "baseline": "B0",
+      "unauthorized_successes": 0,
+      "explicit_forbidden": 3,
+      "http_statuses": [
+        403,
+        403,
+        403
+      ]
+    },
+    {
+      "id": "LC7",
+      "dataset": "synthetic logical deletion residue fixture",
+      "scale": 1,
+      "repeat": 2,
+      "method": "public logical delete, then internal observation of retained version rows",
+      "baseline": "B0",
+      "delete_http": 202,
+      "retained_body_versions": 2,
+      "residue_zero": false,
+      "scope": "body versions only; vectors/events/index/backup residue not fully inspected, so not full deletion completeness; known B0 pending physical cleanup boundary, not a newly introduced optimization regression"
+    },
+    {
+      "dataset": "C synthetic all-channel filtering fixture",
+      "repeat": 0,
+      "baseline": "B0",
+      "method": "public API, non-owner PostgreSQL; explicitly supplied synthetic 1024d vector and controlled derived rows only for structural filtering, not semantic model quality or PF",
+      "setup_valid": true,
+      "model_calls": 0,
+      "id": "LC4",
+      "scale": 1,
+      "expired_status_cases": 3,
+      "expired_memories_returned": 0,
+      "leak_queries": 0,
+      "denominator_queries": 1,
+      "actions_http": [
+        200,
+        200,
+        200
+      ]
+    },
+    {
+      "dataset": "C synthetic all-channel filtering fixture",
+      "repeat": 0,
+      "baseline": "B0",
+      "method": "public API, non-owner PostgreSQL; explicitly supplied synthetic 1024d vector and controlled derived rows only for structural filtering, not semantic model quality or PF",
+      "setup_valid": true,
+      "model_calls": 0,
+      "id": "RT10",
+      "scale": 3,
+      "forbidden_returned": 0,
+      "channel_counts_after": {
+        "lexical": 1,
+        "vector": 1,
+        "structured": 1
+      },
+      "review_pending_returned": false
+    },
+    {
+      "dataset": "C synthetic all-channel filtering fixture",
+      "repeat": 1,
+      "baseline": "B0",
+      "method": "public API, non-owner PostgreSQL; explicitly supplied synthetic 1024d vector and controlled derived rows only for structural filtering, not semantic model quality or PF",
+      "setup_valid": true,
+      "model_calls": 0,
+      "id": "LC4",
+      "scale": 1,
+      "expired_status_cases": 3,
+      "expired_memories_returned": 0,
+      "leak_queries": 0,
+      "denominator_queries": 1,
+      "actions_http": [
+        200,
+        200,
+        200
+      ]
+    },
+    {
+      "dataset": "C synthetic all-channel filtering fixture",
+      "repeat": 1,
+      "baseline": "B0",
+      "method": "public API, non-owner PostgreSQL; explicitly supplied synthetic 1024d vector and controlled derived rows only for structural filtering, not semantic model quality or PF",
+      "setup_valid": true,
+      "model_calls": 0,
+      "id": "RT10",
+      "scale": 3,
+      "forbidden_returned": 0,
+      "channel_counts_after": {
+        "lexical": 1,
+        "vector": 1,
+        "structured": 1
+      },
+      "review_pending_returned": false
+    },
+    {
+      "dataset": "C synthetic all-channel filtering fixture",
+      "repeat": 2,
+      "baseline": "B0",
+      "method": "public API, non-owner PostgreSQL; explicitly supplied synthetic 1024d vector and controlled derived rows only for structural filtering, not semantic model quality or PF",
+      "setup_valid": true,
+      "model_calls": 0,
+      "id": "LC4",
+      "scale": 1,
+      "expired_status_cases": 3,
+      "expired_memories_returned": 0,
+      "leak_queries": 0,
+      "denominator_queries": 1,
+      "actions_http": [
+        200,
+        200,
+        200
+      ]
+    },
+    {
+      "dataset": "C synthetic all-channel filtering fixture",
+      "repeat": 2,
+      "baseline": "B0",
+      "method": "public API, non-owner PostgreSQL; explicitly supplied synthetic 1024d vector and controlled derived rows only for structural filtering, not semantic model quality or PF",
+      "setup_valid": true,
+      "model_calls": 0,
+      "id": "RT10",
+      "scale": 3,
+      "forbidden_returned": 0,
+      "channel_counts_after": {
+        "lexical": 1,
+        "vector": 1,
+        "structured": 1
+      },
+      "review_pending_returned": false
+    }
+  ],
+  "model_calls": 0,
+  "other_correctness_metrics": "unmeasured; do not infer passing from missing adapter",
+  "LC7_full_completion_claim": false,
+  "private_observation_sha256": "efb0a4e9102bb4f21ff4d57f7f550be615fb97bf677209f85d5d5ef8bec3ced2",
+  "baseline_commit": "1e9d6f3b25b58c85792344000d7e1b5a71a79737",
+  "harness_manifest_sha256": "e2c1ad774bbedab51f4891d5dcc298b512e796bddc8788b4ae94d09ded5d49dc"
+}

@@ -11,7 +11,7 @@ uv run python scripts/with-llm-account.py ark-secondary \
  .venv/bin/python scripts/with-llm-account.py tokenhub-secondary \
  .venv/bin/python scripts/run-b0.py \
  --dataset all --mode both \
- --config docs/baselines/b0/config-sample-v5.json \
+ --config docs/baselines/b0/config-sample-v6.json \
  --metrics EX,LC,RT,CX,E,RL,SC \
  --output .local/phase2/b0/REPLACE_WITH_NEW_IMMUTABLE_RUN
 ```
@@ -58,3 +58,9 @@ uv run python scripts/with-llm-account.py ark-secondary \
 DeepSeek新抽取轮在实际运行中返回402，故该轮保留历史。Ark lite按原预检标准实际106次、五标签一致、格式100/100、关闭思考，通过后成为本次抽取与答题的主模型；不再反复探测已知额度失败的pro。独立裁判仍为GLM，向量仍是原Ark模型。超长全文只在供应商明确上下文超限时确定性从最旧端截断，并记录序列化字符保留比例；该比例不是token截断率。
 
 实测替代小样完成后，按replacement-sample-budget-v1.json选择固定开发集抽样sample-v5；保留完整选中会话而非随意裁短历史，未覆盖题型在报告中留空。每个数据集先完成两模式三次并整表判分后写检查点，再处理后续数据；校准导出仍在本轮所选数据全部完成后执行。
+
+## 长任务托管与检查点恢复
+
+旧development-sample-v4在LoCoMo首轮抽取期间进程消失，末条调用成功且未留下关闭状态，不能冒称额度停止。oracle两模式三次共120行已完成，恢复只接纳配置/模型、提示词哈希、原始数据哈希、种子、选中ID、全部预期行和导入组合完全匹配的完整数据集。部分表不拼接，恢复不是新的独立模型重复；原始实际调用仍保留在父目录台账。恢复只恢复测量结果，不声称数据库状态已恢复。
+
+可用scripts/start-b0-managed.py在当前用户systemd临时服务中启动相同单一测量入口，独立于聊天CLI子进程寿命；私有文件0600、umask0077，不把凭据写到命令或unit。正常任务不自动重启，校准导出后仍按入口逻辑暂停。启动后通过systemctl --user show对应unit核对进程；需要停止测量时由助手停止该任务unit，不能只凭CLI结束推断计算已停止。
