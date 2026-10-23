@@ -11,6 +11,7 @@ import hashlib
 import json
 from pathlib import Path
 import random
+import re
 import zipfile
 
 from agent_memory.evals.chinese_expansion import frozen_extension, unsegment
@@ -88,10 +89,13 @@ def prepare(mode, output, seed, owner_decision):
     assert len(sample)==180 and len({r['conversation_id'] for r in sample})==180
     assert not ({r['conversation_id'] for r in sample}&previous)
     if mode=='fresh':assert not ({r['conversation_id'] for r in sample}&used)
+    # Post-selection descriptive hint only: never consulted by reservoir sampling.
+    hint = re.compile(r"(我|本人|我们).{0,12}(住|岁|喜欢|工作|职业|地址|过敏|身高|体重|孩子|宝宝|孕|码|穿|皮肤|敏感|买过|买了|尺寸)")
     manual=[]
     for source in sample:
         cid=source['conversation_id']
-        row={'conversation_id':cid,'stratum':'simple_random_unstratified','split':split[cid],
+        stratum='personal_information_hint' if hint.search(' '.join(t['text'] for t in source['source'])) else 'no_personal_information_hint'
+        row={'conversation_id':cid,'stratum':stratum,'split':split[cid],
              'source':source['source'],**{k:None for k in HUMAN}}
         row['record_sha256']=digest(row);manual.append(row)
     rng.shuffle(manual)
@@ -120,7 +124,9 @@ def prepare(mode, output, seed, owner_decision):
             'private_jsonl_sha256':file_hash(output/'ecd180-preparation.jsonl'),
             'raw_private_only':True,'raw_text_not_published':True,'model_calls':0,
             'provisional_only':True,'owner_confirmed_new_negative':0,'adoption_changed':False,
-            'no_model_memory_judgment_filter':True,
+            'no_model_memory_judgment_filter':True,'no_stratum_filter':True,'stratum_computed_after_sampling':True,
+            'stratum_method':'same descriptive regex as ECD120; anonymous source text only, not verified personal facts',
+            'extended_split_sha256':file_hash(output/'split-extended-private.json') if mode=='fresh' else None,
             'response_label_note':'ECD 1 identifies the matched response; 0 is an unrelated candidate response, not a memory-negative label',
             'source_domain':'customer service; not representative of general dialogue'}
     (output/'manifest.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')

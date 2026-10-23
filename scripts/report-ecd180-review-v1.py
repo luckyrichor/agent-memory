@@ -15,7 +15,7 @@ from zoneinfo import ZoneInfo
 from agent_memory.evals.metrics import clopper_pearson
 
 ROOT=Path('.local/phase1/round3/ecd180-review-v1')
-OUT=Path('docs/reports/phase1-ecd180-preparation-2026-10-23')
+OUT=Path('docs/reports/phase1-ecd180-fresh-preparation-2026-10-23')
 sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
 read=lambda p:json.loads(Path(p).read_text())
 
@@ -56,6 +56,7 @@ def main():
             'source_dirty':bool(subprocess.check_output(['git','status','--porcelain'],text=True).strip()),
             'plan':str(plan),'plan_sha256':sha(plan),'same_plan_as_previous_handoff':same_plan,
             'owner_task_message':'om_x100b629f797834b0df841804501f188',
+            'owner_source_decision':'om_x100b629f278d18a8dd5f2ee1bf3a6fe',
             'plan_execution_difference':['Original ECD small reference target 100-150; owner now asks an additional independent random 180 preparation, original 120 unchanged',
                 'Add item-level exact binomial interval as supplement, not a replacement for frozen conversation bootstrap or an added pass threshold',
                 'Owner identifies only negative-session fraction as remaining phase1 gate; no new gate introduced'],
@@ -74,6 +75,7 @@ def main():
                              'after_owner_confirmation_formula':'(confirmed_old_negative + new_negative)/(confirmed_old_classifiable + new_negative + new_positive); new_uncertain excluded',
                              'all_new_180_negative_scenario':(n+180)/(d+180),'scenario_not_observed':True,'scenarios':projection},
             'reliable_memory_points':frozen['accepted_union'],'new_manual_preparation':prepared,
+            'preparation_verification':read(ROOT/'verification.json') if prepared else None,
             'preparation_status':'exported; waiting owner confirmation of labels' if prepared else 'awaiting owner decision: truly fresh source vs unreviewed historical pool and split-extension authorization',
             'protected_current_registry_sha256':{p:sha(p) for p in ['docs/evals/reliable-chinese-current.json','docs/evals/human-confirmed-current.json','docs/evals/ecd-human-current.json']},
             'model_calls':0,'new_model_tokens':0,'model_cost':0,'inferred_new_labels':0,'existing_labels_changed':False,
@@ -87,7 +89,7 @@ def main():
     (OUT/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
     shutil.copyfile(ROOT/'check.log',OUT/'validation.log')
     if prepared:
-        prep=f"已导出 {prepared['conversations']} 段预备 CSV，种子 {prepared['seed']}，候选总体 {prepared['sampling_population']}，切分分布 `{prepared['split_counts']}`，旧人工审核重叠 {prepared['old_human_review_overlap']}，以前模型输入重叠 {prepared['all_previous_model_source_overlap']}。沿用原表八列 `{', '.join(prepared['columns'])}`；人工三栏全部空白，逐轮 JSON 原样保留，顺序随机打乱，stratum 固定为 simple_random_unstratified（抽样方法，不是信息类别），没有模型标签/参照/模型筛选。CSV SHA256 `{prepared['private_csv_sha256']}`，{prepared['private_csv_bytes']:,} 字节。原 120 表、其回填和原切分均未改动。"
+        prep=f"已导出 {prepared['conversations']} 段预备 CSV，种子 {prepared['seed']}，候选总体 {prepared['sampling_population']}，切分分布 `{prepared['split_counts']}`，旧人工审核重叠 {prepared['old_human_review_overlap']}，以前模型输入重叠 {prepared['all_previous_model_source_overlap']}。沿用原表八列 `{', '.join(prepared['columns'])}`；人工三栏全部空白，逐轮 JSON 原样保留，顺序随机打乱，stratum 仅在纯随机抽取完成后沿用旧表正则计算，事后分布 `{prepared['stratum_counts']}`，不参与抽样、不代表人工记忆标签，没有模型标签/参照/模型筛选。CSV SHA256 `{prepared['private_csv_sha256']}`，{prepared['private_csv_bytes']:,} 字节。排除全部已用 400 段（包含旧 120 段）；完整原库 train 的去重匹配上下文是本次总体，未使用不匹配回复构造会话。新会话按原切分算法与种子 42 追加，新增 dev {prepared['split_counts'].get('dev',0)}/test {prepared['split_counts'].get('test',0)}；原 400 段归属与顺序逐项不变，旧切分文件未修改，扩展切分另存私有文件。预备 CSV 仅在服务器 `.local/phase1/round3/ecd180-review-v1/sample/ecd180-preparation.csv`，不发群、不上传。原 120 表、其回填和原切分均未改动。"
     else:
         prep='预备 CSV 尚未导出：冻结切分覆盖的 400 段都曾做过模型标注，其中 120 段已人工核对，其余 280 段仅是未人工核对。若按“全新未用”取完整原库的新会话，需要追加新会话切分；若从剩余 280 段取，则可直接继承原切分，但不能称从未用过。已请求负责人明确这一口径，未擅自选，也未改变旧切分。'
     source_rows='\n'.join(f"| {name} | {r['negative']} | {r['positive']} | {r.get('uncertain_excluded','不从未审候选推断')} |" for name,r in report['confirmed_sources'].items())
@@ -104,7 +106,7 @@ def main():
 
 ## 方案版本与出入
 
-已完整重读 `{plan}`，SHA256 `{r['plan_sha256']}`；与上轮执行文件一致：{same_plan}。原作者和原文未改。文件写的 ECD 小参照规模是 100–150；本次按负责人新指令另备 180 段，旧 120 保留。Clopper–Pearson 是新增的补充说明，不替换冻结 bootstrap，不新设通过线。按负责人本次认定，阶段1收尾仅处理负会话占比；前报告提到的后续裁判校准等仍未自动完成，不在本次另增阶段1门槛。
+已完整重读 `{plan}`，SHA256 `{r['plan_sha256']}`；与上轮执行文件一致：{same_plan}。原作者和原文未改。负责人随后批准从完整原库排除已用 400 段后另抽全新 180 段并追加切分，本报告取代先前等待源池决定的状态；旧报告保留历史。文件写的 ECD 小参照规模是 100–150；本次按负责人新指令另备 180 段，旧 120 保留。Clopper–Pearson 是新增的补充说明，不替换冻结 bootstrap，不新设通过线。按负责人本次认定，阶段1收尾仅处理负会话占比；前报告提到的后续裁判校准等仍未自动完成，不在本次另增阶段1门槛。
 
 ## 180 段预备表
 
@@ -134,7 +136,7 @@ ECD 原文许可不明，仅保留服务器私有审核文件，不进入 GitHub
 
 ## 检查、遗留与复现
 
-全门 pytest {r['gates']['pytest_passed']} 项通过，ruff、strict mypy、foundation 8/8 通过；日志 validation.log。生成报告：`uv run python scripts/report-ecd180-review-v1.py`；生成预备 CSV 的脚本为 scripts/prepare-ecd180-review-v1.py，必须明确源池口径及负责人决定后运行。数据、切分和旧人工结果均不放宽，不调用任何模型。
+全门 pytest {r['gates']['pytest_passed']} 项通过，ruff、strict mypy、foundation 8/8 通过；日志 validation.log。生成报告：`uv run python scripts/report-ecd180-review-v1.py`；生成预备 CSV 的脚本为 scripts/prepare-ecd180-review-v1.py，必须明确源池口径及负责人决定后运行。另用相同种子从原库重新运行抽样，CSV、JSONL 与扩展切分三个文件 SHA256 完全一致；逐行摘要、空白人工栏、全部保护文件及采纳注册表均经 `uv run python scripts/verify-ecd180-preparation-v1.py` 核验。数据、切分和旧人工结果均不放宽，不调用任何模型。
 
 未完成：180 段人工确认及之后的占比重算；负责人最终阶段1验收。当前比例不提前变化。ECD 原文与审核理由只在服务器私有目录；本报告和 GitHub 只放方法、计数、哈希，不含原文。
 '''
