@@ -35,6 +35,10 @@ def main():
   valid=[r for r in quality if type(r.get('judge_correct')) is bool]
   invalid[key]={'answer_invalid':sum(not r['answer_valid'] for r in quality),'judge_invalid':sum(r['answer_valid'] and r.get('judge_correct') is None for r in quality),'total_quality_rows':len(quality),'valid_grade_rows':len(valid)}
   values={}
+  actual=[r for r in quality if r.get('actual_rendered_context_tokens') is not None and r.get('system_context') and r.get('answer_model')==r.get('context_tokenizer_model','doubao-seed-2-1-pro-260915')]
+  if actual:
+   values['CX1']=clustered([(r,r['actual_rendered_context_tokens'],r['system_context']['budget']) for r in actual],'CX1')
+   values['CX2_excess_estimate_per_true_token']=clustered([(r,max(0,r['system_context']['used_tokens']-r['actual_rendered_context_tokens']),r['actual_rendered_context_tokens']) for r in actual],'CX2')
   if valid:values['E1']=clustered([(r,float(r['judge_correct']),1.0) for r in valid],'E1')
   for k in (1,3,5,10):
    for metric in ('RT1','RT2','RT3','RT4','evidence_coverage'):
@@ -45,7 +49,16 @@ def main():
   measures[key]={'dataset':dataset,'data_level':source[dataset]['data_level'],'sample_conversations':len({r['conversation_id'] for r in quality}),'sample_question_ids':len({r['question_id'] for r in quality}),'rows':len(quality),'baseline':'B0 vs no-memory/full-context/naive-vector','evaluation_method':'frozen dev sample; conversation-cluster bootstrap1000; ratios over valid grading only, invalids separately; uncalibrated diagnostic, not formal','values':values,'answer_models':sorted({r['answer_model'] for r in items if r.get('answer_model')}),'judge_models':sorted({r['judge_model'] for r in items if r.get('judge_model')})}
   types=defaultdict(list)
   for r in quality:types[r['category']].append(r)
-  by_type[key]={cat:clustered([(r,float(r['judge_correct']),1.0) for r in rs if type(r.get('judge_correct')) is bool],'E1') for cat,rs in types.items()}
+  by_type[key]={}
+  for cat,rs in types.items():
+   scores={}
+   valid_type=[(r,float(r['judge_correct']),1.0) for r in rs if type(r.get('judge_correct')) is bool]
+   if valid_type:scores['E1']=clustered(valid_type,'E1')
+   for k in (1,3,5,10):
+    for metric in ('RT1','RT2','RT3','RT4'):
+     pairs=[(r,float(r['retrieval'][str(k)][metric]),1.0) for r in rs if r.get('retrieval',{}).get(str(k),{}).get(metric) is not None]
+     if pairs:scores[f'{metric}@{k}']=clustered(pairs,metric)
+   by_type[key][cat]=scores
   repeats={}
   for i in range(3):
    selected=[r for r in valid if r['repeat']==i]
@@ -83,11 +96,16 @@ def main():
  for role in sorted({r['role'] for r in usage}):
   calls=[r for r in usage if r['role']==role and r.get('new_http_call',not r.get('cache_hit',False)) and not r.get('fixture_only',False)];known=[r for r in calls if r.get('usage')]
   costs[role]={'post_attempts':len(calls),'known_usage_responses':len(known),'input_tokens':sum(r['usage'].get('prompt_tokens',0) for r in known),'output_tokens':sum(r['usage'].get('completion_tokens',0) for r in known),'total_tokens':sum(r['usage'].get('total_tokens',0) for r in known),'usage_unknown':len(calls)-len(known),'latency_seconds':latency([r['seconds'] for r in calls]),'attempted_wire_json_bytes':sum(r['input_bytes'] for r in calls)}
+ ex8=defaultdict(list)
+ for r in imports:
+  outcomes=[x for x in r['extraction_outcomes'] if x['outcome']!='no_job']
+  if outcomes:ex8[r['dataset']].append((r,sum(x['extractor_last_failure']!='NONE' for x in outcomes),len(outcomes)))
+ extraction_failures={dataset:clustered(records,'EX8') for dataset,records in ex8.items()}
  imported=defaultdict(list)
  for row in imports:imported[(row['dataset'],row['mode'],row['repeat'])].append(row)
  import_summary=[{'dataset':k[0],'mode':k[1],'repeat':k[2],'conversations':len(v),'source_documents':sum(r['source_documents'] for r in v),'memories':sum(r['memories'] for r in v),'active_memories':sum(r['active_memories'] for r in v),'rejected_chunks':sum(len(r['rejected']) for r in v),'extraction_jobs':sum(sum(x['outcome']!='no_job' for x in r['extraction_outcomes']) for r in v),'extraction_failure_or_fallback_jobs':sum(sum(x['outcome']!='no_job' and x['extractor_last_failure']!='NONE' for x in r['extraction_outcomes']) for r in v)} for k,v in imported.items()]
  controls=load('.local/phase2/b0/correctness-v1/correctness-observations.json')
- report={'created_beijing':datetime.now(ZoneInfo('Asia/Shanghai')).isoformat(),'summary_generator_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'run_manifest':manifest,'execution_status':status,'phase2_accepted':False,'formal_quality_scores_allowed':False,'plan':load('docs/evals/b0-policy-v1.json'),'data':source,'measurements':measures,'by_type':by_type,'paired_comparisons':comparisons,'flow_only':flows,'invalid_results':invalid,'repeated_three_range':repeat_ranges,'failure_cases':failures[:20],'failure_count':len(failures),'failure_reason_counts':dict(Counter(r['reason'] for r in failures)),'resources':costs,'imports':import_summary,'correctness_controls':controls,'metric_coverage':metric_status,'calibration_private_csv_exists':(root/'calibration-300-private.csv').exists(),'calibration_rows':300 if (root/'calibration-300-private.csv').exists() else 0,'human_calibration_received':False,'performance_measured':False,'stage3_started':False,'remaining':['owner judge calibration if private sheet available','unmeasured metric observation adapters/required labels; no invented zeros','independent load host and PF measurements','full-context over-limit truncation and context tokenizer validation','complete phase2 review and acceptance']}
+ report={'created_beijing':datetime.now(ZoneInfo('Asia/Shanghai')).isoformat(),'summary_generator_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'run_manifest':manifest,'execution_status':status,'phase2_accepted':False,'formal_quality_scores_allowed':False,'plan':load('docs/evals/b0-policy-v1.json'),'data':source,'measurements':measures,'by_type':by_type,'paired_comparisons':comparisons,'flow_only':flows,'invalid_results':invalid,'repeated_three_range':repeat_ranges,'failure_cases':failures[:20],'failure_count':len(failures),'failure_reason_counts':dict(Counter(r['reason'] for r in failures)),'extraction_failure_rates_EX8':extraction_failures,'resources':costs,'imports':import_summary,'correctness_controls':controls,'metric_coverage':metric_status,'calibration_private_csv_exists':(root/'calibration-300-private.csv').exists(),'calibration_rows':300 if (root/'calibration-300-private.csv').exists() else 0,'human_calibration_received':False,'performance_measured':False,'stage3_started':False,'remaining':['owner judge calibration if private sheet available','unmeasured metric observation adapters/required labels; no invented zeros','independent load host and PF measurements','full-context over-limit truncation and context tokenizer validation','complete phase2 review and acceptance']}
  out.mkdir(parents=True,exist_ok=True);(out/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
  text=['# 阶段2 B0测量进展（非完成报告）','',f"源码B0：{manifest.get('runtime_application_file')}；运行提交 {manifest['harness_commit']}；生成器提交 {report['summary_generator_commit']}。",f"状态：{status['status']}；阶段2未验收，阶段3未开始。",'', '## 方案与数据','', '最新版方案与逐条出入见 report.json.plan；B0标签未覆盖。所有输入为冻结开发集投影，测试集未运行。756个记忆点和828个可分类会话是阶段1全局混合来源规模，不冒充开发集分母。所有原文、答案和裁判原判仅服务器私有；本报告只放聚合指标和失败ID。','', '## 指标与对比（均为校准前诊断）','', '| 数据/模式/系统 | 指标 | 值 | 分母 | 会话数 | 95% CI |','| --- | --- | --- | --- | --- | --- |']
  for key,table in measures.items():

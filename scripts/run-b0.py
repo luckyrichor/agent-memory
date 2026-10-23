@@ -128,9 +128,23 @@ class ModelIO:
   if 'data' not in data:raise ValueError('INVALID_EMBEDDING_RESPONSE')
   vector=data['data']['embedding'];assert len(vector)==1024
   return vector
- async def answer(self,question,context,model='doubao-seed-2-1-pro-260915',when=None):
+ async def answer(self,question,context,model='doubao-seed-2-1-pro-260915',when=None,full_history=False):
   body={'model':model,'temperature':0,'thinking':{'type':'disabled'},'max_tokens':512,'messages':[{'role':'system','content':(REPO/'docs/evals/prompts/b0-answer-v1.txt').read_text()},{'role':'user','content':json.dumps({'context':context,'question':question,'question_date':when},ensure_ascii=False)}]}
-  data=await self.request('answer',body,provider='Ark' if model.startswith('doubao') else 'TokenHub')
+  original_chars=len(json.dumps(context,ensure_ascii=False));truncated=False
+  for _ in range(24):
+   data=await self.request('answer',body,provider='Ark' if model.startswith('doubao') else 'TokenHub')
+   error_text=str((data.get('error') or {}).get('message','')).lower()
+   context_error=any(t in error_text for t in ('context length','maximum context','context window','input token','input length','prompt is too long'))
+   if 'choices' in data or not (full_history and context_error):break
+   # Deterministic oldest-first truncation on explicit provider context rejection only.
+   if isinstance(context,list) and len(context)>1:context=context[max(1,len(context)//2):]
+   else:
+    content=json.dumps(context,ensure_ascii=False) if not isinstance(context,str) else context
+    if len(content)<2:break
+    context=content[len(content)//2:]
+   truncated=True
+   body['messages'][1]['content']=json.dumps({'context':context,'question':question,'question_date':when},ensure_ascii=False)
+  data['_b0_full_context_truncation']={'truncated':truncated,'original_serialized_chars':original_chars,'retained_serialized_chars':len(json.dumps(context,ensure_ascii=False)),'basis':'serialized Unicode characters, not model token ratio; drop oldest only on explicit context-length rejection'}
   if 'choices' not in data:return None,data
   return data['choices'][0]['message']['content'],data
  async def grade(self,row,model='glm-5.2'):
@@ -287,8 +301,8 @@ async def measure(args,appurl):
   async def context_tokens(row):
    if row['system']!='system':return
    try:
-    data=await io.request('tokenizer',{'model':'doubao-seed-2-1-pro-260915','text':[row['context']]})
-    row['actual_rendered_context_tokens']=data['data'][0]['total_tokens']
+    data=await io.request('tokenizer',{'model':config.get('answer_models',['doubao-seed-2-1-pro-260915'])[0],'text':[row['context']]})
+    row['actual_rendered_context_tokens']=data['data'][0]['total_tokens'];row['context_tokenizer_model']=data.get('model')
    except (RuntimeError,KeyError,TypeError,IndexError):row['actual_rendered_context_tokens']=None
   await asyncio.gather(*(context_tokens(row) for row in all_results))
   # Failover is table-wide: discard partial answers or grades and restart all systems/repeats.
@@ -299,11 +313,11 @@ async def measure(args,appurl):
    print(json.dumps({'stage':'answer-and-judge','dataset':dataset,'mode':mode,'rows':len(table)}),flush=True)
    answers_complete=False
    for model in config.get('answer_models',['doubao-seed-2-1-pro-260915','mimo-v2.6-flash','minimax-m3']):
-    answered=await asyncio.gather(*(io.answer(row['question'],row['context'],model,row['question_date']) for row in table),return_exceptions=True)
+    answered=await asyncio.gather(*(io.answer(row['question'],row['context'],model,row['question_date'],row['system']=='full-context') for row in table),return_exceptions=True)
     attempt=[v for v in answered if not isinstance(v,BaseException)];failed=len(attempt)!=len(table)
     append(out/'table-attempts.jsonl',{'dataset':dataset,'mode':mode,'role':'answer','model':model,'completed':len(attempt),'failed':failed,'whole_table':True})
     if failed:continue
-    for row,(answer,data) in zip(table,attempt,strict=True):row.update(answer=answer,answer_valid=answer is not None,answer_model=data.get('model'),answer_usage=data.get('usage'))
+    for row,(answer,data) in zip(table,attempt,strict=True):row.update(answer=answer,answer_valid=answer is not None,answer_model=data.get('model'),answer_usage=data.get('usage'),full_context_truncation=data.get('_b0_full_context_truncation'),full_context_truncated=(data.get('_b0_full_context_truncation') or {}).get('truncated',False))
     answers_complete=True;break
    if not answers_complete:raise RuntimeError('EVALUATION_MODEL_QUOTA')
    answer_vendor='ByteDance' if model.startswith('doubao') else ('Xiaomi' if model.startswith('mimo') else 'MiniMax')

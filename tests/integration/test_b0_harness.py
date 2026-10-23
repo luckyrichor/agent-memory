@@ -55,3 +55,35 @@ def test_unfiltered_baseline_and_worker_pipeline_offline():
     usage = [json.loads(line) for line in (root / 'run/usage.jsonl').open()]
     assert usage and all(r.get('fixture_only') and not r.get('new_http_call') for r in usage)
     assert not (root / 'run/calibration-300-private.csv').exists()
+
+
+def test_full_history_truncates_only_on_context_length_rejection(tmp_path):
+    repo = Path(__file__).resolve().parents[2]
+    config = tmp_path / "fixture.json"
+    config.write_text(json.dumps({"offline_fixture": True}))
+    program = r"""
+import asyncio, importlib.util, copy
+spec=importlib.util.spec_from_file_location('driver','scripts/run-b0.py')
+m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+class Stub:
+ def __init__(self,error):self.error=error;self.bodies=[]
+ async def request(self,role,body,**kwargs):
+  self.bodies.append(copy.deepcopy(body))
+  if len(self.bodies)==1:return {'error':{'message':self.error}}
+  return {'model':'fixture','choices':[{'message':{'content':'ok'}}]}
+async def run():
+ context=[{'text':'old'}, {'text':'recent'}]
+ stub=Stub('Maximum context length exceeded')
+ answer,data=await m.ModelIO.answer(stub,'question',context,full_history=True)
+ assert answer=='ok' and len(stub.bodies)==2
+ assert data['_b0_full_context_truncation']['truncated']
+ assert 'recent' in stub.bodies[-1]['messages'][1]['content']
+ assert 'old' not in stub.bodies[-1]['messages'][1]['content']
+ stub=Stub('Unsupported response format')
+ answer,data=await m.ModelIO.answer(stub,'question',context,full_history=True)
+ assert answer is None and len(stub.bodies)==1
+ assert not data['_b0_full_context_truncation']['truncated']
+asyncio.run(run())
+"""
+    subprocess.run([sys.executable, '-c', program, '--config', str(config)],
+                   cwd=repo, check=True, capture_output=True, text=True, timeout=30)

@@ -1,0 +1,31 @@
+{
+  "seed": 42,
+  "conversations_per_dataset": {
+    "longmemeval_s": 5,
+    "longmemeval_oracle": 5,
+    "locomo": 3,
+    "perltqa_zh": 5,
+    "chinese_queries_v2": 10,
+    "dulemon_gold": 8,
+    "ecd_negative": 8
+  },
+  "questions_per_conversation": 10,
+  "system_context_budget": 2000,
+  "purpose": "corrected harness: native B0 context default2000; LME per-question-type seeded dev sampling; complete original source corpus for external vector baseline",
+  "workload_basis": "docs/baselines/b0/workload-estimate-v1.json; measured pilot input/output costs",
+  "conversations_per_question_type": 3,
+  "embedding_cache_roots": [
+    ".local/phase2/b0/api-pilot-v1",
+    ".local/phase2/b0/api-pilot-v2",
+    ".local/phase2/b0/development-sample-v1",
+    ".local/phase2/b0/development-sample-v3"
+  ],
+  "extraction_model": "doubao-seed-2-1-lite-260915",
+  "extraction_provider": "Ark",
+  "runtime_change_authorization": "om_x100b62846f735ca8df833bd67f54736",
+  "answer_models": [
+    "doubao-seed-2-1-lite-260915",
+    "mimo-v2.6-flash",
+    "minimax-m3"
+  ]
+}

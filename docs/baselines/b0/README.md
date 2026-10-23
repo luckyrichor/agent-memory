@@ -2,7 +2,7 @@
 
 B0为已有不可覆盖标签，提交 `1e9d6f3b25b58c85792344000d7e1b5a71a79737`。评测脚本从只读worktree加载该版本API、领域、存储和worker；评测辅助代码与数据从当前仓库加载。当前检索代码曾在阶段1改动，不用于冒充原B0。
 
-当前策略：[b0-policy-v2.json](../../evals/b0-policy-v2.json)。负责人本轮仅授权测量，不作优化、改阈值或进入阶段3；阶段1已验收。
+当前策略：[b0-policy-v3.json](../../evals/b0-policy-v3.json)。负责人本轮仅授权测量，不作优化、改阈值或进入阶段3；阶段1已验收。
 
 ## 单一运行入口
 
@@ -11,7 +11,7 @@ uv run python scripts/with-llm-account.py ark-secondary \
  .venv/bin/python scripts/with-llm-account.py tokenhub-secondary \
  .venv/bin/python scripts/run-b0.py \
  --dataset all --mode both \
- --config docs/baselines/b0/config-sample-v3.json \
+ --config docs/baselines/b0/config-sample-v4.json \
  --metrics EX,LC,RT,CX,E,RL,SC \
  --output .local/phase2/b0/REPLACE_WITH_NEW_IMMUTABLE_RUN
 ```
@@ -54,3 +54,5 @@ uv run python scripts/with-llm-account.py ark-secondary \
 ## 负责人本轮明确授权换型
 
 消息 `om_x100b62846f735ca8df833bd67f54736` 允许本次更换运行时模型。抽取拟改TokenHub deepseek-v4.1-flash-1017，沿用原预检标准，实际预检成功后才运行；embedding仍为冻结Ark1024维，同模型同输入的真实向量可校验重放。新目录整组重跑，不拼接旧pro抽取；不可覆盖B0源码标签。答题按既有整表切换规则，实际所用型号逐表记录。额外抽取诊断中的五次全文JSON不同，不等同于原预检的五次标签不一致；二者分开报告，不能暗中增加或放宽原预检标准。
+
+DeepSeek新抽取轮在实际运行中返回402，故该轮保留历史。Ark lite按原预检标准实际106次、五标签一致、格式100/100、关闭思考，通过后成为本次抽取与答题的主模型；不再反复探测已知额度失败的pro。独立裁判仍为GLM，向量仍是原Ark模型。超长全文只在供应商明确上下文超限时确定性从最旧端截断，并记录序列化字符保留比例；该比例不是token截断率。
