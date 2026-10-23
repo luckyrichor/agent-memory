@@ -36,7 +36,8 @@
   "ecd_total_negative": 282,
   "dulemon_total_negative": 0,
   "candidate_discards_inferred_negative": 0,
-  "phase1_accepted": false,
+  "phase1_accepted": true,
   "phase2_started": false,
-  "report": "docs/reports/phase1-ecd180-confirmed-2026-10-23/report.json"
+  "report": "docs/reports/phase1-ecd180-confirmed-2026-10-23/report.json",
+  "acceptance_record": "docs/evals/phase1-acceptance-current.json"
 }

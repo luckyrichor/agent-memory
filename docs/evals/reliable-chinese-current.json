@@ -16,8 +16,9 @@
   "gap_1500": 744,
   "old_temporal_screen_applied": false,
   "new_temporal_screen_applied": true,
-  "phase1_accepted": false,
+  "phase1_accepted": true,
   "report": "docs/reports/phase1-blind-adoption-2026-10-23/report.json",
   "items_sha256": "2a5173365af41f912f7894d8ce97d746fc9cf90895f2b4d1ae42aa82d38c161b",
-  "provenance_sha256": "8ff4b3be01f207bfd4da3d9b5bf7fde528cb73c9119c4a7ae49c3dec97c9c0de"
+  "provenance_sha256": "8ff4b3be01f207bfd4da3d9b5bf7fde528cb73c9119c4a7ae49c3dec97c9c0de",
+  "acceptance_record": "docs/evals/phase1-acceptance-current.json"
 }

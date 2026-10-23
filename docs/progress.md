@@ -407,3 +407,10 @@ hunyuan-role-latest在当前未完成批返回402；完整v3格式预检合格�
 全门 440 passed in 18.51s，ruff/strict mypy/foundation通过。另用内存变体验证source篡改、摘要篡改、重复ID、矛盾人工答案均拒绝；未修改实际附件。执行入口 `scripts/finalize-ecd180-owner-review-v1.py`，交接 `docs/reports/phase1-ecd180-confirmed-2026-10-23/delivery.md`。
 
 负责人认定的阶段1量化门已齐，待负责人最终验收，未自行宣告验收、不开始阶段2。裁判人工校准与ECD系统误抽评测明确属于阶段2，不列阶段1遗留。目标1500差距照实保留，不新增质量门。
+
+
+## 2026-10-23 阶段1负责人验收（Codex记录）
+
+负责人消息 `om_x100b629f945d4ca8de645562ff5d2aa` 明确“验收”。已记录阶段1通过，当前可靠规模 756（逐条人工 226，模型池采纳但未逐条人工 530）；确认负会话 282/828=34.0580%，数量与占比闸门均过。当前状态与 `docs/evals/phase1-acceptance-current.json` 同步；验收前历史报告保留其原状态与来源，不改人工标签、切分或统计。1500目标差 744，如实保留。阶段2未开始，裁判人工校准与ECD系统误抽评测未冒称完成。
+
+验收状态记录后的全门复验：pytest 440 passed in 18.31s，ruff、strict mypy、foundation8/8通过；未调用模型。

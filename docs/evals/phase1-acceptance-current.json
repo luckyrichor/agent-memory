@@ -1,0 +1,31 @@
+{
+  "phase1_accepted": true,
+  "owner_message_id": "om_x100b629f945d4ca8de645562ff5d2aa",
+  "owner_decision": "验收",
+  "recorded_beijing": "2026-10-23T09:52:32.712387+08:00",
+  "basis_report": "docs/reports/phase1-ecd180-confirmed-2026-10-23/report.json",
+  "basis_report_sha256": "2fa0e70faada1b3edcc710297b2f5022e24357ee4a0d7d180b820c88cf22dc82",
+  "source_commit": "bb349d790a4ff2c52b44152a770a0a39ab483b87",
+  "reliable_memory_points": 756,
+  "individually_human_confirmed": 226,
+  "model_pool_only_not_individually_confirmed": 530,
+  "negative_conversations": 282,
+  "classifiable_conversations": 828,
+  "negative_fraction": 0.34057971014492755,
+  "remaining_target_1500_gap": 744,
+  "phase2_started": false,
+  "phase2_items_not_completed": [
+    "judge human calibration",
+    "ECD system false-extraction evaluation"
+  ],
+  "historical_reports_unchanged": true,
+  "labels_and_splits_unchanged": true,
+  "model_calls": 0,
+  "validation": {
+    "pytest_passed": 440,
+    "pytest_seconds": 18.31,
+    "ruff": true,
+    "strict_mypy": true,
+    "foundation_8_of_8": true
+  }
+}
