@@ -5,7 +5,7 @@
   "owner_message_id": "om_x100b62986bf4a0a8b0f170f0116e796",
   "baseline_tag": "B0",
   "baseline_commit": "1e9d6f3b25b58c85792344000d7e1b5a71a79737",
-  "status": "failed",
+  "status": "paused_no_qualified_embedding_candidate",
   "calibration_exported": false,
   "public_load_test_started": false,
   "test_set_executed": false,
@@ -24,7 +24,7 @@
   "complete_dataset_reused": "see current run resumed-datasets.jsonl; original actual repetitions only",
   "partial_dataset_rebuilt": "only incomplete conversation units; completed units validated and retained",
   "managed_process_completed": true,
-  "managed_verified_at": "2026-10-23T17:30:23.035027+00:00",
+  "managed_verified_at": "2026-10-24T04:25:56.725761+00:00",
   "aggregate_report": ".local/phase2/b0/development-sample-v7-rotation/attempt-003/aggregate/delivery.md",
   "four_key_owner_message_id": "om_x100b6280467a68a4c3cc0005fe78816",
   "active_role_accounts": {
@@ -56,5 +56,9 @@
   "embedding_model": "doubao-embedding-vision-251215",
   "embedding_provider": "Ark",
   "four_key_rotation_root": ".local/phase2/b0/development-sample-v7-rotation",
-  "family_continuation_owner_message_id": "om_x100b628d31ba14a0df2cc7d1869eac1"
+  "family_continuation_owner_message_id": "om_x100b628d31ba14a0df2cc7d1869eac1",
+  "managed_active_state": "inactive",
+  "recovery_report": "docs/baselines/b0/overdue-recovery-status-v1.json",
+  "quota_bug_fixed_commit": "fdd8944",
+  "embedding_replacement_qualified": false
 }

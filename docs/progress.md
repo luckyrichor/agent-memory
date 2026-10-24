@@ -471,3 +471,5 @@ api-pilot-lite-v1已完成四组、两模式、三次：24答题/判分行、156
 核对v7托管任务已结束而非仍在运行：当前最后尝试仅LongMemEval oracle与LoCoMo完成答题判分，PerLTQA准备结果尚未完成全部模式。真实向量403/AccountOverdueError此前被当作普通无效响应，引发INVALID_EMBEDDING_RESPONSE而未触发额度轮换，这是执行缺陷，原始失败台账与已交群的非完成报告保留。已统一额度分类，只有明确AccountOverdueError按额度处理，普通权限403仍不自动轮换。正在按四Key授权重新寻找合格向量账户/型号；能调用不等于通过一致性预检，不放宽校验，也不能宣称所有模型都没额度。
 
 验证由overdue-quota-verification-v1.json脚本生成：454 passed in 44.39s，ruff、strict mypy和foundation通过。新增回归验证首个欠费错误暂停后不再产生后续HTTP。阶段2未完成，未生成300人工校准表，独立压测未进行，不进入阶段3。
+
+恢复尝试已完成：对发现的23个向量型号/Key组合预检，合格0个，当前如实暂停。原向量型号在另一Key上可调用，但五次向量精确一致性未过；不能将该失败冒称没额度，也不自行放宽检查。实际结果由overdue-recovery-status-v1.json生成。

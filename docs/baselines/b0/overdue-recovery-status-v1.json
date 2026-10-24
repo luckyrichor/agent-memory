@@ -1,0 +1,347 @@
+{
+  "at": "2026-10-24T04:25:56.725761+00:00",
+  "status": "paused_no_qualified_embedding_candidate",
+  "qualified_embedding_replacement": false,
+  "considered_model_account_profiles": 23,
+  "passed_profiles": 0,
+  "graded_rows": 360,
+  "graded_by_dataset": {
+    "longmemeval_oracle": 120,
+    "locomo": 240
+  },
+  "qualification_summaries": [
+    {
+      "model": "doubao-embedding-vision-251215",
+      "provider": "Ark",
+      "passed": false,
+      "checks": {
+        "consistent_5": false,
+        "format_n": 100,
+        "format_valid": 100
+      },
+      "http_attempts": 106,
+      "http_counts": {
+        "200": 106
+      },
+      "error_counts": {},
+      "decision_sha256": "00574c8db9f80ab80331505cbcf2417f17c2f56a046536a926ad243a97a108ca"
+    },
+    {
+      "model": "doubao-embedding-large-text-240915",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "9f452583b75336ec96266f838ebd79966c907df354102804198268229719dbfe"
+    },
+    {
+      "model": "doubao-embedding-large-text-240915",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "ab31017c9124832c19a07d4fe429ea503a2394137f73d866155c27492a9f25b8"
+    },
+    {
+      "model": "doubao-embedding-large-text-250515",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "bdecde0cbc40979332903e29ae53c92a4fdfb34bc461c9219c2e70c66b1b883b"
+    },
+    {
+      "model": "doubao-embedding-large-text-250515",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "adee558bbb278f2a4d095143556cbb5a50b24d78621c24b823f0fa88d00a566f"
+    },
+    {
+      "model": "doubao-embedding-text-240515",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "e0a868ffaa18b9636658a4eddc058383bb7efbe0d622c5834c46c9974b2814e3"
+    },
+    {
+      "model": "doubao-embedding-text-240515",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "d47e5df9fd02e4b1c9c17e71fe4a76936947f2203c18f323046e725cab105e02"
+    },
+    {
+      "model": "doubao-embedding-text-240715",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "02b953b478a294277cb0fee7cc825569084204aae0c635cf705c9c7178d09e87"
+    },
+    {
+      "model": "doubao-embedding-text-240715",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "20f22eb047e5284b8a97c408a9b22c1b0f7db27a92f179f9ba9d6b924c73b1a3"
+    },
+    {
+      "model": "doubao-embedding-vision-241215",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "c8f2d3e7f512c82b996ac046ed0edd85c6fabce1da633a531406acfed42fe3cb"
+    },
+    {
+      "model": "doubao-embedding-vision-241215",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "511bfe82979a30cf196004da6f518d86b1d1fec00c34ae25fb9b36e3bd32a888"
+    },
+    {
+      "model": "doubao-embedding-vision-250328",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "6176dd414d575fe52b8e8ea3d313f2b9062034f020ced51418872bcb874b90bb"
+    },
+    {
+      "model": "doubao-embedding-vision-250328",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "3b3dd8b00a9f816d1c8a07dafb65983fabc14758dbbd02e1fde40eb755696b4a"
+    },
+    {
+      "model": "doubao-embedding-vision-250615",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "7c0121e4c3902be6509d7e6d0910e3f6883397f5c7b95e3d1f67420dd6ba0ee1"
+    },
+    {
+      "model": "doubao-embedding-vision-250615",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "0cbffb7a0a0f45a692180ca14bf82e913b2bb167db5e26dd9127924e7c9d51f5"
+    },
+    {
+      "model": "kinfra-text-embedding-0.6b",
+      "provider": "TokenHub",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "400": 1
+      },
+      "error_counts": {
+        "400001": 1
+      },
+      "decision_sha256": "65b137b8a6ed0b967c77691624e9373fb454fde4932b426a456287c04b681bb2"
+    },
+    {
+      "model": "kinfra-text-embedding-0.6b",
+      "provider": "TokenHub",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "400": 1
+      },
+      "error_counts": {
+        "400001": 1
+      },
+      "decision_sha256": "c11cf964f3f63ee5d6554954cb0d23dcde0e12813c63de7ee1a81c9aa97bde9c"
+    },
+    {
+      "model": "kinfra-text-embedding-4b",
+      "provider": "TokenHub",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "400": 1
+      },
+      "error_counts": {
+        "400001": 1
+      },
+      "decision_sha256": "590915dfafa524f458f21271ae0d8640b1928f59fe011a294322b4711570e3b2"
+    },
+    {
+      "model": "kinfra-text-embedding-4b",
+      "provider": "TokenHub",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "400": 1
+      },
+      "error_counts": {
+        "400001": 1
+      },
+      "decision_sha256": "6894bd3141f208de94152e5b131236af7181a06122008b52b951ba9dde449df9"
+    },
+    {
+      "model": "kinfra-vl-embedding-2b",
+      "provider": "TokenHub",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "400": 1
+      },
+      "error_counts": {
+        "400005": 1
+      },
+      "decision_sha256": "419fbbb0bc05cab8192b8a0c093bd9ba4d7b301fe1e75a072ef1c8df674b25d5"
+    },
+    {
+      "model": "kinfra-vl-embedding-2b",
+      "provider": "TokenHub",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "400": 1
+      },
+      "error_counts": {
+        "400005": 1
+      },
+      "decision_sha256": "18f61667d98b8886f4af62894a94b21f76d19841fbfbf7c6e85ea30e59bac790"
+    },
+    {
+      "model": "kinfra-vl-embedding-8b",
+      "provider": "TokenHub",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "400": 1
+      },
+      "error_counts": {
+        "400005": 1
+      },
+      "decision_sha256": "e2b35005fb115baa3d753cad80f4dbb87087f3d232c0710f1f395aa669798785"
+    },
+    {
+      "model": "kinfra-vl-embedding-8b",
+      "provider": "TokenHub",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "400": 1
+      },
+      "error_counts": {
+        "400005": 1
+      },
+      "decision_sha256": "d2c3c17904126d25404b33827d4422c0b3cd467e0e04018a41ae68edd8abe432"
+    }
+  ],
+  "scope": "four configured keys and discovered eligible models; not evidence all models lack quota",
+  "available_original_model_failed": "actual106 HTTP200 on original model,100/100 format but5 exact vector outputs not identical; no relaxation applied",
+  "not_done": [
+    "remaining functional measurement",
+    "300-row private owner calibration",
+    "independent PF load measurements",
+    "phase2 acceptance"
+  ],
+  "raw_source_private": true
+}
