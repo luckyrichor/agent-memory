@@ -41,7 +41,7 @@ from agent_memory.infrastructure.db import create_session_factory,session_for_pr
 from agent_memory.infrastructure.event_repositories import PostgresExtractionBackend,PostgresOutboxRepository
 from agent_memory.evals.datasets import file_hash
 from agent_memory.evals.b0 import cosine_rank,calibration_sample,chunk_source_documents,measurement_signature,complete_checkpoint,compatible_measurement,compatible_result_model
-from agent_memory.evals.b0_rotation import vendor
+from agent_memory.evals.b0_rotation import vendor,quota as quota_response
 from agent_memory.evals.metrics import ratio,evidence_retrieval,latency
 
 
@@ -120,7 +120,7 @@ class ModelIO:
     usage=data.get('usage');code=(data.get('error') or {}).get('code')
     record={'call_id':index,'attempt':attempt,'at':datetime.now(timezone.utc).isoformat(),'role':role,'provider':provider,'model':body['model'],'response_model':data.get('model'),'http':status,'error_code':code,'usage':usage,'seconds':time.monotonic()-start,'input_bytes':len(json.dumps(body,ensure_ascii=False).encode()),'request_sha256':digest(body),'cache_hit':False,'account':account}
     self.calls.append(record);append(self.out/'usage.jsonl',record)
-    quota=status==402 or code in ('SetLimitExceeded','401010','QuotaExceeded','InsufficientBalance')
+    quota=quota_response(record)
     if quota and role in ('extraction','embedding'):
      self.runtime_blocked=True;write(self.out/'runtime-quota-pause.json',record)
      raise RuntimeError('RUNTIME_QUOTA_PAUSED')

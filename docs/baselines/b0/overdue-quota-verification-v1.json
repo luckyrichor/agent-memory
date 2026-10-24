@@ -1,0 +1,10 @@
+{
+  "at_beijing": "2026-10-24T12:25:24.830272+08:00",
+  "pytest_passed": 454,
+  "pytest_seconds": 44.39,
+  "ruff_passed": true,
+  "mypy_passed": true,
+  "foundation_passed": true,
+  "log_sha256": "6be11d6b092848d4002bdf74c54e79f933c5804384a69977183551095bb31fc7",
+  "regression": "403 AccountOverdueError triggers runtime_quota_pause; second request causes no HTTP; plain403 AccessDenied is not quota"
+}

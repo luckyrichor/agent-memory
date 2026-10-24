@@ -165,6 +165,16 @@ async def run():
   assert calls==['Bearer '+secret] and io.calls[0]['account']==account
   for path in (root/account).rglob('*.json*'):assert secret not in path.read_text()
   for client in io.clients.values():await client.aclose()
+ def overdue(request):return m.httpx.Response(403,json={'error':{'code':'AccountOverdueError'}})
+ io=m.ModelIO(root/'overdue',config={})
+ io.clients[id(asyncio.get_running_loop())]=m.httpx.AsyncClient(transport=m.httpx.MockTransport(overdue))
+ for _ in range(2):
+  try:await io.embedding('Fictional quota regression')
+  except RuntimeError as error:assert str(error)=='RUNTIME_QUOTA_PAUSED'
+  else:raise AssertionError('overdue embedding must pause for rotation')
+ assert len(io.calls)==1 and io.runtime_blocked
+ assert json.loads((root/'overdue/runtime-quota-pause.json').read_text())['error_code']=='AccountOverdueError'
+ for client in io.clients.values():await client.aclose()
  io=m.ModelIO(root/'openai-fixture',fixture=True,config={'embedding_model':'fictional-1024','embedding_provider':'TokenHub','embedding_protocol':'openai'})
  vector=await io.embedding('Fictional embedding fixture')
  assert len(vector)==1024 and io.calls[0]['fixture_only'] and not io.calls[0]['new_http_call']

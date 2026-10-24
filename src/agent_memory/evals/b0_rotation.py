@@ -16,7 +16,7 @@ def vendor(model: str) -> str | None:
 
 def quota(record: dict[str, Any]) -> bool:
     return record.get('http') == 402 or record.get('error_code') in (
-        'SetLimitExceeded', '401010', 'QuotaExceeded', 'InsufficientBalance')
+        'SetLimitExceeded', '401010', 'QuotaExceeded', 'InsufficientBalance', 'AccountOverdueError')
 
 
 def candidates(role: str, model: str, provider: str, catalog: dict[str, list[str]],

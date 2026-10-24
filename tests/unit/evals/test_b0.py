@@ -97,3 +97,10 @@ def test_rotation_tries_other_key_and_preserves_vendor_gates():
     assert all(model == 'glm-5.2' for _, _, model in judges)
     assert quota({'http': 429, 'error_code': 'SetLimitExceeded'})
     assert not quota({'http': 429, 'error_code': 'RateLimitExceeded'})
+
+
+def test_overdue_is_quota_but_generic_forbidden_is_not():
+    from agent_memory.evals.b0_rotation import quota
+
+    assert quota({'http': 403, 'error_code': 'AccountOverdueError'})
+    assert not quota({'http': 403, 'error_code': 'AccessDenied'})
