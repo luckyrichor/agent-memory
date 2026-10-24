@@ -60,5 +60,8 @@
   "managed_active_state": "inactive",
   "recovery_report": "docs/baselines/b0/overdue-recovery-status-v1.json",
   "quota_bug_fixed_commit": "fdd8944",
-  "embedding_replacement_qualified": false
+  "embedding_replacement_qualified": false,
+  "pause_handoff_report": "docs/reports/phase2-b0-pause-2026-10-24/report.md",
+  "embedding_gate_plan_deviation_reported": true,
+  "embedding_gate_deviation": "implementation imposed exact repeated vector equality; plan five-repeat consistency is for judge decisions; report-only delivery, no restart or implementation change"
 }

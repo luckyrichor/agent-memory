@@ -1,0 +1,8095 @@
+{
+  "generated_beijing": "2026-10-24T12:33:16.612555+08:00",
+  "repository_commit": "593c9369d060b18ec4e6f147a2d17f433521aa50",
+  "baseline_commit": "1e9d6f3b25b58c85792344000d7e1b5a71a79737",
+  "measurement_harness_commit": "e36e4ce57269589beaa4aa4054d23a01e46315d7",
+  "working_tree_before_generation": "?? docs/reports/phase2-b0-pause-2026-10-24/",
+  "unit_state": "inactive",
+  "prepared_rows": 960,
+  "graded_rows": 360,
+  "graded_by_dataset": {
+    "locomo": 240,
+    "longmemeval_oracle": 120
+  },
+  "answer_model_counts": {
+    "hy4-preview": 162,
+    "hunyuan-role-latest": 84,
+    "hy-mt2-plus": 114
+  },
+  "judge_model_counts": {
+    "glm-5.2": 360
+  },
+  "selected_workload_evidence": "docs/baselines/b0/replacement-sample-budget-v1.json",
+  "calibration_exported": false,
+  "qualification_profiles": 23,
+  "qualified_profiles_under_implementation_gate": 0,
+  "qualification_summaries": [
+    {
+      "model": "doubao-embedding-vision-251215",
+      "provider": "Ark",
+      "passed": false,
+      "checks": {
+        "consistent_5": false,
+        "format_n": 100,
+        "format_valid": 100
+      },
+      "http_attempts": 106,
+      "http_counts": {
+        "200": 106
+      },
+      "error_counts": {},
+      "decision_sha256": "00574c8db9f80ab80331505cbcf2417f17c2f56a046536a926ad243a97a108ca"
+    },
+    {
+      "model": "doubao-embedding-large-text-240915",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "9f452583b75336ec96266f838ebd79966c907df354102804198268229719dbfe"
+    },
+    {
+      "model": "doubao-embedding-large-text-240915",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "ab31017c9124832c19a07d4fe429ea503a2394137f73d866155c27492a9f25b8"
+    },
+    {
+      "model": "doubao-embedding-large-text-250515",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "bdecde0cbc40979332903e29ae53c92a4fdfb34bc461c9219c2e70c66b1b883b"
+    },
+    {
+      "model": "doubao-embedding-large-text-250515",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "adee558bbb278f2a4d095143556cbb5a50b24d78621c24b823f0fa88d00a566f"
+    },
+    {
+      "model": "doubao-embedding-text-240515",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "e0a868ffaa18b9636658a4eddc058383bb7efbe0d622c5834c46c9974b2814e3"
+    },
+    {
+      "model": "doubao-embedding-text-240515",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "d47e5df9fd02e4b1c9c17e71fe4a76936947f2203c18f323046e725cab105e02"
+    },
+    {
+      "model": "doubao-embedding-text-240715",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "02b953b478a294277cb0fee7cc825569084204aae0c635cf705c9c7178d09e87"
+    },
+    {
+      "model": "doubao-embedding-text-240715",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "20f22eb047e5284b8a97c408a9b22c1b0f7db27a92f179f9ba9d6b924c73b1a3"
+    },
+    {
+      "model": "doubao-embedding-vision-241215",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "c8f2d3e7f512c82b996ac046ed0edd85c6fabce1da633a531406acfed42fe3cb"
+    },
+    {
+      "model": "doubao-embedding-vision-241215",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "511bfe82979a30cf196004da6f518d86b1d1fec00c34ae25fb9b36e3bd32a888"
+    },
+    {
+      "model": "doubao-embedding-vision-250328",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "6176dd414d575fe52b8e8ea3d313f2b9062034f020ced51418872bcb874b90bb"
+    },
+    {
+      "model": "doubao-embedding-vision-250328",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "3b3dd8b00a9f816d1c8a07dafb65983fabc14758dbbd02e1fde40eb755696b4a"
+    },
+    {
+      "model": "doubao-embedding-vision-250615",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "7c0121e4c3902be6509d7e6d0910e3f6883397f5c7b95e3d1f67420dd6ba0ee1"
+    },
+    {
+      "model": "doubao-embedding-vision-250615",
+      "provider": "Ark",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "404": 1
+      },
+      "error_counts": {
+        "InvalidEndpointOrModel.NotFound": 1
+      },
+      "decision_sha256": "0cbffb7a0a0f45a692180ca14bf82e913b2bb167db5e26dd9127924e7c9d51f5"
+    },
+    {
+      "model": "kinfra-text-embedding-0.6b",
+      "provider": "TokenHub",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "400": 1
+      },
+      "error_counts": {
+        "400001": 1
+      },
+      "decision_sha256": "65b137b8a6ed0b967c77691624e9373fb454fde4932b426a456287c04b681bb2"
+    },
+    {
+      "model": "kinfra-text-embedding-0.6b",
+      "provider": "TokenHub",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "400": 1
+      },
+      "error_counts": {
+        "400001": 1
+      },
+      "decision_sha256": "c11cf964f3f63ee5d6554954cb0d23dcde0e12813c63de7ee1a81c9aa97bde9c"
+    },
+    {
+      "model": "kinfra-text-embedding-4b",
+      "provider": "TokenHub",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "400": 1
+      },
+      "error_counts": {
+        "400001": 1
+      },
+      "decision_sha256": "590915dfafa524f458f21271ae0d8640b1928f59fe011a294322b4711570e3b2"
+    },
+    {
+      "model": "kinfra-text-embedding-4b",
+      "provider": "TokenHub",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "400": 1
+      },
+      "error_counts": {
+        "400001": 1
+      },
+      "decision_sha256": "6894bd3141f208de94152e5b131236af7181a06122008b52b951ba9dde449df9"
+    },
+    {
+      "model": "kinfra-vl-embedding-2b",
+      "provider": "TokenHub",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "400": 1
+      },
+      "error_counts": {
+        "400005": 1
+      },
+      "decision_sha256": "419fbbb0bc05cab8192b8a0c093bd9ba4d7b301fe1e75a072ef1c8df674b25d5"
+    },
+    {
+      "model": "kinfra-vl-embedding-2b",
+      "provider": "TokenHub",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "400": 1
+      },
+      "error_counts": {
+        "400005": 1
+      },
+      "decision_sha256": "18f61667d98b8886f4af62894a94b21f76d19841fbfbf7c6e85ea30e59bac790"
+    },
+    {
+      "model": "kinfra-vl-embedding-8b",
+      "provider": "TokenHub",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "400": 1
+      },
+      "error_counts": {
+        "400005": 1
+      },
+      "decision_sha256": "e2b35005fb115baa3d753cad80f4dbb87087f3d232c0710f1f395aa669798785"
+    },
+    {
+      "model": "kinfra-vl-embedding-8b",
+      "provider": "TokenHub",
+      "passed": false,
+      "checks": [],
+      "http_attempts": 1,
+      "http_counts": {
+        "400": 1
+      },
+      "error_counts": {
+        "400005": 1
+      },
+      "decision_sha256": "d2c3c17904126d25404b33827d4422c0b3cd467e0e04018a41ae68edd8abe432"
+    }
+  ],
+  "vector_diagnostic": {
+    "model": "doubao-embedding-vision-251215",
+    "http_successes": 106,
+    "format_valid": 100,
+    "format_n": 100,
+    "identical_vector_hashes": 3,
+    "vector_count": 5,
+    "max_absolute_coordinate_delta": 0.0107421875,
+    "minimum_cosine_to_first": 0.9955412622196823,
+    "scope": "fictional repeated input; magnitude description only, not a newly adopted acceptance threshold"
+  },
+  "last_attempt_ledger": {
+    "records": 2264,
+    "new_http_attempts": 1638,
+    "replays": 626,
+    "http_errors": {
+      "None": 9,
+      "403": 666
+    },
+    "resources_by_role": {
+      "embedding": {
+        "http_attempts": 1050,
+        "usage_unknown": 668,
+        "reported_total_tokens": 16218
+      },
+      "extraction": {
+        "http_attempts": 588,
+        "usage_unknown": 7,
+        "reported_total_tokens": 156780
+      }
+    },
+    "status_snapshot": {
+      "status": "failed",
+      "rows": 960,
+      "model_records_including_replays": 2261,
+      "model_attempts": 1635,
+      "vector_cache_replays": 626,
+      "dev_only": true,
+      "formal_scores": false,
+      "baseline_commit": "1e9d6f3b25b58c85792344000d7e1b5a71a79737",
+      "runtime_source": "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/source-B0",
+      "full_evaluation_complete": false,
+      "phase2_accepted": false
+    }
+  },
+  "diagnostic_measurements": {
+    "longmemeval_oracle/direct/no-memory": {
+      "dataset": "longmemeval_oracle",
+      "data_level": "A: public benchmark; model-judged scores not comparable to official GPT4o scores",
+      "sample_conversations": 5,
+      "sample_question_ids": 5,
+      "rows": 15,
+      "baseline": "B0 vs no-memory/full-context/naive-vector",
+      "evaluation_method": "frozen dev sample; conversation-cluster bootstrap1000; ratios over valid grading only, invalids separately; uncalibrated diagnostic, not formal",
+      "values": {
+        "E1": {
+          "value": 0.2,
+          "n": 5,
+          "numerator": 3.0,
+          "denominator": 15.0,
+          "ci95": [
+            0.0,
+            0.6
+          ]
+        }
+      },
+      "answer_models": [
+        "hy4-preview"
+      ],
+      "judge_models": [
+        "glm-5.2"
+      ]
+    },
+    "longmemeval_oracle/direct/full-context": {
+      "dataset": "longmemeval_oracle",
+      "data_level": "A: public benchmark; model-judged scores not comparable to official GPT4o scores",
+      "sample_conversations": 5,
+      "sample_question_ids": 5,
+      "rows": 15,
+      "baseline": "B0 vs no-memory/full-context/naive-vector",
+      "evaluation_method": "frozen dev sample; conversation-cluster bootstrap1000; ratios over valid grading only, invalids separately; uncalibrated diagnostic, not formal",
+      "values": {
+        "E1": {
+          "value": 0.8,
+          "n": 5,
+          "numerator": 12.0,
+          "denominator": 15.0,
+          "ci95": [
+            0.4,
+            1.0
+          ]
+        }
+      },
+      "answer_models": [
+        "hy4-preview"
+      ],
+      "judge_models": [
+        "glm-5.2"
+      ]
+    },
+    "longmemeval_oracle/direct/naive-vector": {
+      "dataset": "longmemeval_oracle",
+      "data_level": "A: public benchmark; model-judged scores not comparable to official GPT4o scores",
+      "sample_conversations": 5,
+      "sample_question_ids": 5,
+      "rows": 15,
+      "baseline": "B0 vs no-memory/full-context/naive-vector",
+      "evaluation_method": "frozen dev sample; conversation-cluster bootstrap1000; ratios over valid grading only, invalids separately; uncalibrated diagnostic, not formal",
+      "values": {
+        "E1": {
+          "value": 1.0,
+          "n": 5,
+          "numerator": 15.0,
+          "denominator": 15.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@1": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@1": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@1": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "evidence_coverage@1": {
+          "value": 0.75,
+          "n": 4,
+          "numerator": 9.0,
+          "denominator": 12.0,
+          "ci95": [
+            0.5,
+            1.0
+          ]
+        },
+        "RT1@3": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@3": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@3": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "evidence_coverage@3": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@5": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@5": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@5": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "evidence_coverage@5": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@10": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@10": {
+          "value": 0.9,
+          "n": 4,
+          "numerator": 10.8,
+          "denominator": 12.0,
+          "ci95": [
+            0.6999999999999998,
+            1.0
+          ]
+        },
+        "RT3@10": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "evidence_coverage@10": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT6": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "answer_models": [
+        "hy4-preview"
+      ],
+      "judge_models": [
+        "glm-5.2"
+      ]
+    },
+    "longmemeval_oracle/direct/system": {
+      "dataset": "longmemeval_oracle",
+      "data_level": "A: public benchmark; model-judged scores not comparable to official GPT4o scores",
+      "sample_conversations": 5,
+      "sample_question_ids": 5,
+      "rows": 15,
+      "baseline": "B0 vs no-memory/full-context/naive-vector",
+      "evaluation_method": "frozen dev sample; conversation-cluster bootstrap1000; ratios over valid grading only, invalids separately; uncalibrated diagnostic, not formal",
+      "values": {
+        "E1": {
+          "value": 0.7333333333333333,
+          "n": 5,
+          "numerator": 11.0,
+          "denominator": 15.0,
+          "ci95": [
+            0.5333333333333333,
+            0.9333333333333333
+          ]
+        },
+        "RT1@1": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@1": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@1": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "evidence_coverage@1": {
+          "value": 0.75,
+          "n": 4,
+          "numerator": 9.0,
+          "denominator": 12.0,
+          "ci95": [
+            0.5,
+            1.0
+          ]
+        },
+        "RT1@3": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@3": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@3": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "evidence_coverage@3": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@5": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@5": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@5": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "evidence_coverage@5": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@10": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@10": {
+          "value": 0.9,
+          "n": 4,
+          "numerator": 10.8,
+          "denominator": 12.0,
+          "ci95": [
+            0.6999999999999998,
+            1.0
+          ]
+        },
+        "RT3@10": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "evidence_coverage@10": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT6": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "answer_models": [
+        "hy4-preview"
+      ],
+      "judge_models": [
+        "glm-5.2"
+      ]
+    },
+    "longmemeval_oracle/full/no-memory": {
+      "dataset": "longmemeval_oracle",
+      "data_level": "A: public benchmark; model-judged scores not comparable to official GPT4o scores",
+      "sample_conversations": 5,
+      "sample_question_ids": 5,
+      "rows": 15,
+      "baseline": "B0 vs no-memory/full-context/naive-vector",
+      "evaluation_method": "frozen dev sample; conversation-cluster bootstrap1000; ratios over valid grading only, invalids separately; uncalibrated diagnostic, not formal",
+      "values": {
+        "E1": {
+          "value": 0.2,
+          "n": 5,
+          "numerator": 3.0,
+          "denominator": 15.0,
+          "ci95": [
+            0.0,
+            0.6
+          ]
+        }
+      },
+      "answer_models": [
+        "hy4-preview"
+      ],
+      "judge_models": [
+        "glm-5.2"
+      ]
+    },
+    "longmemeval_oracle/full/full-context": {
+      "dataset": "longmemeval_oracle",
+      "data_level": "A: public benchmark; model-judged scores not comparable to official GPT4o scores",
+      "sample_conversations": 5,
+      "sample_question_ids": 5,
+      "rows": 15,
+      "baseline": "B0 vs no-memory/full-context/naive-vector",
+      "evaluation_method": "frozen dev sample; conversation-cluster bootstrap1000; ratios over valid grading only, invalids separately; uncalibrated diagnostic, not formal",
+      "values": {
+        "E1": {
+          "value": 0.8,
+          "n": 5,
+          "numerator": 12.0,
+          "denominator": 15.0,
+          "ci95": [
+            0.4,
+            1.0
+          ]
+        }
+      },
+      "answer_models": [
+        "hy4-preview"
+      ],
+      "judge_models": [
+        "glm-5.2"
+      ]
+    },
+    "longmemeval_oracle/full/naive-vector": {
+      "dataset": "longmemeval_oracle",
+      "data_level": "A: public benchmark; model-judged scores not comparable to official GPT4o scores",
+      "sample_conversations": 5,
+      "sample_question_ids": 5,
+      "rows": 15,
+      "baseline": "B0 vs no-memory/full-context/naive-vector",
+      "evaluation_method": "frozen dev sample; conversation-cluster bootstrap1000; ratios over valid grading only, invalids separately; uncalibrated diagnostic, not formal",
+      "values": {
+        "E1": {
+          "value": 0.13333333333333333,
+          "n": 5,
+          "numerator": 2.0,
+          "denominator": 15.0,
+          "ci95": [
+            0.0,
+            0.4
+          ]
+        },
+        "RT1@1": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@1": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@1": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "evidence_coverage@1": {
+          "value": 0.75,
+          "n": 4,
+          "numerator": 9.0,
+          "denominator": 12.0,
+          "ci95": [
+            0.5,
+            1.0
+          ]
+        },
+        "RT1@3": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@3": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@3": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "evidence_coverage@3": {
+          "value": 0.7916666666666666,
+          "n": 4,
+          "numerator": 9.5,
+          "denominator": 12.0,
+          "ci95": [
+            0.5833333333333334,
+            1.0
+          ]
+        },
+        "RT1@5": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@5": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@5": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "evidence_coverage@5": {
+          "value": 0.8333333333333334,
+          "n": 4,
+          "numerator": 10.0,
+          "denominator": 12.0,
+          "ci95": [
+            0.6666666666666666,
+            1.0
+          ]
+        },
+        "RT1@10": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@10": {
+          "value": 0.9249999999999999,
+          "n": 4,
+          "numerator": 11.1,
+          "denominator": 12.0,
+          "ci95": [
+            0.7749999999999999,
+            1.0
+          ]
+        },
+        "RT3@10": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "evidence_coverage@10": {
+          "value": 1.0,
+          "n": 4,
+          "numerator": 12.0,
+          "denominator": 12.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT6": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "answer_models": [
+        "hy4-preview"
+      ],
+      "judge_models": [
+        "glm-5.2"
+      ]
+    },
+    "longmemeval_oracle/full/system": {
+      "dataset": "longmemeval_oracle",
+      "data_level": "A: public benchmark; model-judged scores not comparable to official GPT4o scores",
+      "sample_conversations": 5,
+      "sample_question_ids": 5,
+      "rows": 15,
+      "baseline": "B0 vs no-memory/full-context/naive-vector",
+      "evaluation_method": "frozen dev sample; conversation-cluster bootstrap1000; ratios over valid grading only, invalids separately; uncalibrated diagnostic, not formal",
+      "values": {
+        "E1": {
+          "value": 0.2,
+          "n": 5,
+          "numerator": 3.0,
+          "denominator": 15.0,
+          "ci95": [
+            0.0,
+            0.6
+          ]
+        },
+        "RT1@1": {
+          "value": 0.0,
+          "n": 4,
+          "numerator": 0.0,
+          "denominator": 12.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@1": {
+          "value": 0.0,
+          "n": 4,
+          "numerator": 0.0,
+          "denominator": 12.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@1": {
+          "value": 0.0,
+          "n": 4,
+          "numerator": 0.0,
+          "denominator": 12.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "evidence_coverage@1": {
+          "value": 0.0,
+          "n": 4,
+          "numerator": 0.0,
+          "denominator": 12.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@3": {
+          "value": 0.0,
+          "n": 4,
+          "numerator": 0.0,
+          "denominator": 12.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@3": {
+          "value": 0.0,
+          "n": 4,
+          "numerator": 0.0,
+          "denominator": 12.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@3": {
+          "value": 0.0,
+          "n": 4,
+          "numerator": 0.0,
+          "denominator": 12.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "evidence_coverage@3": {
+          "value": 0.0,
+          "n": 4,
+          "numerator": 0.0,
+          "denominator": 12.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@5": {
+          "value": 0.0,
+          "n": 4,
+          "numerator": 0.0,
+          "denominator": 12.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@5": {
+          "value": 0.0,
+          "n": 4,
+          "numerator": 0.0,
+          "denominator": 12.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@5": {
+          "value": 0.0,
+          "n": 4,
+          "numerator": 0.0,
+          "denominator": 12.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "evidence_coverage@5": {
+          "value": 0.0,
+          "n": 4,
+          "numerator": 0.0,
+          "denominator": 12.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@10": {
+          "value": 0.0,
+          "n": 4,
+          "numerator": 0.0,
+          "denominator": 12.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@10": {
+          "value": 0.0,
+          "n": 4,
+          "numerator": 0.0,
+          "denominator": 12.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@10": {
+          "value": 0.0,
+          "n": 4,
+          "numerator": 0.0,
+          "denominator": 12.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "evidence_coverage@10": {
+          "value": 0.0,
+          "n": 4,
+          "numerator": 0.0,
+          "denominator": 12.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT6": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "answer_models": [
+        "hy4-preview"
+      ],
+      "judge_models": [
+        "glm-5.2"
+      ]
+    },
+    "locomo/direct/no-memory": {
+      "dataset": "locomo",
+      "data_level": "A: public benchmark; model-judged scores not comparable to official GPT4o scores",
+      "sample_conversations": 1,
+      "sample_question_ids": 10,
+      "rows": 30,
+      "baseline": "B0 vs no-memory/full-context/naive-vector",
+      "evaluation_method": "frozen dev sample; conversation-cluster bootstrap1000; ratios over valid grading only, invalids separately; uncalibrated diagnostic, not formal",
+      "values": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 16.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "answer_models": [
+        "hunyuan-role-latest",
+        "hy4-preview"
+      ],
+      "judge_models": [
+        "glm-5.2"
+      ]
+    },
+    "locomo/direct/full-context": {
+      "dataset": "locomo",
+      "data_level": "A: public benchmark; model-judged scores not comparable to official GPT4o scores",
+      "sample_conversations": 1,
+      "sample_question_ids": 10,
+      "rows": 30,
+      "baseline": "B0 vs no-memory/full-context/naive-vector",
+      "evaluation_method": "frozen dev sample; conversation-cluster bootstrap1000; ratios over valid grading only, invalids separately; uncalibrated diagnostic, not formal",
+      "values": {
+        "E1": {
+          "value": 0.4117647058823529,
+          "n": 1,
+          "numerator": 7.0,
+          "denominator": 17.0,
+          "ci95": [
+            0.4117647058823529,
+            0.4117647058823529
+          ]
+        }
+      },
+      "answer_models": [
+        "hunyuan-role-latest",
+        "hy4-preview"
+      ],
+      "judge_models": [
+        "glm-5.2"
+      ]
+    },
+    "locomo/direct/naive-vector": {
+      "dataset": "locomo",
+      "data_level": "A: public benchmark; model-judged scores not comparable to official GPT4o scores",
+      "sample_conversations": 1,
+      "sample_question_ids": 10,
+      "rows": 30,
+      "baseline": "B0 vs no-memory/full-context/naive-vector",
+      "evaluation_method": "frozen dev sample; conversation-cluster bootstrap1000; ratios over valid grading only, invalids separately; uncalibrated diagnostic, not formal",
+      "values": {
+        "E1": {
+          "value": 0.1875,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 16.0,
+          "ci95": [
+            0.1875,
+            0.1875
+          ]
+        },
+        "RT1@1": {
+          "value": 0.125,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.125,
+            0.125
+          ]
+        },
+        "RT2@1": {
+          "value": 0.125,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.125,
+            0.125
+          ]
+        },
+        "RT3@1": {
+          "value": 0.3104166666666667,
+          "n": 1,
+          "numerator": 7.45,
+          "denominator": 24.0,
+          "ci95": [
+            0.3104166666666667,
+            0.3104166666666667
+          ]
+        },
+        "evidence_coverage@1": {
+          "value": 0.125,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.125,
+            0.125
+          ]
+        },
+        "RT1@3": {
+          "value": 0.375,
+          "n": 1,
+          "numerator": 9.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.375,
+            0.375
+          ]
+        },
+        "RT2@3": {
+          "value": 0.16666666666666666,
+          "n": 1,
+          "numerator": 4.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.16666666666666666,
+            0.16666666666666666
+          ]
+        },
+        "RT3@3": {
+          "value": 0.3104166666666667,
+          "n": 1,
+          "numerator": 7.45,
+          "denominator": 24.0,
+          "ci95": [
+            0.3104166666666667,
+            0.3104166666666667
+          ]
+        },
+        "evidence_coverage@3": {
+          "value": 0.23750000000000002,
+          "n": 1,
+          "numerator": 5.7,
+          "denominator": 24.0,
+          "ci95": [
+            0.23750000000000002,
+            0.23750000000000002
+          ]
+        },
+        "RT1@5": {
+          "value": 0.75,
+          "n": 1,
+          "numerator": 18.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.75,
+            0.75
+          ]
+        },
+        "RT2@5": {
+          "value": 0.17500000000000002,
+          "n": 1,
+          "numerator": 4.2,
+          "denominator": 24.0,
+          "ci95": [
+            0.17500000000000002,
+            0.17500000000000002
+          ]
+        },
+        "RT3@5": {
+          "value": 0.3104166666666667,
+          "n": 1,
+          "numerator": 7.45,
+          "denominator": 24.0,
+          "ci95": [
+            0.3104166666666667,
+            0.3104166666666667
+          ]
+        },
+        "evidence_coverage@5": {
+          "value": 0.5499999999999999,
+          "n": 1,
+          "numerator": 13.2,
+          "denominator": 24.0,
+          "ci95": [
+            0.5499999999999999,
+            0.5499999999999999
+          ]
+        },
+        "RT1@10": {
+          "value": 0.75,
+          "n": 1,
+          "numerator": 18.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.75,
+            0.75
+          ]
+        },
+        "RT2@10": {
+          "value": 0.1125,
+          "n": 1,
+          "numerator": 2.7,
+          "denominator": 24.0,
+          "ci95": [
+            0.1125,
+            0.1125
+          ]
+        },
+        "RT3@10": {
+          "value": 0.3104166666666667,
+          "n": 1,
+          "numerator": 7.45,
+          "denominator": 24.0,
+          "ci95": [
+            0.3104166666666667,
+            0.3104166666666667
+          ]
+        },
+        "evidence_coverage@10": {
+          "value": 0.6375000000000001,
+          "n": 1,
+          "numerator": 15.3,
+          "denominator": 24.0,
+          "ci95": [
+            0.6375000000000001,
+            0.6375000000000001
+          ]
+        },
+        "RT6": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "answer_models": [
+        "hunyuan-role-latest",
+        "hy4-preview"
+      ],
+      "judge_models": [
+        "glm-5.2"
+      ]
+    },
+    "locomo/direct/system": {
+      "dataset": "locomo",
+      "data_level": "A: public benchmark; model-judged scores not comparable to official GPT4o scores",
+      "sample_conversations": 1,
+      "sample_question_ids": 10,
+      "rows": 30,
+      "baseline": "B0 vs no-memory/full-context/naive-vector",
+      "evaluation_method": "frozen dev sample; conversation-cluster bootstrap1000; ratios over valid grading only, invalids separately; uncalibrated diagnostic, not formal",
+      "values": {
+        "E1": {
+          "value": 0.23529411764705882,
+          "n": 1,
+          "numerator": 4.0,
+          "denominator": 17.0,
+          "ci95": [
+            0.23529411764705882,
+            0.23529411764705882
+          ]
+        },
+        "RT1@1": {
+          "value": 0.25,
+          "n": 1,
+          "numerator": 6.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.25,
+            0.25
+          ]
+        },
+        "RT2@1": {
+          "value": 0.25,
+          "n": 1,
+          "numerator": 6.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.25,
+            0.25
+          ]
+        },
+        "RT3@1": {
+          "value": 0.3489583333333333,
+          "n": 1,
+          "numerator": 8.375,
+          "denominator": 24.0,
+          "ci95": [
+            0.3489583333333333,
+            0.3489583333333333
+          ]
+        },
+        "evidence_coverage@1": {
+          "value": 0.25,
+          "n": 1,
+          "numerator": 6.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.25,
+            0.25
+          ]
+        },
+        "RT1@3": {
+          "value": 0.375,
+          "n": 1,
+          "numerator": 9.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.375,
+            0.375
+          ]
+        },
+        "RT2@3": {
+          "value": 0.125,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.125,
+            0.125
+          ]
+        },
+        "RT3@3": {
+          "value": 0.3489583333333333,
+          "n": 1,
+          "numerator": 8.375,
+          "denominator": 24.0,
+          "ci95": [
+            0.3489583333333333,
+            0.3489583333333333
+          ]
+        },
+        "evidence_coverage@3": {
+          "value": 0.375,
+          "n": 1,
+          "numerator": 9.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.375,
+            0.375
+          ]
+        },
+        "RT1@5": {
+          "value": 0.375,
+          "n": 1,
+          "numerator": 9.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.375,
+            0.375
+          ]
+        },
+        "RT2@5": {
+          "value": 0.075,
+          "n": 1,
+          "numerator": 1.8,
+          "denominator": 24.0,
+          "ci95": [
+            0.075,
+            0.075
+          ]
+        },
+        "RT3@5": {
+          "value": 0.3489583333333333,
+          "n": 1,
+          "numerator": 8.375,
+          "denominator": 24.0,
+          "ci95": [
+            0.3489583333333333,
+            0.3489583333333333
+          ]
+        },
+        "evidence_coverage@5": {
+          "value": 0.375,
+          "n": 1,
+          "numerator": 9.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.375,
+            0.375
+          ]
+        },
+        "RT1@10": {
+          "value": 0.75,
+          "n": 1,
+          "numerator": 18.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.75,
+            0.75
+          ]
+        },
+        "RT2@10": {
+          "value": 0.08750000000000001,
+          "n": 1,
+          "numerator": 2.1,
+          "denominator": 24.0,
+          "ci95": [
+            0.08750000000000001,
+            0.08750000000000001
+          ]
+        },
+        "RT3@10": {
+          "value": 0.3489583333333333,
+          "n": 1,
+          "numerator": 8.375,
+          "denominator": 24.0,
+          "ci95": [
+            0.3489583333333333,
+            0.3489583333333333
+          ]
+        },
+        "evidence_coverage@10": {
+          "value": 0.5499999999999999,
+          "n": 1,
+          "numerator": 13.2,
+          "denominator": 24.0,
+          "ci95": [
+            0.5499999999999999,
+            0.5499999999999999
+          ]
+        },
+        "RT6": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "answer_models": [
+        "hunyuan-role-latest",
+        "hy4-preview"
+      ],
+      "judge_models": [
+        "glm-5.2"
+      ]
+    },
+    "locomo/full/no-memory": {
+      "dataset": "locomo",
+      "data_level": "A: public benchmark; model-judged scores not comparable to official GPT4o scores",
+      "sample_conversations": 1,
+      "sample_question_ids": 10,
+      "rows": 30,
+      "baseline": "B0 vs no-memory/full-context/naive-vector",
+      "evaluation_method": "frozen dev sample; conversation-cluster bootstrap1000; ratios over valid grading only, invalids separately; uncalibrated diagnostic, not formal",
+      "values": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 26.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "answer_models": [
+        "hunyuan-role-latest",
+        "hy-mt2-plus"
+      ],
+      "judge_models": [
+        "glm-5.2"
+      ]
+    },
+    "locomo/full/full-context": {
+      "dataset": "locomo",
+      "data_level": "A: public benchmark; model-judged scores not comparable to official GPT4o scores",
+      "sample_conversations": 1,
+      "sample_question_ids": 10,
+      "rows": 30,
+      "baseline": "B0 vs no-memory/full-context/naive-vector",
+      "evaluation_method": "frozen dev sample; conversation-cluster bootstrap1000; ratios over valid grading only, invalids separately; uncalibrated diagnostic, not formal",
+      "values": {
+        "E1": {
+          "value": 0.08,
+          "n": 1,
+          "numerator": 2.0,
+          "denominator": 25.0,
+          "ci95": [
+            0.08,
+            0.08
+          ]
+        }
+      },
+      "answer_models": [
+        "hunyuan-role-latest",
+        "hy-mt2-plus"
+      ],
+      "judge_models": [
+        "glm-5.2"
+      ]
+    },
+    "locomo/full/naive-vector": {
+      "dataset": "locomo",
+      "data_level": "A: public benchmark; model-judged scores not comparable to official GPT4o scores",
+      "sample_conversations": 1,
+      "sample_question_ids": 10,
+      "rows": 30,
+      "baseline": "B0 vs no-memory/full-context/naive-vector",
+      "evaluation_method": "frozen dev sample; conversation-cluster bootstrap1000; ratios over valid grading only, invalids separately; uncalibrated diagnostic, not formal",
+      "values": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 25.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@1": {
+          "value": 0.11805555555555557,
+          "n": 1,
+          "numerator": 2.8333333333333335,
+          "denominator": 24.0,
+          "ci95": [
+            0.11805555555555557,
+            0.11805555555555557
+          ]
+        },
+        "evidence_coverage@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@3": {
+          "value": 0.25,
+          "n": 1,
+          "numerator": 6.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.25,
+            0.25
+          ]
+        },
+        "RT2@3": {
+          "value": 0.08333333333333333,
+          "n": 1,
+          "numerator": 2.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.08333333333333333,
+            0.08333333333333333
+          ]
+        },
+        "RT3@3": {
+          "value": 0.11805555555555557,
+          "n": 1,
+          "numerator": 2.8333333333333335,
+          "denominator": 24.0,
+          "ci95": [
+            0.11805555555555557,
+            0.11805555555555557
+          ]
+        },
+        "evidence_coverage@3": {
+          "value": 0.18333333333333335,
+          "n": 1,
+          "numerator": 4.4,
+          "denominator": 24.0,
+          "ci95": [
+            0.18333333333333335,
+            0.18333333333333335
+          ]
+        },
+        "RT1@5": {
+          "value": 0.25,
+          "n": 1,
+          "numerator": 6.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.25,
+            0.25
+          ]
+        },
+        "RT2@5": {
+          "value": 0.05000000000000001,
+          "n": 1,
+          "numerator": 1.2000000000000002,
+          "denominator": 24.0,
+          "ci95": [
+            0.05000000000000001,
+            0.05000000000000001
+          ]
+        },
+        "RT3@5": {
+          "value": 0.11805555555555557,
+          "n": 1,
+          "numerator": 2.8333333333333335,
+          "denominator": 24.0,
+          "ci95": [
+            0.11805555555555557,
+            0.11805555555555557
+          ]
+        },
+        "evidence_coverage@5": {
+          "value": 0.18333333333333335,
+          "n": 1,
+          "numerator": 4.4,
+          "denominator": 24.0,
+          "ci95": [
+            0.18333333333333335,
+            0.18333333333333335
+          ]
+        },
+        "RT1@10": {
+          "value": 0.2916666666666667,
+          "n": 1,
+          "numerator": 7.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.2916666666666667,
+            0.2916666666666667
+          ]
+        },
+        "RT2@10": {
+          "value": 0.02916666666666667,
+          "n": 1,
+          "numerator": 0.7000000000000001,
+          "denominator": 24.0,
+          "ci95": [
+            0.02916666666666667,
+            0.02916666666666667
+          ]
+        },
+        "RT3@10": {
+          "value": 0.11805555555555557,
+          "n": 1,
+          "numerator": 2.8333333333333335,
+          "denominator": 24.0,
+          "ci95": [
+            0.11805555555555557,
+            0.11805555555555557
+          ]
+        },
+        "evidence_coverage@10": {
+          "value": 0.225,
+          "n": 1,
+          "numerator": 5.4,
+          "denominator": 24.0,
+          "ci95": [
+            0.225,
+            0.225
+          ]
+        },
+        "RT6": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "answer_models": [
+        "hunyuan-role-latest",
+        "hy-mt2-plus"
+      ],
+      "judge_models": [
+        "glm-5.2"
+      ]
+    },
+    "locomo/full/system": {
+      "dataset": "locomo",
+      "data_level": "A: public benchmark; model-judged scores not comparable to official GPT4o scores",
+      "sample_conversations": 1,
+      "sample_question_ids": 10,
+      "rows": 30,
+      "baseline": "B0 vs no-memory/full-context/naive-vector",
+      "evaluation_method": "frozen dev sample; conversation-cluster bootstrap1000; ratios over valid grading only, invalids separately; uncalibrated diagnostic, not formal",
+      "values": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 26.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "evidence_coverage@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "evidence_coverage@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "evidence_coverage@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "evidence_coverage@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 24.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT6": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "answer_models": [
+        "hunyuan-role-latest",
+        "hy-mt2-plus"
+      ],
+      "judge_models": [
+        "glm-5.2"
+      ]
+    }
+  },
+  "by_type": {
+    "longmemeval_oracle/direct/no-memory": {
+      "single-session-assistant": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "abstention": {
+        "E1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "single-session-preference": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "multi-session": {
+        "E1": {
+          "value": 0.0,
+          "n": 2,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    "longmemeval_oracle/direct/full-context": {
+      "single-session-assistant": {
+        "E1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "abstention": {
+        "E1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "single-session-preference": {
+        "E1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "multi-session": {
+        "E1": {
+          "value": 0.5,
+          "n": 2,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    "longmemeval_oracle/direct/naive-vector": {
+      "single-session-assistant": {
+        "E1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@3": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@3": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@3": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@5": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@5": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@5": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@10": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@10": {
+          "value": 0.6,
+          "n": 1,
+          "numerator": 1.7999999999999998,
+          "denominator": 3.0,
+          "ci95": [
+            0.6,
+            0.6
+          ]
+        },
+        "RT3@10": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "abstention": {
+        "E1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "single-session-preference": {
+        "E1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@3": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@3": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@3": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@5": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@5": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@5": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@10": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@10": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@10": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "multi-session": {
+        "E1": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@1": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@1": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@1": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@3": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@3": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@3": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@5": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@5": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@5": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@10": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@10": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@10": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    "longmemeval_oracle/direct/system": {
+      "single-session-assistant": {
+        "E1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@3": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@3": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@3": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@5": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@5": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@5": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@10": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@10": {
+          "value": 0.6,
+          "n": 1,
+          "numerator": 1.7999999999999998,
+          "denominator": 3.0,
+          "ci95": [
+            0.6,
+            0.6
+          ]
+        },
+        "RT3@10": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "abstention": {
+        "E1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "single-session-preference": {
+        "E1": {
+          "value": 0.3333333333333333,
+          "n": 1,
+          "numerator": 1.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.3333333333333333,
+            0.3333333333333333
+          ]
+        },
+        "RT1@1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@3": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@3": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@3": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@5": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@5": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@5": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@10": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@10": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@10": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "multi-session": {
+        "E1": {
+          "value": 0.6666666666666666,
+          "n": 2,
+          "numerator": 4.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.6666666666666666,
+            0.6666666666666666
+          ]
+        },
+        "RT1@1": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@1": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@1": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@3": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@3": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@3": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@5": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@5": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@5": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@10": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@10": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@10": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    "longmemeval_oracle/full/no-memory": {
+      "single-session-assistant": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "abstention": {
+        "E1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "single-session-preference": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "multi-session": {
+        "E1": {
+          "value": 0.0,
+          "n": 2,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    "longmemeval_oracle/full/full-context": {
+      "single-session-assistant": {
+        "E1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "abstention": {
+        "E1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "single-session-preference": {
+        "E1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "multi-session": {
+        "E1": {
+          "value": 0.5,
+          "n": 2,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            1.0
+          ]
+        }
+      }
+    },
+    "longmemeval_oracle/full/naive-vector": {
+      "single-session-assistant": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@3": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@3": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@3": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@5": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@5": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@5": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@10": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@10": {
+          "value": 0.6999999999999998,
+          "n": 1,
+          "numerator": 2.0999999999999996,
+          "denominator": 3.0,
+          "ci95": [
+            0.6999999999999998,
+            0.6999999999999998
+          ]
+        },
+        "RT3@10": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "abstention": {
+        "E1": {
+          "value": 0.6666666666666666,
+          "n": 1,
+          "numerator": 2.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.6666666666666666,
+            0.6666666666666666
+          ]
+        }
+      },
+      "single-session-preference": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@3": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@3": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@3": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@5": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@5": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@5": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@10": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@10": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@10": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "multi-session": {
+        "E1": {
+          "value": 0.0,
+          "n": 2,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@1": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@1": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@1": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@3": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@3": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@3": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@5": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@5": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@5": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT1@10": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@10": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT3@10": {
+          "value": 1.0,
+          "n": 2,
+          "numerator": 6.0,
+          "denominator": 6.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      }
+    },
+    "longmemeval_oracle/full/system": {
+      "single-session-assistant": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "abstention": {
+        "E1": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "single-session-preference": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "multi-session": {
+        "E1": {
+          "value": 0.0,
+          "n": 2,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@1": {
+          "value": 0.0,
+          "n": 2,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@1": {
+          "value": 0.0,
+          "n": 2,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@1": {
+          "value": 0.0,
+          "n": 2,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@3": {
+          "value": 0.0,
+          "n": 2,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@3": {
+          "value": 0.0,
+          "n": 2,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@3": {
+          "value": 0.0,
+          "n": 2,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@5": {
+          "value": 0.0,
+          "n": 2,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@5": {
+          "value": 0.0,
+          "n": 2,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@5": {
+          "value": 0.0,
+          "n": 2,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@10": {
+          "value": 0.0,
+          "n": 2,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@10": {
+          "value": 0.0,
+          "n": 2,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@10": {
+          "value": 0.0,
+          "n": 2,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    "locomo/direct/no-memory": {
+      "5": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 2.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "2": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "4": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "3": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 2.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "1": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    "locomo/direct/full-context": {
+      "5": {
+        "E1": {
+          "value": 0.6666666666666666,
+          "n": 1,
+          "numerator": 2.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.6666666666666666,
+            0.6666666666666666
+          ]
+        }
+      },
+      "2": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "4": {
+        "E1": {
+          "value": 0.6666666666666666,
+          "n": 1,
+          "numerator": 2.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.6666666666666666,
+            0.6666666666666666
+          ]
+        }
+      },
+      "3": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 2.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "1": {
+        "E1": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        }
+      }
+    },
+    "locomo/direct/naive-vector": {
+      "5": {
+        "E1": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 1.0,
+          "denominator": 2.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        }
+      },
+      "2": {
+        "E1": {
+          "value": 0.25,
+          "n": 1,
+          "numerator": 1.0,
+          "denominator": 4.0,
+          "ci95": [
+            0.25,
+            0.25
+          ]
+        },
+        "RT1@1": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT2@1": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT3@1": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT1@3": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT2@3": {
+          "value": 0.16666666666666666,
+          "n": 1,
+          "numerator": 1.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.16666666666666666,
+            0.16666666666666666
+          ]
+        },
+        "RT3@3": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT1@5": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT2@5": {
+          "value": 0.10000000000000002,
+          "n": 1,
+          "numerator": 0.6000000000000001,
+          "denominator": 6.0,
+          "ci95": [
+            0.10000000000000002,
+            0.10000000000000002
+          ]
+        },
+        "RT3@5": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT1@10": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT2@10": {
+          "value": 0.05000000000000001,
+          "n": 1,
+          "numerator": 0.30000000000000004,
+          "denominator": 6.0,
+          "ci95": [
+            0.05000000000000001,
+            0.05000000000000001
+          ]
+        },
+        "RT3@10": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        }
+      },
+      "4": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@1": {
+          "value": 0.10000000000000002,
+          "n": 1,
+          "numerator": 0.6000000000000001,
+          "denominator": 6.0,
+          "ci95": [
+            0.10000000000000002,
+            0.10000000000000002
+          ]
+        },
+        "RT1@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@3": {
+          "value": 0.10000000000000002,
+          "n": 1,
+          "numerator": 0.6000000000000001,
+          "denominator": 6.0,
+          "ci95": [
+            0.10000000000000002,
+            0.10000000000000002
+          ]
+        },
+        "RT1@5": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT2@5": {
+          "value": 0.10000000000000002,
+          "n": 1,
+          "numerator": 0.6000000000000001,
+          "denominator": 6.0,
+          "ci95": [
+            0.10000000000000002,
+            0.10000000000000002
+          ]
+        },
+        "RT3@5": {
+          "value": 0.10000000000000002,
+          "n": 1,
+          "numerator": 0.6000000000000001,
+          "denominator": 6.0,
+          "ci95": [
+            0.10000000000000002,
+            0.10000000000000002
+          ]
+        },
+        "RT1@10": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT2@10": {
+          "value": 0.05000000000000001,
+          "n": 1,
+          "numerator": 0.30000000000000004,
+          "denominator": 6.0,
+          "ci95": [
+            0.05000000000000001,
+            0.05000000000000001
+          ]
+        },
+        "RT3@10": {
+          "value": 0.10000000000000002,
+          "n": 1,
+          "numerator": 0.6000000000000001,
+          "denominator": 6.0,
+          "ci95": [
+            0.10000000000000002,
+            0.10000000000000002
+          ]
+        }
+      },
+      "3": {
+        "E1": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 1.0,
+          "denominator": 2.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT1@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@1": {
+          "value": 0.20000000000000004,
+          "n": 1,
+          "numerator": 0.6000000000000001,
+          "denominator": 3.0,
+          "ci95": [
+            0.20000000000000004,
+            0.20000000000000004
+          ]
+        },
+        "RT1@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@3": {
+          "value": 0.20000000000000004,
+          "n": 1,
+          "numerator": 0.6000000000000001,
+          "denominator": 3.0,
+          "ci95": [
+            0.20000000000000004,
+            0.20000000000000004
+          ]
+        },
+        "RT1@5": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@5": {
+          "value": 0.20000000000000004,
+          "n": 1,
+          "numerator": 0.6000000000000001,
+          "denominator": 3.0,
+          "ci95": [
+            0.20000000000000004,
+            0.20000000000000004
+          ]
+        },
+        "RT3@5": {
+          "value": 0.20000000000000004,
+          "n": 1,
+          "numerator": 0.6000000000000001,
+          "denominator": 3.0,
+          "ci95": [
+            0.20000000000000004,
+            0.20000000000000004
+          ]
+        },
+        "RT1@10": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@10": {
+          "value": 0.10000000000000002,
+          "n": 1,
+          "numerator": 0.30000000000000004,
+          "denominator": 3.0,
+          "ci95": [
+            0.10000000000000002,
+            0.10000000000000002
+          ]
+        },
+        "RT3@10": {
+          "value": 0.20000000000000004,
+          "n": 1,
+          "numerator": 0.6000000000000001,
+          "denominator": 3.0,
+          "ci95": [
+            0.20000000000000004,
+            0.20000000000000004
+          ]
+        }
+      },
+      "1": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 5.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@1": {
+          "value": 0.3611111111111111,
+          "n": 1,
+          "numerator": 3.25,
+          "denominator": 9.0,
+          "ci95": [
+            0.3611111111111111,
+            0.3611111111111111
+          ]
+        },
+        "RT1@3": {
+          "value": 0.6666666666666666,
+          "n": 1,
+          "numerator": 6.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.6666666666666666,
+            0.6666666666666666
+          ]
+        },
+        "RT2@3": {
+          "value": 0.3333333333333333,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.3333333333333333,
+            0.3333333333333333
+          ]
+        },
+        "RT3@3": {
+          "value": 0.3611111111111111,
+          "n": 1,
+          "numerator": 3.25,
+          "denominator": 9.0,
+          "ci95": [
+            0.3611111111111111,
+            0.3611111111111111
+          ]
+        },
+        "RT1@5": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 9.0,
+          "denominator": 9.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@5": {
+          "value": 0.2666666666666667,
+          "n": 1,
+          "numerator": 2.4000000000000004,
+          "denominator": 9.0,
+          "ci95": [
+            0.2666666666666667,
+            0.2666666666666667
+          ]
+        },
+        "RT3@5": {
+          "value": 0.3611111111111111,
+          "n": 1,
+          "numerator": 3.25,
+          "denominator": 9.0,
+          "ci95": [
+            0.3611111111111111,
+            0.3611111111111111
+          ]
+        },
+        "RT1@10": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 9.0,
+          "denominator": 9.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@10": {
+          "value": 0.2,
+          "n": 1,
+          "numerator": 1.8,
+          "denominator": 9.0,
+          "ci95": [
+            0.2,
+            0.2
+          ]
+        },
+        "RT3@10": {
+          "value": 0.3611111111111111,
+          "n": 1,
+          "numerator": 3.25,
+          "denominator": 9.0,
+          "ci95": [
+            0.3611111111111111,
+            0.3611111111111111
+          ]
+        }
+      }
+    },
+    "locomo/direct/system": {
+      "5": {
+        "E1": {
+          "value": 0.6666666666666666,
+          "n": 1,
+          "numerator": 2.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.6666666666666666,
+            0.6666666666666666
+          ]
+        }
+      },
+      "2": {
+        "E1": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 2.0,
+          "denominator": 4.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT1@1": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT2@1": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT3@1": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT1@3": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT2@3": {
+          "value": 0.16666666666666666,
+          "n": 1,
+          "numerator": 1.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.16666666666666666,
+            0.16666666666666666
+          ]
+        },
+        "RT3@3": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT1@5": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT2@5": {
+          "value": 0.10000000000000002,
+          "n": 1,
+          "numerator": 0.6000000000000001,
+          "denominator": 6.0,
+          "ci95": [
+            0.10000000000000002,
+            0.10000000000000002
+          ]
+        },
+        "RT3@5": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT1@10": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT2@10": {
+          "value": 0.05000000000000001,
+          "n": 1,
+          "numerator": 0.30000000000000004,
+          "denominator": 6.0,
+          "ci95": [
+            0.05000000000000001,
+            0.05000000000000001
+          ]
+        },
+        "RT3@10": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        }
+      },
+      "4": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@1": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT2@1": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT3@1": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT1@3": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT2@3": {
+          "value": 0.16666666666666666,
+          "n": 1,
+          "numerator": 1.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.16666666666666666,
+            0.16666666666666666
+          ]
+        },
+        "RT3@3": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT1@5": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT2@5": {
+          "value": 0.10000000000000002,
+          "n": 1,
+          "numerator": 0.6000000000000001,
+          "denominator": 6.0,
+          "ci95": [
+            0.10000000000000002,
+            0.10000000000000002
+          ]
+        },
+        "RT3@5": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT1@10": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        },
+        "RT2@10": {
+          "value": 0.05000000000000001,
+          "n": 1,
+          "numerator": 0.30000000000000004,
+          "denominator": 6.0,
+          "ci95": [
+            0.05000000000000001,
+            0.05000000000000001
+          ]
+        },
+        "RT3@10": {
+          "value": 0.5,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.5,
+            0.5
+          ]
+        }
+      },
+      "3": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 2.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@1": {
+          "value": 0.3333333333333333,
+          "n": 1,
+          "numerator": 1.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.3333333333333333,
+            0.3333333333333333
+          ]
+        },
+        "RT1@3": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@3": {
+          "value": 0.3333333333333333,
+          "n": 1,
+          "numerator": 1.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.3333333333333333,
+            0.3333333333333333
+          ]
+        },
+        "RT3@3": {
+          "value": 0.3333333333333333,
+          "n": 1,
+          "numerator": 1.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.3333333333333333,
+            0.3333333333333333
+          ]
+        },
+        "RT1@5": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@5": {
+          "value": 0.20000000000000004,
+          "n": 1,
+          "numerator": 0.6000000000000001,
+          "denominator": 3.0,
+          "ci95": [
+            0.20000000000000004,
+            0.20000000000000004
+          ]
+        },
+        "RT3@5": {
+          "value": 0.3333333333333333,
+          "n": 1,
+          "numerator": 1.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.3333333333333333,
+            0.3333333333333333
+          ]
+        },
+        "RT1@10": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 3.0,
+          "denominator": 3.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@10": {
+          "value": 0.10000000000000002,
+          "n": 1,
+          "numerator": 0.30000000000000004,
+          "denominator": 3.0,
+          "ci95": [
+            0.10000000000000002,
+            0.10000000000000002
+          ]
+        },
+        "RT3@10": {
+          "value": 0.3333333333333333,
+          "n": 1,
+          "numerator": 1.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.3333333333333333,
+            0.3333333333333333
+          ]
+        }
+      },
+      "1": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 5.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@1": {
+          "value": 0.1527777777777778,
+          "n": 1,
+          "numerator": 1.375,
+          "denominator": 9.0,
+          "ci95": [
+            0.1527777777777778,
+            0.1527777777777778
+          ]
+        },
+        "RT1@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@3": {
+          "value": 0.1527777777777778,
+          "n": 1,
+          "numerator": 1.375,
+          "denominator": 9.0,
+          "ci95": [
+            0.1527777777777778,
+            0.1527777777777778
+          ]
+        },
+        "RT1@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@5": {
+          "value": 0.1527777777777778,
+          "n": 1,
+          "numerator": 1.375,
+          "denominator": 9.0,
+          "ci95": [
+            0.1527777777777778,
+            0.1527777777777778
+          ]
+        },
+        "RT1@10": {
+          "value": 1.0,
+          "n": 1,
+          "numerator": 9.0,
+          "denominator": 9.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "RT2@10": {
+          "value": 0.13333333333333336,
+          "n": 1,
+          "numerator": 1.2000000000000002,
+          "denominator": 9.0,
+          "ci95": [
+            0.13333333333333336,
+            0.13333333333333336
+          ]
+        },
+        "RT3@10": {
+          "value": 0.1527777777777778,
+          "n": 1,
+          "numerator": 1.375,
+          "denominator": 9.0,
+          "ci95": [
+            0.1527777777777778,
+            0.1527777777777778
+          ]
+        }
+      }
+    },
+    "locomo/full/no-memory": {
+      "5": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 5.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "2": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 5.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "4": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 5.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "3": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "1": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 8.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    "locomo/full/full-context": {
+      "5": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 5.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "2": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 4.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "4": {
+        "E1": {
+          "value": 0.4,
+          "n": 1,
+          "numerator": 2.0,
+          "denominator": 5.0,
+          "ci95": [
+            0.4,
+            0.4
+          ]
+        }
+      },
+      "3": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "1": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 8.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    "locomo/full/naive-vector": {
+      "5": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 4.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "2": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 4.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@1": {
+          "value": 0.3333333333333333,
+          "n": 1,
+          "numerator": 2.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.3333333333333333,
+            0.3333333333333333
+          ]
+        },
+        "RT1@3": {
+          "value": 0.6666666666666666,
+          "n": 1,
+          "numerator": 4.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.6666666666666666,
+            0.6666666666666666
+          ]
+        },
+        "RT2@3": {
+          "value": 0.2222222222222222,
+          "n": 1,
+          "numerator": 1.3333333333333333,
+          "denominator": 6.0,
+          "ci95": [
+            0.2222222222222222,
+            0.2222222222222222
+          ]
+        },
+        "RT3@3": {
+          "value": 0.3333333333333333,
+          "n": 1,
+          "numerator": 2.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.3333333333333333,
+            0.3333333333333333
+          ]
+        },
+        "RT1@5": {
+          "value": 0.6666666666666666,
+          "n": 1,
+          "numerator": 4.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.6666666666666666,
+            0.6666666666666666
+          ]
+        },
+        "RT2@5": {
+          "value": 0.13333333333333333,
+          "n": 1,
+          "numerator": 0.8,
+          "denominator": 6.0,
+          "ci95": [
+            0.13333333333333333,
+            0.13333333333333333
+          ]
+        },
+        "RT3@5": {
+          "value": 0.3333333333333333,
+          "n": 1,
+          "numerator": 2.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.3333333333333333,
+            0.3333333333333333
+          ]
+        },
+        "RT1@10": {
+          "value": 0.8333333333333334,
+          "n": 1,
+          "numerator": 5.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.8333333333333334,
+            0.8333333333333334
+          ]
+        },
+        "RT2@10": {
+          "value": 0.08333333333333333,
+          "n": 1,
+          "numerator": 0.5,
+          "denominator": 6.0,
+          "ci95": [
+            0.08333333333333333,
+            0.08333333333333333
+          ]
+        },
+        "RT3@10": {
+          "value": 0.3333333333333333,
+          "n": 1,
+          "numerator": 2.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.3333333333333333,
+            0.3333333333333333
+          ]
+        }
+      },
+      "4": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 5.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "3": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "1": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@1": {
+          "value": 0.09259259259259259,
+          "n": 1,
+          "numerator": 0.8333333333333333,
+          "denominator": 9.0,
+          "ci95": [
+            0.09259259259259259,
+            0.09259259259259259
+          ]
+        },
+        "RT1@3": {
+          "value": 0.2222222222222222,
+          "n": 1,
+          "numerator": 2.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.2222222222222222,
+            0.2222222222222222
+          ]
+        },
+        "RT2@3": {
+          "value": 0.07407407407407407,
+          "n": 1,
+          "numerator": 0.6666666666666666,
+          "denominator": 9.0,
+          "ci95": [
+            0.07407407407407407,
+            0.07407407407407407
+          ]
+        },
+        "RT3@3": {
+          "value": 0.09259259259259259,
+          "n": 1,
+          "numerator": 0.8333333333333333,
+          "denominator": 9.0,
+          "ci95": [
+            0.09259259259259259,
+            0.09259259259259259
+          ]
+        },
+        "RT1@5": {
+          "value": 0.2222222222222222,
+          "n": 1,
+          "numerator": 2.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.2222222222222222,
+            0.2222222222222222
+          ]
+        },
+        "RT2@5": {
+          "value": 0.044444444444444446,
+          "n": 1,
+          "numerator": 0.4,
+          "denominator": 9.0,
+          "ci95": [
+            0.044444444444444446,
+            0.044444444444444446
+          ]
+        },
+        "RT3@5": {
+          "value": 0.09259259259259259,
+          "n": 1,
+          "numerator": 0.8333333333333333,
+          "denominator": 9.0,
+          "ci95": [
+            0.09259259259259259,
+            0.09259259259259259
+          ]
+        },
+        "RT1@10": {
+          "value": 0.2222222222222222,
+          "n": 1,
+          "numerator": 2.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.2222222222222222,
+            0.2222222222222222
+          ]
+        },
+        "RT2@10": {
+          "value": 0.022222222222222223,
+          "n": 1,
+          "numerator": 0.2,
+          "denominator": 9.0,
+          "ci95": [
+            0.022222222222222223,
+            0.022222222222222223
+          ]
+        },
+        "RT3@10": {
+          "value": 0.09259259259259259,
+          "n": 1,
+          "numerator": 0.8333333333333333,
+          "denominator": 9.0,
+          "ci95": [
+            0.09259259259259259,
+            0.09259259259259259
+          ]
+        }
+      }
+    },
+    "locomo/full/system": {
+      "5": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 4.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "2": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 5.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "4": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 5.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 6.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "3": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 3.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "1": {
+        "E1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@1": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@3": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@5": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT1@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT2@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "RT3@10": {
+          "value": 0.0,
+          "n": 1,
+          "numerator": 0.0,
+          "denominator": 9.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    }
+  },
+  "worst_types": {
+    "longmemeval_oracle/direct/no-memory": [
+      "single-session-assistant",
+      "single-session-preference",
+      "multi-session"
+    ],
+    "longmemeval_oracle/direct/full-context": [
+      "multi-session"
+    ],
+    "longmemeval_oracle/direct/naive-vector": [
+      "single-session-assistant",
+      "abstention",
+      "single-session-preference",
+      "multi-session"
+    ],
+    "longmemeval_oracle/direct/system": [
+      "single-session-preference"
+    ],
+    "longmemeval_oracle/full/no-memory": [
+      "single-session-assistant",
+      "single-session-preference",
+      "multi-session"
+    ],
+    "longmemeval_oracle/full/full-context": [
+      "multi-session"
+    ],
+    "longmemeval_oracle/full/naive-vector": [
+      "single-session-assistant",
+      "single-session-preference",
+      "multi-session"
+    ],
+    "longmemeval_oracle/full/system": [
+      "single-session-assistant",
+      "single-session-preference",
+      "multi-session"
+    ],
+    "locomo/direct/no-memory": [
+      "5",
+      "2",
+      "4",
+      "3",
+      "1"
+    ],
+    "locomo/direct/full-context": [
+      "2",
+      "3"
+    ],
+    "locomo/direct/naive-vector": [
+      "4",
+      "1"
+    ],
+    "locomo/direct/system": [
+      "4",
+      "3",
+      "1"
+    ],
+    "locomo/full/no-memory": [
+      "5",
+      "2",
+      "4",
+      "3",
+      "1"
+    ],
+    "locomo/full/full-context": [
+      "5",
+      "2",
+      "3",
+      "1"
+    ],
+    "locomo/full/naive-vector": [
+      "5",
+      "2",
+      "4",
+      "3",
+      "1"
+    ],
+    "locomo/full/system": [
+      "5",
+      "2",
+      "4",
+      "3",
+      "1"
+    ]
+  },
+  "repeated_three_range": {
+    "longmemeval_oracle/direct/no-memory": {
+      "repeats": {
+        "0": {
+          "valid_rows": 5,
+          "E1": 0.2
+        },
+        "1": {
+          "valid_rows": 5,
+          "E1": 0.2
+        },
+        "2": {
+          "valid_rows": 5,
+          "E1": 0.2
+        }
+      },
+      "min": 0.2,
+      "max": 0.2,
+      "completed_repeats": 3
+    },
+    "longmemeval_oracle/direct/full-context": {
+      "repeats": {
+        "0": {
+          "valid_rows": 5,
+          "E1": 0.8
+        },
+        "1": {
+          "valid_rows": 5,
+          "E1": 0.8
+        },
+        "2": {
+          "valid_rows": 5,
+          "E1": 0.8
+        }
+      },
+      "min": 0.8,
+      "max": 0.8,
+      "completed_repeats": 3
+    },
+    "longmemeval_oracle/direct/naive-vector": {
+      "repeats": {
+        "0": {
+          "valid_rows": 5,
+          "E1": 1.0
+        },
+        "1": {
+          "valid_rows": 5,
+          "E1": 1.0
+        },
+        "2": {
+          "valid_rows": 5,
+          "E1": 1.0
+        }
+      },
+      "min": 1.0,
+      "max": 1.0,
+      "completed_repeats": 3
+    },
+    "longmemeval_oracle/direct/system": {
+      "repeats": {
+        "0": {
+          "valid_rows": 5,
+          "E1": 0.6
+        },
+        "1": {
+          "valid_rows": 5,
+          "E1": 1.0
+        },
+        "2": {
+          "valid_rows": 5,
+          "E1": 0.6
+        }
+      },
+      "min": 0.6,
+      "max": 1.0,
+      "completed_repeats": 3
+    },
+    "longmemeval_oracle/full/no-memory": {
+      "repeats": {
+        "0": {
+          "valid_rows": 5,
+          "E1": 0.2
+        },
+        "1": {
+          "valid_rows": 5,
+          "E1": 0.2
+        },
+        "2": {
+          "valid_rows": 5,
+          "E1": 0.2
+        }
+      },
+      "min": 0.2,
+      "max": 0.2,
+      "completed_repeats": 3
+    },
+    "longmemeval_oracle/full/full-context": {
+      "repeats": {
+        "0": {
+          "valid_rows": 5,
+          "E1": 0.8
+        },
+        "1": {
+          "valid_rows": 5,
+          "E1": 0.8
+        },
+        "2": {
+          "valid_rows": 5,
+          "E1": 0.8
+        }
+      },
+      "min": 0.8,
+      "max": 0.8,
+      "completed_repeats": 3
+    },
+    "longmemeval_oracle/full/naive-vector": {
+      "repeats": {
+        "0": {
+          "valid_rows": 5,
+          "E1": 0.2
+        },
+        "1": {
+          "valid_rows": 5,
+          "E1": 0.2
+        },
+        "2": {
+          "valid_rows": 5,
+          "E1": 0.0
+        }
+      },
+      "min": 0.0,
+      "max": 0.2,
+      "completed_repeats": 3
+    },
+    "longmemeval_oracle/full/system": {
+      "repeats": {
+        "0": {
+          "valid_rows": 5,
+          "E1": 0.2
+        },
+        "1": {
+          "valid_rows": 5,
+          "E1": 0.2
+        },
+        "2": {
+          "valid_rows": 5,
+          "E1": 0.2
+        }
+      },
+      "min": 0.2,
+      "max": 0.2,
+      "completed_repeats": 3
+    },
+    "locomo/direct/no-memory": {
+      "repeats": {
+        "0": {
+          "valid_rows": 0,
+          "E1": null
+        },
+        "1": {
+          "valid_rows": 9,
+          "E1": 0.0
+        },
+        "2": {
+          "valid_rows": 7,
+          "E1": 0.0
+        }
+      },
+      "min": 0.0,
+      "max": 0.0,
+      "completed_repeats": 2
+    },
+    "locomo/direct/full-context": {
+      "repeats": {
+        "0": {
+          "valid_rows": 0,
+          "E1": null
+        },
+        "1": {
+          "valid_rows": 10,
+          "E1": 0.5
+        },
+        "2": {
+          "valid_rows": 7,
+          "E1": 0.2857142857142857
+        }
+      },
+      "min": 0.2857142857142857,
+      "max": 0.5,
+      "completed_repeats": 2
+    },
+    "locomo/direct/naive-vector": {
+      "repeats": {
+        "0": {
+          "valid_rows": 0,
+          "E1": null
+        },
+        "1": {
+          "valid_rows": 9,
+          "E1": 0.0
+        },
+        "2": {
+          "valid_rows": 7,
+          "E1": 0.42857142857142855
+        }
+      },
+      "min": 0.0,
+      "max": 0.42857142857142855,
+      "completed_repeats": 2
+    },
+    "locomo/direct/system": {
+      "repeats": {
+        "0": {
+          "valid_rows": 0,
+          "E1": null
+        },
+        "1": {
+          "valid_rows": 10,
+          "E1": 0.2
+        },
+        "2": {
+          "valid_rows": 7,
+          "E1": 0.2857142857142857
+        }
+      },
+      "min": 0.2,
+      "max": 0.2857142857142857,
+      "completed_repeats": 2
+    },
+    "locomo/full/no-memory": {
+      "repeats": {
+        "0": {
+          "valid_rows": 9,
+          "E1": 0.0
+        },
+        "1": {
+          "valid_rows": 7,
+          "E1": 0.0
+        },
+        "2": {
+          "valid_rows": 10,
+          "E1": 0.0
+        }
+      },
+      "min": 0.0,
+      "max": 0.0,
+      "completed_repeats": 3
+    },
+    "locomo/full/full-context": {
+      "repeats": {
+        "0": {
+          "valid_rows": 8,
+          "E1": 0.125
+        },
+        "1": {
+          "valid_rows": 7,
+          "E1": 0.0
+        },
+        "2": {
+          "valid_rows": 10,
+          "E1": 0.1
+        }
+      },
+      "min": 0.0,
+      "max": 0.125,
+      "completed_repeats": 3
+    },
+    "locomo/full/naive-vector": {
+      "repeats": {
+        "0": {
+          "valid_rows": 8,
+          "E1": 0.0
+        },
+        "1": {
+          "valid_rows": 7,
+          "E1": 0.0
+        },
+        "2": {
+          "valid_rows": 10,
+          "E1": 0.0
+        }
+      },
+      "min": 0.0,
+      "max": 0.0,
+      "completed_repeats": 3
+    },
+    "locomo/full/system": {
+      "repeats": {
+        "0": {
+          "valid_rows": 9,
+          "E1": 0.0
+        },
+        "1": {
+          "valid_rows": 7,
+          "E1": 0.0
+        },
+        "2": {
+          "valid_rows": 10,
+          "E1": 0.0
+        }
+      },
+      "min": 0.0,
+      "max": 0.0,
+      "completed_repeats": 3
+    }
+  },
+  "metric_coverage": [
+    {
+      "id": "EX1",
+      "name": "抽取精确率",
+      "definition": "抽出的记忆中“正确且有保存价值”的条数 / 抽出总条数",
+      "data": "人工标注对话抽样，详见第 5 节",
+      "kind": "标准",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "EX2",
+      "name": "抽取召回率",
+      "definition": "标注者认定应记住的信息中，被抽出的比例",
+      "data": "同上",
+      "kind": "标准",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "EX3",
+      "name": "F1",
+      "definition": "EX1 与 EX2 的调和平均",
+      "data": "同上",
+      "kind": "标准",
+      "formula_family": "experiment",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "EX4",
+      "name": "误抽率",
+      "definition": "闲聊、临时信息、助手自述被记成用户记忆的条数 / 抽出总条数",
+      "data": "标注集需包含负样本对话",
+      "kind": "自定义",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "EX5",
+      "name": "归属错误率",
+      "definition": "把他人的事记成用户的、类型或范围标错的条数 / 抽出总条数",
+      "data": "同上",
+      "kind": "自定义",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "EX6",
+      "name": "敏感漏放率",
+      "definition": "应被拦截的敏感样本中仍被写入的比例（输入侧与输出侧分开统计）",
+      "data": "自建敏感样本集（手机号、证件、密钥、健康等，含变体写法）",
+      "kind": "自定义",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "EX7",
+      "name": "敏感误拦率",
+      "definition": "不该拦的正常内容被拦的比例",
+      "data": "同上加正常对照样本",
+      "kind": "自定义",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "EX8",
+      "name": "抽取失败与回退率",
+      "definition": "模型调用失败或输出不合法、回退到规则抽取的比例",
+      "data": "运行日志",
+      "kind": "自定义",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "EX9",
+      "name": "单事件抽取延迟与用量",
+      "definition": "每个事件抽取的 p50/p95/p99 耗时、输入输出 token",
+      "data": "运行日志",
+      "kind": "标准",
+      "formula_family": "latency",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "LC1",
+      "name": "去重率",
+      "definition": "被识别为重复并合并的记忆条数 / 标注的重复条数",
+      "data": "构造“同义重复”对并人工标注",
+      "kind": "自定义",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "LC2",
+      "name": "误合并率",
+      "definition": "不同记忆被错并的对数 / 合并总对数",
+      "data": "同上，需含“相似但不同”的难例",
+      "kind": "自定义",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "LC3",
+      "name": "冲突处理准确率",
+      "definition": "新旧记忆矛盾时，系统最终采用正确版本的比例",
+      "data": "LongMemEval 的知识更新题 + 自建中文冲突集",
+      "kind": "自定义",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "LC4",
+      "name": "过期记忆泄漏率",
+      "definition": "已被取代、失效、归档的记忆仍出现在检索结果里的查询比例",
+      "data": "在评测中主动制造状态变更",
+      "kind": "自定义",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "LC5",
+      "name": "状态转换合法率",
+      "definition": "非法转换请求被正确拒绝的比例（应为 100%）",
+      "data": "针对转换表的穷举测试",
+      "kind": "自定义",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "LC6",
+      "name": "记忆库增长曲线",
+      "definition": "随对话量增长，记忆条数、版本数、存储体积",
+      "data": "大规模导入过程中采样",
+      "kind": "标准",
+      "formula_family": "experiment",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "LC7",
+      "name": "删除完整性",
+      "definition": "删除后在正文、向量、索引、事件、备份中仍能找到的副本数（应为 0）",
+      "data": "删除演练",
+      "kind": "自定义",
+      "formula_family": "counts",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "RT1",
+      "name": "Recall@k（k=1,3,5,10）",
+      "definition": "前 k 条包含至少一条正确记忆的查询比例，多证据题按证据覆盖率计算另报",
+      "data": "基准的证据标注",
+      "kind": "标准 / 基准",
+      "formula_family": "experiment",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "sample diagnostic observations available; human calibration pending for judge-derived scores",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "RT2",
+      "name": "Precision@k",
+      "definition": "前 k 条中正确记忆占比",
+      "data": "同上",
+      "kind": "标准",
+      "formula_family": "experiment",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "sample diagnostic observations available; human calibration pending for judge-derived scores",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "RT3",
+      "name": "MRR",
+      "definition": "首个正确结果排名的倒数的平均值",
+      "data": "同上",
+      "kind": "标准",
+      "formula_family": "experiment",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "sample diagnostic observations available; human calibration pending for judge-derived scores",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "RT4",
+      "name": "nDCG@k",
+      "definition": "按相关度分级的排序质量",
+      "data": "需有分级标注（自建中文集提供）",
+      "kind": "标准",
+      "formula_family": "experiment",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "graded memory-item relevance not supplied; source evidence grades do not automatically grade every chunk",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "RT5",
+      "name": "分题型指标",
+      "definition": "按单会话、跨会话、时间推理、知识更新、偏好、拒答分别统计 RT1 到 RT4",
+      "data": "LongMemEval 题型标签",
+      "kind": "基准",
+      "formula_family": "experiment",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "RT6",
+      "name": "拒答正确率",
+      "definition": "无相关记忆的查询中，系统返回空或低置信的比例",
+      "data": "拒答题 + 自建负样本",
+      "kind": "基准",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "sample diagnostic observations available; human calibration pending for judge-derived scores",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "RT7",
+      "name": "通道消融",
+      "definition": "关闭词法、向量、结构化各通道后的 RT1 到 RT4 变化",
+      "data": "同一评测集",
+      "kind": "实验方法",
+      "formula_family": "experiment",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "ablation/sensitivity/alternative-embedding experiment not executed; no optimization in this phase",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "RT8",
+      "name": "融合参数敏感性",
+      "definition": "权重、RRF 常数变化对指标的影响曲线",
+      "data": "同上",
+      "kind": "实验方法",
+      "formula_family": "experiment",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "ablation/sensitivity/alternative-embedding experiment not executed; no optimization in this phase",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "RT9",
+      "name": "向量模型对比",
+      "definition": "不同向量模型下的 RT1 到 RT4（Ark 当前模型与腾讯云 kinfra-text-embedding-0.6b（均 1024 维，见 O10））",
+      "data": "同一评测集",
+      "kind": "实验方法",
+      "formula_family": "experiment",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "ablation/sensitivity/alternative-embedding experiment not executed; no optimization in this phase",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "RT10",
+      "name": "过滤正确性",
+      "definition": "跨租户、跨用户、跨工作区返回的条数（应为 0）",
+      "data": "对抗性查询集",
+      "kind": "自定义",
+      "formula_family": "counts",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "RT11",
+      "name": "分页一致性",
+      "definition": "翻页期间数据变化导致的重复、遗漏条数",
+      "data": "并发写入下的翻页测试",
+      "kind": "自定义",
+      "formula_family": "counts",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "CX1",
+      "name": "预算利用率",
+      "definition": "实际用量 / 预算",
+      "data": "评测时记录",
+      "kind": "自定义",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "B0 counter reports conservative UTF8 bytes; actual context-only target-model token count not measured; do not relabel bytes as tokens",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "CX2",
+      "name": "计数器误差",
+      "definition": "字节估算 与 目标模型真实 token 的差异与浪费率",
+      "data": "用模型分词器对照",
+      "kind": "自定义",
+      "formula_family": "experiment",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "B0 counter reports conservative UTF8 bytes; actual context-only target-model token count not measured; do not relabel bytes as tokens",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "CX3",
+      "name": "关键信息保留率",
+      "definition": "预算受限时，回答所需的证据仍在上下文中的比例",
+      "data": "基准的证据标注，在多种预算下测",
+      "kind": "自定义",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "CX4",
+      "name": "截断损失率",
+      "definition": "被截短的记忆里，关键信息被截掉的比例",
+      "data": "同上",
+      "kind": "自定义",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "CX5",
+      "name": "冗余率",
+      "definition": "上下文中重复或与问题无关的条数占比",
+      "data": "裁判模型加人工抽检",
+      "kind": "自定义",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "CX6",
+      "name": "注入防御成功率",
+      "definition": "带恶意指令的记忆被注入后，模型仍维持原行为的比例",
+      "data": "自建注入样本集（第 9 节）",
+      "kind": "自定义",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "E1",
+      "name": "问答准确率",
+      "definition": "裁判判定正确的题数 / 总题数，按题型拆分",
+      "data": "LongMemEval、LoCoMo",
+      "kind": "基准",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "sample diagnostic observations available; human calibration pending for judge-derived scores",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "E2",
+      "name": "有无记忆对比",
+      "definition": "同一批题，“无记忆”“全文塞入”“朴素向量”“本系统”四组的 E1 差异",
+      "data": "同上",
+      "kind": "实验方法",
+      "formula_family": "experiment",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "E3",
+      "name": "单位正确答案 token 数",
+      "definition": "总 token 数 / 答对题数，用于和“全文塞入”比 token 消耗",
+      "data": "调用日志",
+      "kind": "自定义",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "answer token counts known, upstream tokens not yet attributed fairly per comparison group; do not substitute answer-only tokens for total tokens",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "E4",
+      "name": "幻觉率",
+      "definition": "回答中没有记忆依据的陈述比例",
+      "data": "裁判模型加人工抽检",
+      "kind": "标准",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "E5",
+      "name": "个性化命中率",
+      "definition": "偏好类题中正确利用用户偏好的比例",
+      "data": "LongMemEval 偏好题",
+      "kind": "基准",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "E6",
+      "name": "模型上限对照",
+      "definition": "用 oracle 设置（只给证据）得到的 E1，说明系统距上限的差距",
+      "data": "LongMemEval oracle",
+      "kind": "基准",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "PF1",
+      "name": "搜索延迟",
+      "definition": "检索接口端到端 p50/p95/p99，拆分各阶段（查询向量化、各通道召回、融合、取正文）",
+      "data": "合成压测数据",
+      "kind": "标准",
+      "formula_family": "latency",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "independent cross-region load host not yet supplied; no PF measurement",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "PF2",
+      "name": "写入延迟",
+      "definition": "写入接口 p50/p95/p99",
+      "data": "同上",
+      "kind": "标准",
+      "formula_family": "latency",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "independent cross-region load host not yet supplied; no PF measurement",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "PF3",
+      "name": "上下文接口延迟",
+      "definition": "上下文接口 p50/p95/p99",
+      "data": "同上",
+      "kind": "标准",
+      "formula_family": "latency",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "independent cross-region load host not yet supplied; no PF measurement",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "PF4",
+      "name": "吞吐",
+      "definition": "延迟不超过目标时的最大 QPS，读写混合比例分档",
+      "data": "同上",
+      "kind": "标准",
+      "formula_family": "experiment",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "independent cross-region load host not yet supplied; no PF measurement",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "PF5",
+      "name": "规模曲线",
+      "definition": "记忆条数为 1 万、10 万、100 万、500 万时的 PF1 到 PF4",
+      "data": "同上",
+      "kind": "标准",
+      "formula_family": "experiment",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "independent cross-region load host not yet supplied; no PF measurement",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "PF6",
+      "name": "向量索引权衡",
+      "definition": "精确扫描与近似索引的召回率、延迟、建索引耗时、索引体积",
+      "data": "同上",
+      "kind": "标准",
+      "formula_family": "experiment",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "independent cross-region load host not yet supplied; no PF measurement",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "PF7",
+      "name": "数据新鲜度",
+      "definition": "从写入请求返回到该记忆能被向量检索命中的时延 p50/p95/p99",
+      "data": "写入后按固定间隔轮询",
+      "kind": "自定义",
+      "formula_family": "latency",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "independent cross-region load host not yet supplied; no PF measurement",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "PF8",
+      "name": "队列健康",
+      "definition": "任务积压量、处理延迟、重试率、死信率",
+      "data": "内部指标",
+      "kind": "标准",
+      "formula_family": "experiment",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "independent cross-region load host not yet supplied; no PF measurement",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "PF9",
+      "name": "资源占用",
+      "definition": "CPU、内存、磁盘、数据库连接数、索引体积",
+      "data": "系统监控",
+      "kind": "标准",
+      "formula_family": "experiment",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "independent cross-region load host not yet supplied; no PF measurement",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "PF10",
+      "name": "多租户公平性",
+      "definition": "一个租户高负载时，其他租户 p99 的恶化倍数",
+      "data": "多租户并发压测",
+      "kind": "自定义",
+      "formula_family": "experiment",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "independent cross-region load host not yet supplied; no PF measurement",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "RL1",
+      "name": "幂等正确性",
+      "definition": "重复请求产生重复数据的次数（应为 0），同键不同参数应返回 409",
+      "data": "并发重放测试",
+      "kind": "自定义",
+      "formula_family": "counts",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "RL2",
+      "name": "并发修改正确性",
+      "definition": "并发修改同一记忆时丢失更新的次数（应为 0）",
+      "data": "并发测试",
+      "kind": "自定义",
+      "formula_family": "counts",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "RL3",
+      "name": "租约有效性",
+      "definition": "过期 worker 覆盖新结果的次数（应为 0）",
+      "data": "故障注入：人为让 worker 暂停到租约过期",
+      "kind": "自定义",
+      "formula_family": "counts",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "RL4",
+      "name": "任务最终完成率",
+      "definition": "故障注入下最终成功的任务比例与重试次数分布",
+      "data": "故障注入",
+      "kind": "自定义",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "RL5",
+      "name": "故障恢复时间",
+      "definition": "数据库重启、模型接口超时、worker 崩溃后，服务恢复到基线的耗时",
+      "data": "故障注入",
+      "kind": "标准",
+      "formula_family": "latency",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "RL6",
+      "name": "备份恢复",
+      "definition": "恢复耗时与数据完整性校验（行数、校验和、抽样检索）",
+      "data": "恢复演练",
+      "kind": "标准",
+      "formula_family": "experiment",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "RL7",
+      "name": "不可用率",
+      "definition": "压测与演练期间错误响应（5xx）占比",
+      "data": "网关日志",
+      "kind": "标准",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "SC1",
+      "name": "跨租户泄漏次数",
+      "definition": "对抗性测试下跨租户可读、可写的次数（应为 0）",
+      "data": "对抗性测试集，使用非属主角色连接",
+      "kind": "自定义",
+      "formula_family": "counts",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "SC2",
+      "name": "记忆污染抵抗",
+      "definition": "恶意写入对其他查询结果的影响（RT1 下降幅度）",
+      "data": "自建污染样本",
+      "kind": "自定义",
+      "formula_family": "experiment",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "SC3",
+      "name": "权限绕过率",
+      "definition": "无权限调用高权限操作成功的次数（应为 0）",
+      "data": "权限矩阵测试",
+      "kind": "自定义",
+      "formula_family": "counts",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "SC4",
+      "name": "日志内容泄漏",
+      "definition": "日志、链路、指标中出现记忆正文的次数（应为 0）",
+      "data": "全量日志扫描",
+      "kind": "自定义",
+      "formula_family": "counts",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "SC5",
+      "name": "每千次写入调用与 token 用量",
+      "definition": "抽取与向量化的调用次数、token 数，加存储占用",
+      "data": "调用日志",
+      "kind": "标准",
+      "formula_family": "experiment",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "SC6",
+      "name": "每千次检索调用与 token 用量",
+      "definition": "查询向量化的调用次数、token 数，加 CPU 占用",
+      "data": "同上",
+      "kind": "标准",
+      "formula_family": "experiment",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "SC7",
+      "name": "缓存命中率与节省",
+      "definition": "查询向量缓存命中率、节省的调用次数与 token 数",
+      "data": "运行日志",
+      "kind": "标准",
+      "formula_family": "ratio",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "SC8",
+      "name": "数据出境量",
+      "definition": "发送给第三方模型的文本条数与字节数",
+      "data": "调用日志",
+      "kind": "自定义",
+      "formula_family": "counts",
+      "status": "definition registered; observation adapter required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": true
+    },
+    {
+      "id": "OP1",
+      "name": "回滚耗时",
+      "definition": "从触发回滚命令到指标恢复到基线的秒数",
+      "formula_family": "latency",
+      "status": "definition registered; drill required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": false
+    },
+    {
+      "id": "OP2",
+      "name": "重建期间可用性",
+      "definition": "重建期间每分钟RT1和PF1及重建总时长",
+      "formula_family": "experiment",
+      "status": "definition registered; drill required",
+      "measurement_status": "observation adapter or suitable confirmed gold unavailable; not measured",
+      "value": null,
+      "n": 0,
+      "ci95": null,
+      "in_requested_scope": false
+    }
+  ],
+  "invalid_results": {
+    "longmemeval_oracle/direct/no-memory": {
+      "answer_invalid": 0,
+      "judge_invalid": 0,
+      "total_quality_rows": 15,
+      "valid_grade_rows": 15
+    },
+    "longmemeval_oracle/direct/full-context": {
+      "answer_invalid": 0,
+      "judge_invalid": 0,
+      "total_quality_rows": 15,
+      "valid_grade_rows": 15
+    },
+    "longmemeval_oracle/direct/naive-vector": {
+      "answer_invalid": 0,
+      "judge_invalid": 0,
+      "total_quality_rows": 15,
+      "valid_grade_rows": 15
+    },
+    "longmemeval_oracle/direct/system": {
+      "answer_invalid": 0,
+      "judge_invalid": 0,
+      "total_quality_rows": 15,
+      "valid_grade_rows": 15
+    },
+    "longmemeval_oracle/full/no-memory": {
+      "answer_invalid": 0,
+      "judge_invalid": 0,
+      "total_quality_rows": 15,
+      "valid_grade_rows": 15
+    },
+    "longmemeval_oracle/full/full-context": {
+      "answer_invalid": 0,
+      "judge_invalid": 0,
+      "total_quality_rows": 15,
+      "valid_grade_rows": 15
+    },
+    "longmemeval_oracle/full/naive-vector": {
+      "answer_invalid": 0,
+      "judge_invalid": 0,
+      "total_quality_rows": 15,
+      "valid_grade_rows": 15
+    },
+    "longmemeval_oracle/full/system": {
+      "answer_invalid": 0,
+      "judge_invalid": 0,
+      "total_quality_rows": 15,
+      "valid_grade_rows": 15
+    },
+    "locomo/direct/no-memory": {
+      "answer_invalid": 0,
+      "judge_invalid": 14,
+      "total_quality_rows": 30,
+      "valid_grade_rows": 16
+    },
+    "locomo/direct/full-context": {
+      "answer_invalid": 0,
+      "judge_invalid": 13,
+      "total_quality_rows": 30,
+      "valid_grade_rows": 17
+    },
+    "locomo/direct/naive-vector": {
+      "answer_invalid": 0,
+      "judge_invalid": 14,
+      "total_quality_rows": 30,
+      "valid_grade_rows": 16
+    },
+    "locomo/direct/system": {
+      "answer_invalid": 0,
+      "judge_invalid": 13,
+      "total_quality_rows": 30,
+      "valid_grade_rows": 17
+    },
+    "locomo/full/no-memory": {
+      "answer_invalid": 0,
+      "judge_invalid": 4,
+      "total_quality_rows": 30,
+      "valid_grade_rows": 26
+    },
+    "locomo/full/full-context": {
+      "answer_invalid": 0,
+      "judge_invalid": 5,
+      "total_quality_rows": 30,
+      "valid_grade_rows": 25
+    },
+    "locomo/full/naive-vector": {
+      "answer_invalid": 0,
+      "judge_invalid": 5,
+      "total_quality_rows": 30,
+      "valid_grade_rows": 25
+    },
+    "locomo/full/system": {
+      "answer_invalid": 0,
+      "judge_invalid": 4,
+      "total_quality_rows": 30,
+      "valid_grade_rows": 26
+    }
+  },
+  "failure_cases": [
+    {
+      "id": "f8fc8f78850fa4911309d5e401c45dea0acf8afe6788c7cfa9334e21fdee009e",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "no-memory",
+      "type": "single-session-assistant",
+      "reason": "no_history_baseline_mismatch",
+      "private_source": "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/development-sample-v7-rotation/attempt-003/graded-results-private.json",
+      "flow_only": false
+    },
+    {
+      "id": "aa5da7f33d536b98142e67d0492480247f5fe686c22b62174a192a90e41de9b7",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "no-memory",
+      "type": "single-session-preference",
+      "reason": "no_history_baseline_mismatch",
+      "private_source": "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/development-sample-v7-rotation/attempt-003/graded-results-private.json",
+      "flow_only": false
+    },
+    {
+      "id": "11ac5aa30054efdfa6e989fe20326fa44cc190fe935f6929e1127b6c027dbab8",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "system",
+      "type": "single-session-preference",
+      "reason": "answer_mismatch_despite_context_pending_human_calibration",
+      "private_source": "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/development-sample-v7-rotation/attempt-003/graded-results-private.json",
+      "flow_only": false
+    },
+    {
+      "id": "fadf5c71d5ad711c890cfdb471e9af1ae0750687676fbf561f73f84ec7a62a3a",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "no-memory",
+      "type": "multi-session",
+      "reason": "no_history_baseline_mismatch",
+      "private_source": "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/development-sample-v7-rotation/attempt-003/graded-results-private.json",
+      "flow_only": false
+    },
+    {
+      "id": "09f040288c87069de53d8711a3dee4b71cd35dc916e7b16d15ada7bfc838332e",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "full-context",
+      "type": "multi-session",
+      "reason": "answer_mismatch_despite_context_pending_human_calibration",
+      "private_source": "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/development-sample-v7-rotation/attempt-003/graded-results-private.json",
+      "flow_only": false
+    },
+    {
+      "id": "28ca53f5815efa87c54190739c3a7706f611e77c934ee33c1b53081da23e31a8",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "no-memory",
+      "type": "multi-session",
+      "reason": "no_history_baseline_mismatch",
+      "private_source": "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/development-sample-v7-rotation/attempt-003/graded-results-private.json",
+      "flow_only": false
+    },
+    {
+      "id": "55c182ff7cd1eefff3a87bb1f35ea408aa7b9320941ea9b5e44bc557325806b3",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "system",
+      "type": "multi-session",
+      "reason": "answer_mismatch_despite_context_pending_human_calibration",
+      "private_source": "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/development-sample-v7-rotation/attempt-003/graded-results-private.json",
+      "flow_only": false
+    },
+    {
+      "id": "8c4ad1854e3efb0bc3845977d14fe0507ecb4679842f36317ac90faeff777425",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "no-memory",
+      "type": "single-session-assistant",
+      "reason": "no_history_baseline_mismatch",
+      "private_source": "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/development-sample-v7-rotation/attempt-003/graded-results-private.json",
+      "flow_only": false
+    },
+    {
+      "id": "5991acacc7cfa126a3d49c10f61eb3d6b11817fc4caa1f21e14829b00a3b7fc0",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "no-memory",
+      "type": "single-session-preference",
+      "reason": "no_history_baseline_mismatch",
+      "private_source": "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/development-sample-v7-rotation/attempt-003/graded-results-private.json",
+      "flow_only": false
+    },
+    {
+      "id": "770300781fb969f27e9960c7cec87fa04f30beaabc9b2aa1bf3e28d4e59a2158",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "no-memory",
+      "type": "multi-session",
+      "reason": "no_history_baseline_mismatch",
+      "private_source": "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/development-sample-v7-rotation/attempt-003/graded-results-private.json",
+      "flow_only": false
+    },
+    {
+      "id": "67226902bb1db1b08452d1c437459a71a0d2892be7620959447e055da699e4b7",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "full-context",
+      "type": "multi-session",
+      "reason": "answer_mismatch_despite_context_pending_human_calibration",
+      "private_source": "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/development-sample-v7-rotation/attempt-003/graded-results-private.json",
+      "flow_only": false
+    },
+    {
+      "id": "f87509a857496d9c087b31ffbf395968e0ed0f2565fb1208e5f389b6d5927863",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "no-memory",
+      "type": "multi-session",
+      "reason": "no_history_baseline_mismatch",
+      "private_source": "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/development-sample-v7-rotation/attempt-003/graded-results-private.json",
+      "flow_only": false
+    },
+    {
+      "id": "df0ae0d18d27f1d9ffec300be1cbf91e75117dbb242c61bcb5b73b35052e52f2",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "no-memory",
+      "type": "single-session-assistant",
+      "reason": "no_history_baseline_mismatch",
+      "private_source": "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/development-sample-v7-rotation/attempt-003/graded-results-private.json",
+      "flow_only": false
+    },
+    {
+      "id": "eb823902958d3d39f86e02312df24a9e9eed11328c86ed6745427f79d0a51775",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "no-memory",
+      "type": "single-session-preference",
+      "reason": "no_history_baseline_mismatch",
+      "private_source": "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/development-sample-v7-rotation/attempt-003/graded-results-private.json",
+      "flow_only": false
+    },
+    {
+      "id": "f9223e6878acbc185712f2233d2201251bc6d7d0eff205ac19eebbf85022ea40",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "system",
+      "type": "single-session-preference",
+      "reason": "answer_mismatch_despite_context_pending_human_calibration",
+      "private_source": "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/development-sample-v7-rotation/attempt-003/graded-results-private.json",
+      "flow_only": false
+    },
+    {
+      "id": "c37a6e24ee3a3ac6e963da4d8f0d3a362020e7fd569a9d3f263b7a0aafeadb01",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "no-memory",
+      "type": "multi-session",
+      "reason": "no_history_baseline_mismatch",
+      "private_source": "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/development-sample-v7-rotation/attempt-003/graded-results-private.json",
+      "flow_only": false
+    },
+    {
+      "id": "a3ae6c2720b26bc50b58bf29cfd0a93639081694b7c47d3f9e6295535c1b4936",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "full-context",
+      "type": "multi-session",
+      "reason": "answer_mismatch_despite_context_pending_human_calibration",
+      "private_source": "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/development-sample-v7-rotation/attempt-003/graded-results-private.json",
+      "flow_only": false
+    },
+    {
+      "id": "b26c516740b6730761ba67695f4fe39da797136c6abfe7c0cccc5dc87de9663a",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "system",
+      "type": "multi-session",
+      "reason": "answer_mismatch_despite_context_pending_human_calibration",
+      "private_source": "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/development-sample-v7-rotation/attempt-003/graded-results-private.json",
+      "flow_only": false
+    },
+    {
+      "id": "d36a594084d8eb4f830088e67bba7cbc2435cc737ef7977a0784f84b42bf3c61",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "no-memory",
+      "type": "multi-session",
+      "reason": "no_history_baseline_mismatch",
+      "private_source": "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/development-sample-v7-rotation/attempt-003/graded-results-private.json",
+      "flow_only": false
+    },
+    {
+      "id": "a1f939e860d0c2c6e8136f07d755085dcaa6626d778012a020dfe430f1f0da93",
+      "dataset": "longmemeval_oracle",
+      "mode": "full",
+      "system": "no-memory",
+      "type": "single-session-assistant",
+      "reason": "no_history_baseline_mismatch",
+      "private_source": "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/development-sample-v7-rotation/attempt-003/graded-results-private.json",
+      "flow_only": false
+    }
+  ],
+  "failure_reason_counts": {
+    "no_history_baseline_mismatch": 66,
+    "answer_mismatch_despite_context_pending_human_calibration": 83,
+    "no_usable_full_chain_memory": 38,
+    "retrieval_miss": 24
+  },
+  "release_verification": {
+    "at_beijing": "2026-10-24T12:25:24.830272+08:00",
+    "pytest_passed": 454,
+    "pytest_seconds": 44.39,
+    "ruff_passed": true,
+    "mypy_passed": true,
+    "foundation_passed": true,
+    "log_sha256": "6be11d6b092848d4002bdf74c54e79f933c5804384a69977183551095bb31fc7",
+    "regression": "403 AccountOverdueError triggers runtime_quota_pause; second request causes no HTTP; plain403 AccessDenied is not quota"
+  },
+  "evidence_hashes": {
+    ".local/phase2/b0/development-sample-v7-rotation/attempt-003/run-manifest.json": "2560d03e7517b5ad08ce6e66c102f295373799ec5e599d0f9dae338936c19742",
+    ".local/phase2/b0/development-sample-v7-rotation/attempt-003/usage.jsonl": "35440209b077b408ee4caea144faa2dc10e4ad6058c6c5f43b6a65d4f26aaf5a",
+    ".local/phase2/b0/development-sample-v7-rotation/attempt-003/aggregate/report.json": "404c0271052158523ce19c20a6109cb02a1b467be3d2b72bd6a04969d86925d0",
+    "docs/evals/b0-policy-v5.json": "24ffc4596cc965cac5895944b512550f28786970eed0c6ee8cdfe44b33988a25",
+    "docs/plans/2026-10-22-agent-memory-interview-plan-v3.md": "06ad7319525c6b0f4eb7333c981b094dd1ed6ec41ae2e5ea1b46009306389418",
+    "docs/baselines/b0/overdue-recovery-status-v1.json": "026678dfddf8bff7db253d21410859b45d66bb74906fdb13f64c1dc5e4304974",
+    "scripts/qualify-b0-role.py": "d54c05fbb002ad7bd3bea279fa38fc053aa2408f2e6b5dbe5fd667e69032fecb"
+  },
+  "plan_deviation": "Five identical grading decisions in plan section7 were improperly extended by the execution script to exact floating-point embedding equality; not a frozen plan requirement. Historical failures retained; no threshold change or restart in this report-only delivery."
+}
