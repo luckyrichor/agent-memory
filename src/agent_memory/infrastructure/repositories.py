@@ -60,6 +60,27 @@ class PostgresMemoryRepository:
             versions=tuple(self._version_domain(row) for row in version_rows),
         )
 
+    async def list_by_status(
+        self, tenant_id: UUID, status: MemoryStatus, limit: int, offset: int
+    ) -> tuple[MemoryRecord, ...]:
+        rows = (
+            await self._session.execute(
+                select(MemoryRow, MemoryVersionRow)
+                .join(
+                    MemoryVersionRow,
+                    (MemoryVersionRow.tenant_id == MemoryRow.tenant_id)
+                    & (MemoryVersionRow.memory_version_id == MemoryRow.current_version_id),
+                )
+                .where(MemoryRow.tenant_id == tenant_id, MemoryRow.status == status.value)
+                .order_by(MemoryRow.created_at, MemoryRow.memory_id)
+                .limit(limit)
+                .offset(offset)
+            )
+        ).all()
+        return tuple(
+            MemoryRecord(self._memory_domain(m), (self._version_domain(v),)) for m, v in rows
+        )
+
     async def versions(
         self, tenant_id: UUID, memory_id: UUID, limit: int, offset: int
     ) -> tuple[MemoryVersion, ...]:

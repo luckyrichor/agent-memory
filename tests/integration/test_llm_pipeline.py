@@ -58,7 +58,8 @@ async def test_llm_event_worker_candidate_pipeline(app_database_url: str) -> Non
         async with session_for_principal(sessions, principal) as session:
             assert await PostgresOutboxRepository(session, new_id=uuid4, now=now).dispatch_once(
                 tenant, 10, model.version) == 3
-        worker = ExtractionWorker(PostgresExtractionBackend(sessions, new_id=uuid4, now=now),
+        worker = ExtractionWorker(PostgresExtractionBackend(sessions, new_id=uuid4, now=now,
+                                                    activation="manual"),
                                   model, now=now, lease_duration=timedelta(seconds=30))
         reasons = []
         failures = []

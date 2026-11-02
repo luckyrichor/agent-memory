@@ -9,6 +9,7 @@ from agent_memory.application.commands import (
     DisableMemoryCommand,
     MemoryResult,
     RememberMemoryCommand,
+    ReviewMemoryCommand,
 )
 from agent_memory.application.ports import (
     AuditEntry,
@@ -23,6 +24,7 @@ from agent_memory.domain.enums import MemoryStatus, MemoryType, ScopeKind
 from agent_memory.domain.errors import (
     ContentRejected,
     IdempotencyConflict,
+    InvalidStatusTransition,
     MemoryError,
     MemoryNotFound,
     MemoryScopeForbidden,
@@ -362,6 +364,56 @@ class ExplicitMemoryService:
                 IdempotencyRecord(request_hash, result),
             )
         return result
+
+    async def review_queue(
+        self, principal: RequestPrincipal, status: MemoryStatus, limit: int, offset: int
+    ) -> tuple[MemoryRecord, ...]:
+        """Unreviewed memories the caller is allowed to decide on (needs memory:review)."""
+        if status not in {MemoryStatus.CANDIDATE, MemoryStatus.NEEDS_REVIEW}:
+            raise InvalidStatusTransition("review queue holds candidate or needs_review only")
+        if "memory:review" not in principal.permissions:
+            raise MemoryScopeForbidden("memory:review")
+        records = await self._memories.list_by_status(principal.tenant_id, status, limit, offset)
+        allowed: list[MemoryRecord] = []
+        for record in records:
+            try:
+                self._authorize_scope(principal, record.memory.scope, "memory:review")
+            except MemoryScopeForbidden:
+                continue  # not this reviewer's scope; never leak its content
+            allowed.append(record)
+        return tuple(allowed)
+
+    async def review(self, command: ReviewMemoryCommand, principal: RequestPrincipal) -> MemoryResult:
+        """Accept or reject an unreviewed (candidate / needs_review) memory."""
+        with span(
+            "memory.review",
+            action="memory.review",
+            tenant_id=principal.tenant_id,
+            actor_id=principal.user_id,
+            memory_id=command.memory_id,
+        ):
+            try:
+                record = await self._required_record(command.memory_id, principal)
+                self._authorize_scope(principal, record.memory.scope, "memory:review")
+                target = MemoryStatus.ACTIVE if command.accept else MemoryStatus.REJECTED
+                updated = record.memory.review(target, self._now())
+                await self._memories.disable(
+                    principal.tenant_id, updated, command.expected_revision
+                )
+                reason = "MEMORY_REVIEW_ACCEPTED" if command.accept else "MEMORY_REVIEW_REJECTED"
+                await self._record_audit(
+                    principal, "memory.review", "allow", reason, command.memory_id
+                )
+                self._observe(
+                    "memory.review", "allow", reason,
+                    memory_id=command.memory_id, memory_status=updated.status.value,
+                )
+                return MemoryResult(
+                    updated.memory_id, updated.current_version_id, updated.revision, updated.status
+                )
+            except MemoryError as error:
+                self._observe("memory.review", "deny", type(error).__name__.upper())
+                raise
 
     @staticmethod
     def _observe(action: str, decision: str, reason_code: str, **fields: object) -> None:

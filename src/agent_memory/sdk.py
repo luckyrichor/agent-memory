@@ -13,13 +13,14 @@ from agent_memory.api.schemas import (
     LifecycleResponse,
     MemoryDetailResponse,
     MemoryResponse,
+    ReviewQueueResponse,
     SearchHit,
     SearchRequest,
     SearchResponse,
     VersionListResponse,
     VersionResponse,
 )
-from agent_memory.domain.enums import MemoryType
+from agent_memory.domain.enums import MemoryStatus, MemoryType
 from agent_memory.domain.models import MemoryScope
 
 
@@ -44,11 +45,14 @@ class MemoryClient:
         *,
         body: dict[str, object] | None = None,
         key: str | None = None,
+        params: dict[str, str | int] | None = None,
     ) -> object:
         headers = dict(self._headers)
         if key is not None:
             headers["Idempotency-Key"] = key
-        response = await self._client.request(method, path, json=body, headers=headers)
+        response = await self._client.request(
+            method, path, json=body, headers=headers, params=params
+        )
         if response.is_error:
             code = "HTTP_ERROR"
             reason_code = None
@@ -155,6 +159,28 @@ class MemoryClient:
 
     async def restore(self, memory_id: UUID, *, expected_revision: int) -> MemoryResponse:
         return await self._disable(memory_id, expected_revision, "restore")
+
+    async def confirm(self, memory_id: UUID, *, expected_revision: int) -> MemoryResponse:
+        """Accept a candidate / needs_review memory so it becomes retrievable."""
+        return await self._disable(memory_id, expected_revision, "confirm")
+
+    async def reject(self, memory_id: UUID, *, expected_revision: int) -> MemoryResponse:
+        return await self._disable(memory_id, expected_revision, "reject")
+
+    async def review_queue(
+        self,
+        *,
+        status: MemoryStatus = MemoryStatus.NEEDS_REVIEW,
+        limit: int = 20,
+        offset: int = 0,
+    ) -> ReviewQueueResponse:
+        return ReviewQueueResponse.model_validate(
+            await self._request(
+                "GET",
+                "/v1/memories/review-queue",
+                params={"status": status.value, "limit": limit, "offset": offset},
+            )
+        )
 
     async def ingest_events(self, events: EventBatchRequest) -> EventBatchResponse:
         return EventBatchResponse.model_validate(

@@ -39,6 +39,24 @@ class CorrectMemoryRequest(BaseModel):
     reason: str = Field(min_length=1, max_length=512)
 
 
+class ReviewItem(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    memory_id: UUID
+    memory_type: MemoryType
+    status: MemoryStatus
+    revision: int
+    content: str
+
+
+class ReviewQueueResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    items: list[ReviewItem]
+    limit: int
+    offset: int
+
+
 class MemoryDetailResponse(BaseModel):
     model_config = ConfigDict(extra="forbid")
 

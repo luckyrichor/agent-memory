@@ -9,7 +9,8 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from agent_memory.application.event_commands import EventIngestionResult
 from agent_memory.application.ports import MemoryRepository
-from agent_memory.domain.enums import MemoryStatus, ScopeKind
+from agent_memory.domain.activation import ActivationMode, initial_status
+from agent_memory.domain.enums import ScopeKind
 from agent_memory.domain.errors import (
     EventIdempotencyConflict,
     EventSequenceConflict,
@@ -366,11 +367,13 @@ class PostgresExtractionBackend:
         new_id: Callable[[], UUID],
         now: Callable[[], datetime],
         extractor_version: str | None = None,
+        activation: ActivationMode = "auto",
     ) -> None:
         self._sessions = sessions
         self._extractor_version = extractor_version
         self._new_id = new_id
         self._now = now
+        self._activation = activation
 
     async def claim(
         self,
@@ -440,7 +443,7 @@ class PostgresExtractionBackend:
                     owner_user_id=event.actor_user_id,
                     content=candidate.content,
                     now=now,
-                    status=MemoryStatus.CANDIDATE,
+                    status=initial_status(candidate, self._activation),
                     confidence=candidate.confidence,
                     utility=candidate.utility,
                     authority_level=candidate.authority_level,

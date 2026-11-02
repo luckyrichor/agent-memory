@@ -3,6 +3,7 @@ from typing import Protocol
 from uuid import UUID
 
 from agent_memory.application.commands import MemoryResult
+from agent_memory.domain.enums import MemoryStatus
 from agent_memory.domain.models import Memory, MemoryVersion
 
 
@@ -41,6 +42,10 @@ class MemoryRepository(Protocol):
     async def add(self, tenant_id: UUID, memory: Memory, version: MemoryVersion) -> None: ...
 
     async def get(self, tenant_id: UUID, memory_id: UUID) -> MemoryRecord | None: ...
+
+    async def list_by_status(
+        self, tenant_id: UUID, status: MemoryStatus, limit: int, offset: int
+    ) -> tuple[MemoryRecord, ...]: ...
 
     async def versions(
         self, tenant_id: UUID, memory_id: UUID, limit: int, offset: int

@@ -159,6 +159,25 @@ class Memory:
             version,
         )
 
+    def review(self, decision: MemoryStatus, now: datetime) -> "Memory":
+        """Human/policy decision on an unreviewed memory: accept (active) or reject.
+
+        Only candidate/needs_review memories can be reviewed; accepted memories become
+        retrievable, rejected ones stay out of retrieval and can only be deleted later.
+        Content is never changed here: review is a status decision, not an edit.
+        """
+        if self.status not in {MemoryStatus.CANDIDATE, MemoryStatus.NEEDS_REVIEW}:
+            raise InvalidStatusTransition("only candidate or needs_review memory can be reviewed")
+        if decision not in {MemoryStatus.ACTIVE, MemoryStatus.REJECTED}:
+            raise InvalidStatusTransition("review decision must be active or rejected")
+        return replace(
+            self,
+            status=decision,
+            revision=self.revision + 1,
+            updated_at=now,
+            disabled_at=now if decision is MemoryStatus.REJECTED else None,
+        )
+
     def disable(
         self, status: MemoryStatus, now: datetime, successor_id: UUID | None = None
     ) -> "Memory":

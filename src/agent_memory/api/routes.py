@@ -13,6 +13,8 @@ from agent_memory.api.schemas import (
     MemoryDetailResponse,
     MemoryResponse,
     RememberRequest,
+    ReviewItem,
+    ReviewQueueResponse,
     SupersedeRequest,
     VersionListResponse,
     VersionResponse,
@@ -21,6 +23,7 @@ from agent_memory.application.commands import (
     CorrectMemoryCommand,
     DisableMemoryCommand,
     RememberMemoryCommand,
+    ReviewMemoryCommand,
 )
 from agent_memory.application.explicit_memory import ExplicitMemoryService
 from agent_memory.domain.enums import MemoryStatus
@@ -67,6 +70,32 @@ def create_router(
             version_id=result.version_id,
             revision=result.revision,
             status=result.status,
+        )
+
+    @router.get("/memories/review-queue", response_model=ReviewQueueResponse)
+    async def review_queue(
+        principal: Annotated[RequestPrincipal, Depends(principal_dependency)],
+        service: Annotated[ExplicitMemoryService, Depends(service_dependency)],
+        queue_status: Annotated[
+            MemoryStatus, Query(alias="status")
+        ] = MemoryStatus.NEEDS_REVIEW,
+        limit: Annotated[int, Query(ge=1, le=100)] = 20,
+        offset: Annotated[int, Query(ge=0, le=2900)] = 0,
+    ) -> ReviewQueueResponse:
+        records = await service.review_queue(principal, queue_status, limit, offset)
+        return ReviewQueueResponse(
+            items=[
+                ReviewItem(
+                    memory_id=r.memory.memory_id,
+                    memory_type=r.memory.memory_type,
+                    status=r.memory.status,
+                    revision=r.memory.revision,
+                    content=r.current_version.content,
+                )
+                for r in records
+            ],
+            limit=limit,
+            offset=offset,
         )
 
     @router.get("/memories/{memory_id}", response_model=MemoryDetailResponse)
@@ -176,6 +205,35 @@ def create_router(
             memory_id=result.memory_id,
             status="pending_physical_cleanup",
             retrieval_disabled=True,
+        )
+
+    for review_action, accept in (("confirm", True), ("reject", False)):
+
+        def review_endpoint_for(accepted: bool) -> Callable[..., Awaitable[MemoryResponse]]:
+            async def review(
+                memory_id: UUID,
+                body: LifecycleRequest,
+                principal: Annotated[RequestPrincipal, Depends(principal_dependency)],
+                service: Annotated[ExplicitMemoryService, Depends(service_dependency)],
+            ) -> MemoryResponse:
+                result = await service.review(
+                    ReviewMemoryCommand(memory_id, body.expected_revision, accepted), principal
+                )
+                return MemoryResponse(
+                    tenant_id=principal.tenant_id,
+                    memory_id=result.memory_id,
+                    version_id=result.version_id,
+                    revision=result.revision,
+                    status=result.status,
+                )
+
+            return review
+
+        router.add_api_route(
+            f"/memories/{{memory_id}}/{review_action}",
+            review_endpoint_for(accept),
+            methods=["POST"],
+            response_model=MemoryResponse,
         )
 
     @router.post("/memories/{memory_id}/archive", response_model=MemoryResponse)

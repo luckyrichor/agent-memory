@@ -58,6 +58,7 @@ def bearer_token(private_key: str, *, issuer: str = "memory-test") -> str:
                 "memory:supersede",
                 "memory:restore",
                 "memory:invalidate",
+                "memory:review",
             ],
             "allowed_workspace_ids": ["project-a"],
             "iat": now,
@@ -342,6 +343,11 @@ async def test_sdk_covers_all_business_routes_and_pagination(app_database_url: s
                 source.memory_id, expected_revision=1, successor_id=successor.memory_id
             )
             assert (await sdk.lifecycle(source.memory_id)).successor_id == successor.memory_id
+            assert (await sdk.review_queue()).items == []
+            for review in (sdk.confirm, sdk.reject):
+                with pytest.raises(MemoryAPIError) as failure:
+                    await review(successor.memory_id, expected_revision=1)
+                assert failure.value.code == "INVALID_STATUS_TRANSITION"
             await sdk.delete(m.memory_id, expected_revision=5, idempotency_key=str(uuid4()))
             assert [v async for v in sdk.iter_search(SearchRequest(query="successor"))]
             assert (await sdk.context(ContextRequest(query="successor"))).rendered

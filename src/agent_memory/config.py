@@ -23,6 +23,8 @@ class Settings(BaseSettings):
     extraction_model: str = ""
     extraction_token: SecretStr = SecretStr("")
     extraction_trust_env: bool = False
+    # auto: low-risk extracted candidates become retrievable at once; manual: wait for review.
+    candidate_activation: Literal["auto", "manual"] = "auto"
 
     extraction_timeout_seconds: float = Field(default=15, gt=0)
     embedding_timeout_seconds: float = Field(default=10, gt=0)

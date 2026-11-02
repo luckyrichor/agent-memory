@@ -8,6 +8,7 @@ from agent_memory.application.ports import (
     IdempotencyRecord,
     MemoryRecord,
 )
+from agent_memory.domain.enums import MemoryStatus
 from agent_memory.domain.errors import MemoryNotFound, RevisionConflict
 from agent_memory.domain.models import Memory, MemoryVersion
 
@@ -26,6 +27,19 @@ class InMemoryMemoryRepository:
     async def get(self, tenant_id: UUID, memory_id: UUID) -> MemoryRecord | None:
         record = self._records.get((tenant_id, memory_id))
         return replace(record, versions=(record.current_version,)) if record else None
+
+    async def list_by_status(
+        self, tenant_id: UUID, status: MemoryStatus, limit: int, offset: int
+    ) -> tuple[MemoryRecord, ...]:
+        found = sorted(
+            (
+                replace(r, versions=(r.current_version,))
+                for (tenant, _), r in self._records.items()
+                if tenant == tenant_id and r.memory.status is status
+            ),
+            key=lambda r: (r.memory.created_at, str(r.memory.memory_id)),
+        )
+        return tuple(found[offset : offset + limit])
 
     async def versions(
         self, tenant_id: UUID, memory_id: UUID, limit: int, offset: int

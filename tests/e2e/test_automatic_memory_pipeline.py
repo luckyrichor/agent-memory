@@ -94,6 +94,7 @@ async def test_duplicate_failure_event_produces_one_complete_candidate_lineage(
         sessions,
         new_id=lambda: next(id_values),
         now=lambda: NOW,
+        activation="manual",  # this test pins the candidate lineage, not the activation policy
     )
     worker = ExtractionWorker(
         backend,

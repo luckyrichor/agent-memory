@@ -57,7 +57,7 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 
 | ID | 任务 | 方案编号 | 状态 | 验证方式 | 证据 |
 |---|---|---|---|---|---|
-| A1 | 候选记忆激活：抽取结果按策略进入 `active` 或 `needs_review`；新增 confirm / reject 公开接口与权限 | B0 缺陷、阶段 3 前置 | 待做 | 单测 + Postgres 集成测试 + 端到端（事件→可检索） | |
+| A1 | 候选记忆激活：抽取结果按策略进入 `active` 或 `needs_review`；新增 confirm / reject 公开接口与权限 | B0 缺陷、阶段 3 前置 | 完成 | 单测 + Postgres 集成测试 + 端到端（事件→可检索） | `tests/integration/test_candidate_activation.py`、`tests/unit/domain/test_activation.py` |
 
 ### B. 读路径性能（O1、O2、F2）
 
@@ -158,6 +158,13 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
   4. 抽取候选的 `confidence` 固定为 0.5、`authority_level` 为 `AGENT_INFERENCE`，所以基于置信度的自动激活没有意义，激活策略要显式配置。
   5. `ContextBuilder` 里 `evidence_refs` 恒为空、`conflicts` 恒为 `not_assessed`（占位符，E1/E4 填充）。
 - 下一步：A1 → C1/C2/C3 → B1/B2/B4 → B3 → C5/D1/D2 → E 系列。
+
+### 2026-11-02 — A1 完成
+- 做了：`domain/activation.py`（初始状态策略）；`Memory.review()`（candidate/needs_review → active/rejected）；`ExplicitMemoryService.review()` 与 `review_queue()`；路由 `GET /v1/memories/review-queue`、`POST /v1/memories/{id}/confirm|reject`；SDK 同步（仓库有"SDK 覆盖全部路由"的测试，必须同步）；配置 `MEMORY_CANDIDATE_ACTIVATION`（默认 `auto`）；抽取 worker 入口接上配置。
+- 验证：全量 463 passed（本沙箱 localpg，不含需要子进程 Docker 的 `test_b0_harness`）；ruff、mypy strict、foundation 8/8。
+- 踩坑记录：① 两个旧测试（`test_automatic_memory_pipeline`、`test_llm_pipeline`）原本断言抽取后状态是 `candidate`，现改为显式传 `activation="manual"` 保留其原意，**不是**放松断言；② JWT 的工作区声明字段是 `allowed_workspace_ids`，不是 `workspace_ids`；③ 集成测试里 `NOW` 必须取过去的时间，否则任务 `available_at` 在数据库时钟之后，worker 领不到；④ 同一租户下多个测试共用库，检索类断言要用互不重叠的词表。
+- 局限：评审队列的作用域过滤是取页后再过滤，权限窄的审核人可能看到不满的页；量大后要下推 SQL。
+- 下一步：C1 → C2 → C3，先建"写入到可检索"的延迟测量脚本（改前先测）。
 
 （后续条目在这里追加。）
 

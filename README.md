@@ -267,7 +267,8 @@ Event 记录“发生了什么”，一旦接入不会就地覆盖；Audit 记�
 - 不可变 Event 批量接入、事务 Outbox、幂等 Job；
 - 租约领取、退避重试、死信终态和可恢复 worker；
 - 对 build/test 失败的确定性规则提取，以及 Event → Evidence → MemoryVersion 血缘；
-- 可观测性地基：写入/检索/提取全链路 trace、JSON 结构化日志、四个基础指标，字段白名单保证正文不外流。
+- 可观测性地基：写入/检索/提取全链路 trace、JSON 结构化日志、四个基础指标，字段白名单保证正文不外流；
+- 候选记忆激活（2026-11-02，见 [优化文档](docs/optimization/PLAN.md) A1）：`MEMORY_CANDIDATE_ACTIVATION=auto|manual`，auto 下低风险候选直接可检索、租户级流程性记忆进 `needs_review`；`GET /v1/memories/review-queue`、`POST /v1/memories/{id}/confirm|reject` 需要权限 `memory:review`。
 
 M7真实模型候选提炼与M5三组基线工程初验已通过，详见 [提炼与基线验收](docs/llm-extraction-and-baselines.md)。当前可配置真实LLM提炼器，临时故障重试、永久响应错误回退规则；敏感信息防护仅覆盖明确模式，生产规模质量未验收。M6 Context Builder、反馈和物理删除传播、配额/审核/压测仍未完成。全文/向量/结构化融合检索已实现，真实火山模型初验见 [docs/retrieval.md](docs/retrieval.md)。排期见 `workplan-docs/总节奏表.md`。已支持 OTLP 导出和采样、验证过 Docker collector，并提供告警/多租户 supervisor 示例；生产后端、告警、看板与常驻 API/worker 未部署。17 项评审修复及验收边界见 [修复报告](docs/review-hardening-2026-10-08.md)。
 

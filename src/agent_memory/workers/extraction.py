@@ -186,6 +186,7 @@ async def _run_worker(args: argparse.Namespace, stop: asyncio.Event) -> None:
             new_id=uuid4,
             now=lambda: datetime.now(UTC),
             extractor_version=extractor.version,
+            activation=settings.candidate_activation,
         ),
         extractor,
         now=lambda: datetime.now(UTC),

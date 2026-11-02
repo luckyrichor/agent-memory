@@ -36,3 +36,10 @@ class MemoryResult:
     version_id: UUID
     revision: int
     status: MemoryStatus
+
+
+@dataclass(frozen=True, slots=True)
+class ReviewMemoryCommand:
+    memory_id: UUID
+    expected_revision: int
+    accept: bool
