@@ -1,0 +1,39 @@
+{
+  "label": "before-steady-1",
+  "commit": "48a95a6",
+  "measured_at_utc": "2026-11-02T06:27:24+00:00",
+  "environment": {
+    "host": "vm",
+    "cpus": 2,
+    "python": "3.12.3",
+    "postgres": "16.15 (Ubuntu 16.15-0ubuntu0.24.04.1)",
+    "pgvector": "0.6.0",
+    "client_workers_database_same_host": true,
+    "extractor": "rule (CodingFailureRuleExtractor)",
+    "embedding": "fixture-sha256-1024-v1 (NOT a semantic model, ~0 ms)"
+  },
+  "workload": {
+    "events": 20,
+    "interval_s": 1.5,
+    "dispatch_args": "",
+    "work_args": "",
+    "embed_args": ""
+  },
+  "extraction_visible": {
+    "n": 20,
+    "p50_s": 6.127,
+    "p95_s": 9.744,
+    "max_s": 10.275,
+    "mean_s": 5.394
+  },
+  "vector_ready": {
+    "n": 20,
+    "p50_s": 7.723,
+    "p95_s": 11.351,
+    "max_s": 11.847,
+    "mean_s": 6.984
+  },
+  "completed": 20,
+  "total_wall_s": 40.59,
+  "drain_s_first_send_to_last_vector": 40.51
+}

@@ -1,3 +1,4 @@
+import asyncio
 import hashlib
 from datetime import datetime, timedelta
 from typing import Literal
@@ -22,7 +23,13 @@ class FixtureEmbeddingProvider:
 
     model = "fixture-sha256-1024-v1"
 
+    def __init__(self, latency_seconds: float = 0.0) -> None:
+        # Test aid: simulate a slow provider to exercise worker concurrency / timeouts.
+        self.latency_seconds = latency_seconds
+
     async def embed(self, content: str) -> list[float]:
+        if self.latency_seconds:
+            await asyncio.sleep(self.latency_seconds)
         digest = hashlib.sha256(content.encode()).digest()
         return [(digest[i % len(digest)] - 127.5) / 127.5 for i in range(DIMENSIONS)]
 

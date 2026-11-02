@@ -14,8 +14,9 @@ from agent_memory.infrastructure.embedding import (
     PostgresEmbeddingBackend,
 )
 from agent_memory.observability.setup import configure_observability
-from agent_memory.workers.extraction import _install_signal_handlers, _pause
+from agent_memory.workers.extraction import _bounded_integer, _install_signal_handlers
 from agent_memory.workers.health import heartbeat
+from agent_memory.workers.loop import JOBS_CHANNEL, Wakeup, run_loop
 
 
 async def run(args: argparse.Namespace) -> None:
@@ -35,7 +36,7 @@ async def run(args: argparse.Namespace) -> None:
         ) as http:
             provider: EmbeddingProvider
             if args.fixture:
-                provider = FixtureEmbeddingProvider()
+                provider = FixtureEmbeddingProvider(args.fixture_latency_ms / 1000)
             else:
                 # No credentials are printed; missing configuration fails closed.
                 if not settings.embedding_endpoint or not settings.embedding_model:
@@ -53,16 +54,33 @@ async def run(args: argparse.Namespace) -> None:
                 timeout=settings.embedding_timeout_seconds,
                 lease_seconds=settings.worker_lease_seconds,
             )
-            while not stop.is_set():
-                result = await worker.run_once(args.tenant_id, args.worker_id)
-                heartbeat(args.tenant_id, args.worker_id, "embedding", result.reason_code)
-                print(
-                    f"embedding: job_id={result.job_id} outcome={result.outcome} "
-                    f"reason_code={result.reason_code}"
+            wakeup = None if args.no_notify or args.once else Wakeup(
+                settings.database_url, JOBS_CHANNEL, args.tenant_id
+            )
+            if wakeup is not None:
+                wakeup.start()
+
+            async def loop(index: int) -> None:
+                worker_id = args.worker_id if args.concurrency == 1 else f"{args.worker_id}-{index}"
+
+                async def step() -> bool:
+                    result = await worker.run_once(args.tenant_id, worker_id)
+                    heartbeat(args.tenant_id, worker_id, "embedding", result.reason_code)
+                    print(
+                        f"embedding: job_id={result.job_id} outcome={result.outcome} "
+                        f"reason_code={result.reason_code}"
+                    )
+                    return result.outcome != "no_job"
+
+                await run_loop(
+                    stop, step, poll_seconds=args.poll_seconds, wakeup=wakeup, once=args.once
                 )
-                if args.once:
-                    break
-                await _pause(stop, 2)
+
+            try:
+                await asyncio.gather(*(loop(i) for i in range(args.concurrency)))
+            finally:
+                if wakeup is not None:
+                    await wakeup.aclose()
     finally:
         await engine.dispose()
 
@@ -73,6 +91,12 @@ def main() -> None:
     work = sub.add_parser("work")
     work.add_argument("--worker-id", required=True)
     work.add_argument("--once", action="store_true")
+    work.add_argument("--poll-seconds", default=2, action=_bounded_integer(1, 60))
+    work.add_argument("--no-notify", action="store_true")
+    work.add_argument(
+        "--fixture-latency-ms", type=int, default=0, help="with --fixture: simulated provider delay"
+    )
+    work.add_argument("--concurrency", default=1, action=_bounded_integer(1, 16))
     work.add_argument(
         "--fixture", action="store_true", help="pipeline test only, no semantic model"
     )

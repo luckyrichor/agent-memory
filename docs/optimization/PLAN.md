@@ -72,9 +72,9 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 
 | ID | 任务 | 方案编号 | 状态 | 验证方式 | 证据 |
 |---|---|---|---|---|---|
-| C1 | worker 有活时不睡眠，只有空闲才等待 | O5 | 待做 | 积压 N 条任务的清空时间 | |
-| C2 | 触发式唤醒：PostgreSQL `LISTEN/NOTIFY`，保留低频轮询兜底 | O5 | 待做 | "写入→可检索"延迟 p50/p95 前后对比 | |
-| C3 | 单进程多并发消费（`--concurrency`） | O5 | 待做 | 吞吐对比；租约不重复领取 | |
+| C1 | worker 有活时不睡眠，只有空闲才等待 | O5 | 完成 | 积压 N 条任务的清空时间 | `docs/optimization/measurements/c-*-burst-*.json` |
+| C2 | 触发式唤醒：PostgreSQL `LISTEN/NOTIFY`，保留低频轮询兜底 | O5 | 完成 | "写入→可检索"延迟 p50/p95 前后对比 | `c-*-steady-*.json`、迁移 `0009_job_notify.py`、`tests/integration/test_worker_wakeup.py` |
+| C3 | 单进程多并发消费（`--concurrency`） | O5 | 完成-仅功能，吞吐对比未测 | 吞吐对比；租约不重复领取 | 代码已有；并发 1 对 4 的对比被中断，待补 |
 | C4 | 任务优先级（交互写入 > 批量导入） | O5 | 待做 | 混合负载下交互任务延迟 | |
 | C5 | 同租户、同模型、相同正文的向量复用（内容哈希） | O4 | 待做 | 向量调用次数前后对比（计数提供器） | |
 
@@ -166,7 +166,15 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 - 局限：评审队列的作用域过滤是取页后再过滤，权限窄的审核人可能看到不满的页；量大后要下推 SQL。
 - 下一步：C1 → C2 → C3，先建"写入到可检索"的延迟测量脚本（改前先测）。
 
-（后续条目在这里追加。）
+### 2026-11-02 — C1/C2/C3 代码完成，数据已测（同机、夹具向量，非真实模型）
+- 做了：`workers/loop.py`（有活不睡、LISTEN/NOTIFY 唤醒、轮询兜底）；迁移 `0009_job_notify`（jobs / outbox 插入时 `pg_notify`，载荷是 `md5(tenant_id)`，不含租户 ID 和任何正文）；三个 worker 入口改用共享循环；新增 `--no-notify`、`--concurrency`、embedding 的 `--poll-seconds`、`--fixture-latency-ms`（测试用，模拟慢提供器）；抽取 worker 每个并发循环各建一个 extractor（LLMExtractor 带 `last_reason` 状态，并发共享会串）。
+- 测量（`scripts/bench/pipeline_latency.py`，各 3 次，本沙箱 2 核、同机、规则抽取 + 夹具向量，所以只反映排队和轮询开销）：
+  - 稳态（每 1.5 秒一条，共 20 条），向量就绪 p50：改前 7.4–7.8 s，p95 11.4–11.9 s；改后 0.06 s，p95 0.08–0.09 s。
+  - 突发（一次 40 条），全部向量就绪耗时：改前 81 s（= 40 条 × 2 s 睡眠），改后 1.2 s。
+  - 改前"稳态"其实已经积压：到达速率 0.67 条/s 超过每阶段 0.5 条/s 的处理上限。
+- 未完成：并发 1 对 4 在 300 ms 模拟延迟下的吞吐对比被中断，没有数据，不得写成已测；全量测试在最后一次改动（`--fixture-latency-ms`）之后尚未重跑。
+- 下一步：重跑全量四道门；补并发对比；然后 B1/B2/B4。
+
 
 ## 9. 需要负责人决定或配合的事项
 

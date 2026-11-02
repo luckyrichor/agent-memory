@@ -26,6 +26,7 @@ from agent_memory.infrastructure.llm_extractor import build_extractor
 from agent_memory.observability import correlation, get_logger, span
 from agent_memory.observability.setup import configure_observability
 from agent_memory.workers.health import heartbeat
+from agent_memory.workers.loop import JOBS_CHANNEL, OUTBOX_CHANNEL, Wakeup, run_loop
 
 _logger = get_logger("agent_memory.workers.extraction")
 
@@ -61,6 +62,12 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
             "--poll-seconds",
             default=2,
             action=_bounded_integer(1, 60),
+            help="fallback poll interval; with notifications on it only bounds a missed wake-up",
+        )
+        command.add_argument(
+            "--no-notify",
+            action="store_true",
+            help="disable LISTEN/NOTIFY wake-up and rely on polling only",
         )
 
     dispatch = subparsers.add_parser("dispatch", help="move outbox events to jobs")
@@ -77,6 +84,12 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         )
         add_common_arguments(work)
         work.add_argument("--worker-id", required=True)
+        work.add_argument(
+            "--concurrency",
+            default=1,
+            action=_bounded_integer(1, 16),
+            help="parallel claim loops in this process (FOR UPDATE SKIP LOCKED keeps them disjoint)",
+        )
 
     return parser.parse_args(argv)
 
@@ -132,40 +145,50 @@ async def _run_dispatch(args: argparse.Namespace, stop: asyncio.Event) -> None:
         "outbox_dispatcher",
         "queue:dispatch",
     )
-    try:
-        while not stop.is_set():
-            with (
-                correlation(request_id=str(uuid4()), tenant_id=args.tenant_id),
-                span(
-                    "outbox.dispatch",
-                    action="outbox.dispatch",
-                    tenant_id=args.tenant_id,
-                    batch_size=args.batch_size,
-                ),
-            ):
-                async with session_for_principal(sessions, principal) as session:
-                    repository = PostgresOutboxRepository(
-                        session,
-                        new_id=uuid4,
-                        now=lambda: datetime.now(UTC),
-                    )
-                    count = await OutboxDispatcher(
-                        repository,
-                        extractor.version,
-                    ).dispatch_once(args.tenant_id, args.batch_size)
-            reason_code = "OUTBOX_DISPATCHED" if count else "NO_PENDING_OUTBOX"
-            _logger.event(
-                "outbox.dispatched",
+    wakeup = None if args.no_notify or args.once else Wakeup(
+        settings.database_url, OUTBOX_CHANNEL, args.tenant_id
+    )
+    if wakeup is not None:
+        wakeup.start()
+
+    async def step() -> bool:
+        with (
+            correlation(request_id=str(uuid4()), tenant_id=args.tenant_id),
+            span(
+                "outbox.dispatch",
+                action="outbox.dispatch",
                 tenant_id=args.tenant_id,
-                count=count,
-                reason_code=reason_code,
-            )
-            heartbeat(args.tenant_id, "dispatch", "dispatch", reason_code)
-            print(f"dispatch:count={count} reason_code={reason_code}")
-            if args.once:
-                break
-            await _pause(stop, args.poll_seconds)
+                batch_size=args.batch_size,
+            ),
+        ):
+            async with session_for_principal(sessions, principal) as session:
+                repository = PostgresOutboxRepository(
+                    session,
+                    new_id=uuid4,
+                    now=lambda: datetime.now(UTC),
+                )
+                count = await OutboxDispatcher(
+                    repository,
+                    extractor.version,
+                ).dispatch_once(args.tenant_id, args.batch_size)
+        reason_code = "OUTBOX_DISPATCHED" if count else "NO_PENDING_OUTBOX"
+        _logger.event(
+            "outbox.dispatched",
+            tenant_id=args.tenant_id,
+            count=count,
+            reason_code=reason_code,
+        )
+        heartbeat(args.tenant_id, "dispatch", "dispatch", reason_code)
+        print(f"dispatch:count={count} reason_code={reason_code}")
+        return count > 0
+
+    try:
+        await run_loop(
+            stop, step, poll_seconds=args.poll_seconds, wakeup=wakeup, once=args.once
+        )
     finally:
+        if wakeup is not None:
+            await wakeup.aclose()
         await engine.dispose()
 
 
@@ -179,41 +202,68 @@ async def _run_worker(args: argparse.Namespace, stop: asyncio.Event) -> None:
         trust_env=settings.extraction_trust_env,
         limits=httpx.Limits(max_connections=8, max_keepalive_connections=4),
     )
-    extractor = build_extractor(settings, http)
-    worker = ExtractionWorker(
-        PostgresExtractionBackend(
-            sessions,
-            new_id=uuid4,
-            now=lambda: datetime.now(UTC),
-            extractor_version=extractor.version,
-            activation=settings.candidate_activation,
-        ),
-        extractor,
-        now=lambda: datetime.now(UTC),
-        lease_duration=timedelta(seconds=settings.worker_lease_seconds),
+    wakeup = None if args.no_notify or args.once else Wakeup(
+        settings.database_url, JOBS_CHANNEL, args.tenant_id
     )
-    try:
-        while not stop.is_set():
+    if wakeup is not None:
+        wakeup.start()
+
+    def build_worker() -> tuple[ExtractionWorker, str]:
+        # One extractor per loop: LLMExtractor keeps per-call state (last_reason / last_failure)
+        # that concurrent loops must not share.
+        extractor = build_extractor(settings, http)
+        return (
+            ExtractionWorker(
+                PostgresExtractionBackend(
+                    sessions,
+                    new_id=uuid4,
+                    now=lambda: datetime.now(UTC),
+                    extractor_version=extractor.version,
+                    activation=settings.candidate_activation,
+                ),
+                extractor,
+                now=lambda: datetime.now(UTC),
+                lease_duration=timedelta(seconds=settings.worker_lease_seconds),
+            ),
+            extractor.version,
+        )
+
+    concurrency = getattr(args, "concurrency", 1)
+
+    async def loop(index: int) -> None:
+        worker, version = build_worker()
+        worker_id = args.worker_id if concurrency == 1 else f"{args.worker_id}-{index}"
+
+        async def step() -> bool:
             with correlation(request_id=str(uuid4()), tenant_id=args.tenant_id):
-                result = await worker.run_once(args.tenant_id, args.worker_id)
-            heartbeat(args.tenant_id, args.worker_id, "extraction", result.reason_code)
+                result = await worker.run_once(args.tenant_id, worker_id)
+            heartbeat(args.tenant_id, worker_id, "extraction", result.reason_code)
             print(format_worker_result(result))
-            if args.once:
-                break
-            if args.command == "drain" and result.outcome == "no_job":
+            if result.outcome != "no_job":
+                return True
+            if args.command == "drain" and not args.once:
                 from agent_memory.infrastructure.queue_admin import PostgresQueueAdmin
 
                 status = await PostgresQueueAdmin(sessions, args.tenant_id).status(
-                    job_type="extract_event", version=extractor.version
+                    job_type="extract_event", version=version
                 )
                 counts = status["counts"]
                 if isinstance(counts, dict) and not any(
                     counts.get(k, 0) for k in ("pending", "retry_wait", "running")
                 ):
                     print(f"drain: outcome=finished dead_count={counts.get('dead', 0)}")
-                    break
-            await _pause(stop, args.poll_seconds)
+                    stop.set()
+            return False
+
+        await run_loop(
+            stop, step, poll_seconds=args.poll_seconds, wakeup=wakeup, once=args.once
+        )
+
+    try:
+        await asyncio.gather(*(loop(i) for i in range(concurrency)))
     finally:
+        if wakeup is not None:
+            await wakeup.aclose()
         await http.aclose()
         await engine.dispose()
 

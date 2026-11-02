@@ -3,6 +3,7 @@ from uuid import uuid4
 import pytest
 from alembic import command
 from alembic.config import Config
+from alembic.script import ScriptDirectory
 from sqlalchemy import create_engine, text
 from sqlalchemy.exc import ProgrammingError
 from testcontainers.community.postgres import PostgresContainer
@@ -26,7 +27,7 @@ def test_conversation_rollback_refuses_data_loss_and_preserves_rls():
                 command.downgrade(config, '0007_review_hardening')
             with engine.begin() as connection:
                 assert connection.scalar(text("SELECT count(*) FROM events")) == 1
-                assert connection.scalar(text("SELECT version_num FROM alembic_version")) == '0008_conversation_events'
+                assert connection.scalar(text("SELECT version_num FROM alembic_version")) == ScriptDirectory.from_config(config).get_current_head()
                 rls = connection.execute(text("SELECT relrowsecurity,relforcerowsecurity "
                                               "FROM pg_class WHERE relname='events'" )).one()
                 assert all(rls)

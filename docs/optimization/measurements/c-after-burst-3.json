@@ -1,0 +1,39 @@
+{
+  "label": "after-burst-3",
+  "commit": "48a95a6",
+  "measured_at_utc": "2026-11-02T06:38:46+00:00",
+  "environment": {
+    "host": "vm",
+    "cpus": 2,
+    "python": "3.12.3",
+    "postgres": "16.15 (Ubuntu 16.15-0ubuntu0.24.04.1)",
+    "pgvector": "0.6.0",
+    "client_workers_database_same_host": true,
+    "extractor": "rule (CodingFailureRuleExtractor)",
+    "embedding": "fixture-sha256-1024-v1 (NOT a semantic model, ~0 ms)"
+  },
+  "workload": {
+    "events": 40,
+    "interval_s": 0.0,
+    "dispatch_args": "",
+    "work_args": "",
+    "embed_args": ""
+  },
+  "extraction_visible": {
+    "n": 40,
+    "p50_s": 0.553,
+    "p95_s": 0.707,
+    "max_s": 0.716,
+    "mean_s": 0.51
+  },
+  "vector_ready": {
+    "n": 40,
+    "p50_s": 0.6,
+    "p95_s": 0.73,
+    "max_s": 0.761,
+    "mean_s": 0.563
+  },
+  "completed": 40,
+  "total_wall_s": 1.31,
+  "drain_s_first_send_to_last_vector": 1.2
+}
