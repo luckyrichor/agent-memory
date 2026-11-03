@@ -188,7 +188,9 @@ async def seed_bulk(sessions, who, count: int) -> None:
     async with session_for_principal(sessions, who) as session:
         await session.execute(
             text(
-                "WITH seed AS (SELECT g, gen_random_uuid() AS mid, gen_random_uuid() AS vid"
+                "WITH seed AS (SELECT g,"
+                " ('00000000-0000-0000-0000-' || lpad(g::text, 12, '0'))::uuid AS mid,"
+                " ('00000000-0000-0000-0001-' || lpad(g::text, 12, '0'))::uuid AS vid"
                 " FROM generate_series(1, :n) g)"
                 " INSERT INTO memories (tenant_id, memory_id, memory_type, status, scope_kind,"
                 " workspace_id, subject_user_id, visibility, owner_user_id, current_version_id,"
@@ -200,7 +202,9 @@ async def seed_bulk(sessions, who, count: int) -> None:
         )
         await session.execute(
             text(
-                "WITH seed AS (SELECT g, gen_random_uuid() AS mid, gen_random_uuid() AS vid"
+                "WITH seed AS (SELECT g,"
+                " ('00000000-0000-0000-0000-' || lpad(g::text, 12, '0'))::uuid AS mid,"
+                " ('00000000-0000-0000-0001-' || lpad(g::text, 12, '0'))::uuid AS vid"
                 " FROM generate_series(1, :n) g)"
                 " INSERT INTO memory_versions (tenant_id, memory_version_id, memory_id,"
                 " version_number, content, structured_content, content_hash, confidence, utility,"
@@ -212,7 +216,9 @@ async def seed_bulk(sessions, who, count: int) -> None:
         )
         await session.execute(
             text(
-                "WITH seed AS (SELECT g, gen_random_uuid() AS mid, gen_random_uuid() AS vid"
+                "WITH seed AS (SELECT g,"
+                " ('00000000-0000-0000-0000-' || lpad(g::text, 12, '0'))::uuid AS mid,"
+                " ('00000000-0000-0000-0001-' || lpad(g::text, 12, '0'))::uuid AS vid"
                 " FROM generate_series(1, :n) g)"
                 " INSERT INTO memory_embeddings (tenant_id, memory_version_id, model, embedding,"
                 " updated_at)"
