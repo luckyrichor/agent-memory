@@ -67,11 +67,16 @@ class VersionEvidence:
 
 @dataclass(frozen=True)
 class MemoryFacts:
-    """Per-version attributes the context scorer needs (E3). Ids and metadata, never content."""
+    """Per-version attributes the context code needs (E3 scoring, E4 grouping).
+
+    Ids and metadata only -- never content, never another tenant's row.
+    """
 
     memory_type: MemoryType
     created_at: datetime
     authority_level: int
+    scope_kind: str
+    subject_id: UUID
 
 
 @dataclass(frozen=True)
@@ -89,6 +94,9 @@ class RetrievalHit:
     memory_type: MemoryType = MemoryType.SEMANTIC
     created_at: datetime | None = None
     authority_level: int = int(AuthorityLevel.MULTIPLE_EVENTS)
+    # E4: which subject this memory is about, so conflicts are only looked for inside one subject.
+    scope_kind: str = "tenant"
+    subject_id: UUID | None = None
 
 
 class CandidateProvider(Protocol):
@@ -161,7 +169,11 @@ class MemoryRetriever:
                                  else MemoryType.SEMANTIC,
                                  facts[version_id].created_at if version_id in facts else None,
                                  facts[version_id].authority_level if version_id in facts
-                                 else int(AuthorityLevel.MULTIPLE_EVENTS))
+                                 else int(AuthorityLevel.MULTIPLE_EVENTS),
+                                 facts[version_id].scope_kind if version_id in facts
+                                 else "tenant",
+                                 (facts[version_id].subject_id or memory_id)
+                                 if version_id in facts else memory_id)
                     for memory_id, version_id, score, hit_ranks, raw_scores in page
                     if version_id in contents]
             return RetrievalPage(tuple(hits),

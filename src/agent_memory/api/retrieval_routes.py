@@ -128,9 +128,10 @@ def create_retrieval_router(
         service: Annotated[MemoryRetriever, Depends(service_dependency)],
     ) -> ContextResponse:
         page, _, _ = await run_search(body, principal, service)
-        packet = MemoryContextBuilder(scoring=context_scoring()).build(
-            page.items, body.token_budget
-        )
+        packet = MemoryContextBuilder(
+            scoring=context_scoring(),
+            conflict_similarity=settings.context_conflict_similarity,
+        ).build(page.items, body.token_budget)
         return ContextResponse.model_validate(asdict(packet))
 
     return router

@@ -92,8 +92,8 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 |---|---|---|---|---|---|
 | E1 | 证据引用：检索结果和 context 里带上来源事件的引用 | 阶段 4 | 完成-仅规则抽取产生的证据；每次搜索多约 1.6–3 ms | API 测试 | `tests/integration/test_evidence_refs.py`、`tests/unit/application/test_retrieval.py`、`test_context_builder.py`、`measurements/e1-{before,after}-10k-*.json` |
 | E2 | 精确重复去重：同租户同作用域内规范化后相同的候选，不新建记忆，只追加证据 | 阶段 4 / LC1 | 完成-仅抽取路径；并发竞态未处理（见日志） | 单测 + 集成测试 | `domain/dedup.py`、迁移 `0012_dedup_hash`、`tests/integration/test_candidate_dedup.py`、`tests/unit/domain/test_dedup.py`、`tests/integration/test_dedup_migration.py` |
-| E3 | 上下文打分：相关度 + 新旧（按记忆类型分半衰期）+ 来源可信度，按 分数/占用 贪心装入预算 | O6 | 待做 | 单测（确定性排序）；效果指标待负责人侧重跑 | |
-| E4 | 冲突标注：同主体同类型相互矛盾的记忆在 context 里标 `conflicts` | 阶段 4 / O8 | 待做 | 仅规则型（不调模型）；语义冲突留给后续 | |
+| E3 | 上下文打分：相关度 + 新旧（按记忆类型分半衰期）+ 来源可信度，按 分数/占用 贪心装入预算 | O6 | 完成-机制与确定性已验证；权重只是起点值，未在开发集上选 | 单测（三因子各自能改变顺序、确定性）+ 集成（真库元数据、跨租户） | `src/agent_memory/application/context_scoring.py`、`tests/unit/application/test_context_scoring.py`、`tests/integration/test_context_metadata.py` |
+| E4 | 冲突标注：同主体同类型相互矛盾的记忆在 context 里标 `conflicts` | 阶段 4 / O8 | 完成-只有词面重叠规则，标 `similar_text`；语义冲突未做 | 仅规则型（不调模型）；语义冲突留给后续 | `src/agent_memory/application/conflicts.py`、`tests/unit/application/test_conflicts.py`、`tests/integration/test_context_metadata.py` |
 
 ### F. 本环境做不了、需要负责人侧完成
 
@@ -128,6 +128,11 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 - 决定：上"最近邻优先"的形状，不上索引迁移。索引写成运维可选步骤，前置条件是 pgvector ≥ 0.8（`hnsw.iterative_scan`），因为低于 0.8 时过滤会把近似扫描截断成几十条，正是上面 0.4983 那种召回塌陷。
 - 诚实边界：夹具是聚类合成向量（50 个中心 + 噪声 0.3），**不是语义向量**，召回数字只说明形状与索引的行为，不能当检索质量；规模只到 2 万，没有 10 万；客户端与数据库同机。
 
+### E4 冲突标注
+- **不做语义判断**。规则是结构性的：同一主体、同一记忆类型、用词高度重叠（`lexical_tokens` 的 Jaccard ≥ `MEMORY_CONTEXT_CONFLICT_SIMILARITY`，默认 0.6）但正文不同，就互相标 `{"memory_id", "reason": "similar_text"}`。这正是"同一字段被改了口"的形状，也同样是"无害改写"的形状，所以字段里写的是 `similar_text`，不是"矛盾"。
+- 为什么不用证据表里的 `contradicts`：写路径只产生 `triggered_by` 与 `supports`，没有任何生产者写 `contradicts`，只按这个角色标就是一个永不触发的功能。已记录的 contradiction 仍然会进 prompt（E1 把 role 放进 `evidence_refs`），E4 补的只是"跨记忆配对"。
+- 渲染：`conflicts` 从占位的 `"not_assessed"` 变成列表，空列表表示"查过了，没有"。指向未装进预算的条目的引用会被剪掉——留一个读者无法解析的 id 比承认这份 context 是局部的更糟。
+- 局限（写进代码注释里，别在汇报时忘掉）：① 短句失效——"我住北京" 与 "我搬到上海" 几乎没有共同 bigram，标不出来。② 语义冲突无解，需要模型，超出本任务范围。③ 措辞相近但其实相容的两条会被误标；这个字段只是给读者的提示，**不修改存储**。
 ### C2 触发式唤醒
 - 数据库在 `jobs` / `outbox_messages` 插入时 `pg_notify`；worker 用独立连接 `LISTEN`，收到通知立刻领取；`poll-seconds` 保留作兜底（通知丢失、连接断开时不卡死）。租约、围栏、`FOR UPDATE SKIP LOCKED` 不变。
 - 注意：通知只是"叫醒"，任务是否可领仍由数据库里的状态和租约决定，所以通知重复或丢失都不影响正确性。
@@ -143,6 +148,13 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 
 ### E3 上下文打分
 `总分 = w相关 × 相关度 + w新旧 × 新旧度 + w可信 × 可信度`，三项先归一到 0–1；新旧度 = 0.5^(年龄/半衰期)，半衰期按记忆类型区分；可信度按 `authority_level` 分档。装入时按 `分数 ÷ 占用` 贪心，相关度低于门槛的不装。权重默认值只是起点，**必须在开发集上选**，本环境只验证机制。
+
+- 实现（`application/context_scoring.py`，纯函数、可单测）：相关度 = 本页融合分 ÷ 本页最高分；新旧度 = 0.5^(年龄/半衰期)，半衰期 episodic/semantic/procedural = 14/180/365 天；可信度 = `authority_level` ÷ 5（`ENTERPRISE_POLICY`）。默认权重 1.0 / 0.3 / 0.3，相关度门槛 0（默认不丢任何条目）。
+- 为什么相关度按**本页**归一：RRF 分数没有绝对量纲（取决于几个通道命中），任何"绝对阈值"都只是个看起来有道理的数字。
+- 为什么按 `分数 ÷ 占用` 而不是单纯按分数：预算是稀缺资源，"短且几乎同样相关"比"长且略好一点"更值。
+- 元数据走**页级一次查询**（`CandidateProvider.facts()`），只取类型、版本创建时间、`authority_level`、作用域主体；没有创建时间的条目按中性 0.5 计，不因缺字段被丢。
+- context 路由改为与 `/v1/memories/search` 走同一条检索路径并直接读真实 page。原先它把 `SearchHit` 重新拼成 `RetrievalHit`，正好会丢掉 E3 要用的元数据。
+- 局限：权重与半衰期**没有**在开发集上选过，也没有证据说明新顺序对读 prompt 的模型更好；没有真实向量，测不出检索质量差异。
 
 ## 6. 度量方法
 
@@ -270,6 +282,16 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 - 四道门（tx，pgvector 0.8.6，Docker）：541 passed、ruff、mypy strict 106 文件、foundation 8/8。本沙箱 localpg 是 pgvector 0.6.0，B3 有一个测试在那边 skip，属版本差异不是缺陷。
 - 局限（不得夸大）：① 没有语义向量，召回数字不代表检索质量。② 规模到 2 万，没到 10 万。③ C4 只验证了"积压时交互任务不再排队"，没有测多 worker 抢同一租户，也没有测优先级造成的饥饿。④ 优先级只有两档，且 outbox → job 这一跳不分级。
 - 下一步：E4（冲突标注）→ E3（上下文打分）→ STORY.md。
+
+### 2026-11-03 — E3 与 E4 完成（tx 服务器）
+
+- E3 做法见 5 · E3。代码：`application/context_scoring.py`、`context_builder` 改为按 `分数 ÷ 占用` 贪心、`CandidateProvider.facts()`（Postgres 与内存两个实现）、`RetrievalHit` 带类型 / 创建时间 / 权威级别 / 主体、配置项 `MEMORY_CONTEXT_*`。context 路由不再从响应模型重建 hit（否则正好丢掉这些元数据）。
+- E3 测试：单测 16 个（三因子各自能改变顺序、半衰期按类型、权重归零被拒、缺时间戳按中性 0.5、确定性、短条目赢过长条目）；集成 3 个（真库读出类型与 30 天前的年龄、跨租户拿不到别人的 facts、同分时权威高的排第一）。**没有**质量指标——本环境没有真实向量。
+- E4 做法见 5 · E4。代码：`application/conflicts.py`，只做"同主体 + 同类型 + 词面重叠但正文不同"的规则，标签是 `similar_text`。渲染时剪掉未装进预算的引用。
+- E4 测试：单测 9 个（互标、跨主体不标、跨类型不标、完全相同交给 E2、不相关不标、短句失效的已知盲点、阈值可移动分界线、封顶取最相似的、空包不花钱）；集成 1 个（真库两条改口式记忆在 context 里互相指向）。
+- **诚实边界**：`conflicts` 字段从字符串 `"not_assessed"` 改为列表，这是 context 渲染格式的变化；空列表表示"查过没有"，不再表示"没查"。E4 不判断语义，短句标不出来。
+- 四道门（tx）：571 passed、ruff、mypy strict 108 文件、foundation 8/8。
+- 下一步：STORY.md（第 10 节的交付约定）。
 
 ## 9. 需要负责人决定或配合的事项
 

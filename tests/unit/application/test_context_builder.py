@@ -172,3 +172,40 @@ def test_scoring_is_deterministic_for_equal_inputs():
     assert first == second
     assert first.selected_version_ids == (str(UUID(int=101)), str(UUID(int=102)),
                                          str(UUID(int=103)))
+
+
+# ---- E4: rule-based conflict marking ----
+def test_competing_memories_are_marked_in_the_packet():
+    left = _aged(1, "the rollout window is Tuesday at nine for billing", 1.0, days_old=1)
+    right = _aged(2, "the rollout window is Wednesday at nine for billing", 1.0, days_old=1)
+    packet = MemoryContextBuilder().build((left, right), 100000, now=NOW)
+    entries = {entry["memory_id"]: entry for entry in json.loads(packet.rendered)["memories"]}
+    assert entries[str(UUID(int=1))]["conflicts"] == [
+        {"memory_id": str(UUID(int=2)), "reason": "similar_text"}
+    ]
+    assert entries[str(UUID(int=2))]["conflicts"] == [
+        {"memory_id": str(UUID(int=1)), "reason": "similar_text"}
+    ]
+
+
+def test_no_conflicts_render_as_an_empty_list_not_a_placeholder():
+    packet = MemoryContextBuilder().build((_aged(1, "solo memory", 1.0, days_old=1),),
+                                          100000, now=NOW)
+    assert _entry(packet.rendered)["conflicts"] == []
+
+
+def test_conflicts_drop_peers_that_did_not_fit_the_budget():
+    """A dangling id the reader cannot resolve is worse than admitting the packet is partial."""
+    sentence = "the rollout window is Tuesday at nine for billing "
+    left = _aged(1, sentence, 2.0, days_old=1)
+    # Same vocabulary (so the pair is still a conflict), far too big for the budget below.
+    right = _aged(2, sentence * 50, 1.0, days_old=1)
+    generous = MemoryContextBuilder().build((left, right), 100000, now=NOW)
+    assert _entry(generous.rendered)["conflicts"]  # both fit, so the mark is kept
+
+    single = MemoryContextBuilder().build((left,), 100000, now=NOW)
+    tight = MemoryContextBuilder().build((left, right), single.used_tokens + 60, now=NOW)
+    packet = json.loads(tight.rendered)
+    assert [m["memory_id"] for m in packet["memories"]] == [str(UUID(int=1))]  # one fit
+    assert packet["memories"][0]["conflicts"] == []  # its peer reference was pruned
+    assert tight.used_tokens <= single.used_tokens + 60

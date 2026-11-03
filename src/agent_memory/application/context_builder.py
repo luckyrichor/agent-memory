@@ -4,6 +4,11 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Protocol
 
+from agent_memory.application.conflicts import (
+    DEFAULT_SIMILARITY,
+    MAX_CONFLICTS_PER_HIT,
+    find_conflicts,
+)
 from agent_memory.application.context_scoring import ContextScoring, utc_now
 from agent_memory.application.retrieval import RetrievalHit
 
@@ -39,9 +44,11 @@ ENTRY_OVERHEAD_BYTES = 160
 
 class MemoryContextBuilder:
     def __init__(self, counter: TokenCounter | None = None,
-                 scoring: ContextScoring | None = None) -> None:
+                 scoring: ContextScoring | None = None,
+                 conflict_similarity: float = DEFAULT_SIMILARITY) -> None:
         self.counter = counter or Utf8ByteCounter()
         self.scoring = scoring or ContextScoring()
+        self.conflict_similarity = conflict_similarity
 
     def build(self, hits: tuple[RetrievalHit, ...], budget: int,
               now: datetime | None = None) -> ContextPacket:
@@ -87,6 +94,14 @@ class MemoryContextBuilder:
             ranked.append((-(total / cost), -total, hit))
         ranked.sort(key=lambda item: (item[0], item[1], str(item[2].memory_id)))
 
+        # E4: which other memories this one looks like it competes with. Rule-based and labelled
+        # as such; every reference is pruned below to entries that actually fit the budget.
+        conflicts = (
+            find_conflicts(unique, similarity=self.conflict_similarity,
+                           limit=MAX_CONFLICTS_PER_HIT)
+            if len(unique) > 1 else {}
+        )
+
         for _, _, hit in ranked:
             key = str(hit.memory_id)
             refs = [{"event_id": str(ref.event_id), "role": ref.role}
@@ -95,7 +110,9 @@ class MemoryContextBuilder:
                 "memory_id": key, "version_id": str(hit.version_id),
                 "trust": "unverified_historical_reference",
                 "status": "active_at_retrieval_snapshot",
-                "evidence_refs": refs, "conflicts": "not_assessed",
+                "evidence_refs": refs,
+                "conflicts": [{"memory_id": str(peer), "reason": "similar_text"}
+                              for peer in conflicts.get(hit.memory_id, ())],
                 "content": hit.content,
             }
             if hit.evidence_total:
@@ -121,6 +138,14 @@ class MemoryContextBuilder:
                 truncated += 1
             entries.append(entry)
             versions.append(str(hit.version_id))
+        # A conflict whose peer did not fit the budget would be a dangling id in the prompt: the
+        # reader could neither read it nor resolve it. Pruning only shrinks the payload, so the
+        # budget already charged for it is still an upper bound.
+        included = {entry["memory_id"] for entry in entries}
+        for entry in entries:
+            listed = entry.get("conflicts")
+            if isinstance(listed, list):
+                entry["conflicts"] = [i for i in listed if i["memory_id"] in included]
         rendered = render(entries)
         used = self.counter.count(rendered)
         if used > budget:

@@ -4,6 +4,7 @@ Unit tests cover the arithmetic. What is only verifiable here is the join: that 
 hit is the row's metadata, scoped to the caller's tenant, and that changing a row's authority
 actually moves it in the rendered context.
 """
+import json
 from datetime import UTC, datetime, timedelta
 
 from sqlalchemy import text
@@ -125,3 +126,32 @@ async def test_context_prefers_the_authoritative_memory_when_relevance_ties(app_
     assert len(page.items) == 2
     packet = MemoryContextBuilder().build(page.items, 100000, now=datetime.now(UTC))
     assert packet.selected_version_ids[0] == str(strong.version_id)
+
+
+async def test_competing_restatements_carry_each_other_into_the_context(app_database_url):
+    """E4 on real rows: same subject and type, similar wording, so each points at the other."""
+    engine = create_engine(app_database_url)
+    sessions = create_session_factory(engine)
+    who = principal()
+    try:
+        first = await remember(
+            sessions, who, "k1", "the checkout rollout window is Tuesday at nine for billing"
+        )
+        second = await remember(
+            sessions, who, "k2", "the checkout rollout window is Wednesday at nine for billing"
+        )
+        async with session_for_principal(sessions, who) as session:
+            page = await MemoryRetriever(PostgresCandidateProvider(session)).search(
+                RetrievalQuery("checkout rollout window"), who
+            )
+    finally:
+        await engine.dispose()
+
+    packet = MemoryContextBuilder().build(page.items, 100000, now=datetime.now(UTC))
+    entries = {e["memory_id"]: e for e in json.loads(packet.rendered)["memories"]}
+    assert entries[str(first.memory_id)]["conflicts"] == [
+        {"memory_id": str(second.memory_id), "reason": "similar_text"}
+    ]
+    assert entries[str(second.memory_id)]["conflicts"] == [
+        {"memory_id": str(first.memory_id), "reason": "similar_text"}
+    ]

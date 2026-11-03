@@ -99,8 +99,16 @@ class PostgresCandidateProvider:
         if not version_ids:
             return {}
         v, m = MemoryVersionRow, MemoryRow
+        subject = func.coalesce(m.subject_user_id, m.owner_user_id)
         rows = await self.session.execute(
-            select(v.memory_version_id, m.memory_type, v.created_at, v.authority_level)
+            select(
+                v.memory_version_id,
+                m.memory_type,
+                v.created_at,
+                v.authority_level,
+                m.scope_kind,
+                subject,
+            )
             .join(
                 m,
                 and_(m.tenant_id == v.tenant_id, m.memory_id == v.memory_id),
@@ -111,8 +119,10 @@ class PostgresCandidateProvider:
             )
         )
         return {
-            version_id: MemoryFacts(MemoryType(memory_type), created_at, int(authority_level))
-            for version_id, memory_type, created_at, authority_level in rows
+            version_id: MemoryFacts(
+                MemoryType(memory_type), created_at, int(authority_level), scope_kind, subject_id
+            )
+            for version_id, memory_type, created_at, authority_level, scope_kind, subject_id in rows
         }
 
     async def evidence(

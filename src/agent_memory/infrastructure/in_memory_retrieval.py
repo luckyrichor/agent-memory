@@ -60,6 +60,8 @@ class InMemoryCandidateProvider:
                 record.memory.memory_type,
                 record.current_version.created_at,
                 int(record.current_version.authority_level),
+                record.memory.scope.kind.value,
+                record.memory.scope.subject_user_id or record.memory.owner_user_id,
             )
             for record in self.records
             if record.memory.tenant_id == principal.tenant_id

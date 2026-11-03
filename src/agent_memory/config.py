@@ -61,6 +61,9 @@ class Settings(BaseSettings):
     context_half_life_episodic_days: float = Field(default=14, gt=0)
     context_half_life_semantic_days: float = Field(default=180, gt=0)
     context_half_life_procedural_days: float = Field(default=365, gt=0)
+    # E4: token-overlap floor above which two memories about the same subject are marked as
+    # competing statements. Rule-based, not semantic -- raising it marks less and misses more.
+    context_conflict_similarity: float = Field(default=0.6, ge=0, le=1)
 
     @model_validator(mode="after")
     def validate_context_weights(self) -> "Settings":
