@@ -1,0 +1,1931 @@
+{
+  "generated_at": "2026-11-03T19:17:43.793512+08:00",
+  "source_commit": "df36251f6b685db1fff8e0a3a31ca1099e4c05cc",
+  "project_closed_by_owner": true,
+  "phase2_accepted": false,
+  "stage3_started": false,
+  "staircase_status": "measurements_complete",
+  "points": [
+    {
+      "size": 10000,
+      "repeat": 1,
+      "control_exit": 255,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.12060301507537685,
+      "maximum_load_memory_fraction": 0.24104161455417517,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 31,
+          "rate": 0.08023770891593913
+        },
+        "b0_sample_errors": {
+          "count": 0,
+          "rate": 0
+        },
+        "b0_sample_client_ms": {
+          "p(90)": 25974.420918,
+          "p(95)": 26237.6041335,
+          "avg": 8025.093612000001,
+          "min": 21.310373,
+          "med": 1037.888662,
+          "max": 26338.317332
+        },
+        "b0_sample_server_ms": {
+          "p(90)": 25969.11782,
+          "p(95)": 26231.6199035,
+          "avg": 8018.8755016774185,
+          "min": 15.82839,
+          "med": 1032.16693,
+          "max": 26332.080818
+        },
+        "dropped_iterations": {
+          "count": 0,
+          "rate": 0
+        }
+      },
+      "wall_seconds": 466.27669503800007,
+      "workload": "search",
+      "rate_per_second": 0.1,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300,
+      "server_observations_scope": "all requests including warmup; request-start timestamps retained privately for window analysis",
+      "server_stage_ms": {
+        "lexical_sql": {
+          "n": 37,
+          "mean": 6717.002069486486,
+          "p50": 888.3139249999772,
+          "p95": 26061.040162999972,
+          "max": 26191.93949700002
+        },
+        "vector_sql": {
+          "n": 37,
+          "mean": 92.77572024325463,
+          "p50": 88.84725699999763,
+          "p95": 126.61736100005783,
+          "max": 803.1478059999984
+        },
+        "structured_sql": {
+          "n": 37,
+          "mean": 10.953911594597415,
+          "p50": 13.363368000000264,
+          "p95": 15.60553499996331,
+          "max": 19.761819999985164
+        },
+        "other_sql": {
+          "n": 37,
+          "mean": 0.8076887837813882,
+          "p50": 0.612341000021388,
+          "p95": 1.770025999974223,
+          "max": 3.951377000021239
+        }
+      },
+      "pool_blocking_queue_ms": {
+        "n": 0,
+        "mean": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "pool_nonblocking_queue_ms": {
+        "n": 37,
+        "mean": 0.006136621619601568,
+        "p50": 0.005110000074637355,
+        "p95": 0.008344999997689229,
+        "max": 0.028834000005417693
+      },
+      "pool_physical_connection_ms": {
+        "n": 3,
+        "mean": 12.599138666644194,
+        "p50": 8.814601999972638,
+        "p95": 8.814601999972638,
+        "max": 21.451039999988097
+      },
+      "server_total_ms": {
+        "n": 37,
+        "mean": 6854.748689729731,
+        "p50": 1033.628178000015,
+        "p95": 26209.39522499998,
+        "max": 26333.161311000025
+      },
+      "server_peak_memory_fraction": 0.3605686048473833,
+      "target_host_resource_valid": true
+    },
+    {
+      "size": 10000,
+      "repeat": 2,
+      "control_exit": 0,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.14572864321608037,
+      "maximum_load_memory_fraction": 0.24715217641616938,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 31,
+          "rate": 0.08047604491160502
+        },
+        "b0_sample_errors": {
+          "rate": 0,
+          "count": 0
+        },
+        "b0_sample_client_ms": {
+          "min": 17.639484,
+          "med": 1030.406316,
+          "max": 26886.306713,
+          "p(90)": 26401.343834,
+          "p(95)": 26540.0731115,
+          "avg": 8099.845623451612
+        },
+        "b0_sample_server_ms": {
+          "p(90)": 26396.043396,
+          "p(95)": 26533.377785,
+          "avg": 8093.565491741936,
+          "min": 12.015856,
+          "med": 1024.443739,
+          "max": 26880.797206
+        },
+        "dropped_iterations": {
+          "count": 0,
+          "rate": 0
+        }
+      },
+      "wall_seconds": 412.0904934769999,
+      "workload": "search",
+      "rate_per_second": 0.1,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300,
+      "server_observations_scope": "all requests including warmup; request-start timestamps retained privately for window analysis",
+      "server_stage_ms": {
+        "lexical_sql": {
+          "n": 37,
+          "mean": 6774.739717540532,
+          "p50": 863.4542690000444,
+          "p95": 26380.960531000026,
+          "max": 26746.06452800003
+        },
+        "vector_sql": {
+          "n": 37,
+          "mean": 71.85531413514386,
+          "p50": 87.23946800000704,
+          "p95": 96.38152799993804,
+          "max": 175.23332799999025
+        },
+        "structured_sql": {
+          "n": 37,
+          "mean": 11.641847162177083,
+          "p50": 13.452510999968581,
+          "p95": 19.646588999989945,
+          "max": 39.416046000042115
+        },
+        "other_sql": {
+          "n": 37,
+          "mean": 0.6235114594524881,
+          "p50": 0.5852909999930489,
+          "p95": 0.8805559999700563,
+          "max": 1.0496740000007776
+        }
+      },
+      "pool_blocking_queue_ms": {
+        "n": 0,
+        "mean": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "pool_nonblocking_queue_ms": {
+        "n": 37,
+        "mean": 0.005707837833658748,
+        "p50": 0.0047789999371161684,
+        "p95": 0.008305999926960794,
+        "max": 0.028503999942586233
+      },
+      "pool_physical_connection_ms": {
+        "n": 3,
+        "mean": 9.57335166666932,
+        "p50": 7.980720999967161,
+        "p95": 7.980720999967161,
+        "max": 12.979440000094655
+      },
+      "server_total_ms": {
+        "n": 37,
+        "mean": 6890.745218432435,
+        "p50": 1006.0357229999681,
+        "p95": 26523.60480699997,
+        "max": 26882.055312000033
+      },
+      "server_peak_memory_fraction": 0.34493537703338195,
+      "target_host_resource_valid": true
+    },
+    {
+      "size": 10000,
+      "repeat": 3,
+      "control_exit": 0,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.13567839195979903,
+      "maximum_load_memory_fraction": 0.24743805065532698,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 31,
+          "rate": 0.08038193887426104
+        },
+        "b0_sample_errors": {
+          "count": 0,
+          "rate": 0
+        },
+        "b0_sample_client_ms": {
+          "avg": 8049.23562316129,
+          "min": 18.410263,
+          "med": 1060.657452,
+          "max": 26566.032981,
+          "p(90)": 25802.47942,
+          "p(95)": 26254.413777499998
+        },
+        "b0_sample_server_ms": {
+          "med": 1051.74611,
+          "max": 26559.715238,
+          "p(90)": 25796.634241,
+          "p(95)": 26248.484506,
+          "avg": 8043.077435677419,
+          "min": 12.700578
+        },
+        "dropped_iterations": {
+          "count": 0,
+          "rate": 0
+        }
+      },
+      "wall_seconds": 412.259567287,
+      "workload": "search",
+      "rate_per_second": 0.1,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300,
+      "server_observations_scope": "all requests including warmup; request-start timestamps retained privately for window analysis",
+      "server_stage_ms": {
+        "lexical_sql": {
+          "n": 37,
+          "mean": 6731.508437000014,
+          "p50": 896.0728259999087,
+          "p95": 26040.2870989999,
+          "max": 26411.604197000088
+        },
+        "vector_sql": {
+          "n": 37,
+          "mean": 74.86415497298269,
+          "p50": 85.62357800019527,
+          "p95": 130.14415299994653,
+          "max": 145.95302099996843
+        },
+        "structured_sql": {
+          "n": 37,
+          "mean": 11.08158154052895,
+          "p50": 13.349474000051487,
+          "p95": 19.50115900012861,
+          "max": 24.17577899996104
+        },
+        "other_sql": {
+          "n": 37,
+          "mean": 0.7213662432309935,
+          "p50": 0.5895770000279299,
+          "p95": 0.9294080000472604,
+          "max": 3.060148000031404
+        }
+      },
+      "pool_blocking_queue_ms": {
+        "n": 0,
+        "mean": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "pool_nonblocking_queue_ms": {
+        "n": 37,
+        "mean": 0.006182918948095018,
+        "p50": 0.005370000053517288,
+        "p95": 0.008767000053921947,
+        "max": 0.021491000097739743
+      },
+      "pool_physical_connection_ms": {
+        "n": 3,
+        "mean": 9.894910000108817,
+        "p50": 10.514030000194907,
+        "p95": 10.514030000194907,
+        "max": 11.841301999993448
+      },
+      "server_total_ms": {
+        "n": 37,
+        "mean": 6850.3618577567395,
+        "p50": 1043.9995009999166,
+        "p95": 26200.633401999992,
+        "max": 26563.626053999997
+      },
+      "server_peak_memory_fraction": 0.333559518799316,
+      "target_host_resource_valid": true
+    },
+    {
+      "size": 10000,
+      "repeat": 1,
+      "control_exit": 0,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.13567839195979903,
+      "maximum_load_memory_fraction": 0.2472633497313973,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 76,
+          "rate": 0.20105583214285785
+        },
+        "b0_sample_errors": {
+          "count": 17,
+          "rate": 0.04497301508458662
+        },
+        "b0_sample_client_ms": {
+          "max": 30001.249206,
+          "p(90)": 30000.722496000002,
+          "p(95)": 30000.978970750002,
+          "avg": 9572.517170697369,
+          "min": 19.49785,
+          "med": 2328.5408165
+        },
+        "b0_sample_server_ms": {
+          "p(95)": 25819.453823899992,
+          "avg": 3679.316351728812,
+          "min": 14.340471,
+          "med": 1620.572055,
+          "max": 29321.92455,
+          "p(90)": 4622.173991000001
+        },
+        "dropped_iterations": {
+          "count": 0,
+          "rate": 0
+        }
+      },
+      "wall_seconds": 412.31395390700004,
+      "workload": "search",
+      "rate_per_second": 0.25,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300,
+      "server_observations_scope": "all requests including warmup; request-start timestamps retained privately for window analysis",
+      "server_stage_ms": {
+        "lexical_sql": {
+          "n": 91,
+          "mean": 11836.428928120886,
+          "p50": 1438.1368980000389,
+          "p95": 59068.95699300003,
+          "max": 70939.11292899998
+        },
+        "vector_sql": {
+          "n": 91,
+          "mean": 156.97611100000148,
+          "p50": 122.52372999978434,
+          "p95": 411.0705630000666,
+          "max": 583.6015329998645
+        },
+        "structured_sql": {
+          "n": 91,
+          "mean": 23.943982351648717,
+          "p50": 14.972986000202582,
+          "p95": 75.532216000056,
+          "max": 91.70917599999484
+        },
+        "other_sql": {
+          "n": 91,
+          "mean": 0.9356820219631578,
+          "p50": 0.6201959999998508,
+          "p95": 2.435467000168501,
+          "max": 5.6546119999438815
+        }
+      },
+      "pool_blocking_queue_ms": {
+        "n": 0,
+        "mean": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "pool_nonblocking_queue_ms": {
+        "n": 91,
+        "mean": 0.006268472529032746,
+        "p50": 0.005269999974188977,
+        "p95": 0.008115999889923842,
+        "max": 0.051787000074909884
+      },
+      "pool_physical_connection_ms": {
+        "n": 8,
+        "mean": 10.684419249940902,
+        "p50": 10.5030719998922,
+        "p95": 11.329039999964152,
+        "max": 16.374226999914754
+      },
+      "server_total_ms": {
+        "n": 91,
+        "mean": 12058.42814198902,
+        "p50": 1656.303335000075,
+        "p95": 59209.300226000094,
+        "max": 71223.29660400009
+      },
+      "server_peak_memory_fraction": 0.3311655108335214,
+      "target_host_resource_valid": true
+    },
+    {
+      "size": 10000,
+      "repeat": 2,
+      "control_exit": 0,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.13,
+      "maximum_load_memory_fraction": 0.24735467066890604,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 75,
+          "rate": 0.19230739685203185
+        },
+        "b0_sample_errors": {
+          "count": 16,
+          "rate": 0.04102557799510013
+        },
+        "b0_sample_client_ms": {
+          "min": 0.887661,
+          "med": 2268.845642,
+          "max": 30001.646652,
+          "p(90)": 30000.6141968,
+          "p(95)": 30001.048825899998,
+          "avg": 8841.887594426667
+        },
+        "b0_sample_server_ms": {
+          "med": 1616.962839,
+          "max": 29621.566116,
+          "p(90)": 4526.5887416000005,
+          "p(95)": 25545.728278499988,
+          "avg": 3606.9878386440682,
+          "min": 12.446416
+        },
+        "dropped_iterations": {
+          "count": 0,
+          "rate": 0
+        }
+      },
+      "wall_seconds": 412.03396604099976,
+      "workload": "search",
+      "rate_per_second": 0.25,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300,
+      "server_observations_scope": "all requests including warmup; request-start timestamps retained privately for window analysis",
+      "server_stage_ms": {
+        "lexical_sql": {
+          "n": 90,
+          "mean": 10606.028626766654,
+          "p50": 1439.7623050003858,
+          "p95": 51268.825270999965,
+          "max": 58287.618901000315
+        },
+        "vector_sql": {
+          "n": 90,
+          "mean": 146.39938692225516,
+          "p50": 116.10848000009355,
+          "p95": 399.5781009998609,
+          "max": 569.7773199999574
+        },
+        "structured_sql": {
+          "n": 90,
+          "mean": 25.917285300010917,
+          "p50": 14.553946999967593,
+          "p95": 74.45224399998551,
+          "max": 93.61129399985657
+        },
+        "other_sql": {
+          "n": 90,
+          "mean": 1.2399657555660168,
+          "p50": 0.664710000364721,
+          "p95": 3.270267999596399,
+          "max": 11.82625100000223
+        }
+      },
+      "pool_blocking_queue_ms": {
+        "n": 0,
+        "mean": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "pool_nonblocking_queue_ms": {
+        "n": 90,
+        "mean": 0.005584255533600905,
+        "p50": 0.004608999915944878,
+        "p95": 0.0073639998845465016,
+        "max": 0.044614000216824934
+      },
+      "pool_physical_connection_ms": {
+        "n": 7,
+        "mean": 31.109225285782877,
+        "p50": 36.22965100021247,
+        "p95": 48.410589000013715,
+        "max": 57.65951800003677
+      },
+      "server_total_ms": {
+        "n": 90,
+        "mean": 10828.737821266668,
+        "p50": 1630.7435029998487,
+        "p95": 51793.52697000013,
+        "max": 58421.18277600002
+      },
+      "server_peak_memory_fraction": 0.33690909682364445,
+      "target_host_resource_valid": true
+    },
+    {
+      "size": 10000,
+      "repeat": 3,
+      "control_exit": 0,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.13,
+      "maximum_load_memory_fraction": 0.24754723873278306,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 76,
+          "rate": 0.20105589334610374
+        },
+        "b0_sample_errors": {
+          "count": 17,
+          "rate": 0.044973028774786365
+        },
+        "b0_sample_client_ms": {
+          "avg": 9601.364632328945,
+          "min": 18.842798,
+          "med": 2282.6762744999996,
+          "max": 30001.325547,
+          "p(90)": 30000.744094499998,
+          "p(95)": 30001.116234
+        },
+        "b0_sample_server_ms": {
+          "avg": 3717.720004135593,
+          "min": 13.208278,
+          "med": 1701.393107,
+          "max": 29201.917748,
+          "p(90)": 5132.374621000005,
+          "p(95)": 26011.04477969999
+        },
+        "dropped_iterations": {
+          "count": 0,
+          "rate": 0
+        }
+      },
+      "wall_seconds": 412.23504049099984,
+      "workload": "search",
+      "rate_per_second": 0.25,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300,
+      "server_observations_scope": "all requests including warmup; request-start timestamps retained privately for window analysis",
+      "server_stage_ms": {
+        "lexical_sql": {
+          "n": 91,
+          "mean": 11734.182072901118,
+          "p50": 1862.8720940000676,
+          "p95": 57205.20696599988,
+          "max": 67693.14193000036
+        },
+        "vector_sql": {
+          "n": 91,
+          "mean": 163.87504249449515,
+          "p50": 127.85132799990606,
+          "p95": 455.9975470001518,
+          "max": 714.3223640000542
+        },
+        "structured_sql": {
+          "n": 91,
+          "mean": 22.968412219777566,
+          "p50": 14.726550999967003,
+          "p95": 70.04119400016862,
+          "max": 101.36042400017686
+        },
+        "other_sql": {
+          "n": 91,
+          "mean": 1.521181164832172,
+          "p50": 0.6008199998177588,
+          "p95": 3.500350000194885,
+          "max": 47.11963999989166
+        }
+      },
+      "pool_blocking_queue_ms": {
+        "n": 0,
+        "mean": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "pool_nonblocking_queue_ms": {
+        "n": 91,
+        "mean": 0.005475945027473454,
+        "p50": 0.004999999873689376,
+        "p95": 0.007283999821083853,
+        "max": 0.02026799984378158
+      },
+      "pool_physical_connection_ms": {
+        "n": 8,
+        "mean": 26.717278625085328,
+        "p50": 12.857337000241387,
+        "p95": 56.942232999972475,
+        "max": 64.83253400028843
+      },
+      "server_total_ms": {
+        "n": 91,
+        "mean": 11967.843478901124,
+        "p50": 2030.374244000086,
+        "p95": 57514.70241800007,
+        "max": 67995.03160299992
+      },
+      "server_peak_memory_fraction": 0.315335069624461,
+      "target_host_resource_valid": true
+    },
+    {
+      "size": 10000,
+      "repeat": 1,
+      "control_exit": 0,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.12182741116751272,
+      "maximum_load_memory_fraction": 0.250826851532008,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 150,
+          "rate": 0.38461438501147366
+        },
+        "b0_sample_errors": {
+          "count": 24,
+          "rate": 0.061538301601835786
+        },
+        "b0_sample_client_ms": {
+          "p(90)": 30000.207476400003,
+          "p(95)": 30000.59431,
+          "avg": 9650.88630477333,
+          "min": 60.491272,
+          "med": 5731.037871,
+          "max": 30001.114785
+        },
+        "b0_sample_server_ms": {
+          "avg": 5768.459662714286,
+          "min": 53.388623,
+          "med": 5471.2320375,
+          "max": 29980.571125,
+          "p(90)": 11155.5884415,
+          "p(95)": 15336.241759999999
+        },
+        "dropped_iterations": {
+          "rate": 0,
+          "count": 0
+        }
+      },
+      "wall_seconds": 412.0843569110002,
+      "workload": "search",
+      "rate_per_second": 0.5,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300,
+      "server_observations_scope": "all requests including warmup; request-start timestamps retained privately for window analysis",
+      "server_stage_ms": {
+        "lexical_sql": {
+          "n": 181,
+          "mean": 9436.053421182318,
+          "p50": 3839.905521000219,
+          "p95": 58678.66615599996,
+          "max": 149143.37343000033
+        },
+        "vector_sql": {
+          "n": 181,
+          "mean": 339.4842300165677,
+          "p50": 340.8337730002131,
+          "p95": 895.8956159999616,
+          "max": 1144.9925569995685
+        },
+        "structured_sql": {
+          "n": 181,
+          "mean": 50.858271143644835,
+          "p50": 35.40025099982813,
+          "p95": 115.21064900034617,
+          "max": 184.12715999966167
+        },
+        "other_sql": {
+          "n": 181,
+          "mean": 2.9602497127105893,
+          "p50": 1.4409880000130215,
+          "p95": 7.029243000033603,
+          "max": 39.53719699984504
+        }
+      },
+      "pool_blocking_queue_ms": {
+        "n": 20,
+        "mean": 8458.017781350054,
+        "p50": 7542.743116000111,
+        "p95": 18547.071746000256,
+        "max": 25480.860215999655
+      },
+      "pool_nonblocking_queue_ms": {
+        "n": 161,
+        "mean": 0.005290720487803059,
+        "p50": 0.0047789999371161684,
+        "p95": 0.007934999757708283,
+        "max": 0.026679999791667797
+      },
+      "pool_physical_connection_ms": {
+        "n": 15,
+        "mean": 44.65493833340588,
+        "p50": 53.9826690001064,
+        "p95": 65.15016100001958,
+        "max": 65.9718150000117
+      },
+      "server_total_ms": {
+        "n": 181,
+        "mean": 19657.58856824863,
+        "p50": 5497.844376000103,
+        "p95": 115338.33984800003,
+        "max": 207826.7936809998
+      },
+      "server_peak_memory_fraction": 0.3241634187450315,
+      "target_host_resource_valid": true
+    },
+    {
+      "size": 10000,
+      "repeat": 2,
+      "control_exit": 0,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.11616161616161613,
+      "maximum_load_memory_fraction": 0.25149786189891965,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 151,
+          "rate": 0.3932258054308513
+        },
+        "b0_sample_errors": {
+          "rate": 0.059895321357017084,
+          "count": 23
+        },
+        "b0_sample_client_ms": {
+          "med": 4873.327474,
+          "max": 30001.231103,
+          "p(90)": 30000.246637,
+          "p(95)": 30000.529499,
+          "avg": 8516.390457748348,
+          "min": 21.564036
+        },
+        "b0_sample_server_ms": {
+          "avg": 4649.410112406249,
+          "min": 16.970008,
+          "med": 4420.427897,
+          "max": 16097.963306,
+          "p(90)": 9308.749003199999,
+          "p(95)": 12784.491615749997
+        },
+        "dropped_iterations": {
+          "count": 0,
+          "rate": 0
+        }
+      },
+      "wall_seconds": 412.25107529800016,
+      "workload": "search",
+      "rate_per_second": 0.5,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300,
+      "server_observations_scope": "all requests including warmup; request-start timestamps retained privately for window analysis",
+      "server_stage_ms": {
+        "lexical_sql": {
+          "n": 181,
+          "mean": 10850.682268646391,
+          "p50": 2813.129364999895,
+          "p95": 70255.80070100023,
+          "max": 186003.55551899975
+        },
+        "vector_sql": {
+          "n": 181,
+          "mean": 320.4991083646228,
+          "p50": 224.04703599977438,
+          "p95": 804.7461539999858,
+          "max": 1419.7454539998944
+        },
+        "structured_sql": {
+          "n": 181,
+          "mean": 49.62942641434727,
+          "p50": 30.75373799993031,
+          "p95": 139.61479099998542,
+          "max": 258.2387950001248
+        },
+        "other_sql": {
+          "n": 181,
+          "mean": 3.0308579336774253,
+          "p50": 1.1195649999535817,
+          "p95": 8.037568999952782,
+          "max": 47.367896999730874
+        }
+      },
+      "pool_blocking_queue_ms": {
+        "n": 19,
+        "mean": 2428.169615842044,
+        "p50": 2595.6060929997875,
+        "p95": 5396.197800000209,
+        "max": 7181.980995999766
+      },
+      "pool_nonblocking_queue_ms": {
+        "n": 162,
+        "mean": 0.005297104943015312,
+        "p50": 0.004828999863093486,
+        "p95": 0.007203000222943956,
+        "max": 0.020078000034118304
+      },
+      "pool_physical_connection_ms": {
+        "n": 16,
+        "mean": 42.19454218758756,
+        "p50": 45.1661580000291,
+        "p95": 55.35321600018506,
+        "max": 64.66634200023691
+      },
+      "server_total_ms": {
+        "n": 181,
+        "mean": 17328.691935270712,
+        "p50": 4439.698399000008,
+        "p95": 102090.1322300001,
+        "max": 186938.76846600007
+      },
+      "server_peak_memory_fraction": 0.3247006727619838,
+      "target_host_resource_valid": true
+    },
+    {
+      "size": 10000,
+      "repeat": 3,
+      "control_exit": 0,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.11557788944723613,
+      "maximum_load_memory_fraction": 0.2477775263143267,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 150,
+          "rate": 0.3846142543642682
+        },
+        "b0_sample_errors": {
+          "count": 24,
+          "rate": 0.06153828069828291
+        },
+        "b0_sample_client_ms": {
+          "min": 21.436567,
+          "med": 4776.789667,
+          "max": 30001.44176,
+          "p(90)": 30000.2526479,
+          "p(95)": 30000.6651487,
+          "avg": 8820.50803851333
+        },
+        "b0_sample_server_ms": {
+          "min": 16.762969,
+          "med": 4563.546365,
+          "max": 17541.52876,
+          "p(90)": 9760.739880000001,
+          "p(95)": 12364.99772325,
+          "avg": 4779.657046380953
+        },
+        "dropped_iterations": {
+          "count": 0,
+          "rate": 0
+        }
+      },
+      "wall_seconds": 412.28353498700017,
+      "workload": "search",
+      "rate_per_second": 0.5,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300,
+      "server_observations_scope": "all requests including warmup; request-start timestamps retained privately for window analysis",
+      "server_stage_ms": {
+        "lexical_sql": {
+          "n": 181,
+          "mean": 12304.633371270713,
+          "p50": 3779.6658229999593,
+          "p95": 98224.758501,
+          "max": 175291.62884700007
+        },
+        "vector_sql": {
+          "n": 181,
+          "mean": 344.75491379006957,
+          "p50": 303.39106800010995,
+          "p95": 978.4751040001538,
+          "max": 1592.3752769999737
+        },
+        "structured_sql": {
+          "n": 181,
+          "mean": 54.73451467955105,
+          "p50": 52.54964599998857,
+          "p95": 117.2053949999281,
+          "max": 209.1139799999837
+        },
+        "other_sql": {
+          "n": 181,
+          "mean": 2.1064478618658673,
+          "p50": 0.6870510001135699,
+          "p95": 5.866897000032623,
+          "max": 58.611036999991484
+        }
+      },
+      "pool_blocking_queue_ms": {
+        "n": 31,
+        "mean": 1439.6145566774094,
+        "p50": 0.04960300020684372,
+        "p95": 5574.636735999775,
+        "max": 10696.983992000241
+      },
+      "pool_nonblocking_queue_ms": {
+        "n": 150,
+        "mean": 0.005917699994218613,
+        "p50": 0.0052400000640773214,
+        "p95": 0.00803500006441027,
+        "max": 0.03216999994037906
+      },
+      "pool_physical_connection_ms": {
+        "n": 15,
+        "mean": 20.81094406670066,
+        "p50": 14.07075800034363,
+        "p95": 62.08687000025748,
+        "max": 63.79850900020756
+      },
+      "server_total_ms": {
+        "n": 181,
+        "mean": 18713.30274755251,
+        "p50": 4596.460002000185,
+        "p95": 121804.54197300014,
+        "max": 176500.80694999997
+      },
+      "server_peak_memory_fraction": 0.3253172187625164,
+      "target_host_resource_valid": true
+    },
+    {
+      "size": 10000,
+      "repeat": 1,
+      "control_exit": 0,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.13567839195979903,
+      "maximum_load_memory_fraction": 0.24653079699355596,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 30,
+          "rate": 0.08195501717659504
+        },
+        "b0_sample_errors": {
+          "rate": 0,
+          "count": 0
+        },
+        "b0_sample_client_ms": {
+          "avg": 7412.753595733333,
+          "min": 18.44586,
+          "med": 1026.9289945,
+          "max": 26289.168936,
+          "p(90)": 26041.043426,
+          "p(95)": 26047.92390035
+        },
+        "b0_sample_server_ms": {
+          "avg": 7406.779554500001,
+          "min": 12.841597,
+          "med": 1020.562603,
+          "max": 26283.239096,
+          "p(90)": 26035.650843400002,
+          "p(95)": 26042.18096745
+        },
+        "dropped_iterations": {
+          "count": 0,
+          "rate": 0
+        }
+      },
+      "wall_seconds": 412.1807386360001,
+      "workload": "context",
+      "rate_per_second": 0.1,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300,
+      "server_observations_scope": "all requests including warmup; request-start timestamps retained privately for window analysis",
+      "server_stage_ms": {
+        "lexical_sql": {
+          "n": 36,
+          "mean": 6170.801791194536,
+          "p50": 868.7221300006058,
+          "p95": 25903.22515400021,
+          "max": 26151.15790100026
+        },
+        "vector_sql": {
+          "n": 36,
+          "mean": 70.74932224999328,
+          "p50": 83.37703999950463,
+          "p95": 106.38771799949609,
+          "max": 207.28697499998816
+        },
+        "structured_sql": {
+          "n": 36,
+          "mean": 11.118062805533352,
+          "p50": 13.058987000476918,
+          "p95": 18.033425999874453,
+          "max": 27.851101999658567
+        },
+        "other_sql": {
+          "n": 36,
+          "mean": 0.671329500038256,
+          "p50": 0.5952490000709076,
+          "p95": 0.9792700002435595,
+          "max": 1.840468999944278
+        }
+      },
+      "pool_blocking_queue_ms": {
+        "n": 0,
+        "mean": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "pool_nonblocking_queue_ms": {
+        "n": 36,
+        "mean": 0.006244027720943753,
+        "p50": 0.0050499993449193425,
+        "p95": 0.008355000318260863,
+        "max": 0.023935999706736766
+      },
+      "pool_physical_connection_ms": {
+        "n": 3,
+        "mean": 9.571370666738707,
+        "p50": 8.968717999778164,
+        "p95": 8.968717999778164,
+        "max": 12.097178000203712
+      },
+      "server_total_ms": {
+        "n": 36,
+        "mean": 6285.749502527728,
+        "p50": 1006.3517620001221,
+        "p95": 26040.06123599993,
+        "max": 26284.401380999952
+      },
+      "server_peak_memory_fraction": 0.31434290326581316,
+      "target_host_resource_valid": true
+    },
+    {
+      "size": 10000,
+      "repeat": 2,
+      "control_exit": 0,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.13131313131313127,
+      "maximum_load_memory_fraction": 0.24927439559436038,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 31,
+          "rate": 0.08048275935890707
+        },
+        "b0_sample_errors": {
+          "count": 0,
+          "rate": 0
+        },
+        "b0_sample_client_ms": {
+          "max": 26749.088017,
+          "p(90)": 26034.374556,
+          "p(95)": 26372.207328999997,
+          "avg": 8022.238495161289,
+          "min": 20.196755,
+          "med": 1026.138472
+        },
+        "b0_sample_server_ms": {
+          "p(90)": 26028.322265,
+          "p(95)": 26365.772380000002,
+          "avg": 8016.213214032257,
+          "min": 13.696466,
+          "med": 1020.434428,
+          "max": 26743.745507
+        },
+        "dropped_iterations": {
+          "count": 0,
+          "rate": 0
+        }
+      },
+      "wall_seconds": 412.07091097800003,
+      "workload": "context",
+      "rate_per_second": 0.1,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300,
+      "server_observations_scope": "all requests including warmup; request-start timestamps retained privately for window analysis",
+      "server_stage_ms": {
+        "lexical_sql": {
+          "n": 37,
+          "mean": 6707.996149162092,
+          "p50": 861.7801720001808,
+          "p95": 26103.67618700002,
+          "max": 26600.577582999904
+        },
+        "vector_sql": {
+          "n": 37,
+          "mean": 72.37663508105372,
+          "p50": 86.61242700054572,
+          "p95": 111.19118700025865,
+          "max": 150.22189499995875
+        },
+        "structured_sql": {
+          "n": 37,
+          "mean": 11.464074162250729,
+          "p50": 13.377245999436127,
+          "p95": 19.756948000576813,
+          "max": 33.24944099949789
+        },
+        "other_sql": {
+          "n": 37,
+          "mean": 0.6993950540384725,
+          "p50": 0.6403340003089397,
+          "p95": 1.01083000026847,
+          "max": 1.5250970000124653
+        }
+      },
+      "pool_blocking_queue_ms": {
+        "n": 0,
+        "mean": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "pool_nonblocking_queue_ms": {
+        "n": 37,
+        "mean": 0.0058528377996628625,
+        "p50": 0.005138999767950736,
+        "p95": 0.008916000297176652,
+        "max": 0.02165000023524044
+      },
+      "pool_physical_connection_ms": {
+        "n": 3,
+        "mean": 9.268936666558147,
+        "p50": 8.315340999615728,
+        "p95": 8.315340999615728,
+        "max": 11.908524999853398
+      },
+      "server_total_ms": {
+        "n": 37,
+        "mean": 6824.888656810873,
+        "p50": 995.0344230001065,
+        "p95": 26243.886823999674,
+        "max": 26744.878597000024
+      },
+      "server_peak_memory_fraction": 0.3147596944615566,
+      "target_host_resource_valid": true
+    },
+    {
+      "size": 10000,
+      "repeat": 3,
+      "control_exit": 0,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.14,
+      "maximum_load_memory_fraction": 0.24808722340674738,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 31,
+          "rate": 0.08035368294271662
+        },
+        "b0_sample_errors": {
+          "count": 0,
+          "rate": 0
+        },
+        "b0_sample_client_ms": {
+          "avg": 8020.848572354837,
+          "min": 19.40714,
+          "med": 1018.583933,
+          "max": 26614.005395,
+          "p(90)": 25944.639172,
+          "p(95)": 26092.6752385
+        },
+        "b0_sample_server_ms": {
+          "p(95)": 26086.374522500002,
+          "avg": 8014.407743935483,
+          "min": 13.550166,
+          "med": 1011.961633,
+          "max": 26608.389592,
+          "p(90)": 25938.961567
+        },
+        "dropped_iterations": {
+          "count": 0,
+          "rate": 0
+        }
+      },
+      "wall_seconds": 412.19952753599955,
+      "workload": "context",
+      "rate_per_second": 0.1,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300,
+      "server_observations_scope": "all requests including warmup; request-start timestamps retained privately for window analysis",
+      "server_stage_ms": {
+        "lexical_sql": {
+          "n": 37,
+          "mean": 6710.478835026986,
+          "p50": 873.3551479999733,
+          "p95": 25887.641786999666,
+          "max": 26473.00243800055
+        },
+        "vector_sql": {
+          "n": 37,
+          "mean": 71.26921948637008,
+          "p50": 84.68349299982947,
+          "p95": 99.81228600008762,
+          "max": 205.12472999962483
+        },
+        "structured_sql": {
+          "n": 37,
+          "mean": 10.908867918948777,
+          "p50": 13.284876999932749,
+          "p95": 15.10966699970595,
+          "max": 24.239765999482188
+        },
+        "other_sql": {
+          "n": 37,
+          "mean": 0.6659134864880675,
+          "p50": 0.5718950005757506,
+          "p95": 0.9572599992679898,
+          "max": 2.7812369999082875
+        }
+      },
+      "pool_blocking_queue_ms": {
+        "n": 0,
+        "mean": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "pool_nonblocking_queue_ms": {
+        "n": 37,
+        "mean": 0.006540135251959106,
+        "p50": 0.005521000275621191,
+        "p95": 0.009598000360711012,
+        "max": 0.021830999685334973
+      },
+      "pool_physical_connection_ms": {
+        "n": 3,
+        "mean": 11.520087333944199,
+        "p50": 12.447734000488708,
+        "p95": 12.447734000488708,
+        "max": 12.759259000631573
+      },
+      "server_total_ms": {
+        "n": 37,
+        "mean": 6825.845589054035,
+        "p50": 1000.1803499999369,
+        "p95": 26031.07700700002,
+        "max": 26609.764166000787
+      },
+      "server_peak_memory_fraction": 0.31329330104726416,
+      "target_host_resource_valid": true
+    },
+    {
+      "size": 10000,
+      "repeat": 1,
+      "control_exit": 0,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.11111111111111116,
+      "maximum_load_memory_fraction": 0.24546273907225868,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "rate": 0.20105551666015145,
+          "count": 76
+        },
+        "b0_sample_errors": {
+          "count": 15,
+          "rate": 0.03968200986713515
+        },
+        "b0_sample_client_ms": {
+          "p(95)": 30000.9131755,
+          "avg": 9091.692386236842,
+          "min": 18.518195,
+          "med": 2331.9344935,
+          "max": 30001.281692,
+          "p(90)": 30000.7134525
+        },
+        "b0_sample_server_ms": {
+          "avg": 3944.505452016394,
+          "min": 14.180422,
+          "med": 1606.463953,
+          "max": 29918.444415,
+          "p(90)": 4660.983408,
+          "p(95)": 26960.148659
+        },
+        "dropped_iterations": {
+          "count": 0,
+          "rate": 0
+        }
+      },
+      "wall_seconds": 412.03796015399985,
+      "workload": "context",
+      "rate_per_second": 0.25,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300,
+      "server_observations_scope": "all requests including warmup; request-start timestamps retained privately for window analysis",
+      "server_stage_ms": {
+        "lexical_sql": {
+          "n": 91,
+          "mean": 10645.027672362641,
+          "p50": 1382.1081369997046,
+          "p95": 53510.91032400018,
+          "max": 57229.941236999366
+        },
+        "vector_sql": {
+          "n": 91,
+          "mean": 149.3893449450607,
+          "p50": 118.42609099949186,
+          "p95": 400.5875329994524,
+          "max": 478.22739600087516
+        },
+        "structured_sql": {
+          "n": 91,
+          "mean": 24.291126923074714,
+          "p50": 14.832157000455481,
+          "p95": 76.1211999997613,
+          "max": 86.3837369997782
+        },
+        "other_sql": {
+          "n": 91,
+          "mean": 1.595199373536321,
+          "p50": 0.6167099991216674,
+          "p95": 3.420949999963341,
+          "max": 18.131928999537195
+        }
+      },
+      "pool_blocking_queue_ms": {
+        "n": 0,
+        "mean": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "pool_nonblocking_queue_ms": {
+        "n": 91,
+        "mean": 0.005106494417314924,
+        "p50": 0.004577999789034948,
+        "p95": 0.006682000275759492,
+        "max": 0.02102899998135399
+      },
+      "pool_physical_connection_ms": {
+        "n": 8,
+        "mean": 19.51188112491309,
+        "p50": 15.632010999979684,
+        "p95": 33.527333999700204,
+        "max": 36.624616000153765
+      },
+      "server_total_ms": {
+        "n": 91,
+        "mean": 10865.82309858245,
+        "p50": 1620.032803999493,
+        "p95": 53673.591393000606,
+        "max": 57453.059006999865
+      },
+      "server_peak_memory_fraction": 0.3178043033182678,
+      "target_host_resource_valid": true
+    },
+    {
+      "size": 10000,
+      "repeat": 2,
+      "control_exit": 0,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.15577889447236182,
+      "maximum_load_memory_fraction": 0.24521656958853966,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 76,
+          "rate": 0.20105578558729037
+        },
+        "b0_sample_errors": {
+          "count": 17,
+          "rate": 0.04497300467084127
+        },
+        "b0_sample_client_ms": {
+          "avg": 9583.512422052632,
+          "min": 22.552941,
+          "med": 2349.018114,
+          "max": 30001.324187,
+          "p(90)": 30000.544302000002,
+          "p(95)": 30000.960909
+        },
+        "b0_sample_server_ms": {
+          "min": 15.665162,
+          "med": 1665.155333,
+          "max": 29390.55065,
+          "p(90)": 4940.480236800001,
+          "p(95)": 25573.411334099987,
+          "avg": 3695.2580918813564
+        },
+        "dropped_iterations": {
+          "count": 0,
+          "rate": 0
+        }
+      },
+      "wall_seconds": 412.1501160170001,
+      "workload": "context",
+      "rate_per_second": 0.25,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300,
+      "server_observations_scope": "all requests including warmup; request-start timestamps retained privately for window analysis",
+      "server_stage_ms": {
+        "lexical_sql": {
+          "n": 91,
+          "mean": 11528.511131000014,
+          "p50": 1450.254276999658,
+          "p95": 59433.025252000334,
+          "max": 82215.60703100023
+        },
+        "vector_sql": {
+          "n": 91,
+          "mean": 159.56378965937213,
+          "p50": 135.06401300037396,
+          "p95": 417.8011559997685,
+          "max": 659.0391720001207
+        },
+        "structured_sql": {
+          "n": 91,
+          "mean": 23.309275076926397,
+          "p50": 15.033143999971799,
+          "p95": 73.48739899953216,
+          "max": 101.8879890007156
+        },
+        "other_sql": {
+          "n": 91,
+          "mean": 1.4963739999834766,
+          "p50": 0.6532280003739288,
+          "p95": 4.610785999830114,
+          "max": 17.17805699991004
+        }
+      },
+      "pool_blocking_queue_ms": {
+        "n": 0,
+        "mean": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "pool_nonblocking_queue_ms": {
+        "n": 91,
+        "mean": 0.005007736265494943,
+        "p50": 0.004528000317804981,
+        "p95": 0.006713999937346671,
+        "max": 0.02148000021406915
+      },
+      "pool_physical_connection_ms": {
+        "n": 8,
+        "mean": 20.925711124846202,
+        "p50": 15.99904999966384,
+        "p95": 36.75156500048615,
+        "max": 37.740273000054
+      },
+      "server_total_ms": {
+        "n": 91,
+        "mean": 12437.890601011,
+        "p50": 1726.6440100002,
+        "p95": 61679.27292799959,
+        "max": 82475.87062499952
+      },
+      "server_peak_memory_fraction": 0.3170159580199775,
+      "target_host_resource_valid": true
+    },
+    {
+      "size": 10000,
+      "repeat": 3,
+      "control_exit": 0,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.1515151515151515,
+      "maximum_load_memory_fraction": 0.24841677287688746,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 76,
+          "rate": 0.20105615941640964
+        },
+        "b0_sample_errors": {
+          "count": 16,
+          "rate": 0.04232761250871782
+        },
+        "b0_sample_client_ms": {
+          "med": 2175.9101495,
+          "max": 30001.23168,
+          "p(90)": 30000.3032855,
+          "p(95)": 30001.031348250002,
+          "avg": 9589.072321026317,
+          "min": 18.923199
+        },
+        "b0_sample_server_ms": {
+          "med": 1635.336732,
+          "max": 29290.578626,
+          "p(90)": 6048.368674700001,
+          "p(95)": 27431.4424667,
+          "avg": 4140.985235000001,
+          "min": 14.654675
+        },
+        "dropped_iterations": {
+          "count": 0,
+          "rate": 0
+        }
+      },
+      "wall_seconds": 412.08360918200015,
+      "workload": "context",
+      "rate_per_second": 0.25,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300,
+      "server_observations_scope": "all requests including warmup; request-start timestamps retained privately for window analysis",
+      "server_stage_ms": {
+        "lexical_sql": {
+          "n": 91,
+          "mean": 11721.410406439565,
+          "p50": 1451.1439799998698,
+          "p95": 54877.80787700012,
+          "max": 68104.99390299992
+        },
+        "vector_sql": {
+          "n": 91,
+          "mean": 157.753928263706,
+          "p50": 122.9787740003303,
+          "p95": 406.14562800055864,
+          "max": 613.9205150002454
+        },
+        "structured_sql": {
+          "n": 91,
+          "mean": 22.404955615376903,
+          "p50": 14.221591000023182,
+          "p95": 71.97912300034659,
+          "max": 82.89210499970068
+        },
+        "other_sql": {
+          "n": 91,
+          "mean": 1.1637385934271471,
+          "p50": 0.6513440002891002,
+          "p95": 3.6408440000741393,
+          "max": 8.765927000240481
+        }
+      },
+      "pool_blocking_queue_ms": {
+        "n": 0,
+        "mean": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "pool_nonblocking_queue_ms": {
+        "n": 91,
+        "mean": 0.005726241777285775,
+        "p50": 0.004307999915909022,
+        "p95": 0.007433999599015806,
+        "max": 0.08577100015827455
+      },
+      "pool_physical_connection_ms": {
+        "n": 8,
+        "mean": 13.739201375074117,
+        "p50": 11.176766999597021,
+        "p95": 19.03378600036376,
+        "max": 20.14381200024218
+      },
+      "server_total_ms": {
+        "n": 91,
+        "mean": 11946.875954109872,
+        "p50": 1646.1374230002548,
+        "p95": 55030.11273100037,
+        "max": 68647.38436900006
+      },
+      "server_peak_memory_fraction": 0.31811791327896755,
+      "target_host_resource_valid": true
+    },
+    {
+      "size": 10000,
+      "repeat": 1,
+      "control_exit": 0,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.14,
+      "maximum_load_memory_fraction": 0.24838302383476474,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 150,
+          "rate": 0.38461428353964133
+        },
+        "b0_sample_errors": {
+          "count": 28,
+          "rate": 0.07179466626073305
+        },
+        "b0_sample_client_ms": {
+          "avg": 10182.584242613335,
+          "min": 42.957079,
+          "med": 5372.792534,
+          "max": 30001.720976,
+          "p(90)": 30000.3455503,
+          "p(95)": 30000.58629295
+        },
+        "b0_sample_server_ms": {
+          "p(90)": 12335.655131300004,
+          "p(95)": 18166.12347124998,
+          "avg": 5628.059751803279,
+          "min": 37.627004,
+          "med": 4709.14942,
+          "max": 27504.830618
+        },
+        "dropped_iterations": {
+          "count": 0,
+          "rate": 0
+        }
+      },
+      "wall_seconds": 412.3082429899996,
+      "workload": "context",
+      "rate_per_second": 0.5,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300,
+      "server_observations_scope": "all requests including warmup; request-start timestamps retained privately for window analysis",
+      "server_stage_ms": {
+        "lexical_sql": {
+          "n": 181,
+          "mean": 10502.365070414362,
+          "p50": 3611.6543289999754,
+          "p95": 72631.49694699951,
+          "max": 179799.66537900054
+        },
+        "vector_sql": {
+          "n": 181,
+          "mean": 359.1613041325826,
+          "p50": 375.3644690004876,
+          "p95": 1114.027012000406,
+          "max": 1407.8884479995395
+        },
+        "structured_sql": {
+          "n": 181,
+          "mean": 55.201974464123154,
+          "p50": 41.62177400030487,
+          "p95": 156.5793580002719,
+          "max": 196.20449899957748
+        },
+        "other_sql": {
+          "n": 181,
+          "mean": 2.1517015967114257,
+          "p50": 1.0144260004381067,
+          "p95": 5.757821999395674,
+          "max": 27.717859000404133
+        }
+      },
+      "pool_blocking_queue_ms": {
+        "n": 18,
+        "mean": 15418.214200722206,
+        "p50": 16124.214888999632,
+        "p95": 24927.18123800023,
+        "max": 30000.767290000113
+      },
+      "pool_nonblocking_queue_ms": {
+        "n": 163,
+        "mean": 0.005585766844062186,
+        "p50": 0.0049390000640414655,
+        "p95": 0.007844000720069744,
+        "max": 0.02580799991847016
+      },
+      "pool_physical_connection_ms": {
+        "n": 15,
+        "mean": 30.699554066632118,
+        "p50": 34.13447900038591,
+        "p95": 42.0043820004139,
+        "max": 52.35517699929915
+      },
+      "server_total_ms": {
+        "n": 181,
+        "mean": 20337.508386198915,
+        "p50": 4778.352213999824,
+        "p95": 121761.34483900023,
+        "max": 193774.50334999958
+      },
+      "server_peak_memory_fraction": 0.3285976704421849,
+      "target_host_resource_valid": true
+    },
+    {
+      "size": 10000,
+      "repeat": 2,
+      "control_exit": 0,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.15577889447236182,
+      "maximum_load_memory_fraction": 0.24305464565491008,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 150,
+          "rate": 0.38461400679980756
+        },
+        "b0_sample_errors": {
+          "count": 23,
+          "rate": 0.05897414770930383
+        },
+        "b0_sample_client_ms": {
+          "p(90)": 30000.257990899998,
+          "p(95)": 30000.63639805,
+          "avg": 8604.019317540004,
+          "min": 20.081299,
+          "med": 5224.8606375,
+          "max": 30001.620908
+        },
+        "b0_sample_server_ms": {
+          "p(90)": 9235.1683804,
+          "p(95)": 10874.973743399998,
+          "avg": 4722.319932842521,
+          "min": 15.937346,
+          "med": 4727.695228,
+          "max": 18684.00482
+        },
+        "dropped_iterations": {
+          "count": 0,
+          "rate": 0
+        }
+      },
+      "wall_seconds": 412.12783681199926,
+      "workload": "context",
+      "rate_per_second": 0.5,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300,
+      "server_observations_scope": "all requests including warmup; request-start timestamps retained privately for window analysis",
+      "server_stage_ms": {
+        "lexical_sql": {
+          "n": 181,
+          "mean": 12540.306926309362,
+          "p50": 3510.89384900024,
+          "p95": 72010.50132199998,
+          "max": 191302.3762160001
+        },
+        "vector_sql": {
+          "n": 181,
+          "mean": 344.0947234474815,
+          "p50": 251.19066099978227,
+          "p95": 898.3186939994994,
+          "max": 1588.874773000498
+        },
+        "structured_sql": {
+          "n": 181,
+          "mean": 54.10214268508326,
+          "p50": 38.823494000098435,
+          "p95": 140.85849999992206,
+          "max": 193.05440700009058
+        },
+        "other_sql": {
+          "n": 181,
+          "mean": 1.316713143665836,
+          "p50": 0.6445320004786481,
+          "p95": 3.821102000074461,
+          "max": 9.192729000460531
+        }
+      },
+      "pool_blocking_queue_ms": {
+        "n": 16,
+        "mean": 3403.1022336873775,
+        "p50": 1904.9701799995091,
+        "p95": 9279.364173999966,
+        "max": 9736.746718000177
+      },
+      "pool_nonblocking_queue_ms": {
+        "n": 165,
+        "mean": 0.012682812115544397,
+        "p50": 0.005369999598769937,
+        "p95": 0.008214999979827553,
+        "max": 1.1696879992086906
+      },
+      "pool_physical_connection_ms": {
+        "n": 15,
+        "mean": 17.61687040003987,
+        "p50": 18.170875000578235,
+        "p95": 26.056616000460053,
+        "max": 26.482796999516722
+      },
+      "server_total_ms": {
+        "n": 181,
+        "mean": 18292.124914513857,
+        "p50": 4732.17669099995,
+        "p95": 122494.64595999962,
+        "max": 192651.51985600006
+      },
+      "server_peak_memory_fraction": 0.32645221234799826,
+      "target_host_resource_valid": true
+    },
+    {
+      "size": 10000,
+      "repeat": 3,
+      "control_exit": 0,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.13,
+      "maximum_load_memory_fraction": 0.24714622070285364,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 150,
+          "rate": 0.3846146094995897
+        },
+        "b0_sample_errors": {
+          "count": 20,
+          "rate": 0.05128194793327863
+        },
+        "b0_sample_client_ms": {
+          "min": 20.667212,
+          "med": 5012.754886500001,
+          "max": 30001.275609,
+          "p(90)": 30000.1401366,
+          "p(95)": 30000.46776,
+          "avg": 8014.419604559998
+        },
+        "b0_sample_server_ms": {
+          "min": 16.333658,
+          "med": 4578.058077,
+          "max": 15988.219807,
+          "p(90)": 9243.104858400004,
+          "p(95)": 10627.529085099999,
+          "avg": 4626.240674969232
+        },
+        "dropped_iterations": {
+          "rate": 0,
+          "count": 0
+        }
+      },
+      "wall_seconds": 412.1564990319994,
+      "workload": "context",
+      "rate_per_second": 0.5,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300,
+      "server_observations_scope": "all requests including warmup; request-start timestamps retained privately for window analysis",
+      "server_stage_ms": {
+        "lexical_sql": {
+          "n": 181,
+          "mean": 13569.705596690592,
+          "p50": 3688.133695000033,
+          "p95": 100646.47342799981,
+          "max": 183615.5368030004
+        },
+        "vector_sql": {
+          "n": 181,
+          "mean": 372.76939585634216,
+          "p50": 380.49116999991384,
+          "p95": 967.1521720001692,
+          "max": 1979.3487829992955
+        },
+        "structured_sql": {
+          "n": 181,
+          "mean": 57.500675292822905,
+          "p50": 43.77685300005396,
+          "p95": 156.45195900015096,
+          "max": 271.54492599947844
+        },
+        "other_sql": {
+          "n": 181,
+          "mean": 2.782726712714508,
+          "p50": 0.9511279995422228,
+          "p95": 6.852150000668189,
+          "max": 34.87818400026299
+        }
+      },
+      "pool_blocking_queue_ms": {
+        "n": 2,
+        "mean": 1754.0040144999693,
+        "p50": 1646.977563999826,
+        "p95": 1646.977563999826,
+        "max": 1861.0304650001126
+      },
+      "pool_nonblocking_queue_ms": {
+        "n": 179,
+        "mean": 0.00525494411378948,
+        "p50": 0.00475899923912948,
+        "p95": 0.007183999514381867,
+        "max": 0.02467600006639259
+      },
+      "pool_physical_connection_ms": {
+        "n": 17,
+        "mean": 36.728915588034454,
+        "p50": 40.27698899972165,
+        "p95": 47.08554700027889,
+        "max": 59.14908000067953
+      },
+      "server_total_ms": {
+        "n": 181,
+        "mean": 16121.806962171253,
+        "p50": 4548.80406600023,
+        "p95": 101579.20331300011,
+        "max": 184429.22739499953
+      },
+      "server_peak_memory_fraction": 0.32477437364415795,
+      "target_host_resource_valid": true
+    }
+  ],
+  "interrupted_prior_point": {
+    "status": "interrupted_by_target_host_reboot",
+    "valid_capacity_point": false,
+    "load_host_measured_requests": 30,
+    "load_host_errors": 14,
+    "load_host_dropped_arrivals": 0,
+    "server_monitor_peak_memory_fraction": 0.9727367452640782,
+    "reason": "Target host memory reached 97% and probes failed before observed host reboot; cause of memory pressure/reboot not established. No stable-rate conclusion."
+  },
+  "perltqa300": {
+    "status": "runtime_quota_paused",
+    "rows": 0,
+    "model_records_including_replays": 2,
+    "model_attempts": 2,
+    "vector_cache_replays": 0,
+    "baseline_configuration_id": "B0-deepseek-v4-pro-kinfra-20261026-v1",
+    "classification": "new B0 configuration, calibration pending",
+    "index_model": "kinfra-text-embedding-0.6b",
+    "index_rebuilt_from_new_inputs": true,
+    "dev_only": true,
+    "formal_scores": false,
+    "baseline_commit": "1e9d6f3b25b58c85792344000d7e1b5a71a79737",
+    "full_evaluation_complete": false,
+    "phase2_accepted": false
+  },
+  "source_sha256": {
+    "expansion-20261101/staircase-private.json": "1c400916ece7addafee12263cd0ed4d9e82d6f45043eb227f2170cc9868e4da3",
+    "expansion-20261101/interrupted-point.json": "513e734ac6c7c35726a19c12be4996877edeac702750b15c4e1ec35ed5b6aee4",
+    "expansion-20261101/continuation-private.json": "638ada671be7ebb6e04ee15b7b7c9bf7dc784ed269992826035c1f20882c40b5",
+    "expansion-20261101/perltqa300-run/status.json": "9921c8548f367857587c82fabf7e9dd28d59a73ad637c8e81dc3fd242ad463b9"
+  }
+}
