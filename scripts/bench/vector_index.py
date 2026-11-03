@@ -8,9 +8,12 @@ without a global HNSW index, and reports per tenant class:
   * latency p50/p95,
   * whether the planner used the HNSW index at all (EXPLAIN of the SQL the provider sent).
 
-Limits: random clustered vectors are not a semantic embedding; pgvector here is whatever the
-local PostgreSQL ships (0.6.0 has no iterative index scan, 0.8+ does); client and database share
-one machine.  Numbers show index behaviour, not retrieval quality on real data.
+The "too few rows" problem is what ``hnsw.iterative_scan`` (pgvector >= 0.8) fixes: without it a
+filtered approximate scan stops after roughly ``ef_search`` rows. Both variants are measured, so
+the version requirement is visible in the numbers instead of being asserted.
+
+Limits: random clustered vectors are not a semantic embedding; client and database share one
+machine. Numbers show index behaviour, not retrieval quality on real data.
 """
 import argparse
 import asyncio
@@ -48,10 +51,12 @@ async def main() -> None:
     parser.add_argument("--queries", type=int, default=30)
     parser.add_argument("--ef-search", default="40,200,1000")
     parser.add_argument("--k", type=int, default=20, help="recall@k")
+    parser.add_argument("--database-url", help="existing superuser URL; otherwise a local cluster")
+    parser.add_argument("--reset", action="store_true",
+                        help="with --database-url: drop and recreate the public schema first")
     parser.add_argument("--out", type=Path)
     args = parser.parse_args()
 
-    import localpg
     import psycopg
     from alembic import command
     from alembic.config import Config
@@ -68,16 +73,32 @@ async def main() -> None:
     )
     from agent_memory.infrastructure.retrieval import PostgresCandidateProvider
 
-    cluster = localpg.LocalPostgres(username="agent_memory", password="bench-only",
-                                    dbname="agent_memory", driver="psycopg")
-    cluster.__enter__()
-    try:
+    cluster = None
+    if args.database_url is None:
+        import localpg
+
+        cluster = localpg.LocalPostgres(username="agent_memory", password="bench-only",
+                                        dbname="agent_memory", driver="psycopg")
+        cluster.__enter__()
         owner_url = cluster.get_connection_url()
+    else:
+        owner_url = args.database_url
+    try:
+        owner = create_sync(owner_url)
+        if args.database_url is not None and args.reset:
+            with owner.begin() as connection:
+                connection.execute(text("DROP SCHEMA public CASCADE"))
+                connection.execute(text("CREATE SCHEMA public"))
+        owner.dispose()
         config = Config(str(ROOT / "alembic.ini"))
         config.set_main_option("script_location", str(ROOT / "migrations"))
         config.set_main_option("sqlalchemy.url", owner_url)
         command.upgrade(config, "head")
         owner = create_sync(owner_url)
+        # Migration 0014 ships the index; the baselines below need it gone, and the index runs
+        # re-create it with the same name so the numbers describe the deployed object.
+        with owner.connect().execution_options(isolation_level="AUTOCOMMIT") as connection:
+            connection.execute(text("DROP INDEX IF EXISTS ix_memory_embeddings_hnsw"))
         big = uuid4()
         smalls = [uuid4() for _ in range(args.small_tenants)]
         sizes = {big: args.big, **{t: args.small_size for t in smalls}}
@@ -218,7 +239,7 @@ async def main() -> None:
             "  ON m.tenant_id = nullif(current_setting('app.current_tenant_id', true), '')::uuid"
             "  AND m.current_version_id = n.memory_version_id AND m.status = 'active'"
             " ORDER BY n.distance LIMIT 1000")
-        def run_two_step(ef: int | None) -> dict[str, dict]:
+        def run_two_step(ef: int | None, iterative: bool = False) -> dict[str, dict]:
             per_class: dict[str, dict] = {}
             for name, vectors in queries.items():
                 latencies, counts, recalls = [], [], []
@@ -227,6 +248,8 @@ async def main() -> None:
                                   (str(tenants[name]),))
                     if ef is not None:
                         plain.execute(f"SET hnsw.ef_search = {ef}")
+                    if iterative:
+                        plain.execute("SET hnsw.iterative_scan = relaxed_order")
                     for index, vector in enumerate(vectors):
                         literal = "[" + ",".join(f"{x:.6f}" for x in vector) + "]"
                         params = {"q": literal, "model": MODEL, "lim": 1000}
@@ -253,20 +276,29 @@ async def main() -> None:
         with owner.connect().execution_options(isolation_level="AUTOCOMMIT") as connection:
             build_started = time.monotonic()
             connection.execute(text(
-                "CREATE INDEX ix_bench_hnsw ON memory_embeddings "
+                "CREATE INDEX ix_memory_embeddings_hnsw ON memory_embeddings "
                 "USING hnsw (embedding vector_cosine_ops) WITH (m = 16, ef_construction = 64)"))
             build_s = round(time.monotonic() - build_started, 1)
             size = connection.execute(text(
-                "SELECT pg_size_pretty(pg_relation_size('ix_bench_hnsw'))")).scalar()
+                "SELECT pg_size_pretty(pg_relation_size('ix_memory_embeddings_hnsw'))")).scalar()
             table = connection.execute(text(
                 "SELECT pg_size_pretty(pg_relation_size('memory_embeddings'))")).scalar()
             for ef in [int(x) for x in args.ef_search.split(",")]:
-                connection.execute(text(f"ALTER DATABASE agent_memory SET hnsw.ef_search = {ef}"))
+                connection.execute(text(
+                    f'ALTER DATABASE "{make_url(owner_url).database}"'
+                    f" SET hnsw.ef_search = {ef}"))
                 result, _ = await run_config(f"hnsw_ef{ef}", truth)
                 report[f"hnsw_global_ef_search_{ef}"] = result
 
+        iterative_supported = False
+        with owner.connect() as connection:
+            iterative_supported = connection.execute(text(
+                "SELECT current_setting('hnsw.iterative_scan', true)")).scalar() is not None
         for ef in [int(x) for x in args.ef_search.split(",")]:
             report[f"hnsw_two_step_ef_search_{ef}"] = run_two_step(ef)
+            if iterative_supported:
+                report[f"hnsw_two_step_iterative_ef_search_{ef}"] = run_two_step(
+                    ef, iterative=True)
         out = {
             "label": args.label,
             "commit": subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT,
@@ -283,7 +315,8 @@ async def main() -> None:
                      "queries_per_class": args.queries, "recall_k": args.k,
                      "candidate_limit": 1000},
             "hnsw": {"m": 16, "ef_construction": 64, "build_seconds": build_s,
-                     "index_size": size, "embedding_table_size": table},
+                     "index_size": size, "embedding_table_size": table,
+                     "iterative_scan_supported": iterative_supported},
             "results": report,
         }
         text_out = json.dumps(out, ensure_ascii=False, indent=2, default=str)
@@ -292,7 +325,8 @@ async def main() -> None:
             args.out.parent.mkdir(parents=True, exist_ok=True)
             args.out.write_text(text_out + "\n")
     finally:
-        cluster.__exit__(None, None, None)
+        if cluster is not None:
+            cluster.__exit__(None, None, None)
 
 
 if __name__ == "__main__":

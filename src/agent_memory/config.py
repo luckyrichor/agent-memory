@@ -42,6 +42,11 @@ class Settings(BaseSettings):
     # Rows each retrieval channel may contribute before fusion. Deep pagination (offset up to
     # 2900) needs the default; lower it only with recall data from the dev set (PLAN.md B1).
     retrieval_candidate_limit: int = Field(default=1000, ge=1, le=1000)
+    # B3: "hnsw" searches nearest-first, the only shape a pgvector HNSW index can serve; it is only
+    # used where the extension supports iterative scans (>= 0.8), otherwise the provider falls back
+    # to "exact". ef_search trades recall for latency *inside* the index scan.
+    vector_search: Literal["exact", "hnsw"] = "hnsw"
+    vector_ef_search: int = Field(default=100, ge=1, le=4000)
 
     @model_validator(mode="after")
     def validate_lease_budget(self) -> "Settings":
