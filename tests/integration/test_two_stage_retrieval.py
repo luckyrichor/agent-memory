@@ -85,3 +85,50 @@ async def test_candidate_limit_caps_every_channel(app_database_url):
             assert page.channel_counts["lexical"] == 2 and len(page.items) == 2
     finally:
         await engine.dispose()
+
+
+async def test_stored_lexical_vectors_equal_the_expressions_they_replace(app_database_url):
+    """B2: lexical_en / lexical_zh must be exactly the old per-row to_tsvector expressions."""
+    from sqlalchemy import select, text
+
+    from agent_memory.infrastructure.orm import MemoryVersionRow
+
+    engine = create_engine(app_database_url)
+    sessions = create_session_factory(engine)
+    who = principal()
+    try:
+        await remember(sessions, who, "mixed", "部署失败 Java17 stemming runs, deployments failed")
+        async with session_for_principal(sessions, who) as session:
+            same = (
+                await session.execute(
+                    text(
+                        "SELECT lexical_en = to_tsvector('english', content),"
+                        " lexical_zh = to_tsvector('simple', memory_lexical_tokens(content)),"
+                        " lexical_en IS NOT NULL AND lexical_zh IS NOT NULL"
+                        " FROM memory_versions"
+                    )
+                )
+            ).one()
+            assert tuple(same) == (True, True, True)
+            # whole-entity loads must not fetch the two vectors (deferred columns)
+            statement = str(select(MemoryVersionRow).compile())
+            assert "lexical_en" not in statement and "lexical_zh" not in statement
+    finally:
+        await engine.dispose()
+
+
+async def test_both_languages_still_retrieve_through_the_stored_vectors(app_database_url):
+    engine = create_engine(app_database_url)
+    sessions = create_session_factory(engine)
+    who = principal()
+    try:
+        english = await remember(sessions, who, "en", "The nightly pipelines were rebuilt")
+        chinese = await remember(sessions, who, "zh", "夜间流水线已经重新构建完成")
+        async with session_for_principal(sessions, who) as session:
+            retriever = MemoryRetriever(PostgresCandidateProvider(session))
+            found_en = await retriever.search(RetrievalQuery("rebuilding pipeline"), who)
+            found_zh = await retriever.search(RetrievalQuery("流水线构建"), who)
+        assert [h.memory_id for h in found_en.items] == [english.memory_id]  # stemmed match
+        assert chinese.memory_id in [h.memory_id for h in found_zh.items]
+    finally:
+        await engine.dispose()

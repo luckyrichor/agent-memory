@@ -6,6 +6,7 @@ from pgvector.sqlalchemy import Vector
 from sqlalchemy import (
     BigInteger,
     CheckConstraint,
+    Computed,
     DateTime,
     Float,
     ForeignKeyConstraint,
@@ -16,7 +17,7 @@ from sqlalchemy import (
     Text,
     UniqueConstraint,
 )
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.dialects.postgresql import JSONB, TSVECTOR
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
@@ -119,6 +120,25 @@ class MemoryVersionRow(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
     reason: Mapped[str | None] = mapped_column(String(512))
+    # Stored lexical document vectors (migration 0010): computed once by PostgreSQL at write
+    # time, never written by the application, read only inside the lexical retrieval query.
+    # deferred: whole-entity loads (version history etc.) must not drag two large vectors along;
+    # eager_defaults off: do not RETURNING them on every insert.
+    lexical_en: Mapped[str | None] = mapped_column(
+        TSVECTOR,
+        Computed("to_tsvector('english'::regconfig, content)", persisted=True),
+        nullable=True,
+        deferred=True,
+    )
+    lexical_zh: Mapped[str | None] = mapped_column(
+        TSVECTOR,
+        Computed(
+            "to_tsvector('simple'::regconfig, memory_lexical_tokens(content))", persisted=True
+        ),
+        nullable=True,
+        deferred=True,
+    )
+    __mapper_args__ = {"eager_defaults": False}  # noqa: RUF012 - SQLAlchemy declarative hook
 
 
 class IdempotencyRecordRow(Base):

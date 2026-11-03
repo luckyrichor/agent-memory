@@ -1,0 +1,98 @@
+{
+  "label": "b2-before",
+  "commit": "73bd3e3",
+  "dirty_tree": false,
+  "measured_at_utc": "2026-11-03T01:06:21+00:00",
+  "environment": {
+    "host": "vm",
+    "cpus": 2,
+    "postgres": "16.15 (Ubuntu 16.15-0ubuntu0.24.04.1)",
+    "client_and_database_same_host": true,
+    "vectors": "random fixture"
+  },
+  "data": {
+    "rows": 10000
+  },
+  "memory_versions_indexes": [
+    "ix_memory_versions_chinese_lexical",
+    "ix_memory_versions_lexical",
+    "pk_memory_versions",
+    "uq_memory_versions_identity",
+    "uq_memory_versions_number"
+  ],
+  "channels": {
+    "english_lexical_narrow": {
+      "execution_ms": 626.3,
+      "planning_ms": 0.9,
+      "nodes": [
+        "Limit",
+        "Sort",
+        "Result",
+        "Hash Join",
+        "Seq Scan",
+        "Hash",
+        "Gather",
+        "Seq Scan"
+      ],
+      "uses_index_scan": false,
+      "shared_hit_blocks": 1688,
+      "shared_read_blocks": 0,
+      "config_is_bound_parameter": true
+    },
+    "english_lexical_broad": {
+      "execution_ms": 1778.4,
+      "planning_ms": 1.6,
+      "nodes": [
+        "Limit",
+        "Sort",
+        "Result",
+        "Hash Join",
+        "Seq Scan",
+        "Hash",
+        "Gather",
+        "Seq Scan"
+      ],
+      "uses_index_scan": false,
+      "shared_hit_blocks": 1682,
+      "shared_read_blocks": 0,
+      "config_is_bound_parameter": true
+    },
+    "structured_workspace": {
+      "execution_ms": 11.4,
+      "planning_ms": 0.7,
+      "nodes": [
+        "Limit",
+        "Sort",
+        "Result",
+        "Hash Join",
+        "Seq Scan",
+        "Hash",
+        "Seq Scan"
+      ],
+      "uses_index_scan": false,
+      "shared_hit_blocks": 1556,
+      "shared_read_blocks": 0,
+      "config_is_bound_parameter": false
+    },
+    "vector": {
+      "execution_ms": 85.2,
+      "planning_ms": 0.9,
+      "nodes": [
+        "Limit",
+        "Sort",
+        "Result",
+        "Hash Join",
+        "Seq Scan",
+        "Hash",
+        "Hash Join",
+        "Seq Scan",
+        "Hash",
+        "Seq Scan"
+      ],
+      "uses_index_scan": false,
+      "shared_hit_blocks": 68369,
+      "shared_read_blocks": 0,
+      "config_is_bound_parameter": false
+    }
+  }
+}

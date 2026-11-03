@@ -56,10 +56,8 @@ class PostgresCandidateProvider:
         candidates: list[Candidate] = []
         if query.text.strip():
             chinese = bool(re.search(r"[一-鿿]", query.text))
-            document = func.to_tsvector(
-                "simple" if chinese else "english",
-                func.memory_lexical_tokens(v.content) if chinese else v.content,
-            )
+            # Stored vectors (migration 0010): the per-row to_tsvector() used to dominate latency.
+            document = v.lexical_zh if chinese else v.lexical_en
             # Tokenizer yields only CJK/ASCII word lexemes, never tsquery operators.
             # OR broadens Chinese paraphrases; PostgreSQL ranks overlap afterwards.
             terms = (

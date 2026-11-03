@@ -64,7 +64,7 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 | ID | 任务 | 方案编号 | 状态 | 验证方式 | 证据 |
 |---|---|---|---|---|---|
 | B1 | 两段式检索：先只取 id 与分数，只对当前页取正文；候选数上限可配置（默认 1000→200） | O1 | 完成-传输量降低，延迟无改善；默认值未降 | 单测 + 微基准（行数/传输量/延迟） | `tests/unit/application/test_retrieval.py`、`tests/integration/test_two_stage_retrieval.py`、`scripts/bench/retrieval_read_path.py`、`measurements/b1-{before,after}-10k-*.json` |
-| B2 | 英文词法通道补 GIN 索引；检查三路查询的执行计划 | O1 | 待做 | `EXPLAIN` 前后对比 | |
+| B2 | 英文词法通道补 GIN 索引；检查三路查询的执行计划 | O1 | 完成-改用存储列（GIN 在 RLS 下用不上）；仅 1 万行 | `EXPLAIN` 前后对比 | `migrations/versions/0010_stored_lexical_vectors.py`、`scripts/bench/explain_read_path.py`、`measurements/b2-*` |
 | B3 | 向量近似索引（HNSW）实验 + 过滤后结果过少的处理 | O2 | 待做 | 召回率对精确扫描、延迟，1 万 / 10 万向量 | |
 | B4 | 连接池参数可配置、池耗尽快速失败返回 503（带 Retry-After），不再挂 30 秒 | F2 | 待做 | 单测 + 并发复现 | |
 
@@ -192,6 +192,15 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 - 四道门（本沙箱 localpg）：482 passed（排除 `test_b0_harness`）；ruff（`src tests migrations`）通过；mypy strict 102 文件无错；foundation 8/8。`scripts/bench/pipeline_latency.py` 有一条 ruff `ASYNC220`（C1–C3 提交带来的，不在闸门范围，未处理）。
 - 踩坑：基准一开始的"窄查询"带了词表里的常用词，几乎全表命中，分不出窄和宽，已改成只用标记词；alembic 日志写 stdout，基准要用 `--out` 取 JSON。
 - 下一步：B2——给英文词法通道补 GIN 索引并对比 `EXPLAIN`；B2 的"改前"数据就是本次 `b1-after-10k-*.json`。
+
+### 2026-11-02 — B2 完成：执行计划发现 GIN 索引在 RLS 下用不上，改为存储 tsvector 列（本沙箱，1 万行，同机）
+- 发现（`explain_read_path.py` 抓取 provider 实际发出的 SQL 再 `EXPLAIN ANALYZE`）：英文词法通道是 Seq Scan，数据库侧窄查询 626 ms、宽查询 1778 ms，时间花在对每行现算 `to_tsvector('english', content)`。对照实验：同一条 SQL，超级用户（绕过 RLS）走 `Bitmap Index Scan` 仅 1.95 ms；应用角色（RLS 生效）永远是 Seq Scan，即使 `enable_seqscan=off` 也只把 `@@` 当 Filter。原因是 `ts_match_vq` 等 `@@` 实现不是 leakproof（`pg_proc.proleakproof=false`），PostgreSQL 不允许非 leakproof 条件推到 RLS 策略之下做索引条件。**推论：现有 `simple` 与中文 bigram 两个 GIN 索引，应用角色同样一直没用上**；我也验证过只加英文索引、或把配置名从绑定参数改成常量，计划都不变。
+- 做了：迁移 `0010_stored_lexical_vectors` 加两个 `GENERATED ALWAYS ... STORED` 列 `lexical_en`、`lexical_zh`（版本行不可变，写入时算一次）；ORM 里设为 `deferred` 且该映射 `eager_defaults=False`（避免整实体读取和 INSERT 的 RETURNING 带上大向量）；词法通道直接读这两列。没有加 GIN 索引（应用角色用不上，只增加写入成本）。
+- 测量（同一脚本、同一数据，改前 = `b1-after-10k-*`，改后 = `b2-after-10k-*`，各 3 次，1 万行、2 核同机、pgvector 0.6.0，p50 中位，范围互不重叠）：词法窄 673 → 10.8 ms；词法宽 1868 → 68.7 ms；词法+结构化 630 → 24.3 ms；向量+词法 719 → 95.5 ms（剩余主要是向量精确扫描，归 B3）。数据库侧 EXPLAIN：窄 626 → 13.1 ms，宽 1778 → 74.4 ms。`b2-explain-after-10k.json` 是在提交前的工作区上采集的（`dirty_tree: true`，基于 `73bd3e3`）。
+- 局限（必须说清）：① 只测了 1 万行；10 万行的"改后"数据被中断，**没有数据，不得写成已测**。② 因为索引仍用不上，查询对单租户行数依然是线性的，只是每行便宜很多；10 万行以上要么再测，要么需要下面的安全决策。③ 代价：每个生成列约等于正文大小的额外存储；加列重写整张表并持有 ACCESS EXCLUSIVE 锁（1 万行约 6 秒）。
+- 需要负责人决定：若要让词法检索随数据量次线性增长，只能让 GIN 被应用角色用上，选项（SECURITY DEFINER 且自行强制租户过滤的检索函数、把 `@@` 实现标 LEAKPROOF、独立无 RLS 的词法表）都会触及"RLS 是纵深防御"这条核心不变量，我没有擅自做。
+- 验证：四道门（localpg）484 passed（排除 `test_b0_harness`，含升降级迁移测试）、ruff、mypy strict、foundation 8/8；新增 2 个集成测试（存储列与旧表达式逐值相等且整实体查询不含它们；中英文检索仍可用）。
+- 下一步：B4 连接池快速失败；之后 B3。
 
 ## 9. 需要负责人决定或配合的事项
 
