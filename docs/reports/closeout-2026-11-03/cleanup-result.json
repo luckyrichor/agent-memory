@@ -1,0 +1,21 @@
+{
+  "completed_at": "2026-11-03T19:22:44.274857+08:00",
+  "executor": "Codex (explicit owner authorization after CodeBuddy quota exhaustion)",
+  "project_closed": true,
+  "phase2_accepted": false,
+  "initial_project_bytes": 7281848320,
+  "cleanup_before_bytes": 7288995840,
+  "cleanup_after_bytes": 1999261696,
+  "released_bytes": 5289734144,
+  "deleted_files": 161520,
+  "retained_files_verified": 24328,
+  "retained_digest_before": "b7f557e252faa22cb4e3360ac7f9265380e2962603dad430f348024a5bdac84b",
+  "retained_digest_after": "b7f557e252faa22cb4e3360ac7f9265380e2962603dad430f348024a5bdac84b",
+  "old_formal_deliverables_preserved": true,
+  "containers_and_volumes_untouched": true,
+  "lost_capabilities": [
+    "Recalculate every metric from deleted per-question records",
+    "Restore deleted experiment database snapshots"
+  ],
+  "feishu_status": "Deferred per owner instruction"
+}

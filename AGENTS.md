@@ -1,5 +1,16 @@
 # AGENTS.md
 
+<!-- PROJECT_CLOSEOUT_20261103_START -->
+- 2026-11-03T19:23:27.741025+08:00（北京时间）用户明确项目结项、不再继续；因CodeBuddy指定模型429配额超限，用户明确授权本次由Codex亲自归档与清理。
+- 当前结项入口：`docs/reports/closeout-2026-11-03/结项补充.md`、`conclusions.json`、`staircase-trials.csv`、`cleanup-result.json`。补齐旧交付之后18个阶梯点及PerLTQA额度暂停（0结果行）；项目结项不等于阶段2验收通过，失败/未测/中断照实保留，不进入阶段3。
+- 旧正式报告及ZIP/CSV/JSON原样保留；结项补测归档已先推送GitHub提交`6570a6c`，本次更新提交以Git历史为准。
+- 清理完成：删除161520个清单内原始调用、阶段2逐题记录/检查点/映射/日志、项目内数据库dump及SQLite向量缓存，共释放5289734144字节（4.93GiB）；当前项目约1.86GiB，实际值见cleanup-result。
+- 保留24328个本地文件的集合与内容摘要前后一致：阶段1数据/人工回填/标注、所有未列入删除清单的聚合报告与结论、配置/状态/环境元数据、源码worktree保留；Docker容器/卷、其他项目不动，agent-memory服务保持停止。
+- 原始调用、逐题证据和部分数据库备份已删除，不能再依赖旧文档指向的这些文件进行完整重算/恢复；重新运行需新建输入/数据库并可能产生费用，不得自动恢复旧托管任务。前文关于“数据全部保留”的描述仅是历史状态。
+- 本机审计：`.agent-tasks/2026-11-03-closeout-cleanup.md`、`2026-11-03-closeout-delete-manifest.jsonl.gz`、`2026-11-03-closeout-state.json`；均不入Git。`CLAUDE.md`保持仅引用本文件。
+- 飞书待同步：2026-11-03项目结项与过程数据清理、补测结论；用户历史要求暂不写Wiki，未创建或修改飞书文档。
+<!-- PROJECT_CLOSEOUT_20261103_END -->
+
 <!-- SERVICE_STOP_HANDOFF_20261102_START -->
 - 2026-11-02T15:08:37+08:00（北京时间）停服交接：用户明确要求停止 agent-memory 全部服务，本轮已执行并核对，本段优先于下文全部“正在运行”描述。
 - 实际状态：本项目 API/worker 没有运行（无 agent_memory 进程、无自有 8000/8080/55432/13051 端口监听、无 agent-memory systemd 单元/计时器）。Docker 中 `agent-memory-b0-capacity-20261028` 已 `docker stop`，`agent-memory-postgres-1` 与两个 `agent-memory-b0-diskfull` 容器同为 Exited，所有 `agent-memory*` 前缀容器均不再运行，56432 端口已关闭。
