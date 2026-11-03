@@ -84,7 +84,7 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 |---|---|---|---|---|---|
 | D1 | 查询文本不进日志 / span（SC4） | SC4 | 完成-守卫测试；当前代码未发现泄漏点 | 捕获日志的断言测试 | `tests/integration/test_query_text_not_logged.py` |
 | D2 | 磁盘满 / 数据库不可用等错误映射为明确的 503 与稳定错误码（F9） | F9 | 完成-仅单测（模拟 SQLSTATE），没有真的写满磁盘 | 单测（模拟异常） | `tests/unit/api/test_infrastructure_errors.py` |
-| D3 | 逻辑删除后的正文清理方案（LC7）：设计 + 可执行的清理命令 | LC7 | 待做 | 集成测试（清理后正文与向量不可读） | |
+| D3 | 逻辑删除后的正文清理方案（LC7）：设计 + 可执行的清理命令 | LC7 | 完成-手动命令，无自动调度；范围见日志 | 集成测试（清理后正文与向量不可读） | `src/agent_memory/infrastructure/purge.py`、`workers/purge.py`、`tests/integration/test_purge_deleted.py` |
 
 ### E. 记忆深度与上下文（阶段 4、5）
 
@@ -221,6 +221,14 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 - 四道门（localpg，排除 `test_b0_harness`）：C5 之后 502 passed、ruff 通过、mypy strict 103 文件无错、foundation 8/8；D1 测试加入后单独通过（1 passed），全量待下一次提交前重跑。
 - 未完成：B3 结论仍未写（见上一条中途同步，实验数据文件会被覆盖，先重跑再下结论）；C4、D3、E1–E4、STORY.md 待做。
 - 下一步：D3 → E2 → E1 → E4 → E3 → C4 → B3 收尾 → STORY.md。
+
+### 2026-11-03 — D3 完成：已删除记忆的正文/向量物理清理命令（本沙箱 localpg）
+- 现状：`POST /v1/deletion-requests` 只把记忆置为 `deleted` 并返回 `pending_physical_cleanup`，版本行里的正文、两个由正文生成的词法向量、嵌入向量都还在，也没有执行者（B0 的 LC7 就是这个）。
+- 做了：`infrastructure/purge.py` 的 `purge_deleted_memories`，CLI `python -m agent_memory.workers.purge --tenant-id <uuid> --older-than-days N [--execute]`。**默认预演**；`--older-than-days` 必填、没有默认值；单租户、一次一个事务，幂等（重跑返回 0）。对已删除且早于保留期的记忆的每个版本：`content` 置空（生成列 `lexical_en/zh` 随之变空）、`structured_content` 置 `{}`、`reason` 置 NULL、`content_hash` 换成固定标记（同时是"已清理"标志，避免用哈希验证猜测）、删除 `memory_embeddings` 行、把未完成的 `embed_memory` 任务置为 `dead/MEMORY_PURGED`（防止 worker 用空文本重建向量）；每个记忆写一条 `memory.purge` 审计，不含正文。版本行、记忆行、ID、时间戳、状态保留（血缘和外键依赖它们）。输出只有计数。
+- 验证（`test_purge_deleted.py`，1 passed）：清理前正文、词法向量、嵌入向量俱在；保留期未到时 `execute=True` 也不动；预演不改任何数据；执行后正文为空、词法向量为空、嵌入向量被删、任务置 dead；同租户的存活记忆和另一租户的已删除记忆原样不动；审计无正文；重跑为 0；清理后跑 embedding worker 不会把向量建回来、存活记忆照常建向量；清理后搜索词法零命中且不返回该记忆。四道门（localpg，排除 `test_b0_harness`）：504 passed、ruff、mypy strict 105 文件、foundation 8/8。
+- **不在范围内，不得宣称已做**：① 源 `events` / `evidence` 里的原始文本（这是另一个保留期问题，需要负责人定策略）；② WAL、从库、备份，以及尚未 vacuum 的死元组（PostgreSQL 里 UPDATE 只是产生新行版本，旧版本在 vacuum 前仍在磁盘上，不是安全擦除）；③ 自动调度——现在只有手动命令；④ 没有 CLI 级别的端到端测试，测的是同一个函数；⑤ 没有大数据量下的耗时/锁测量。
+- 需要负责人决定：保留期默认值（命令里故意不设）；是否把清理挂到定时任务；源事件正文的保留与清理策略。已同步 `README.md` 已知缺口表与 `AGENTS.md` 的相关口径。
+- 下一步：E2（精确重复去重）→ E1 → E4 → E3 → C4 → B3 收尾 → STORY.md。
 
 ## 9. 需要负责人决定或配合的事项
 

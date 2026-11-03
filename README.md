@@ -132,7 +132,7 @@ curl -sS "http://127.0.0.1:8000/v1/memories/$MEMORY_ID/versions" \
   -H "Authorization: Bearer $TOKEN"
 ```
 
-逻辑删除会立即停止检索；物理清理任务将在后续 worker 阶段实现：
+逻辑删除会立即停止检索；正文与向量的物理清理需另行运行手动命令（默认预演，见下方「已知缺口」表中的物理删除一行）：
 
 ```bash
 curl -sS -X POST http://127.0.0.1:8000/v1/deletion-requests \
@@ -284,7 +284,7 @@ M7真实模型候选提炼与M5三组基线工程初验已通过，详见 [提�
 | 列表分页 | 搜索与版本列表统一 limit/offset/next_offset；版本历史已下推 SQL LIMIT/OFFSET，多取一条判断下一页 | M4 已实现 |
 | 删除幂等 | 已实现持久幂等结果与事务锁，同键同参重放返回相同结果，同键异参 409 | M2 |
 | CI | W4 已推送并通过远端 CI；新修改四道门见 progress，不能用旧提交的结果代替 | W4 已验收 |
-| **物理删除** | `DeletionRequest` 只落库，**没有执行者**。接口返回的 `pending_physical_cleanup` 描述的是意图，不是已发生的事 | 暂不排期 |
+| **物理删除** | `DeletionRequest` 只做逻辑删除。已新增手动清理命令 `python -m agent_memory.workers.purge`（默认预演，`--execute` 才执行），可抹掉已删除记忆的正文、词法向量、嵌入向量。**没有常驻的自动清理**：接口返回的 `pending_physical_cleanup` 仍要靠运维运行该命令才会兑现；源事件/证据正文、WAL、备份、未回收的死元组都不在清理范围，**不得声称“数据已彻底删除”** | 命令已有；自动调度与源事件保留策略待定 |
 | **限流** | 设计文档第 5 节的 API Gateway 列了 Rate Limit，实现里没有 | 暂不排期 |
 
 当前已有存储、治理与检索工程能力；真实模型提炼已做小型初验，更大规模语义质量与任务收益评测仍待验收。
