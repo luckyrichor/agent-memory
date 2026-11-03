@@ -9,7 +9,7 @@ from datetime import UTC, datetime
 from uuid import uuid4
 
 import pytest
-from sqlalchemy import event
+from sqlalchemy import event, text
 from sqlalchemy.engine import make_url
 
 from agent_memory.application.retrieval import RetrievalQuery
