@@ -13,20 +13,35 @@ from agent_memory.infrastructure.orm import MemoryEmbeddingRow, MemoryRow, Memor
 
 # pgvector 0.8 added iterative index scans. Without them an approximate scan stops after
 # ``hnsw.ef_search`` rows, so a tenant/status filter applied afterwards can leave the candidate
-# list short (measured: 34 rows for a 1000-row limit at ef_search=40). The setting only exists on
-# >= 0.8, which is why support is probed instead of assumed. Cached per process: the extension
-# version cannot change while the process lives.
+# list short (measured: 34 rows for a 1000-row limit at ef_search=40). Support is read from the
+# installed extension version: the GUC itself only exists in a backend once the library has been
+# loaded, so asking for it would answer "missing" on a cold connection.
 _ITERATIVE_SCAN: bool | None = None
 
 VectorSearchMode = Literal["exact", "hnsw"]
+
+ITERATIVE_SCAN_SINCE = (0, 8)
+
+
+def supports_iterative_scan(version: str | None) -> bool:
+    """pgvector >= 0.8 can keep scanning until LIMIT is satisfied (hnsw.iterative_scan)."""
+    if not version:
+        return False
+    try:
+        major, minor = (int(part) for part in version.split(".")[:2])
+    except ValueError:
+        return False
+    return (major, minor) >= ITERATIVE_SCAN_SINCE
 
 
 async def iterative_scan_available(session: AsyncSession) -> bool:
     """Whether this server's pgvector can keep scanning until the LIMIT is satisfied."""
     global _ITERATIVE_SCAN
     if _ITERATIVE_SCAN is None:
-        value = await session.scalar(text("SELECT current_setting('hnsw.iterative_scan', true)"))
-        _ITERATIVE_SCAN = value is not None
+        version = await session.scalar(
+            text("SELECT extversion FROM pg_extension WHERE extname = 'vector'")
+        )
+        _ITERATIVE_SCAN = supports_iterative_scan(version)
     return _ITERATIVE_SCAN
 
 
