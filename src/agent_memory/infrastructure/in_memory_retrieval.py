@@ -9,6 +9,7 @@ from agent_memory.application.ports import MemoryRecord
 from agent_memory.application.retrieval import (
     Candidate,
     EvidenceRef,
+    MemoryFacts,
     RetrievalQuery,
     VersionEvidence,
 )
@@ -44,6 +45,22 @@ class InMemoryCandidateProvider:
         wanted = set(version_ids)
         return {
             record.current_version.version_id: record.current_version.content
+            for record in self.records
+            if record.memory.tenant_id == principal.tenant_id
+            and record.current_version.version_id in wanted
+        }
+
+    async def facts(
+        self, version_ids: Sequence[UUID], principal: RequestPrincipal
+    ) -> dict[UUID, MemoryFacts]:
+        """E3: the same three attributes the Postgres provider reads, from the records at hand."""
+        wanted = set(version_ids)
+        return {
+            record.current_version.version_id: MemoryFacts(
+                record.memory.memory_type,
+                record.current_version.created_at,
+                int(record.current_version.authority_level),
+            )
             for record in self.records
             if record.memory.tenant_id == principal.tenant_id
             and record.current_version.version_id in wanted

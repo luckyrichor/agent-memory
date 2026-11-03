@@ -13,7 +13,6 @@ would only pin the row count of the fixture.
 from datetime import UTC, datetime
 from uuid import uuid4
 
-import pytest
 from sqlalchemy import event
 
 from agent_memory.application.retrieval import RetrievalQuery

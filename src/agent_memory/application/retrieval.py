@@ -6,7 +6,7 @@ from datetime import datetime
 from typing import Protocol
 from uuid import UUID
 
-from agent_memory.domain.enums import MemoryType
+from agent_memory.domain.enums import AuthorityLevel, MemoryType
 from agent_memory.domain.errors import MemoryScopeForbidden
 from agent_memory.domain.principal import RequestPrincipal
 from agent_memory.observability import span
@@ -66,6 +66,15 @@ class VersionEvidence:
 
 
 @dataclass(frozen=True)
+class MemoryFacts:
+    """Per-version attributes the context scorer needs (E3). Ids and metadata, never content."""
+
+    memory_type: MemoryType
+    created_at: datetime
+    authority_level: int
+
+
+@dataclass(frozen=True)
 class RetrievalHit:
     memory_id: UUID
     version_id: UUID
@@ -75,6 +84,11 @@ class RetrievalHit:
     raw_scores: dict[str, float]
     evidence: tuple[EvidenceRef, ...] = ()
     evidence_total: int = 0
+    # E3: defaults keep older constructions (tests, fixtures) working; the retriever always fills
+    # these from the provider's ``facts`` so a real page never scores on a guess.
+    memory_type: MemoryType = MemoryType.SEMANTIC
+    created_at: datetime | None = None
+    authority_level: int = int(AuthorityLevel.MULTIPLE_EVENTS)
 
 
 class CandidateProvider(Protocol):
@@ -90,6 +104,13 @@ class CandidateProvider(Protocol):
                        per_version: int) -> dict[UUID, VersionEvidence]:
         """Source-event references of already-authorized versions (E1); absent = none recorded.
         Origin and contradicting evidence rank before plain support when the list is capped."""
+        ...
+
+    async def facts(self, version_ids: Sequence[UUID],
+                    principal: RequestPrincipal) -> dict[UUID, MemoryFacts]:
+        """Type, age and authority of already-authorized versions (E3), page-sized. Absent means
+        unknown, and the scorer then falls back to its neutral defaults rather than dropping the
+        row."""
         ...
 
 
@@ -131,10 +152,16 @@ class MemoryRetriever:
             contents = (await self.provider.contents(page_versions, principal) if page else {})
             evidence = (await self.provider.evidence(page_versions, principal, EVIDENCE_PER_HIT)
                         if page else {})
+            facts = (await self.provider.facts(page_versions, principal) if page else {})
             hits = [RetrievalHit(memory_id, version_id, contents[version_id], score,
                                  hit_ranks, raw_scores,
                                  evidence[version_id].refs if version_id in evidence else (),
-                                 evidence[version_id].total if version_id in evidence else 0)
+                                 evidence[version_id].total if version_id in evidence else 0,
+                                 facts[version_id].memory_type if version_id in facts
+                                 else MemoryType.SEMANTIC,
+                                 facts[version_id].created_at if version_id in facts else None,
+                                 facts[version_id].authority_level if version_id in facts
+                                 else int(AuthorityLevel.MULTIPLE_EVENTS))
                     for memory_id, version_id, score, hit_ranks, raw_scores in page
                     if version_id in contents]
             return RetrievalPage(tuple(hits),

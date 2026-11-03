@@ -49,6 +49,29 @@ class Settings(BaseSettings):
     # the provider keeps the "exact" shape. ef_search only matters once such an index exists.
     vector_search: Literal["exact", "nearest_first"] = "nearest_first"
     vector_ef_search: int = Field(default=100, ge=1, le=4000)
+    # E3: context packing scores relevance + recency + authority, then fills the budget by
+    # score/byte. These are STARTING POINTS, not tuned values -- choosing them needs a dev set
+    # with real embeddings and user judgements (docs/optimization/PLAN.md 5 · E3). Setting the
+    # relevance floor above 0 drops hits far below the best one on the page, even when the budget
+    # is empty.
+    context_relevance_weight: float = Field(default=1.0, ge=0, le=100)
+    context_recency_weight: float = Field(default=0.3, ge=0, le=100)
+    context_authority_weight: float = Field(default=0.3, ge=0, le=100)
+    context_min_relevance: float = Field(default=0.0, ge=0, le=1)
+    context_half_life_episodic_days: float = Field(default=14, gt=0)
+    context_half_life_semantic_days: float = Field(default=180, gt=0)
+    context_half_life_procedural_days: float = Field(default=365, gt=0)
+
+    @model_validator(mode="after")
+    def validate_context_weights(self) -> "Settings":
+        if (
+            self.context_relevance_weight
+            + self.context_recency_weight
+            + self.context_authority_weight
+            <= 0
+        ):
+            raise ValueError("at least one context weight must be positive")
+        return self
 
     @model_validator(mode="after")
     def validate_lease_budget(self) -> "Settings":

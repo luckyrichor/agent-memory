@@ -5,7 +5,7 @@ import pytest
 
 from agent_memory.application.ports import MemoryRecord
 from agent_memory.application.retrieval import MemoryRetriever, RetrievalQuery
-from agent_memory.domain.enums import MemoryType, ScopeKind
+from agent_memory.domain.enums import AuthorityLevel, MemoryType, ScopeKind
 from agent_memory.domain.errors import MemoryScopeForbidden
 from agent_memory.domain.models import Memory, MemoryScope
 from agent_memory.domain.principal import RequestPrincipal
@@ -50,6 +50,7 @@ class SpyProvider:
 
     def __init__(self, inner, drop=frozenset()):
         self.inner, self.drop, self.requested, self.evidence_requested = inner, drop, [], []
+        self.facts_requested = []
 
     async def candidates(self, query, principal):
         return await self.inner.candidates(query, principal)
@@ -57,6 +58,10 @@ class SpyProvider:
     async def evidence(self, version_ids, principal, per_version):
         self.evidence_requested.append(list(version_ids))
         return await self.inner.evidence(version_ids, principal, per_version)
+
+    async def facts(self, version_ids, principal):
+        self.facts_requested.append(list(version_ids))
+        return await self.inner.facts(version_ids, principal)
 
     async def contents(self, version_ids, principal):
         self.requested.append(list(version_ids))
@@ -127,6 +132,19 @@ async def test_evidence_is_requested_for_the_page_versions_only():
     assert len(spy.evidence_requested) == 1
     assert spy.evidence_requested[0] == [hit.version_id for hit in page.items]  # 3 of 8, in order
     assert all(hit.evidence == () and hit.evidence_total == 0 for hit in page.items)
+
+
+@pytest.mark.asyncio
+async def test_facts_are_requested_for_the_page_and_land_on_the_hits():
+    """E3: type, age and authority travel with the hit so the context scorer can use them."""
+    principal, records = _corpus(8)
+    spy = SpyProvider(InMemoryCandidateProvider(records, {}))
+    page = await MemoryRetriever(spy).search(RetrievalQuery("compiler", limit=3), principal)
+    assert len(spy.facts_requested) == 1
+    assert spy.facts_requested[0] == [hit.version_id for hit in page.items]  # not all 8
+    assert all(hit.memory_type is MemoryType.SEMANTIC for hit in page.items)
+    assert all(hit.created_at is not None for hit in page.items)
+    assert all(hit.authority_level == int(AuthorityLevel.USER_CONFIRMED) for hit in page.items)
 
 
 @pytest.mark.asyncio

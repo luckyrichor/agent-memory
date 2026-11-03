@@ -10,9 +10,11 @@ from sqlalchemy.sql.elements import ColumnElement
 from agent_memory.application.retrieval import (
     Candidate,
     EvidenceRef,
+    MemoryFacts,
     RetrievalQuery,
     VersionEvidence,
 )
+from agent_memory.domain.enums import MemoryType
 from agent_memory.domain.principal import RequestPrincipal
 from agent_memory.infrastructure.orm import (
     EventRow,
@@ -85,6 +87,33 @@ class PostgresCandidateProvider:
             )
         )
         return {version_id: content for version_id, content in rows}
+
+    async def facts(
+        self, version_ids: Sequence[UUID], principal: RequestPrincipal
+    ) -> dict[UUID, MemoryFacts]:
+        """E3: type, version age and authority for the page, in one query.
+
+        Only metadata leaves the database here; the scoring happens in the application layer, so
+        the weights stay configurable without touching SQL.
+        """
+        if not version_ids:
+            return {}
+        v, m = MemoryVersionRow, MemoryRow
+        rows = await self.session.execute(
+            select(v.memory_version_id, m.memory_type, v.created_at, v.authority_level)
+            .join(
+                m,
+                and_(m.tenant_id == v.tenant_id, m.memory_id == v.memory_id),
+            )
+            .where(
+                v.tenant_id == principal.tenant_id,
+                v.memory_version_id.in_(list(version_ids)),
+            )
+        )
+        return {
+            version_id: MemoryFacts(MemoryType(memory_type), created_at, int(authority_level))
+            for version_id, memory_type, created_at, authority_level in rows
+        }
 
     async def evidence(
         self, version_ids: Sequence[UUID], principal: RequestPrincipal, per_version: int
