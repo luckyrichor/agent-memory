@@ -76,13 +76,13 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 | C2 | 触发式唤醒：PostgreSQL `LISTEN/NOTIFY`，保留低频轮询兜底 | O5 | 完成 | "写入→可检索"延迟 p50/p95 前后对比 | `c-*-steady-*.json`、迁移 `0009_job_notify.py`、`tests/integration/test_worker_wakeup.py` |
 | C3 | 单进程多并发消费（`--concurrency`） | O5 | 完成 | 吞吐对比；租约不重复领取 | `docs/optimization/measurements/c3-conc{1,4}-burst-*.json`、`tests/integration/test_worker_concurrency.py` |
 | C4 | 任务优先级（交互写入 > 批量导入） | O5 | 待做 | 混合负载下交互任务延迟 | |
-| C5 | 同租户、同模型、相同正文的向量复用（内容哈希） | O4 | 进行中（代码和测试已写，**测试尚未运行**） | 向量调用次数前后对比（计数提供器） | |
+| C5 | 同租户、同模型、相同正文的向量复用（内容哈希） | O4 | 完成-仅单测/集成测试（计数提供器断言调用次数，无规模化测量） | 向量调用次数前后对比（计数提供器） | `tests/unit/application/test_embedding_reuse.py`、迁移 `0011_content_hash_index` |
 
 ### D. 可靠性与安全（阶段 6 能在本环境验证的部分）
 
 | ID | 任务 | 方案编号 | 状态 | 验证方式 | 证据 |
 |---|---|---|---|---|---|
-| D1 | 查询文本不进日志 / span（SC4） | SC4 | 待做 | 捕获日志的断言测试 | |
+| D1 | 查询文本不进日志 / span（SC4） | SC4 | 完成-守卫测试；当前代码未发现泄漏点 | 捕获日志的断言测试 | `tests/integration/test_query_text_not_logged.py` |
 | D2 | 磁盘满 / 数据库不可用等错误映射为明确的 503 与稳定错误码（F9） | F9 | 完成-仅单测（模拟 SQLSTATE），没有真的写满磁盘 | 单测（模拟异常） | `tests/unit/api/test_infrastructure_errors.py` |
 | D3 | 逻辑删除后的正文清理方案（LC7）：设计 + 可执行的清理命令 | LC7 | 待做 | 集成测试（清理后正文与向量不可读） | |
 
@@ -213,6 +213,14 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 - B3：`scripts/bench/vector_index.py` 已能跑。已有数据 `measurements/b3-provider-sql-20k.json`（大租户 1.6 万行 + 8 个小租户各 500 行）：**provider 现在发出的 SQL，规划器从不使用 HNSW 索引**（即使建了索引、`ef_search` 取 40/200/1000），所以加索引对当前查询毫无作用。`measurements/b3-two-step-10k.json` 是改写成"先在 embeddings 上取最近邻再关联"的 SQL 形状后的第一轮数据（大租户 8000 行：精确扫描 p50 125 ms；HNSW ef=40/200/1000 为 11.5/17.8/36.2 ms，召回@20 为 0.54/0.80/0.97，返回候选数约 34/160/800），但**这个文件稍后会被带"无索引的改写形状"对照的新一轮覆盖**，不要据此下结论。
 - C5：`EmbeddingWorker` 先查同租户同模型相同正文的已有向量，命中则复用（reason `EMBEDDING_REUSED`）；重建任务（payload `force`）永不复用；迁移 `0011_content_hash_index`。单测 `tests/unit/application/test_embedding_reuse.py` 与集成测试已写，**还没跑过**。
 - D1：`SC4`（日志泄漏）在当前代码里读不出泄漏点（sqlalchemy 日志默认 WARN，字段白名单有效）；B0 的原始日志不在仓库，无法定位。计划写一个覆盖搜索查询、事件、worker 的端到端扫描测试作为守卫。
+
+### 2026-11-03 — C5 验证完成、D1 守卫测试完成（新会话接手；沙箱 1 核 3 GB，apt 装 postgresql-16 + pgvector 0.6.0）
+- 接手状态：分支 `optimize/stage3-6` 停在 WIP 提交 `852938e`（B3 实验、C5 代码，C5 测试未跑）。
+- C5：`test_embedding_reuse.py` 与相关集成测试共 8 个，全部通过（此前从未运行过）。仍只有测试级证据，没有规模化的"调用次数前后"测量，不得写成已测量的节省比例。
+- D1：新增 `tests/integration/test_query_text_not_logged.py`。用唯一标记串驱动 remember、events:batch、search、context、两种 422 校验失败、401 未认证，以及真实抽取 worker 一次；根 logger 开到 DEBUG（含 sqlalchemy/httpx 等第三方 logger）并收集全部 span，断言任何标记串都不在日志消息、格式化参数、异常文本、`agent_memory_fields` 或 span 里。**变异验证**：临时在搜索路由里加一行把 `body.query` 写进日志，测试立即失败，说明守卫非空转；改动已还原。结论只能是"当前代码下，这些路径没有泄漏"；B0 原始日志不在仓库，B0 报告的 117 次泄漏无法复现也无法定位，不得写成"已修复"。
+- 四道门（localpg，排除 `test_b0_harness`）：C5 之后 502 passed、ruff 通过、mypy strict 103 文件无错、foundation 8/8；D1 测试加入后单独通过（1 passed），全量待下一次提交前重跑。
+- 未完成：B3 结论仍未写（见上一条中途同步，实验数据文件会被覆盖，先重跑再下结论）；C4、D3、E1–E4、STORY.md 待做。
+- 下一步：D3 → E2 → E1 → E4 → E3 → C4 → B3 收尾 → STORY.md。
 
 ## 9. 需要负责人决定或配合的事项
 
