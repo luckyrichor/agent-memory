@@ -10,7 +10,8 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from agent_memory.application.event_commands import EventIngestionResult
 from agent_memory.application.ports import MemoryRepository
 from agent_memory.domain.activation import ActivationMode, initial_status
-from agent_memory.domain.enums import ScopeKind
+from agent_memory.domain.dedup import dedup_hash, normalize_for_dedup
+from agent_memory.domain.enums import MemoryStatus, ScopeKind
 from agent_memory.domain.errors import (
     EventIdempotencyConflict,
     EventSequenceConflict,
@@ -26,6 +27,8 @@ from agent_memory.infrastructure.orm import (
     EventRow,
     EvidenceRow,
     JobRow,
+    MemoryRow,
+    MemoryVersionRow,
     OutboxMessageRow,
 )
 from agent_memory.infrastructure.repositories import PostgresMemoryRepository
@@ -434,6 +437,28 @@ class PostgresExtractionBackend:
         async with session_for_principal(self._sessions, self._principal(tenant_id)) as session:
             memory_repository: MemoryRepository = PostgresMemoryRepository(session)
             for candidate in candidates:
+                duplicate_version = await self._find_duplicate(session, tenant_id, candidate)
+                if duplicate_version is not None:
+                    # E2: same text, type and scope as a live memory: no new memory, only one
+                    # more piece of evidence pointing at the version that already says it.
+                    already_linked = await session.scalar(
+                        select(EvidenceRow.event_id).where(
+                            EvidenceRow.tenant_id == tenant_id,
+                            EvidenceRow.memory_version_id == duplicate_version,
+                            EvidenceRow.event_id == event.event_id,
+                        )
+                    )
+                    if already_linked is None:
+                        session.add(
+                            EvidenceRow(
+                                tenant_id=tenant_id,
+                                memory_version_id=duplicate_version,
+                                event_id=event.event_id,
+                                role="supports",
+                                created_at=now,
+                            )
+                        )
+                    continue
                 memory, version = Memory.create(
                     tenant_id=tenant_id,
                     memory_id=self._new_id(),
@@ -470,6 +495,52 @@ class PostgresExtractionBackend:
                 worker_id,
                 now,
             )
+
+    @staticmethod
+    async def _find_duplicate(
+        session: AsyncSession, tenant_id: UUID, candidate: MemoryCandidate
+    ) -> UUID | None:
+        """Current version of a live memory with the same normalized text, type and scope.
+
+        Only candidate / needs_review / active memories count: a deleted, rejected, invalidated,
+        superseded or archived memory must not swallow new evidence, so re-extraction after a
+        deletion creates a fresh candidate. The hash narrows the search; the normalized text is
+        compared too, so a collision can never merge different memories.
+        """
+        scope = candidate.scope
+        rows = await session.execute(
+            select(MemoryRow.current_version_id, MemoryVersionRow.content)
+            .join(
+                MemoryVersionRow,
+                (MemoryVersionRow.tenant_id == MemoryRow.tenant_id)
+                & (MemoryVersionRow.memory_version_id == MemoryRow.current_version_id),
+            )
+            .where(
+                MemoryRow.tenant_id == tenant_id,
+                MemoryRow.memory_type == candidate.memory_type.value,
+                MemoryRow.scope_kind == scope.kind.value,
+                MemoryRow.workspace_id.is_(None)
+                if scope.workspace_id is None
+                else MemoryRow.workspace_id == scope.workspace_id,
+                MemoryRow.subject_user_id.is_(None)
+                if scope.subject_user_id is None
+                else MemoryRow.subject_user_id == scope.subject_user_id,
+                MemoryRow.status.in_(
+                    (
+                        MemoryStatus.CANDIDATE.value,
+                        MemoryStatus.NEEDS_REVIEW.value,
+                        MemoryStatus.ACTIVE.value,
+                    )
+                ),
+                MemoryVersionRow.dedup_hash == dedup_hash(candidate.content),
+            )
+            .order_by(MemoryRow.created_at, MemoryRow.memory_id)
+        )
+        wanted = normalize_for_dedup(candidate.content)
+        for version_id, content in rows.all():
+            if version_id is not None and normalize_for_dedup(content) == wanted:
+                return UUID(str(version_id))
+        return None
 
     async def fail_job(
         self,

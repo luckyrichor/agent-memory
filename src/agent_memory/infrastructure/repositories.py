@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from agent_memory.application.commands import MemoryResult
 from agent_memory.application.ports import AuditEntry, IdempotencyRecord, MemoryRecord
+from agent_memory.domain.dedup import dedup_hash
 from agent_memory.domain.enums import (
     AuthorityLevel,
     MemoryStatus,
@@ -196,6 +197,7 @@ class PostgresMemoryRepository:
             content=version.content,
             structured_content=dict(version.structured_content),
             content_hash=hashlib.sha256(version.content.encode()).hexdigest(),
+            dedup_hash=dedup_hash(version.content),
             confidence=version.confidence,
             utility=version.utility,
             authority_level=int(version.authority_level),

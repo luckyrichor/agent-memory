@@ -9,8 +9,8 @@ What is erased, per version of a deleted memory:
 * ``memory_versions.content`` -> empty string, ``structured_content`` -> ``{}``,
   ``reason`` -> NULL. The stored lexical vectors are generated from ``content`` and therefore
   collapse with it. Version rows themselves stay: lineage, audit and foreign keys point at them.
-* ``content_hash`` -> a fixed marker (also the "already purged" flag), because a SHA-256 of the
-  text lets anyone holding a guess confirm it.
+* ``content_hash`` -> a fixed marker (also the "already purged" flag) and ``dedup_hash`` -> NULL,
+  because a hash of the text lets anyone holding a guess confirm it.
 * ``memory_embeddings`` rows -> deleted (a vector is derived from the text).
 * unfinished ``embed_memory`` jobs for those versions -> ``dead`` (``MEMORY_PURGED``), so a worker
   cannot recreate a vector from the now-empty text.
@@ -165,6 +165,7 @@ async def purge_deleted_memories(
                 content="",
                 structured_content={},
                 content_hash=PURGED_CONTENT_HASH,
+                dedup_hash=None,
                 reason=None,
             )
             .execution_options(synchronize_session=False)

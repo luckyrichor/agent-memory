@@ -33,9 +33,14 @@ async def test_llm_event_worker_candidate_pipeline(app_database_url: str) -> Non
     engine = create_engine(app_database_url)
     sessions = create_session_factory(engine)
     now = lambda: datetime.now(UTC)
+    answers = iter((  # distinct per event: identical candidates are merged by E2 (exact dedup)
+        "Check deployment configuration before restarting",
+        "Check target architecture before rebuilding dependencies",
+    ))
+
     def respond(request: httpx.Request) -> httpx.Response:
         return httpx.Response(200, json={"choices": [{"message": {"content": json.dumps(
-            {"memories": [{"content": "Check deployment configuration before restarting"}]})}}]})
+            {"memories": [{"content": next(answers)}]})}}]})
     model = LLMExtractor("https://provider.test/chat", "fixed-response-v1", "test",
                          transport=httpx.MockTransport(respond))
     real = os.environ.get("MEMORY_EVAL_REAL_EXTRACTION") == "1"

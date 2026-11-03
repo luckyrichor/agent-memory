@@ -113,6 +113,9 @@ class MemoryVersionRow(Base):
     content: Mapped[str] = mapped_column(Text, nullable=False)
     structured_content: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False, default=dict)
     content_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    # SHA-256 of the dedup-normalized text (E2). NULL on rows written before migration 0012
+    # and after a purge; such rows are never matched as duplicates.
+    dedup_hash: Mapped[str | None] = mapped_column(String(64))
     confidence: Mapped[float] = mapped_column(Float, nullable=False)
     utility: Mapped[float] = mapped_column(Float, nullable=False)
     authority_level: Mapped[int] = mapped_column(SmallInteger, nullable=False)

@@ -194,6 +194,11 @@ async def test_purge_erases_text_and_vectors_of_deleted_memories_only(
             )
             content, content_hash, vectors, lexical = await snapshot(tenant_a, doomed_version)
             assert content == "" and content_hash == PURGED_CONTENT_HASH
+            async with session_for_principal(sessions, principal(tenant_a)) as session:
+                assert await session.scalar(
+                    select(MemoryVersionRow.dedup_hash)
+                    .where(MemoryVersionRow.memory_version_id == doomed_version)
+                ) is None  # a hash of the text would let a guess be confirmed
             assert vectors == 0 and "quetzal" not in lexical and lexical == ""
             assert await job_status(tenant_a, doomed_version) == ("dead", "MEMORY_PURGED")
 
