@@ -99,3 +99,56 @@ async def test_transactional_embedding_retry_restart_rebuild_and_rls(app_databas
             assert await session.scalar(select(func.count()).select_from(JobRow)) == 2
     finally:
         await engine.dispose()
+
+
+@pytest.mark.asyncio
+async def test_postgres_reuses_identical_content_only_within_tenant_and_model(
+    app_database_url: str,
+) -> None:
+    from agent_memory.application.embedding import EmbeddingWorker
+    from agent_memory.domain.enums import MemoryType, ScopeKind
+    from agent_memory.domain.models import Memory, MemoryScope
+    from agent_memory.infrastructure.embedding import (
+        FixtureEmbeddingProvider,
+        PostgresEmbeddingBackend,
+    )
+    from agent_memory.infrastructure.repositories import PostgresMemoryRepository
+
+    engine = create_engine(app_database_url)
+    sessions = create_session_factory(engine)
+    tenant_a, tenant_b, user = uuid4(), uuid4(), uuid4()
+    now = datetime.now(UTC) - timedelta(minutes=5)
+
+    async def add(tenant, content):
+        principal = RequestPrincipal(tenant, user, frozenset(), frozenset({"memory:write"}),
+                                     frozenset())
+        memory, version = Memory.create(
+            tenant_id=tenant, memory_id=uuid4(), version_id=uuid4(),
+            memory_type=MemoryType.SEMANTIC, scope=MemoryScope(ScopeKind.TENANT, None, None),
+            owner_user_id=user, content=content, now=now,
+        )
+        async with session_for_principal(sessions, principal) as session:
+            await PostgresMemoryRepository(session).add(tenant, memory, version)
+        return version.version_id
+
+    class Counting(FixtureEmbeddingProvider):
+        calls = 0
+
+        async def embed(self, content: str) -> list[float]:
+            Counting.calls += 1
+            return await super().embed(content)
+
+    backend = PostgresEmbeddingBackend(sessions)
+    worker = EmbeddingWorker(backend, Counting())
+    await add(tenant_a, "reuse me exactly")
+    await add(tenant_a, "reuse me exactly")
+    await add(tenant_a, "reuse me exactly!")  # near-duplicate: own vector
+    await add(tenant_b, "reuse me exactly")  # other tenant: own vector
+    reasons: list[str] = []
+    for tenant in (tenant_a, tenant_a, tenant_a, tenant_b):
+        reasons.append((await worker.run_once(tenant, "w")).reason_code)
+    await engine.dispose()
+    assert reasons == [
+        "EMBEDDING_SUCCEEDED", "EMBEDDING_REUSED", "EMBEDDING_SUCCEEDED", "EMBEDDING_SUCCEEDED"
+    ]
+    assert Counting.calls == 3

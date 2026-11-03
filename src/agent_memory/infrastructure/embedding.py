@@ -8,6 +8,7 @@ import httpx
 from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
+from sqlalchemy.orm import aliased
 
 from agent_memory.application.embedding import DIMENSIONS
 from agent_memory.domain.errors import MemoryNotFound
@@ -103,6 +104,37 @@ class PostgresEmbeddingBackend:
                 raise MemoryNotFound(str(version))
             return content
 
+    async def find_reusable(self, tenant: UUID, version: UUID, model: str) -> list[float] | None:
+        """Same tenant (explicit filter + RLS), same model, byte-identical content.
+
+        The hash only narrows the search through ``ix_memory_versions_tenant_content_hash``; the
+        content itself is compared too, so a hash collision can never reuse a wrong vector.
+        """
+        other = aliased(MemoryVersionRow)
+        async with session_for_principal(self.sessions, self.principal(tenant)) as session:
+            row = await session.scalar(
+                select(MemoryEmbeddingRow.embedding)
+                .join(
+                    other,
+                    (other.tenant_id == MemoryEmbeddingRow.tenant_id)
+                    & (other.memory_version_id == MemoryEmbeddingRow.memory_version_id),
+                )
+                .join(
+                    MemoryVersionRow,
+                    (MemoryVersionRow.tenant_id == other.tenant_id)
+                    & (MemoryVersionRow.content_hash == other.content_hash)
+                    & (MemoryVersionRow.content == other.content),
+                )
+                .where(
+                    MemoryVersionRow.tenant_id == tenant,
+                    MemoryVersionRow.memory_version_id == version,
+                    other.memory_version_id != version,
+                    MemoryEmbeddingRow.model == model,
+                )
+                .limit(1)
+            )
+            return None if row is None else [float(x) for x in row]
+
     async def complete(
         self, job: Job, worker: str, model: str, vector: list[float], now: datetime
     ) -> None:
@@ -156,7 +188,7 @@ class PostgresEmbeddingBackend:
                     job_id=uuid4(),
                     job_type="embed_memory",
                     idempotency_key=f"rebuild:{version}:{key}",
-                    payload={"version_id": str(version)},
+                    payload={"version_id": str(version), "force": True},
                     status="pending",
                     attempts=0,
                     max_attempts=5,

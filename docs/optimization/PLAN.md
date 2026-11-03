@@ -65,7 +65,7 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 |---|---|---|---|---|---|
 | B1 | 两段式检索：先只取 id 与分数，只对当前页取正文；候选数上限可配置（默认 1000→200） | O1 | 完成-传输量降低，延迟无改善；默认值未降 | 单测 + 微基准（行数/传输量/延迟） | `tests/unit/application/test_retrieval.py`、`tests/integration/test_two_stage_retrieval.py`、`scripts/bench/retrieval_read_path.py`、`measurements/b1-{before,after}-10k-*.json` |
 | B2 | 英文词法通道补 GIN 索引；检查三路查询的执行计划 | O1 | 完成-改用存储列（GIN 在 RLS 下用不上）；仅 1 万行 | `EXPLAIN` 前后对比 | `migrations/versions/0010_stored_lexical_vectors.py`、`scripts/bench/explain_read_path.py`、`measurements/b2-*` |
-| B3 | 向量近似索引（HNSW）实验 + 过滤后结果过少的处理 | O2 | 待做 | 召回率对精确扫描、延迟，1 万 / 10 万向量 | |
+| B3 | 向量近似索引（HNSW）实验 + 过滤后结果过少的处理 | O2 | 进行中（实验数据已有，结论待写） | 召回率对精确扫描、延迟，1 万 / 10 万向量 | |
 | B4 | 连接池参数可配置、池耗尽快速失败返回 503（带 Retry-After），不再挂 30 秒 | F2 | 完成-行为已验证，未做压测 | 单测 + 并发复现 | `tests/integration/test_pool_exhaustion.py`、`api/infrastructure_errors.py` |
 
 ### C. 写路径与 worker（O4、O5）
@@ -76,7 +76,7 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 | C2 | 触发式唤醒：PostgreSQL `LISTEN/NOTIFY`，保留低频轮询兜底 | O5 | 完成 | "写入→可检索"延迟 p50/p95 前后对比 | `c-*-steady-*.json`、迁移 `0009_job_notify.py`、`tests/integration/test_worker_wakeup.py` |
 | C3 | 单进程多并发消费（`--concurrency`） | O5 | 完成 | 吞吐对比；租约不重复领取 | `docs/optimization/measurements/c3-conc{1,4}-burst-*.json`、`tests/integration/test_worker_concurrency.py` |
 | C4 | 任务优先级（交互写入 > 批量导入） | O5 | 待做 | 混合负载下交互任务延迟 | |
-| C5 | 同租户、同模型、相同正文的向量复用（内容哈希） | O4 | 待做 | 向量调用次数前后对比（计数提供器） | |
+| C5 | 同租户、同模型、相同正文的向量复用（内容哈希） | O4 | 进行中（代码和测试已写，**测试尚未运行**） | 向量调用次数前后对比（计数提供器） | |
 
 ### D. 可靠性与安全（阶段 6 能在本环境验证的部分）
 
@@ -208,6 +208,11 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 - 验证：`test_pool_exhaustion.py`：连接池大小 1、占住唯一连接，请求在 0.3 秒池超时后 2 秒内返回 503，释放后恢复；错误体的 `request_id` 与响应头一致。语句超时配置在每个连接上生效（`SHOW statement_timeout`），并能真的取消 `pg_sleep`。四道门（localpg）496 passed（排除 `test_b0_harness`）、ruff、mypy strict、foundation 8/8。
 - 局限：① 没有重做 B0 那种 1 QPS 的压测，所以**不能**说"1 QPS 不再超时"，只能说"池耗尽时现在 2 秒内明确失败而不是挂 30 秒"。1 QPS 大量超时的根因是 B1/B2（每次查询要扫全表并现算分词）加上池太小，B1/B2 已经把单次查询从 ~0.7–1.9 s 降到 ~10–70 ms（见上），这才是改善吞吐的主因，需要压测机验证。② D2 只验证了 SQLSTATE 映射，没有真的写满磁盘。③ 默认池 10+10 是我的取值，没有依据，需要在压测机上按数据库 `max_connections` 和实例数核定。
 - 下一步：B3（HNSW 实验）→ C5 → D1 → E 系列。
+
+### 2026-11-03 — 中途同步（未完成，供接手）
+- B3：`scripts/bench/vector_index.py` 已能跑。已有数据 `measurements/b3-provider-sql-20k.json`（大租户 1.6 万行 + 8 个小租户各 500 行）：**provider 现在发出的 SQL，规划器从不使用 HNSW 索引**（即使建了索引、`ef_search` 取 40/200/1000），所以加索引对当前查询毫无作用。`measurements/b3-two-step-10k.json` 是改写成"先在 embeddings 上取最近邻再关联"的 SQL 形状后的第一轮数据（大租户 8000 行：精确扫描 p50 125 ms；HNSW ef=40/200/1000 为 11.5/17.8/36.2 ms，召回@20 为 0.54/0.80/0.97，返回候选数约 34/160/800），但**这个文件稍后会被带"无索引的改写形状"对照的新一轮覆盖**，不要据此下结论。
+- C5：`EmbeddingWorker` 先查同租户同模型相同正文的已有向量，命中则复用（reason `EMBEDDING_REUSED`）；重建任务（payload `force`）永不复用；迁移 `0011_content_hash_index`。单测 `tests/unit/application/test_embedding_reuse.py` 与集成测试已写，**还没跑过**。
+- D1：`SC4`（日志泄漏）在当前代码里读不出泄漏点（sqlalchemy 日志默认 WARN，字段白名单有效）；B0 的原始日志不在仓库，无法定位。计划写一个覆盖搜索查询、事件、worker 的端到端扫描测试作为守卫。
 
 ## 9. 需要负责人决定或配合的事项
 

@@ -27,6 +27,9 @@ class EmbeddingBackend(Protocol):
         self, tenant: UUID, worker: str, now: datetime, duration: timedelta
     ) -> Job | None: ...
     async def load_content(self, tenant: UUID, version: UUID) -> str: ...
+    async def find_reusable(self, tenant: UUID, version: UUID, model: str) -> list[float] | None:
+        """Vector already stored for IDENTICAL content in the SAME tenant by the SAME model."""
+        ...
     async def complete(
         self, job: Job, worker: str, model: str, vector: list[float], now: datetime
     ) -> None: ...
@@ -70,8 +73,16 @@ class EmbeddingWorker:
                 content = await self.backend.load_content(
                     tenant, UUID(str(job.payload["version_id"]))
                 )
-                async with asyncio.timeout(self.timeout):
-                    vector = await self.provider.embed(content)
+                reused: list[float] | None = None
+                if not job.payload.get("force"):  # rebuilds exist to recompute: never reuse
+                    reused = await self.backend.find_reusable(
+                        tenant, UUID(str(job.payload["version_id"])), self.provider.model
+                    )
+                if reused is not None:
+                    vector = reused
+                else:
+                    async with asyncio.timeout(self.timeout):
+                        vector = await self.provider.embed(content)
                 if (
                     len(vector) != DIMENSIONS
                     or not all(math.isfinite(x) for x in vector)
@@ -81,7 +92,11 @@ class EmbeddingWorker:
                 # Real completion time fences slow providers that outlive their lease.
                 finished = at if now is not None else datetime.now(UTC)
                 await self.backend.complete(job, worker, self.provider.model, vector, finished)
-                result = WorkerResult(job.job_id, "succeeded", "EMBEDDING_SUCCEEDED")
+                result = WorkerResult(
+                    job.job_id,
+                    "succeeded",
+                    "EMBEDDING_REUSED" if reused is not None else "EMBEDDING_SUCCEEDED",
+                )
             except LeaseLost:
                 result = WorkerResult(job.job_id, "lease_lost", "LEASE_LOST")
             except Exception as error:  # noqa: BLE001 - provider boundary; persist retry, redact error text

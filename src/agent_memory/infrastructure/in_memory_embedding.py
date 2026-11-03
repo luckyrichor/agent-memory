@@ -25,7 +25,7 @@ class InMemoryEmbeddingBackend:
             uuid4(),
             "embed_memory",
             job_key,
-            {"version_id": str(version)},
+            {"version_id": str(version), **({"force": True} if key != "initial" else {})},
             JobStatus.PENDING,
             0,
             5,
@@ -60,6 +60,18 @@ class InMemoryEmbeddingBackend:
         if (tenant, version) not in self.contents:
             raise MemoryNotFound(str(version))
         return self.contents[tenant, version]
+
+    async def find_reusable(self, tenant: UUID, version: UUID, model: str) -> list[float] | None:
+        target = self.contents.get((tenant, version))
+        for (owner, other), (stored_model, vector) in self.vectors.items():
+            if (
+                owner == tenant
+                and other != version
+                and stored_model == model
+                and self.contents.get((owner, other)) == target
+            ):
+                return list(vector)
+        return None
 
     async def complete(
         self, job: Job, worker: str, model: str, vector: list[float], now: datetime

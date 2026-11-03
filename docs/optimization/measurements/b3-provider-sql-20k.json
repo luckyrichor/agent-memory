@@ -1,0 +1,210 @@
+{
+  "label": "b3-provider-sql-20k",
+  "commit": "bd41d72",
+  "dirty_tree": true,
+  "measured_at_utc": "2026-11-03T01:26:02+00:00",
+  "environment": {
+    "host": "vm",
+    "cpus": 2,
+    "postgres": "16.15 (Ubuntu 16.15-0ubuntu0.24.04.1)",
+    "pgvector": "0.6.0",
+    "client_and_database_same_host": true,
+    "vectors": "clustered synthetic (50 centers, noise 0.3), NOT semantic"
+  },
+  "data": {
+    "big_tenant_rows": 16000,
+    "small_tenants": 8,
+    "small_tenant_rows": 500,
+    "dims": 1024,
+    "seed_seconds": 66.1,
+    "queries_per_class": 30,
+    "recall_k": 20,
+    "candidate_limit": 1000
+  },
+  "hnsw": {
+    "m": 16,
+    "ef_construction": 64,
+    "build_seconds": 160.3,
+    "index_size": "156 MB",
+    "embedding_table_size": "1976 kB"
+  },
+  "results": {
+    "exact_no_index": {
+      "big": {
+        "p50_ms": 252.6,
+        "p95_ms": 301.0,
+        "candidates_min": 1000,
+        "candidates_median": 1000.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false,
+        "plan_nodes": [
+          "Limit",
+          "Sort",
+          "Result",
+          "Hash Join",
+          "Seq Scan",
+          "Hash",
+          "Hash Join",
+          "Seq Scan",
+          "Hash",
+          "Seq Scan"
+        ]
+      },
+      "small": {
+        "p50_ms": 14.2,
+        "p95_ms": 17.6,
+        "candidates_min": 500,
+        "candidates_median": 500.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false,
+        "plan_nodes": [
+          "Limit",
+          "Sort",
+          "Result",
+          "Nested Loop",
+          "Hash Join",
+          "Bitmap Heap Scan",
+          "Bitmap Index Scan[ix_memories_tenant_user_status]",
+          "Hash",
+          "Bitmap Heap Scan",
+          "Bitmap Index Scan[memory_embeddings_pkey]",
+          "Index Only Scan[pk_memory_versions]"
+        ]
+      }
+    },
+    "hnsw_global_ef_search_40": {
+      "big": {
+        "p50_ms": 234.0,
+        "p95_ms": 355.8,
+        "candidates_min": 1000,
+        "candidates_median": 1000.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false,
+        "plan_nodes": [
+          "Limit",
+          "Sort",
+          "Result",
+          "Hash Join",
+          "Seq Scan",
+          "Hash",
+          "Hash Join",
+          "Seq Scan",
+          "Hash",
+          "Seq Scan"
+        ]
+      },
+      "small": {
+        "p50_ms": 12.8,
+        "p95_ms": 17.9,
+        "candidates_min": 500,
+        "candidates_median": 500.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false,
+        "plan_nodes": [
+          "Limit",
+          "Sort",
+          "Result",
+          "Nested Loop",
+          "Hash Join",
+          "Bitmap Heap Scan",
+          "Bitmap Index Scan[ix_memories_tenant_user_status]",
+          "Hash",
+          "Index Only Scan[pk_memory_versions]",
+          "Index Scan[memory_embeddings_pkey]"
+        ]
+      }
+    },
+    "hnsw_global_ef_search_200": {
+      "big": {
+        "p50_ms": 236.6,
+        "p95_ms": 284.5,
+        "candidates_min": 1000,
+        "candidates_median": 1000.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false,
+        "plan_nodes": [
+          "Limit",
+          "Sort",
+          "Result",
+          "Hash Join",
+          "Seq Scan",
+          "Hash",
+          "Hash Join",
+          "Seq Scan",
+          "Hash",
+          "Seq Scan"
+        ]
+      },
+      "small": {
+        "p50_ms": 14.7,
+        "p95_ms": 19.1,
+        "candidates_min": 500,
+        "candidates_median": 500.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false,
+        "plan_nodes": [
+          "Limit",
+          "Sort",
+          "Result",
+          "Nested Loop",
+          "Hash Join",
+          "Bitmap Heap Scan",
+          "Bitmap Index Scan[ix_memories_tenant_user_status]",
+          "Hash",
+          "Index Only Scan[pk_memory_versions]",
+          "Index Scan[memory_embeddings_pkey]"
+        ]
+      }
+    },
+    "hnsw_global_ef_search_1000": {
+      "big": {
+        "p50_ms": 232.9,
+        "p95_ms": 275.0,
+        "candidates_min": 1000,
+        "candidates_median": 1000.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false,
+        "plan_nodes": [
+          "Limit",
+          "Sort",
+          "Result",
+          "Hash Join",
+          "Seq Scan",
+          "Hash",
+          "Hash Join",
+          "Seq Scan",
+          "Hash",
+          "Seq Scan"
+        ]
+      },
+      "small": {
+        "p50_ms": 14.5,
+        "p95_ms": 19.4,
+        "candidates_min": 500,
+        "candidates_median": 500.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false,
+        "plan_nodes": [
+          "Limit",
+          "Sort",
+          "Result",
+          "Nested Loop",
+          "Hash Join",
+          "Bitmap Heap Scan",
+          "Bitmap Index Scan[ix_memories_tenant_user_status]",
+          "Hash",
+          "Index Only Scan[pk_memory_versions]",
+          "Index Scan[memory_embeddings_pkey]"
+        ]
+      }
+    }
+  }
+}
