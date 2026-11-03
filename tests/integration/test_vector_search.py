@@ -4,13 +4,17 @@ The point of the shape change is not "an index exists" but that the candidate li
 tenant / status filtering. pgvector only guarantees that from 0.8 (iterative scans), so the
 provider falls back to the exact scan where the setting is missing; both behaviours are pinned
 here.
+
+Deliberately absent: a test that the planner picks the HNSW index. Measured on 8k and 20k rows
+(docs/optimization/measurements/b3-*) the planner never chose it while the candidate limit stayed
+at 1000, because the exact scan is genuinely cheaper at that width. Pinning planner behaviour here
+would only pin the row count of the fixture.
 """
 from datetime import UTC, datetime
 from uuid import uuid4
 
 import pytest
-from sqlalchemy import event, text
-from sqlalchemy.engine import make_url
+from sqlalchemy import event
 
 from agent_memory.application.retrieval import RetrievalQuery
 from agent_memory.domain.enums import MemoryStatus, MemoryType, ScopeKind
@@ -23,10 +27,7 @@ from agent_memory.infrastructure.db import (
 )
 from agent_memory.infrastructure.orm import MemoryEmbeddingRow
 from agent_memory.infrastructure.repositories import PostgresMemoryRepository
-from agent_memory.infrastructure.retrieval import (
-    PostgresCandidateProvider,
-    iterative_scan_available,
-)
+from agent_memory.infrastructure.retrieval import PostgresCandidateProvider
 
 MODEL = "b3-test-model"
 DIMENSIONS = 1024
@@ -103,7 +104,7 @@ async def test_nearest_first_returns_the_same_hits_as_the_exact_scan(app_databas
 
     query = RetrievalQuery("", vector=tuple(unit_vector(7, 1.2)), model=MODEL, limit=10)
     exact = await ids_from(app_database_url, who, query, vector_search="exact")
-    nearest = await ids_from(app_database_url, who, query, vector_search="hnsw")
+    nearest = await ids_from(app_database_url, who, query, vector_search="nearest_first")
     assert exact[0] == created[7][0]
     assert nearest[:5] == exact[:5], "approximate search must not reshuffle the head of the list"
     assert set(nearest) <= {memory_id for memory_id, _ in created}
@@ -145,7 +146,7 @@ async def test_other_tenants_and_inactive_memories_never_leak_through_the_join(a
         await engine.dispose()
 
     query = RetrievalQuery("", vector=tuple(unit_vector(0, 5.0)), model=MODEL, limit=50)
-    found = await ids_from(app_database_url, mine, query, vector_search="hnsw")
+    found = await ids_from(app_database_url, mine, query, vector_search="nearest_first")
     assert archived_id not in found
     assert len(found) == 5
 
@@ -172,7 +173,7 @@ async def test_missing_iterative_scan_falls_back_to_the_exact_scan(app_database_
 
     try:
         async with session_for_principal(sessions, who) as session:
-            provider = PostgresCandidateProvider(session, vector_search="hnsw")
+            provider = PostgresCandidateProvider(session, vector_search="nearest_first")
             found = [c.memory_id for c in await provider.candidates(query, who)]
     finally:
         await engine.dispose()
@@ -183,105 +184,37 @@ async def test_missing_iterative_scan_falls_back_to_the_exact_scan(app_database_
     )
 
 
-async def seed_bulk(sessions, who, count: int) -> None:
-    """Bulk-load one tenant, so the planner has a realistic choice between index and scan."""
-    async with session_for_principal(sessions, who) as session:
-        await session.execute(
-            text(
-                "WITH seed AS (SELECT g,"
-                " ('00000000-0000-0000-0000-' || lpad(g::text, 12, '0'))::uuid AS mid,"
-                " ('00000000-0000-0000-0001-' || lpad(g::text, 12, '0'))::uuid AS vid"
-                " FROM generate_series(1, :n) g)"
-                " INSERT INTO memories (tenant_id, memory_id, memory_type, status, scope_kind,"
-                " workspace_id, subject_user_id, visibility, owner_user_id, current_version_id,"
-                " revision, created_at, updated_at)"
-                " SELECT :t, mid, 'semantic', 'active', 'tenant', NULL, NULL, 'scope', :u, vid, 1,"
-                " now(), now() FROM seed"
-            ),
-            {"n": count, "t": who.tenant_id, "u": who.user_id},
-        )
-        await session.execute(
-            text(
-                "WITH seed AS (SELECT g,"
-                " ('00000000-0000-0000-0000-' || lpad(g::text, 12, '0'))::uuid AS mid,"
-                " ('00000000-0000-0000-0001-' || lpad(g::text, 12, '0'))::uuid AS vid"
-                " FROM generate_series(1, :n) g)"
-                " INSERT INTO memory_versions (tenant_id, memory_version_id, memory_id,"
-                " version_number, content, structured_content, content_hash, confidence, utility,"
-                " authority_level, verification_status, created_at)"
-                " SELECT :t, vid, mid, 1, 'v' || g, '{}', md5('v' || g), 0.5, 0.5, 2,"
-                " 'unverified', now() FROM seed"
-            ),
-            {"n": count, "t": who.tenant_id},
-        )
-        await session.execute(
-            text(
-                "WITH seed AS (SELECT g,"
-                " ('00000000-0000-0000-0000-' || lpad(g::text, 12, '0'))::uuid AS mid,"
-                " ('00000000-0000-0000-0001-' || lpad(g::text, 12, '0'))::uuid AS vid"
-                " FROM generate_series(1, :n) g)"
-                " INSERT INTO memory_embeddings (tenant_id, memory_version_id, model, embedding,"
-                " updated_at)"
-                " SELECT :t, vid, :m, ('[' || array_to_string(ARRAY(SELECT"
-                " CASE WHEN i = 1 + (g % 1024) THEN 1.0 ELSE 0.01 END"
-                " FROM generate_series(1, 1024) i), ',') || ']')::vector, now()"
-                " FROM seed"
-            ),
-            {"n": count, "t": who.tenant_id, "m": MODEL},
-        )
-        await session.execute(text("ANALYZE memories, memory_versions, memory_embeddings"))
-
-
-async def test_planner_uses_the_hnsw_index_for_the_nearest_first_shape(app_database_url):
-    if not await supports_iterative_scan(app_database_url):
-        pytest.skip("needs pgvector >= 0.8 (hnsw.iterative_scan)")
-
+async def test_nearest_first_is_the_shape_that_reaches_the_database(app_database_url, monkeypatch):
+    """The branch must actually be taken: ranking inside memory_embeddings, joining afterwards."""
     who = principal()
     engine = create_engine(app_database_url)
     sessions = create_session_factory(engine)
-    statements: list[tuple[str, object]] = []
+    try:
+        created = await seed(sessions, who, 12)
+    finally:
+        await engine.dispose()
+
+    monkeypatch.setattr(retrieval_module, "_ITERATIVE_SCAN", True)
+    engine = create_engine(app_database_url)
+    sessions = create_session_factory(engine)
+    statements: list[str] = []
 
     @event.listens_for(engine.sync_engine, "before_cursor_execute")
     def capture(conn, cursor, statement, parameters, context, executemany):
-        statements.append((statement, parameters))
+        statements.append(statement)
 
+    query = RetrievalQuery("", vector=tuple(unit_vector(4, 1.3)), model=MODEL, limit=10)
     try:
-        await seed_bulk(sessions, who, 3000)
         async with session_for_principal(sessions, who) as session:
-            provider = PostgresCandidateProvider(session, vector_search="hnsw")
-            await provider.candidates(
-                RetrievalQuery("", vector=tuple(unit_vector(11, 1.2)), model=MODEL, limit=10), who
-            )
+            provider = PostgresCandidateProvider(session, vector_search="nearest_first", ef_search=64)
+            found = [c.memory_id for c in await provider.candidates(query, who)]
     finally:
         await engine.dispose()
 
-    nearest = [(s, p) for s, p in statements if "nearest" in s.lower()]
-    assert nearest, "the nearest-first shape must be what reaches the database"
-    statement, parameters = nearest[-1]
-    plan = explain_as_app_role(app_database_url, who.tenant_id, statement, parameters)
-    assert "ix_memory_embeddings_hnsw" in plan
-
-
-async def supports_iterative_scan(app_url: str) -> bool:
-    engine = create_engine(app_url)
-    sessions = create_session_factory(engine)
-    try:
-        async with session_for_principal(sessions, principal()) as session:
-            return await iterative_scan_available(session)
-    finally:
-        await engine.dispose()
-
-
-def explain_as_app_role(app_url: str, tenant, statement: str, parameters) -> str:
-    import psycopg
-
-    sync_url = make_url(app_url).set(drivername="postgresql").render_as_string(
-        hide_password=False
+    assert found[0] == created[4][0]
+    assert any("MATERIALIZED" in statement for statement in statements), (
+        "the nearest-first shape ranks in a materialised CTE"
     )
-    with psycopg.connect(sync_url, autocommit=True) as connection:
-        connection.execute("SELECT set_config('app.current_tenant_id', %s, false)", (str(tenant),))
-        connection.execute("SET enable_seqscan = off")
-        connection.execute("SELECT set_config('hnsw.ef_search', '100', false)")
-        connection.execute("SELECT set_config('hnsw.iterative_scan', 'relaxed_order', false)")
-        rows = connection.execute("EXPLAIN " + statement, parameters).fetchall()
-    return "\n".join(str(row[0]) for row in rows)
+    assert any("hnsw.ef_search" in statement for statement in statements), (
+        "the ef_search probe must be issued on the nearest-first path"
+    )

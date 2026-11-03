@@ -29,7 +29,7 @@ from agent_memory.infrastructure.orm import (
 # loaded, so asking for it would answer "missing" on a cold connection.
 _ITERATIVE_SCAN: bool | None = None
 
-VectorSearchMode = Literal["exact", "hnsw"]
+VectorSearchMode = Literal["exact", "nearest_first"]
 
 ITERATIVE_SCAN_SINCE = (0, 8)
 
@@ -64,7 +64,7 @@ class PostgresCandidateProvider:
         session: AsyncSession,
         candidate_limit: int = 1000,
         *,
-        vector_search: VectorSearchMode = "hnsw",
+        vector_search: VectorSearchMode = "nearest_first",
         ef_search: int = 100,
     ) -> None:
         self.session = session
@@ -227,7 +227,9 @@ class PostgresCandidateProvider:
         ``hnsw.iterative_scan`` removes that failure mode, which is why the shape is only used
         where the setting exists.
         """
-        if self.vector_search == "hnsw" and await iterative_scan_available(self.session):
+        if self.vector_search == "nearest_first" and (
+            await iterative_scan_available(self.session)
+        ):
             return await self._nearest_first(query, principal, filters)
         return await self._exact_scan(query, filters)
 

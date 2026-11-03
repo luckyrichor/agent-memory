@@ -42,10 +42,12 @@ class Settings(BaseSettings):
     # Rows each retrieval channel may contribute before fusion. Deep pagination (offset up to
     # 2900) needs the default; lower it only with recall data from the dev set (PLAN.md B1).
     retrieval_candidate_limit: int = Field(default=1000, ge=1, le=1000)
-    # B3: "hnsw" searches nearest-first, the only shape a pgvector HNSW index can serve; it is only
-    # used where the extension supports iterative scans (>= 0.8), otherwise the provider falls back
-    # to "exact". ef_search trades recall for latency *inside* the index scan.
-    vector_search: Literal["exact", "hnsw"] = "hnsw"
+    # B3: "nearest_first" ranks inside the embeddings table and joins the memory rows afterwards --
+    # the only shape an HNSW index can serve, and measurably cheaper than the join-then-sort shape
+    # even with no index. It is used where pgvector supports iterative scans (>= 0.8), because only
+    # then is it safe to add the optional index without truncating the candidate list; otherwise
+    # the provider keeps the "exact" shape. ef_search only matters once such an index exists.
+    vector_search: Literal["exact", "nearest_first"] = "nearest_first"
     vector_ef_search: int = Field(default=100, ge=1, le=4000)
 
     @model_validator(mode="after")

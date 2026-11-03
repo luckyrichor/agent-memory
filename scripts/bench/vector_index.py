@@ -51,6 +51,8 @@ async def main() -> None:
     parser.add_argument("--queries", type=int, default=30)
     parser.add_argument("--ef-search", default="40,200,1000")
     parser.add_argument("--k", type=int, default=20, help="recall@k")
+    parser.add_argument("--candidate-limit", type=int, default=1000,
+                        help="rows each channel may contribute (MEMORY_RETRIEVAL_CANDIDATE_LIMIT)")
     parser.add_argument("--database-url", help="existing superuser URL; otherwise a local cluster")
     parser.add_argument("--reset", action="store_true",
                         help="with --database-url: drop and recreate the public schema first")
@@ -89,6 +91,9 @@ async def main() -> None:
             with owner.begin() as connection:
                 connection.execute(text("DROP SCHEMA public CASCADE"))
                 connection.execute(text("CREATE SCHEMA public"))
+                # A recreated schema has no ACLs: without this the app role cannot resolve a
+                # single unqualified table name and every query fails as "relation does not exist".
+                connection.execute(text("GRANT USAGE ON SCHEMA public TO PUBLIC"))
         owner.dispose()
         config = Config(str(ROOT / "alembic.ini"))
         config.set_main_option("script_location", str(ROOT / "migrations"))
@@ -164,7 +169,9 @@ async def main() -> None:
             drivername="postgresql", username="bench_app", password="bench-app"
         ).render_as_string(hide_password=False)
 
-        async def run_config(label: str, truth: dict | None) -> tuple[dict, dict]:
+        async def run_config(
+            label: str, truth: dict | None, mode: str = "exact", ef: int | None = None
+        ) -> tuple[dict, dict]:
             engine = create_engine(app_url)
             sessions = create_session_factory(engine)
             captured: list[tuple[str, object]] = []
@@ -186,7 +193,10 @@ async def main() -> None:
                     captured.clear()
                     started = time.perf_counter()
                     async with session_for_principal(sessions, principal) as session:
-                        candidates = await PostgresCandidateProvider(session).candidates(
+                        candidates = await PostgresCandidateProvider(
+                            session, vector_search=mode, candidate_limit=args.candidate_limit,
+                            ef_search=ef if ef is not None else 100,
+                        ).candidates(
                             RetrievalQuery("", vector=vector, model=MODEL, limit=args.k), principal)
                     latencies.append((time.perf_counter() - started) * 1000)
                     ids = [c.memory_id for c in candidates]
@@ -196,7 +206,8 @@ async def main() -> None:
                         want = set(truth[name][index][: args.k])
                         recalls.append(len(want & set(ids[: args.k])) / max(1, len(want)))
                 selects = [(s, p) for s, p in captured
-                           if s.lstrip().upper().startswith("SELECT") and "FROM memories" in s]
+                           if s.lstrip().upper().startswith(("SELECT", "WITH"))
+                           and "FROM memories" in s]
                 with psycopg.connect(sync_app_url) as plain:
                     plain.execute("SELECT set_config('app.current_tenant_id', %s, false)",
                                   (str(tenants[name]),))
@@ -224,7 +235,7 @@ async def main() -> None:
             return result, ranked
 
         report: dict[str, dict] = {}
-        exact, truth = await run_config("exact", None)
+        exact, truth = await run_config("exact", None, "exact")
         report["exact_no_index"] = exact
 
         # Variant 2: index-friendly SQL shape (nearest-first on the embeddings table, then join),
@@ -252,7 +263,7 @@ async def main() -> None:
                         plain.execute("SET hnsw.iterative_scan = relaxed_order")
                     for index, vector in enumerate(vectors):
                         literal = "[" + ",".join(f"{x:.6f}" for x in vector) + "]"
-                        params = {"q": literal, "model": MODEL, "lim": 1000}
+                        params = {"q": literal, "model": MODEL, "lim": args.candidate_limit}
                         started = time.perf_counter()
                         ids = [r[0] for r in plain.execute(two_step_sql, params).fetchall()]
                         latencies.append((time.perf_counter() - started) * 1000)
@@ -283,21 +294,25 @@ async def main() -> None:
                 "SELECT pg_size_pretty(pg_relation_size('ix_memory_embeddings_hnsw'))")).scalar()
             table = connection.execute(text(
                 "SELECT pg_size_pretty(pg_relation_size('memory_embeddings'))")).scalar()
+            # The old shape with the index present: same SQL as before B3, so if the index were
+            # the whole story this run would already be fast.
+            with_index, _ = await run_config("exact_with_index", truth, "exact")
+            report["provider_exact_with_index"] = with_index
             for ef in [int(x) for x in args.ef_search.split(",")]:
                 connection.execute(text(
                     f'ALTER DATABASE "{make_url(owner_url).database}"'
                     f" SET hnsw.ef_search = {ef}"))
-                result, _ = await run_config(f"hnsw_ef{ef}", truth)
-                report[f"hnsw_global_ef_search_{ef}"] = result
+                result, _ = await run_config(f"nearest_first_ef{ef}", truth, "nearest_first", ef)
+                report[f"provider_nearest_first_ef_search_{ef}"] = result
 
         iterative_supported = False
         with owner.connect() as connection:
             iterative_supported = connection.execute(text(
                 "SELECT current_setting('hnsw.iterative_scan', true)")).scalar() is not None
         for ef in [int(x) for x in args.ef_search.split(",")]:
-            report[f"hnsw_two_step_ef_search_{ef}"] = run_two_step(ef)
+            report[f"raw_two_step_ef_search_{ef}"] = run_two_step(ef)
             if iterative_supported:
-                report[f"hnsw_two_step_iterative_ef_search_{ef}"] = run_two_step(
+                report[f"raw_two_step_iterative_ef_search_{ef}"] = run_two_step(
                     ef, iterative=True)
         out = {
             "label": args.label,
@@ -313,7 +328,7 @@ async def main() -> None:
             "data": {"big_tenant_rows": args.big, "small_tenants": args.small_tenants,
                      "small_tenant_rows": args.small_size, "dims": 1024, "seed_seconds": seed_s,
                      "queries_per_class": args.queries, "recall_k": args.k,
-                     "candidate_limit": 1000},
+                     "candidate_limit": args.candidate_limit},
             "hnsw": {"m": 16, "ef_construction": 64, "build_seconds": build_s,
                      "index_size": size, "embedding_table_size": table,
                      "iterative_scan_supported": iterative_supported},
