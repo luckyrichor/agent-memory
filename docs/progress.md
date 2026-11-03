@@ -588,3 +588,15 @@ B0-CANDIDATE-ACTIVATION-MISSING：候选记忆无自动生效路径；冻结B0�
 - 离线门禁：`pytest tests/unit` 409 passed；`ruff check src tests migrations` 通过；`mypy src` strict 102 文件无错；`git diff --check` 通过。未跑集成/Testcontainers 测试。
 - 清理只出清单、未执行：A 类可重新下载 8 项共 487,069,042 B（464.5 MiB），路径/大小/sha256 见 `.agent-tasks/2026-11-03-stage1-deletable-a-class.json`；B 类派生重复目录与 C 类独占证据均不列入。
 - 飞书 Wiki 按用户要求仍暂缓；阶段2 状态不变，仍未验收、未进入阶段3。
+
+## 2026-11-03T17:43:27+08:00 阶段1收尾完成：代码入 GitHub、A 类下载物清理已执行
+
+由 CodeBuddy 实施（deepseek-v4.1-flash）；用户授权清理后执行，Codex 已独立确认 8 条路径均不存在。上节“清理只出清单、未执行”及“未提交/推送”两处状态已被本条取代。服务与进程保持全部停止，未启停任何单元或容器。
+
+- 代码修正来源：GitHub `6e87149`（Sync stage-1 B0 evidence, measurement tooling and handoff docs，已推送 origin/main）。内容为 `select_questions` 补类型注解、单测 import 排序、两个 load 脚本去掉公网地址/派生主机名硬编码（目标改由 `--base-url/--host` 或 `B0_BASE_URL/B0_HOST` 提供，缺失时在 `mkdir` 前 `parser.error` 退出 2）。
+- 离线门禁为提交前结果，本轮未重跑：`pytest tests/unit` 409 passed；`ruff check src tests migrations` All checks passed；`mypy src` strict 102 文件无错；`git diff --check` 通过。未调用付费 API，未跑集成/容器测试。
+- 清理执行：删除 `.local` A 类 8 项共 **487,069,042 B（约 464.5 MiB）**——longmemeval_s_cleaned.json、longmemeval_oracle.json、DuLeMon.zip、ECD.zip、locomo/、PerLTQA/、k6-v2.3.0-linux-amd64.tar.gz、tokenizer.json。删除前逐项核对大小与 sha256（目录项按目录内全部文件哈希），删除后 8/8 路径 `[ -e ]`/`[ -L ]` 均不存在。
+- 空间实测：`du -s -B1` 仓库 **7,769,567,232 → 7,281,754,112 B（约 7.24 → 6.78 GiB，差 487,813,120 B）**；`du -sb` **7,216,173,816 → 6,729,104,774 B（差 487,069,042 B，与该 8 项总量精确一致）**。`du -s` 与 `df` 的差值来自块分配与主机并发活动，不作为精确对账依据。
+- 可再下载来源仍沿用 README 与既有下载清单重取，未新增下载文档；精确路径/大小/sha256 清单在 `.agent-tasks/2026-11-03-cleanup-result.json`，仅本机私有，不入库、不上传、不发群。
+- 保留项全部未动：冻结 `normalized-v3`、旧归一化派生产物、付费模型输出、人工标签与审核数据、向量、DB dump 与检查点、worktrees、容器与卷（含 `agent-memory_agent-memory-postgres`）及其 restart 策略。
+- `CLAUDE.md` 仍只有 `@AGENTS.md` 一行。飞书 Wiki 按用户要求仍暂缓；飞书待同步：本次阶段1收尾完成与 A 类清理结果（用户明确暂不写，非授权失效）。阶段2 仍未验收、未进入阶段3。

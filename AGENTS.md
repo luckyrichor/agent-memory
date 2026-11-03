@@ -11,11 +11,13 @@
 <!-- SERVICE_STOP_HANDOFF_20261102_END -->
 
 <!-- STAGE1_VERIFY_20261103_START -->
-- 2026-11-03（北京时间）阶段1收尾复核，CodeBuddy 实施、deepseek-v4.1-flash，Codex 待验；服务仍全部停止，本轮未启动任何进程/容器。
-- 只改/只核对 4 个文件：`src/agent_memory/evals/b0_selection.py`（`select_questions` 注解已补）、`tests/unit/evals/test_b0_selection.py`（import 已排序）、`scripts/run-b0-mac-load.py`、`scripts/run-b0-linux-load-point.py`。两个 load 脚本已无公网 IP/派生主机名，目标必须由 `--base-url/--host` 或 `B0_BASE_URL/B0_HOST` 提供，缺失在 `mkdir` 前 `parser.error` 退出 2；实测缺失目标时无目录创建。
-- 四道离线检查：`pytest tests/unit` 409 passed；`ruff check src tests migrations` All checks passed；`mypy src` 102 文件无错；`git diff --check` 通过。未调用任何付费 API，未跑集成/容器测试。
-- 可删清单只列不删：`.local` A 类 8 项共 487,069,042 B（464.5 MiB），精确路径/大小/sha256 见 `.agent-tasks/2026-11-03-stage1-deletable-a-class.json`（本机排除，不入库）；B 类派生目录与 C 类独占证据均不列入。
-- 本轮未 commit/push/删除/启停服务，未新增服务与依赖；飞书 Wiki 按用户要求仍暂缓，等待 Codex 下一步。
+- 2026-11-03T17:43:27+08:00（北京时间，现场读取）阶段1收尾**已完成**：代码修正已入 GitHub `6e87149`，A 类下载物清理已执行并核对，服务保持停止。实施 CodeBuddy（deepseek-v4.1-flash），Codex 已独立确认 8 条路径均不存在。
+- 代码修正（已提交）：`src/agent_memory/evals/b0_selection.py` 的 `select_questions` 补类型注解；`tests/unit/evals/test_b0_selection.py` import 排序；`scripts/run-b0-mac-load.py`、`scripts/run-b0-linux-load-point.py` 去掉公网地址/派生主机名硬编码，目标改由 `--base-url/--host` 或 `B0_BASE_URL/B0_HOST` 提供，缺失时在 `mkdir` 前 `parser.error` 退出 2。
+- 离线门禁（提交前跑过，本轮未重跑）：`pytest tests/unit` 409 passed；`ruff check src tests migrations` All checks passed；`mypy src` 102 文件无错；`git diff --check` 通过。未调用付费 API，未跑集成/容器测试。
+- 清理**已执行**（用户授权）：删除 `.local` A 类 8 项共 487,069,042 B（464.5 MiB）——LongMemEval cleaned/oracle、DuLeMon.zip、ECD.zip、locomo/、PerLTQA/、k6 Linux 包、tokenizer.json。实测 `du -s -B1` 仓库 7,769,567,232 → 7,281,754,112 B（约 7.24 → 6.78 GiB），`du -sb` 7,216,173,816 → 6,729,104,774 B；表观差值与该 8 项总字节完全一致。清单与哈希存 `.agent-tasks/2026-11-03-cleanup-result.json`，私有、不入库不上传。
+- 可再下载来源仍按 README 与旧下载清单重取，未新增下载说明文件；冻结 `normalized-v3`、旧归一化产物、付费模型输出、人工标签、向量、DB dump、worktrees 与容器卷全部保留，容器/卷/restart 策略未动，服务与进程仍全部停止，未启停任何单元。
+- 版本状态：HEAD `6e87149`（Sync stage-1 B0 evidence, measurement tooling and handoff docs）已推送 GitHub origin/main；`CLAUDE.md` 仍只有 `@AGENTS.md` 一行，保持不动。阶段2 仍未验收、未进入阶段3。
+- 飞书 Wiki 按用户要求仍暂缓；**飞书待同步：2026-11-03 阶段1 收尾完成与 A 类清理结果**，原因是用户明确暂不写，不是授权失效。
 <!-- STAGE1_VERIFY_20261103_END -->
 
 <!-- B0_EXPANSION_20261101_START -->
