@@ -74,7 +74,7 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 |---|---|---|---|---|---|
 | C1 | worker 有活时不睡眠，只有空闲才等待 | O5 | 完成 | 积压 N 条任务的清空时间 | `docs/optimization/measurements/c-*-burst-*.json` |
 | C2 | 触发式唤醒：PostgreSQL `LISTEN/NOTIFY`，保留低频轮询兜底 | O5 | 完成 | "写入→可检索"延迟 p50/p95 前后对比 | `c-*-steady-*.json`、迁移 `0009_job_notify.py`、`tests/integration/test_worker_wakeup.py` |
-| C3 | 单进程多并发消费（`--concurrency`） | O5 | 完成-仅功能，吞吐对比未测 | 吞吐对比；租约不重复领取 | 代码已有；并发 1 对 4 的对比被中断，待补 |
+| C3 | 单进程多并发消费（`--concurrency`） | O5 | 完成 | 吞吐对比；租约不重复领取 | `docs/optimization/measurements/c3-conc{1,4}-burst-*.json`、`tests/integration/test_worker_concurrency.py` |
 | C4 | 任务优先级（交互写入 > 批量导入） | O5 | 待做 | 混合负载下交互任务延迟 | |
 | C5 | 同租户、同模型、相同正文的向量复用（内容哈希） | O4 | 待做 | 向量调用次数前后对比（计数提供器） | |
 
@@ -175,6 +175,12 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 - 未完成：并发 1 对 4 在 300 ms 模拟延迟下的吞吐对比被中断，没有数据，不得写成已测；全量测试在最后一次改动（`--fixture-latency-ms`）之后尚未重跑。
 - 下一步：重跑全量四道门；补并发对比；然后 B1/B2/B4。
 
+### 2026-11-02 — C3 补测完成，四道门重跑通过（新会话接手）
+- 环境：新沙箱没有 pgvector，用 `apt-get install postgresql-16-pgvector` 装上（0.6.0，与此前一致）；`uv sync --all-groups --frozen` 后按第 3 节方式跑。
+- 四道门（本沙箱 localpg，非 Docker）：pytest 476 passed（排除需要子进程 Docker 的 `test_b0_harness`）；ruff 通过；mypy strict 102 文件无错；foundation 8/8。这是 `--fixture-latency-ms` 改动之后第一次全量重跑。
+- C3 吞吐对比（`scripts/bench/pipeline_latency.py`，突发 40 条，embedding 夹具模拟 300 ms 延迟，各 3 次，2 核同机、规则抽取）：全部向量就绪耗时，并发 1 为 13.36–13.48 s（中位 13.45 s），并发 4 为 3.78–3.99 s（中位 3.97 s），约 3.4 倍。数据在 `measurements/c3-conc{1,4}-burst-*.json`。这只说明"慢提供器下并发能把等待重叠起来"，不代表真实模型的吞吐。
+- 新增 `tests/integration/test_worker_concurrency.py`：24 个任务、4 个并发循环，断言每个任务恰好被领取一次且多个循环都分到了活。
+- 下一步：B1 → B2 → B4。
 
 ## 9. 需要负责人决定或配合的事项
 
