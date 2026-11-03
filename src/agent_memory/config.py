@@ -33,6 +33,9 @@ class Settings(BaseSettings):
     query_embedding_cache_seconds: float = Field(default=60, gt=0, le=3600)
     query_embedding_cache_size: int = Field(default=256, ge=1, le=10000)
     worker_lease_seconds: float = Field(default=30, gt=0)
+    # Rows each retrieval channel may contribute before fusion. Deep pagination (offset up to
+    # 2900) needs the default; lower it only with recall data from the dev set (PLAN.md B1).
+    retrieval_candidate_limit: int = Field(default=1000, ge=1, le=1000)
 
     @model_validator(mode="after")
     def validate_lease_budget(self) -> "Settings":

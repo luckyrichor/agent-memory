@@ -63,7 +63,7 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 
 | ID | 任务 | 方案编号 | 状态 | 验证方式 | 证据 |
 |---|---|---|---|---|---|
-| B1 | 两段式检索：先只取 id 与分数，只对当前页取正文；候选数上限可配置（默认 1000→200） | O1 | 待做 | 单测 + 微基准（行数/传输量/延迟） | |
+| B1 | 两段式检索：先只取 id 与分数，只对当前页取正文；候选数上限可配置（默认 1000→200） | O1 | 完成-传输量降低，延迟无改善；默认值未降 | 单测 + 微基准（行数/传输量/延迟） | `tests/unit/application/test_retrieval.py`、`tests/integration/test_two_stage_retrieval.py`、`scripts/bench/retrieval_read_path.py`、`measurements/b1-{before,after}-10k-*.json` |
 | B2 | 英文词法通道补 GIN 索引；检查三路查询的执行计划 | O1 | 待做 | `EXPLAIN` 前后对比 | |
 | B3 | 向量近似索引（HNSW）实验 + 过滤后结果过少的处理 | O2 | 待做 | 召回率对精确扫描、延迟，1 万 / 10 万向量 | |
 | B4 | 连接池参数可配置、池耗尽快速失败返回 503（带 Retry-After），不再挂 30 秒 | F2 | 待做 | 单测 + 并发复现 | |
@@ -181,6 +181,17 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 - C3 吞吐对比（`scripts/bench/pipeline_latency.py`，突发 40 条，embedding 夹具模拟 300 ms 延迟，各 3 次，2 核同机、规则抽取）：全部向量就绪耗时，并发 1 为 13.36–13.48 s（中位 13.45 s），并发 4 为 3.78–3.99 s（中位 3.97 s），约 3.4 倍。数据在 `measurements/c3-conc{1,4}-burst-*.json`。这只说明"慢提供器下并发能把等待重叠起来"，不代表真实模型的吞吐。
 - 新增 `tests/integration/test_worker_concurrency.py`：24 个任务、4 个并发循环，断言每个任务恰好被领取一次且多个循环都分到了活。
 - 下一步：B1 → B2 → B4。
+
+### 2026-11-02 — B1 两段式检索完成（本沙箱，1 万行，同机，随机夹具向量）
+- 做了：`Candidate` 去掉正文，三通道只取 `memory_id, version_id, score`；`MemoryRetriever` 融合分页后调用新增的 `CandidateProvider.contents()` 只读当前页正文（Postgres 与内存适配器都实现；按租户过滤，查不到的版本直接丢弃而不是返回空正文）；候选上限改成配置 `MEMORY_RETRIEVAL_CANDIDATE_LIMIT`，**默认仍是 1000，没有降到 200**：API 允许 offset 到 2900，降到 200 会让深分页变空，而我们没有开发集召回数据，PLAN 第 5 节也要求不盲降。
+- 测量（`scripts/bench/retrieval_read_path.py`，同一脚本、同一数据、改前 `605a079` 对改后，各 3 次，每类 20 个查询，1 万行、平均正文 849 字节、pgvector 0.6.0、2 核同机；字节数是字符串长度估算，不是线上抓包）：
+  - 候选阶段从数据库取回的正文量（中位）：词法窄 270,772 → 16,983 字节；词法宽 848,122 → 16,967；词法+结构化 1,119,850 → 16,981；向量+词法 1,119,921 → 17,036。降了约 16–66 倍。
+  - 延迟 p50（中位，范围）：词法窄 679 ms（617–692）→ 673 ms（606–707）；词法宽 1862 ms（1788–1904）→ 1869 ms（1760–2006）；词法+结构化 656 → 630 ms；向量+词法 775 → 719 ms。**每类前后范围互相重叠，不能说延迟改善。**
+- 为什么延迟没变：英文词法通道对每一行现算 `to_tsvector('english', content)`（没有对应索引），1 万行就要 0.6–1.9 s，这部分主导了总时间；客户端和数据库同机，省下的字节也没有网络传输开销可省。所以 B1 现在**只能**说"减少了数据库到应用的传输和反序列化量"，延迟收益要等 B2（建索引）之后才可能显现，真实跨机部署下传输量的影响本环境没测。
+- 新增测试：单测 3 个（只取当前页正文、分页拼起来无重叠无遗漏且空页不触发第二阶段、正文读不到的命中被丢弃）；集成测试 3 个（`contents()` 取不到别的租户的版本、候选不带正文且页内容正确、候选上限对每通道生效）。
+- 四道门（本沙箱 localpg）：482 passed（排除 `test_b0_harness`）；ruff（`src tests migrations`）通过；mypy strict 102 文件无错；foundation 8/8。`scripts/bench/pipeline_latency.py` 有一条 ruff `ASYNC220`（C1–C3 提交带来的，不在闸门范围，未处理）。
+- 踩坑：基准一开始的"窄查询"带了词表里的常用词，几乎全表命中，分不出窄和宽，已改成只用标记词；alembic 日志写 stdout，基准要用 `--out` 取 JSON。
+- 下一步：B2——给英文词法通道补 GIN 索引并对比 `EXPLAIN`；B2 的"改前"数据就是本次 `b1-after-10k-*.json`。
 
 ## 9. 需要负责人决定或配合的事项
 

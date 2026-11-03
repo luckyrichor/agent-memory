@@ -43,3 +43,66 @@ async def test_eval_adapter_fuses_current_version_filters_tenant_and_pages():
 def test_query_vectors_fail_closed(vector,model):
     with pytest.raises(ValueError):
         RetrievalQuery("query",tuple(vector),model)
+
+
+class SpyProvider:
+    """Wraps the in-memory adapter and records which version ids had their body requested."""
+
+    def __init__(self, inner, drop=frozenset()):
+        self.inner, self.drop, self.requested = inner, drop, []
+
+    async def candidates(self, query, principal):
+        return await self.inner.candidates(query, principal)
+
+    async def contents(self, version_ids, principal):
+        self.requested.append(list(version_ids))
+        found = await self.inner.contents(version_ids, principal)
+        return {k: v for k, v in found.items() if k not in self.drop}
+
+
+def _corpus(count):
+    tenant, user = uuid4(), uuid4()
+    principal = RequestPrincipal(tenant, user, frozenset(), frozenset({"memory:read"}),
+                                 frozenset({"project"}))
+    records = []
+    for index in range(count):
+        m, v = Memory.create(tenant_id=tenant, memory_id=uuid4(), version_id=uuid4(),
+            memory_type=MemoryType.SEMANTIC, scope=MemoryScope(ScopeKind.WORKSPACE, "project", None),
+            owner_user_id=user, content=f"compiler note {index}", now=datetime.now(UTC))
+        records.append(MemoryRecord(m, (v,)))
+    return principal, records
+
+
+@pytest.mark.asyncio
+async def test_body_text_is_fetched_only_for_the_requested_page():
+    principal, records = _corpus(12)
+    spy = SpyProvider(InMemoryCandidateProvider(records, {}))
+    page = await MemoryRetriever(spy).search(RetrievalQuery("compiler", limit=5), principal)
+    assert len(page.items) == 5 and page.next_offset == 5
+    assert len(spy.requested) == 1 and len(spy.requested[0]) == 5  # 12 candidates, 5 bodies
+    assert {hit.version_id for hit in page.items} == set(spy.requested[0])
+    assert all(hit.content.startswith("compiler note") for hit in page.items)
+
+
+@pytest.mark.asyncio
+async def test_two_stage_page_matches_single_stage_order_and_empty_page_skips_second_stage():
+    principal, records = _corpus(7)
+    spy = SpyProvider(InMemoryCandidateProvider(records, {}))
+    retriever = MemoryRetriever(spy)
+    seen = []
+    for offset in (0, 3, 6):
+        page = await retriever.search(RetrievalQuery("compiler", limit=3, offset=offset), principal)
+        seen.extend(hit.memory_id for hit in page.items)
+    assert len(seen) == 7 and len(set(seen)) == 7  # pages tile the fused ranking, no overlap
+    before = len(spy.requested)
+    empty = await retriever.search(RetrievalQuery("compiler", limit=3, offset=9), principal)
+    assert empty.items == () and len(spy.requested) == before  # nothing to fetch
+
+
+@pytest.mark.asyncio
+async def test_hit_whose_body_cannot_be_read_is_dropped_not_returned_blank():
+    principal, records = _corpus(3)
+    gone = records[0].current_version.version_id
+    spy = SpyProvider(InMemoryCandidateProvider(records, {}), drop={gone})
+    page = await MemoryRetriever(spy).search(RetrievalQuery("compiler", limit=10), principal)
+    assert gone not in {hit.version_id for hit in page.items} and len(page.items) == 2

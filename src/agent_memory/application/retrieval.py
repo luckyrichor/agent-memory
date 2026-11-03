@@ -1,5 +1,6 @@
 """Authorized candidate retrieval and deterministic reciprocal-rank fusion."""
 import math
+from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import Protocol
 from uuid import UUID
@@ -31,9 +32,10 @@ class RetrievalQuery:
 
 @dataclass(frozen=True)
 class Candidate:
+    """Channel output carries ids and a score only; body text is fetched for the page alone."""
+
     memory_id: UUID
     version_id: UUID
-    content: str
     channel: str
     raw_score: float
 
@@ -51,6 +53,11 @@ class RetrievalHit:
 class CandidateProvider(Protocol):
     async def candidates(self, query: RetrievalQuery,
                          principal: RequestPrincipal) -> list[Candidate]: ...
+
+    async def contents(self, version_ids: Sequence[UUID],
+                       principal: RequestPrincipal) -> dict[UUID, str]:
+        """Body text of already-authorized versions; unknown or foreign ids are simply absent."""
+        ...
 
 
 @dataclass(frozen=True)
@@ -77,15 +84,23 @@ class MemoryRetriever:
                 ranks[candidate.channel] = ranks.get(candidate.channel, 0) + 1
                 grouped.setdefault(candidate.memory_id, []).append(
                     (candidate, ranks[candidate.channel]))
-            hits = [RetrievalHit(memory_id, entries[0][0].version_id, entries[0][0].content,
-                    sum((0.25 if candidate.channel == "structured" else 1) / (60 + rank)
-                        for candidate, rank in entries),
-                    {candidate.channel: rank for candidate, rank in entries},
-                    {candidate.channel: candidate.raw_score for candidate, _ in entries})
-                    for memory_id, entries in grouped.items()]
-            hits.sort(key=lambda hit: (-hit.score, str(hit.memory_id)))
+            fused = [(memory_id, entries[0][0].version_id,
+                      sum((0.25 if candidate.channel == "structured" else 1) / (60 + rank)
+                          for candidate, rank in entries),
+                      {candidate.channel: rank for candidate, rank in entries},
+                      {candidate.channel: candidate.raw_score for candidate, _ in entries})
+                     for memory_id, entries in grouped.items()]
+            fused.sort(key=lambda item: (-item[2], str(item[0])))
             end = query.offset + query.limit
-            return RetrievalPage(tuple(hits[query.offset:end]),
-                                 end if end < len(hits) else None,
+            page = fused[query.offset:end]
+            # Second stage: only the current page (<= 100 rows) needs its body text.
+            contents = (await self.provider.contents([item[1] for item in page], principal)
+                        if page else {})
+            hits = [RetrievalHit(memory_id, version_id, contents[version_id], score,
+                                 hit_ranks, raw_scores)
+                    for memory_id, version_id, score, hit_ranks, raw_scores in page
+                    if version_id in contents]
+            return RetrievalPage(tuple(hits),
+                                 end if end < len(fused) else None,
                                  {channel: ranks.get(channel, 0)
                                   for channel in ("lexical", "vector", "structured")})

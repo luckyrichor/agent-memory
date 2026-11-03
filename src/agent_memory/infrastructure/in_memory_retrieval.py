@@ -1,6 +1,7 @@
 """Small evaluation adapter; lexical tokens emulate 'simple', not PostgreSQL itself."""
 
 import math
+from collections.abc import Sequence
 from dataclasses import dataclass
 from uuid import UUID
 
@@ -15,6 +16,18 @@ from agent_memory.domain.principal import RequestPrincipal
 class InMemoryCandidateProvider:
     records: list[MemoryRecord]
     embeddings: dict[UUID, tuple[str, tuple[float, ...]]]
+    candidate_limit: int = 1000
+
+    async def contents(
+        self, version_ids: Sequence[UUID], principal: RequestPrincipal
+    ) -> dict[UUID, str]:
+        wanted = set(version_ids)
+        return {
+            record.current_version.version_id: record.current_version.content
+            for record in self.records
+            if record.memory.tenant_id == principal.tenant_id
+            and record.current_version.version_id in wanted
+        }
 
     async def candidates(
         self, query: RetrievalQuery, principal: RequestPrincipal
@@ -41,7 +54,7 @@ class InMemoryCandidateProvider:
             overlap = tokens & content_tokens
             if overlap:
                 channels["lexical"].append(
-                    Candidate(m.memory_id, v.version_id, v.content, "lexical", len(overlap))
+                    Candidate(m.memory_id, v.version_id, "lexical", len(overlap))
                 )
             embedding = self.embeddings.get(v.version_id)
             if query.vector and embedding and embedding[0] == query.model:
@@ -50,14 +63,14 @@ class InMemoryCandidateProvider:
                 if norm > 0:
                     score = sum(a * b for a, b in zip(vector, query.vector, strict=True)) / norm
                     channels["vector"].append(
-                        Candidate(m.memory_id, v.version_id, v.content, "vector", score)
+                        Candidate(m.memory_id, v.version_id, "vector", score)
                     )
             if query.memory_type or query.workspace_id:
                 channels["structured"].append(
-                    Candidate(m.memory_id, v.version_id, v.content, "structured", 1)
+                    Candidate(m.memory_id, v.version_id, "structured", 1)
                 )
         return [
             c
             for channel in channels.values()
-            for c in sorted(channel, key=lambda c: (-c.raw_score, str(c.memory_id)))[:1000]
+            for c in sorted(channel, key=lambda c: (-c.raw_score, str(c.memory_id)))[: self.candidate_limit]
         ]

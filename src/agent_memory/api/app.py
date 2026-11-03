@@ -245,7 +245,9 @@ def create_app(settings: Settings) -> FastAPI:
         principal: Annotated[RequestPrincipal, Depends(resolver)],
     ) -> AsyncIterator[MemoryRetriever]:
         async with session_for_principal(sessions, principal) as session:
-            yield MemoryRetriever(PostgresCandidateProvider(session))
+            yield MemoryRetriever(
+                PostgresCandidateProvider(session, settings.retrieval_candidate_limit)
+            )
 
     app.include_router(create_router(resolver, service_dependency))
     app.include_router(create_retrieval_router(resolver, retrieval_dependency, settings, vectors))

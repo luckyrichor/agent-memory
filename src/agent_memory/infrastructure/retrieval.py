@@ -1,4 +1,6 @@
 import re
+from collections.abc import Sequence
+from uuid import UUID
 
 from sqlalchemy import String, and_, cast, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -11,8 +13,23 @@ from agent_memory.infrastructure.orm import MemoryEmbeddingRow, MemoryRow, Memor
 class PostgresCandidateProvider:
     """Filter before ranking; only active current versions can enter any channel."""
 
-    def __init__(self, session: AsyncSession) -> None:
+    def __init__(self, session: AsyncSession, candidate_limit: int = 1000) -> None:
         self.session = session
+        self.candidate_limit = candidate_limit
+
+    async def contents(
+        self, version_ids: Sequence[UUID], principal: RequestPrincipal
+    ) -> dict[UUID, str]:
+        """Second retrieval stage: bodies for the ids the channels already authorized."""
+        if not version_ids:
+            return {}
+        v = MemoryVersionRow
+        rows = await self.session.execute(
+            select(v.memory_version_id, v.content).where(
+                v.tenant_id == principal.tenant_id, v.memory_version_id.in_(list(version_ids))
+            )
+        )
+        return {version_id: content for version_id, content in rows}
 
     async def candidates(
         self, query: RetrievalQuery, principal: RequestPrincipal
@@ -32,7 +49,7 @@ class PostgresCandidateProvider:
         if query.memory_type is not None:
             filters.append(m.memory_type == query.memory_type.value)
         base = (
-            select(m.memory_id, v.memory_version_id, v.content)
+            select(m.memory_id, v.memory_version_id)
             .join(v, and_(v.tenant_id == m.tenant_id, v.memory_version_id == m.current_version_id))
             .where(*filters)
         )
@@ -69,11 +86,10 @@ class PostgresCandidateProvider:
                 base.add_columns(score)
                 .where(document.op("@@")(terms))
                 .order_by(score.desc(), m.memory_id)
-                .limit(1000)
+                .limit(self.candidate_limit)
             )
             candidates.extend(
-                Candidate(mid, vid, content, "lexical", float(raw))
-                for mid, vid, content, raw in rows
+                Candidate(mid, vid, "lexical", float(raw)) for mid, vid, raw in rows
             )
         if query.vector is not None:
             distance = e.embedding.cosine_distance(list(query.vector))
@@ -84,18 +100,15 @@ class PostgresCandidateProvider:
                 .add_columns(distance)
                 .where(e.model == query.model, distance <= 2)
                 .order_by(distance, m.memory_id)
-                .limit(1000)
+                .limit(self.candidate_limit)
             )
             candidates.extend(
-                Candidate(mid, vid, content, "vector", 1 - float(raw))
-                for mid, vid, content, raw in rows
+                Candidate(mid, vid, "vector", 1 - float(raw)) for mid, vid, raw in rows
             )
         # Structured is opt-in; no broad unrelated candidates for an unfiltered query.
         if query.memory_type is not None or query.workspace_id is not None:
             rows = await self.session.execute(
-                base.order_by(m.updated_at.desc(), m.memory_id).limit(1000)
+                base.order_by(m.updated_at.desc(), m.memory_id).limit(self.candidate_limit)
             )
-            candidates.extend(
-                Candidate(mid, vid, content, "structured", 1) for mid, vid, content in rows
-            )
+            candidates.extend(Candidate(mid, vid, "structured", 1) for mid, vid in rows)
         return candidates
