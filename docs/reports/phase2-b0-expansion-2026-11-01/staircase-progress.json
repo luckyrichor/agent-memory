@@ -1,0 +1,118 @@
+{
+  "status": "running",
+  "completed_points": 1,
+  "expected_points": 18,
+  "observations": [
+    {
+      "size": 10000,
+      "repeat": 1,
+      "control_exit": 255,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.12060301507537685,
+      "maximum_load_memory_fraction": 0.24104161455417517,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 31,
+          "rate": 0.08023770891593913
+        },
+        "b0_sample_errors": {
+          "count": 0,
+          "rate": 0
+        },
+        "b0_sample_client_ms": {
+          "p(90)": 25974.420918,
+          "p(95)": 26237.6041335,
+          "avg": 8025.093612000001,
+          "min": 21.310373,
+          "med": 1037.888662,
+          "max": 26338.317332
+        },
+        "b0_sample_server_ms": {
+          "p(90)": 25969.11782,
+          "p(95)": 26231.6199035,
+          "avg": 8018.8755016774185,
+          "min": 15.82839,
+          "med": 1032.16693,
+          "max": 26332.080818
+        },
+        "dropped_iterations": {
+          "count": 0,
+          "rate": 0
+        }
+      },
+      "wall_seconds": 466.27669503800007,
+      "workload": "search",
+      "rate_per_second": 0.1,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300,
+      "server_observations_scope": "all requests including warmup; request-start timestamps retained privately for window analysis",
+      "server_stage_ms": {
+        "lexical_sql": {
+          "n": 37,
+          "mean": 6717.002069486486,
+          "p50": 888.3139249999772,
+          "p95": 26061.040162999972,
+          "max": 26191.93949700002
+        },
+        "vector_sql": {
+          "n": 37,
+          "mean": 92.77572024325463,
+          "p50": 88.84725699999763,
+          "p95": 126.61736100005783,
+          "max": 803.1478059999984
+        },
+        "structured_sql": {
+          "n": 37,
+          "mean": 10.953911594597415,
+          "p50": 13.363368000000264,
+          "p95": 15.60553499996331,
+          "max": 19.761819999985164
+        },
+        "other_sql": {
+          "n": 37,
+          "mean": 0.8076887837813882,
+          "p50": 0.612341000021388,
+          "p95": 1.770025999974223,
+          "max": 3.951377000021239
+        }
+      },
+      "pool_blocking_queue_ms": {
+        "n": 0,
+        "mean": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "pool_nonblocking_queue_ms": {
+        "n": 37,
+        "mean": 0.006136621619601568,
+        "p50": 0.005110000074637355,
+        "p95": 0.008344999997689229,
+        "max": 0.028834000005417693
+      },
+      "pool_physical_connection_ms": {
+        "n": 3,
+        "mean": 12.599138666644194,
+        "p50": 8.814601999972638,
+        "p95": 8.814601999972638,
+        "max": 21.451039999988097
+      },
+      "server_total_ms": {
+        "n": 37,
+        "mean": 6854.748689729731,
+        "p50": 1033.628178000015,
+        "p95": 26209.39522499998,
+        "max": 26333.161311000025
+      },
+      "server_peak_memory_fraction": 0.3605686048473833,
+      "target_host_resource_valid": true,
+      "remote_k6_exit": 0,
+      "control_transport_note": "SSH exit255; remote status/summary/resource/log files independently recovered and checked. Does not turn an incomplete remote run into a success."
+    }
+  ],
+  "interrupted_prior_point_excluded": true,
+  "scope": "Preliminary single trial; all server stage samples include warmup. No stable maximum rate established.",
+  "initial_bottleneck_evidence": "At0.1QPS search, lexical SQL p95 about26.06s versus vector0.127s and structured0.016s; client p95 about26.24s. Zero blocking pool acquisitions observed. This localizes observed tail in lexical SQL without proving a unique root cause.",
+  "stage3_started": false
+}

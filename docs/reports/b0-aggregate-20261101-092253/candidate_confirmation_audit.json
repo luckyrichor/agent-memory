@@ -1,0 +1,166 @@
+{
+  "baseline_commit": "1e9d6f3b25b58c85792344000d7e1b5a71a79737",
+  "created_at": "2026-10-26T13:09:37.370525+00:00",
+  "method": "all API route declarations and all source ACTIVE assignments reviewed; execute actual frozen domain transition used by public restore service; no HTTP/model/DB writes",
+  "defect_id": "B0-CANDIDATE-ACTIVATION-MISSING",
+  "conclusion": "候选记忆无自动生效路径；冻结B0也未实现将原候选确认转为active的公开接口或流程。",
+  "public_restore": "POST /v1/memories/{memory_id}/restore exists, but candidate and needs_review to active are rejected; archived to active allowed",
+  "explicit_write": "POST /v1/memories creates a NEW memory ID; re-entering candidate content is not confirmation of the original candidate and is not measured as such",
+  "historical_document_caveat": "review-followup says approval uses an independent extraction path, but implemented worker only creates candidate; historical text is not implementation evidence",
+  "second_measurement": {
+    "status": "not_applicable_missing_public_path",
+    "value": null,
+    "reason": "No state rewrite, no SQL activation, no new-memory recreation disguised as confirmation"
+  },
+  "current_run_interrupted": false,
+  "calibration": "only sample after whole group completes; no early table",
+  "transition_checks": [
+    {
+      "from": "candidate",
+      "to": "active",
+      "allowed": false,
+      "error": "transition not allowed"
+    },
+    {
+      "from": "needs_review",
+      "to": "active",
+      "allowed": false,
+      "error": "transition not allowed"
+    },
+    {
+      "from": "archived",
+      "to": "active",
+      "allowed": true,
+      "error": null
+    }
+  ],
+  "api_route_declarations": [
+    {
+      "file": "src/agent_memory/api/app.py",
+      "line": 147,
+      "expression": "hints.get(reason, 'Content rejected.')"
+    },
+    {
+      "file": "src/agent_memory/api/auth.py",
+      "line": 41,
+      "expression": "claims.get('roles', [])"
+    },
+    {
+      "file": "src/agent_memory/api/auth.py",
+      "line": 42,
+      "expression": "claims.get('permissions', [])"
+    },
+    {
+      "file": "src/agent_memory/api/auth.py",
+      "line": 43,
+      "expression": "claims.get('allowed_workspace_ids', [])"
+    },
+    {
+      "file": "src/agent_memory/api/body_limit.py",
+      "line": 22,
+      "expression": "headers.get(b'content-length')"
+    },
+    {
+      "file": "src/agent_memory/api/body_limit.py",
+      "line": 21,
+      "expression": "scope.get('headers', [])"
+    },
+    {
+      "file": "src/agent_memory/api/body_limit.py",
+      "line": 36,
+      "expression": "message.get('body', b'')"
+    },
+    {
+      "file": "src/agent_memory/api/body_limit.py",
+      "line": 41,
+      "expression": "message.get('more_body', False)"
+    },
+    {
+      "file": "src/agent_memory/api/body_limit.py",
+      "line": 18,
+      "expression": "scope.get('state', {}).get('request_id', 'unavailable')"
+    },
+    {
+      "file": "src/agent_memory/api/body_limit.py",
+      "line": 18,
+      "expression": "scope.get('state', {})"
+    },
+    {
+      "file": "src/agent_memory/api/event_routes.py",
+      "line": 24,
+      "expression": "router.post('/events:batch', response_model=EventBatchResponse, status_code=status.HTTP_202_ACCEPTED)"
+    },
+    {
+      "file": "src/agent_memory/api/middleware.py",
+      "line": 62,
+      "expression": "request.headers.get(REQUEST_ID_HEADER, '')"
+    },
+    {
+      "file": "src/agent_memory/api/middleware.py",
+      "line": 70,
+      "expression": "request.scope.get('route')"
+    },
+    {
+      "file": "src/agent_memory/api/retrieval_routes.py",
+      "line": 32,
+      "expression": "router.post('/memories/search', response_model=SearchResponse)"
+    },
+    {
+      "file": "src/agent_memory/api/retrieval_routes.py",
+      "line": 88,
+      "expression": "router.post('/memories/context', response_model=ContextResponse)"
+    },
+    {
+      "file": "src/agent_memory/api/routes.py",
+      "line": 37,
+      "expression": "router.post('/memories', response_model=MemoryResponse, status_code=status.HTTP_201_CREATED)"
+    },
+    {
+      "file": "src/agent_memory/api/routes.py",
+      "line": 72,
+      "expression": "router.get('/memories/{memory_id}', response_model=MemoryDetailResponse)"
+    },
+    {
+      "file": "src/agent_memory/api/routes.py",
+      "line": 91,
+      "expression": "router.get('/memories/{memory_id}/versions', response_model=VersionListResponse)"
+    },
+    {
+      "file": "src/agent_memory/api/routes.py",
+      "line": 121,
+      "expression": "router.post('/memories/{memory_id}/versions', response_model=MemoryResponse, status_code=status.HTTP_201_CREATED)"
+    },
+    {
+      "file": "src/agent_memory/api/routes.py",
+      "line": 152,
+      "expression": "router.post('/deletion-requests', response_model=DeletionResponse, status_code=status.HTTP_202_ACCEPTED)"
+    },
+    {
+      "file": "src/agent_memory/api/routes.py",
+      "line": 181,
+      "expression": "router.post('/memories/{memory_id}/archive', response_model=MemoryResponse)"
+    },
+    {
+      "file": "src/agent_memory/api/routes.py",
+      "line": 200,
+      "expression": "router.post('/memories/{memory_id}/supersede', response_model=MemoryResponse)"
+    },
+    {
+      "file": "src/agent_memory/api/routes.py",
+      "line": 256,
+      "expression": "router.get('/memories/{memory_id}/lifecycle', response_model=LifecycleResponse)"
+    },
+    {
+      "file": "src/agent_memory/api/routes.py",
+      "line": 249,
+      "expression": "router.add_api_route(f'/memories/{{memory_id}}/{action}', endpoint_for(target), methods=['POST'], response_model=MemoryResponse)"
+    }
+  ],
+  "source_sha256": {
+    "src/agent_memory/domain/models.py": "c1ec07a3dabf6834c5d4b2cb4a0503ae3f4ca567af5ea5abc80d716d8db57942",
+    "src/agent_memory/api/routes.py": "faa05425157f3efd780bbf489d52a558f6a382f9a170e74e336e087a737e3958",
+    "src/agent_memory/application/explicit_memory.py": "183cfdef95cda8927cee3d4d7c4eed0b4070fe40c5bbd26752c126c359d205aa",
+    "src/agent_memory/infrastructure/event_repositories.py": "1f957e7afc14c8da97fccf4dbda34ba28eec20164abb9f0fa2c789c403ef166d",
+    "docs/review-followup-2026-10-08.md": "70683200fd8a860d5041c4e61344507eb1831943944f7a6b31019c6e72406647"
+  }
+}

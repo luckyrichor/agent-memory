@@ -3,6 +3,11 @@ import hashlib,json,os,subprocess,sys
 from pathlib import Path
 
 
+def aggregate_delivery_deferred(state):
+ return (state.get('aggregate_delivery_request',{}).get('status')=='deferred_until_complete'
+         and state.get('full_aggregate_ready') is not True)
+
+
 def main():
  repo=Path(__file__).resolve().parents[1];arguments=sys.argv[1:];output=Path(arguments[arguments.index('--output')+1]);python=sys.executable
  config_path=Path(arguments[arguments.index('--config')+1]);config=json.loads(config_path.read_text());history=[];rotation=None;iteration=0
@@ -33,10 +38,14 @@ def main():
  with delivery.open('a') as stream:stream.write(message)
  current=repo/'docs/evals/b0-current.json';state=json.loads(current.read_text());state.pop('managed_active_state',None);state.update(status=status['status'],active_run=str(output.relative_to(repo)),calibration_exported=calibration.exists(),phase2_accepted=False,phase3_started=False,aggregate_report=str(delivery.relative_to(repo)),managed_process_completed=True);current.write_text(json.dumps(state,ensure_ascii=False,indent=2)+'\n')
  cli=os.environ['LARK_CLI_PATH'];relative=str(delivery.relative_to(repo))
- sent=subprocess.run([cli,'im','+messages-send','--as','bot','--chat-id','oc_e7156f4a7fa19da571d73b10169cd92f','--file',relative,'--idempotency-key','b0-'+hashlib.sha256(str(output).encode()).hexdigest()[:24]+'-closed'],cwd=repo,capture_output=True,text=True,check=False)
- try:sent_ok=sent.returncode==0 and json.loads(sent.stdout).get('ok') is True
- except (ValueError,TypeError):sent_ok=False
- (output/'delivery-result-private.json').write_text(json.dumps({'exit_code':sent.returncode,'stdout':sent.stdout,'stderr':sent.stderr},ensure_ascii=False,indent=2)+'\n');(output/'delivery-result-private.json').chmod(0o600)
+ if aggregate_delivery_deferred(state):
+  sent_ok=False;delivery_result={'deferred':True,'reason':'owner requests full aggregate only after completeness verified; local report retained'}
+ else:
+  sent=subprocess.run([cli,'im','+messages-send','--as','bot','--chat-id','oc_e7156f4a7fa19da571d73b10169cd92f','--file',relative,'--idempotency-key','b0-'+hashlib.sha256(str(output).encode()).hexdigest()[:24]+'-closed'],cwd=repo,capture_output=True,text=True,check=False)
+  try:sent_ok=sent.returncode==0 and json.loads(sent.stdout).get('ok') is True
+  except (ValueError,TypeError):sent_ok=False
+  delivery_result={'exit_code':sent.returncode,'stdout':sent.stdout,'stderr':sent.stderr}
+ (output/'delivery-result-private.json').write_text(json.dumps(delivery_result,ensure_ascii=False,indent=2)+'\n');(output/'delivery-result-private.json').chmod(0o600)
  print(json.dumps({'stage':'managed-run-completed','status':status['status'],'aggregate_sent':sent_ok,'calibration_exists':calibration.exists(),'phase2_accepted':False}),flush=True)
  if result.returncode or status['status'] not in ('paused_for_owner_calibration','incomplete_calibration_population'):raise SystemExit(2)
 

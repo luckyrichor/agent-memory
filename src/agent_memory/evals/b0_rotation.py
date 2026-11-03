@@ -3,7 +3,8 @@ import re
 from typing import Any
 
 ACCOUNTS = {'Ark': ('ark-primary', 'ark-secondary'),
-            'TokenHub': ('tokenhub-primary', 'tokenhub-secondary')}
+            'TokenHub': ('tokenhub-primary', 'tokenhub-secondary'),
+            'DeepSeek': ('deepseek-direct',)}
 
 
 def vendor(model: str) -> str | None:
@@ -53,4 +54,4 @@ def candidates(role: str, model: str, provider: str, catalog: dict[str, list[str
         if role in ('answer', 'extraction') and vendor(candidate) == judge_vendor:
             continue
         result.append(item)
-    return result
+    return sorted(result, key=lambda option: option[0] == 'DeepSeek')

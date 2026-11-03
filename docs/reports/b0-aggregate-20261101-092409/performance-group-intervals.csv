@@ -1,0 +1,7 @@
+﻿workload,size,error_fraction,error_ci95_low,error_ci95_high,mean_per_trial_p95_ms,mean_p95_ci95_low_ms,mean_p95_ci95_high_ms,bootstrap_unit
+search,10000,0.6424452133794695,0.603517877739331,0.671280276816609,30000.515986133334,30000.464557643336,30000.57439962,three repeats; exact27 resamples; low precision; not pooled per-request CI
+search,100000,0.9786036036036037,0.9710585585585586,0.986936936936937,29991.842662916664,29991.725204141665,29991.9535274,three repeats; exact27 resamples; low precision; not pooled per-request CI
+write,10000,0.0,0.0,0.0,18.636910666666665,17.10288075,20.428994766666666,three repeats; exact27 resamples; low precision; not pooled per-request CI
+write,100000,0.0,0.0,0.0,20.401668599999997,19.226675739999997,21.847952689999996,three repeats; exact27 resamples; low precision; not pooled per-request CI
+context,10000,0.6470588235294118,0.6256632064590543,0.6636101499423299,30000.3967944,30000.334664343332,30000.455029306664,three repeats; exact27 resamples; low precision; not pooled per-request CI
+context,100000,0.9740990990990991,0.9676801801801802,0.9809121621621621,29992.241863499996,29992.138250154167,29992.341361633335,three repeats; exact27 resamples; low precision; not pooled per-request CI

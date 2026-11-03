@@ -1,0 +1,192 @@
+{
+  "count_all": 906,
+  "reason_counts": {
+    "no_history_baseline_mismatch": 368,
+    "answer_mismatch_despite_context_pending_human_calibration": 233,
+    "filtered_nonactive": 185,
+    "retrieval_miss": 120
+  },
+  "examples": [
+    {
+      "id": "aa5da7f33d536b98142e67d0492480247f5fe686c22b62174a192a90e41de9b7",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "no-memory",
+      "type": "single-session-preference",
+      "reason": "no_history_baseline_mismatch",
+      "flow_only": false
+    },
+    {
+      "id": "11ac5aa30054efdfa6e989fe20326fa44cc190fe935f6929e1127b6c027dbab8",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "system",
+      "type": "single-session-preference",
+      "reason": "answer_mismatch_despite_context_pending_human_calibration",
+      "flow_only": false
+    },
+    {
+      "id": "fadf5c71d5ad711c890cfdb471e9af1ae0750687676fbf561f73f84ec7a62a3a",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "no-memory",
+      "type": "multi-session",
+      "reason": "no_history_baseline_mismatch",
+      "flow_only": false
+    },
+    {
+      "id": "09f040288c87069de53d8711a3dee4b71cd35dc916e7b16d15ada7bfc838332e",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "full-context",
+      "type": "multi-session",
+      "reason": "answer_mismatch_despite_context_pending_human_calibration",
+      "flow_only": false
+    },
+    {
+      "id": "9f3859ea2f805736edf41a1974f0b0a85bff55e066ca2c75974afe03381f03ed",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "system",
+      "type": "multi-session",
+      "reason": "answer_mismatch_despite_context_pending_human_calibration",
+      "flow_only": false
+    },
+    {
+      "id": "f8fc8f78850fa4911309d5e401c45dea0acf8afe6788c7cfa9334e21fdee009e",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "no-memory",
+      "type": "single-session-assistant",
+      "reason": "no_history_baseline_mismatch",
+      "flow_only": false
+    },
+    {
+      "id": "28ca53f5815efa87c54190739c3a7706f611e77c934ee33c1b53081da23e31a8",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "no-memory",
+      "type": "multi-session",
+      "reason": "no_history_baseline_mismatch",
+      "flow_only": false
+    },
+    {
+      "id": "3047658c847240d853877a5511010c157e63968e6dd431d6785ed5611abcafdc",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "naive-vector",
+      "type": "multi-session",
+      "reason": "answer_mismatch_despite_context_pending_human_calibration",
+      "flow_only": false
+    },
+    {
+      "id": "5991acacc7cfa126a3d49c10f61eb3d6b11817fc4caa1f21e14829b00a3b7fc0",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "no-memory",
+      "type": "single-session-preference",
+      "reason": "no_history_baseline_mismatch",
+      "flow_only": false
+    },
+    {
+      "id": "ff3712bb654b0a091d54ad447a4b9b16c12a78ff9d5e88d5fd66064d3cc8efcd",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "system",
+      "type": "single-session-preference",
+      "reason": "answer_mismatch_despite_context_pending_human_calibration",
+      "flow_only": false
+    },
+    {
+      "id": "770300781fb969f27e9960c7cec87fa04f30beaabc9b2aa1bf3e28d4e59a2158",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "no-memory",
+      "type": "multi-session",
+      "reason": "no_history_baseline_mismatch",
+      "flow_only": false
+    },
+    {
+      "id": "67226902bb1db1b08452d1c437459a71a0d2892be7620959447e055da699e4b7",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "full-context",
+      "type": "multi-session",
+      "reason": "answer_mismatch_despite_context_pending_human_calibration",
+      "flow_only": false
+    },
+    {
+      "id": "8c4ad1854e3efb0bc3845977d14fe0507ecb4679842f36317ac90faeff777425",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "no-memory",
+      "type": "single-session-assistant",
+      "reason": "no_history_baseline_mismatch",
+      "flow_only": false
+    },
+    {
+      "id": "f87509a857496d9c087b31ffbf395968e0ed0f2565fb1208e5f389b6d5927863",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "no-memory",
+      "type": "multi-session",
+      "reason": "no_history_baseline_mismatch",
+      "flow_only": false
+    },
+    {
+      "id": "67dbf49d0f2222c7e4a1af3e69ab443ee9f2210087567665e18cb7ff4a8886e3",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "naive-vector",
+      "type": "multi-session",
+      "reason": "answer_mismatch_despite_context_pending_human_calibration",
+      "flow_only": false
+    },
+    {
+      "id": "eb823902958d3d39f86e02312df24a9e9eed11328c86ed6745427f79d0a51775",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "no-memory",
+      "type": "single-session-preference",
+      "reason": "no_history_baseline_mismatch",
+      "flow_only": false
+    },
+    {
+      "id": "f9223e6878acbc185712f2233d2201251bc6d7d0eff205ac19eebbf85022ea40",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "system",
+      "type": "single-session-preference",
+      "reason": "answer_mismatch_despite_context_pending_human_calibration",
+      "flow_only": false
+    },
+    {
+      "id": "c37a6e24ee3a3ac6e963da4d8f0d3a362020e7fd569a9d3f263b7a0aafeadb01",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "no-memory",
+      "type": "multi-session",
+      "reason": "no_history_baseline_mismatch",
+      "flow_only": false
+    },
+    {
+      "id": "a3ae6c2720b26bc50b58bf29cfd0a93639081694b7c47d3f9e6295535c1b4936",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "full-context",
+      "type": "multi-session",
+      "reason": "answer_mismatch_despite_context_pending_human_calibration",
+      "flow_only": false
+    },
+    {
+      "id": "60c33e7e385b86be253d59293c6d732e4470846bf177cd8416ee6f8b81c62dc2",
+      "dataset": "longmemeval_oracle",
+      "mode": "direct",
+      "system": "naive-vector",
+      "type": "multi-session",
+      "reason": "answer_mismatch_despite_context_pending_human_calibration",
+      "flow_only": false
+    }
+  ],
+  "privacy": "Only failure IDs, task strata and reason codes; no conversations, answers or human labels."
+}

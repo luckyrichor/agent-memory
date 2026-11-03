@@ -1,0 +1,3217 @@
+{
+  "generated_at": "2026-11-01T09:10:40.303775+08:00",
+  "baseline_commit": "1e9d6f3b25b58c85792344000d7e1b5a71a79737",
+  "phase2_accepted": false,
+  "full_aggregate_ready": false,
+  "measured": {
+    "tokenizer": {
+      "model": "deepseek-v4-pro",
+      "official_repository": "deepseek-ai/DeepSeek-V4-Pro",
+      "revision": "b5968e9190ef611bbf34a7229255be88a0e937c1",
+      "tokenizer_sha256": "8f9f37ca37fdc4f5fd36d5cf4d3b0e8392edb4e894fd10cc0d70b4957c8633cf",
+      "tokenizer_config_sha256": "6ac8c8dc065ed118161d02dd532749ae3f52c243deac27872134fae2f50d8547",
+      "tokenizers_package": "0.22.2",
+      "source_results_sha256": "963d877d5cf1f159f02d4768c72dfc60d435b65cf6ffec64dce6c3073be9fb61",
+      "rows": 390,
+      "by_dataset_mode": {
+        "longmemeval_oracle/direct": {
+          "CX1": {
+            "value": 0.28113333333333335,
+            "n": 5,
+            "numerator": 8434,
+            "denominator": 30000,
+            "ci95": [
+              0.26303333333333334,
+              0.29923333333333335
+            ]
+          },
+          "CX2_signed_estimate_minus_true_per_true": {
+            "value": 2.547308513161015,
+            "n": 5,
+            "numerator": 21484,
+            "denominator": 8434,
+            "ci95": [
+              2.332627826668152,
+              2.791534659738943
+            ]
+          },
+          "CX2_absolute_error_per_true": {
+            "value": 2.547308513161015,
+            "n": 5,
+            "numerator": 21484,
+            "denominator": 8434,
+            "ci95": [
+              2.332627826668152,
+              2.791534659738943
+            ]
+          },
+          "rows": 15,
+          "method": "frozen rendered context only, official tokenizer add_special_tokens=False; conversation-cluster bootstrap, no API question/chat framing or counter change"
+        },
+        "longmemeval_oracle/full": {
+          "CX1": {
+            "value": 0.0,
+            "n": 5,
+            "numerator": 0,
+            "denominator": 30000,
+            "ci95": [
+              0.0,
+              0.0
+            ]
+          },
+          "CX2_signed_estimate_minus_true_per_true": {
+            "value": null,
+            "n": 5,
+            "numerator": 0,
+            "denominator": 0,
+            "ci95": null
+          },
+          "CX2_absolute_error_per_true": {
+            "value": null,
+            "n": 5,
+            "numerator": 0,
+            "denominator": 0,
+            "ci95": null
+          },
+          "rows": 15,
+          "method": "frozen rendered context only, official tokenizer add_special_tokens=False; conversation-cluster bootstrap, no API question/chat framing or counter change"
+        },
+        "locomo/direct": {
+          "CX1": {
+            "value": 0.3176833333333333,
+            "n": 1,
+            "numerator": 19061,
+            "denominator": 60000,
+            "ci95": [
+              0.3176833333333333,
+              0.3176833333333333
+            ]
+          },
+          "CX2_signed_estimate_minus_true_per_true": {
+            "value": 2.073343476207964,
+            "n": 1,
+            "numerator": 39520,
+            "denominator": 19061,
+            "ci95": [
+              2.073343476207964,
+              2.073343476207964
+            ]
+          },
+          "CX2_absolute_error_per_true": {
+            "value": 2.073343476207964,
+            "n": 1,
+            "numerator": 39520,
+            "denominator": 19061,
+            "ci95": [
+              2.073343476207964,
+              2.073343476207964
+            ]
+          },
+          "rows": 30,
+          "method": "frozen rendered context only, official tokenizer add_special_tokens=False; conversation-cluster bootstrap, no API question/chat framing or counter change"
+        },
+        "locomo/full": {
+          "CX1": {
+            "value": 0.0,
+            "n": 1,
+            "numerator": 0,
+            "denominator": 60000,
+            "ci95": [
+              0.0,
+              0.0
+            ]
+          },
+          "CX2_signed_estimate_minus_true_per_true": {
+            "value": null,
+            "n": 1,
+            "numerator": 0,
+            "denominator": 0,
+            "ci95": null
+          },
+          "CX2_absolute_error_per_true": {
+            "value": null,
+            "n": 1,
+            "numerator": 0,
+            "denominator": 0,
+            "ci95": null
+          },
+          "rows": 30,
+          "method": "frozen rendered context only, official tokenizer add_special_tokens=False; conversation-cluster bootstrap, no API question/chat framing or counter change"
+        },
+        "perltqa_zh/direct": {
+          "CX1": {
+            "value": 0.2519722222222222,
+            "n": 3,
+            "numerator": 45355,
+            "denominator": 180000,
+            "ci95": [
+              0.2429,
+              0.2657
+            ]
+          },
+          "CX2_signed_estimate_minus_true_per_true": {
+            "value": 2.8921397861316285,
+            "n": 3,
+            "numerator": 131173,
+            "denominator": 45355,
+            "ci95": [
+              2.709446744448626,
+              3.0424042815973653
+            ]
+          },
+          "CX2_absolute_error_per_true": {
+            "value": 2.8921397861316285,
+            "n": 3,
+            "numerator": 131173,
+            "denominator": 45355,
+            "ci95": [
+              2.709446744448626,
+              3.0424042815973653
+            ]
+          },
+          "rows": 90,
+          "method": "frozen rendered context only, official tokenizer add_special_tokens=False; conversation-cluster bootstrap, no API question/chat framing or counter change"
+        },
+        "perltqa_zh/full": {
+          "CX1": {
+            "value": 0.0,
+            "n": 3,
+            "numerator": 0,
+            "denominator": 180000,
+            "ci95": [
+              0.0,
+              0.0
+            ]
+          },
+          "CX2_signed_estimate_minus_true_per_true": {
+            "value": null,
+            "n": 3,
+            "numerator": 0,
+            "denominator": 0,
+            "ci95": null
+          },
+          "CX2_absolute_error_per_true": {
+            "value": null,
+            "n": 3,
+            "numerator": 0,
+            "denominator": 0,
+            "ci95": null
+          },
+          "rows": 90,
+          "method": "frozen rendered context only, official tokenizer add_special_tokens=False; conversation-cluster bootstrap, no API question/chat framing or counter change"
+        },
+        "chinese_queries_v2/direct": {
+          "CX1": {
+            "value": 0.27428703703703705,
+            "n": 10,
+            "numerator": 29623,
+            "denominator": 108000,
+            "ci95": [
+              0.24647673611111112,
+              0.3305715277777778
+            ]
+          },
+          "CX2_signed_estimate_minus_true_per_true": {
+            "value": 2.390406103365628,
+            "n": 10,
+            "numerator": 70811,
+            "denominator": 29623,
+            "ci95": [
+              1.9155320221886032,
+              2.71273730581401
+            ]
+          },
+          "CX2_absolute_error_per_true": {
+            "value": 2.390406103365628,
+            "n": 10,
+            "numerator": 70811,
+            "denominator": 29623,
+            "ci95": [
+              1.9155320221886032,
+              2.71273730581401
+            ]
+          },
+          "rows": 54,
+          "method": "frozen rendered context only, official tokenizer add_special_tokens=False; conversation-cluster bootstrap, no API question/chat framing or counter change"
+        },
+        "chinese_queries_v2/full": {
+          "CX1": {
+            "value": 0.0,
+            "n": 10,
+            "numerator": 0,
+            "denominator": 108000,
+            "ci95": [
+              0.0,
+              0.0
+            ]
+          },
+          "CX2_signed_estimate_minus_true_per_true": {
+            "value": null,
+            "n": 10,
+            "numerator": 0,
+            "denominator": 0,
+            "ci95": null
+          },
+          "CX2_absolute_error_per_true": {
+            "value": null,
+            "n": 10,
+            "numerator": 0,
+            "denominator": 0,
+            "ci95": null
+          },
+          "rows": 54,
+          "method": "frozen rendered context only, official tokenizer add_special_tokens=False; conversation-cluster bootstrap, no API question/chat framing or counter change"
+        },
+        "longmemeval_s/direct": {
+          "CX1": {
+            "value": 0.29158333333333336,
+            "n": 2,
+            "numerator": 3499,
+            "denominator": 12000,
+            "ci95": [
+              0.2853333333333333,
+              0.29783333333333334
+            ]
+          },
+          "CX2_signed_estimate_minus_true_per_true": {
+            "value": 2.3498142326378963,
+            "n": 2,
+            "numerator": 8222,
+            "denominator": 3499,
+            "ci95": [
+              2.3417056074766354,
+              2.357582540570789
+            ]
+          },
+          "CX2_absolute_error_per_true": {
+            "value": 2.3498142326378963,
+            "n": 2,
+            "numerator": 8222,
+            "denominator": 3499,
+            "ci95": [
+              2.3417056074766354,
+              2.357582540570789
+            ]
+          },
+          "rows": 6,
+          "method": "frozen rendered context only, official tokenizer add_special_tokens=False; conversation-cluster bootstrap, no API question/chat framing or counter change"
+        },
+        "longmemeval_s/full": {
+          "CX1": {
+            "value": 0.0,
+            "n": 2,
+            "numerator": 0,
+            "denominator": 12000,
+            "ci95": [
+              0.0,
+              0.0
+            ]
+          },
+          "CX2_signed_estimate_minus_true_per_true": {
+            "value": null,
+            "n": 2,
+            "numerator": 0,
+            "denominator": 0,
+            "ci95": null
+          },
+          "CX2_absolute_error_per_true": {
+            "value": null,
+            "n": 2,
+            "numerator": 0,
+            "denominator": 0,
+            "ci95": null
+          },
+          "rows": 6,
+          "method": "frozen rendered context only, official tokenizer add_special_tokens=False; conversation-cluster bootstrap, no API question/chat framing or counter change"
+        }
+      },
+      "api_crosscheck": [
+        {
+          "index": 0,
+          "content_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "official_text_tokens": 0,
+          "api_prompt_tokens": 4,
+          "usage": {
+            "prompt_tokens": 4,
+            "completion_tokens": 1,
+            "total_tokens": 5,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 4
+          },
+          "api_delta_without_empty_chat_overhead": 0,
+          "local_minus_api_delta": 0
+        },
+        {
+          "index": 1,
+          "content_sha256": "340f1d0e76c45954a55622db0b3bc6a134d5876a2011bc407e46f4e0358de5e7",
+          "official_text_tokens": 7,
+          "api_prompt_tokens": 11,
+          "usage": {
+            "prompt_tokens": 11,
+            "completion_tokens": 1,
+            "total_tokens": 12,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 11
+          },
+          "api_delta_without_empty_chat_overhead": 7,
+          "local_minus_api_delta": 0
+        },
+        {
+          "index": 2,
+          "content_sha256": "050b5e086bb5c678d2495e3b1ca482bef32c4190b64ec1a4da7955b770d536b4",
+          "official_text_tokens": 7,
+          "api_prompt_tokens": 11,
+          "usage": {
+            "prompt_tokens": 11,
+            "completion_tokens": 1,
+            "total_tokens": 12,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 11
+          },
+          "api_delta_without_empty_chat_overhead": 7,
+          "local_minus_api_delta": 0
+        },
+        {
+          "index": 3,
+          "content_sha256": "0af8f5ac1cdb6ac5abfc011b8d53a0a7d582799e35ba320138bb007ea12f2f42",
+          "official_text_tokens": 469,
+          "api_prompt_tokens": 473,
+          "usage": {
+            "prompt_tokens": 473,
+            "completion_tokens": 1,
+            "total_tokens": 474,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 473
+          },
+          "api_delta_without_empty_chat_overhead": 469,
+          "local_minus_api_delta": 0
+        },
+        {
+          "index": 4,
+          "content_sha256": "d57193b73f5889bc193052648522a88a1f041d6e0907ef793bde3c324e7a632b",
+          "official_text_tokens": 594,
+          "api_prompt_tokens": 598,
+          "usage": {
+            "prompt_tokens": 598,
+            "completion_tokens": 1,
+            "total_tokens": 599,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 598
+          },
+          "api_delta_without_empty_chat_overhead": 594,
+          "local_minus_api_delta": 0
+        },
+        {
+          "index": 5,
+          "content_sha256": "eabc85ce9bdc90f19c0e5579d838a0b0715aa29d015358bd28fdecab2af6cbe1",
+          "official_text_tokens": 519,
+          "api_prompt_tokens": 523,
+          "usage": {
+            "prompt_tokens": 523,
+            "completion_tokens": 1,
+            "total_tokens": 524,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 523
+          },
+          "api_delta_without_empty_chat_overhead": 519,
+          "local_minus_api_delta": 0
+        },
+        {
+          "index": 6,
+          "content_sha256": "f510744a8309a5f52c8bd577850519d49978b478d246e9bf86e7bcf902ae0178",
+          "official_text_tokens": 598,
+          "api_prompt_tokens": 602,
+          "usage": {
+            "prompt_tokens": 602,
+            "completion_tokens": 1,
+            "total_tokens": 603,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 602
+          },
+          "api_delta_without_empty_chat_overhead": 598,
+          "local_minus_api_delta": 0
+        },
+        {
+          "index": 7,
+          "content_sha256": "21fa1f251aaf919a3ffc1738364c03a072454ffa09d9ee760da1fce263d4414e",
+          "official_text_tokens": 459,
+          "api_prompt_tokens": 463,
+          "usage": {
+            "prompt_tokens": 463,
+            "completion_tokens": 1,
+            "total_tokens": 464,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            },
+            "prompt_cache_hit_tokens": 0,
+            "prompt_cache_miss_tokens": 463
+          },
+          "api_delta_without_empty_chat_overhead": 459,
+          "local_minus_api_delta": 0
+        }
+      ],
+      "api_calls": 8,
+      "api_token_differences": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "source_urls": [
+        "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro",
+        "https://api-docs.deepseek.com/quick_start/token_usage/"
+      ],
+      "limit": "Official released same-model tokenizer, sample-checked against live API. API usage remains authority for billing; hidden tokenizer/version drift outside sampled texts unverified. Empty context has zero text tokens, so CX2 zero denominator stays null. B0 UTF8 counter/budget unchanged.",
+      "phase2_accepted": false
+    },
+    "recovery100k": {
+      "tables": {
+        "alembic_version": {
+          "rows": 1,
+          "canonical_json_md5_multiset_checksum": "ff1ba70facb5d57196c50d55dc9aa62a"
+        },
+        "audit_logs": {
+          "rows": 0,
+          "canonical_json_md5_multiset_checksum": "d41d8cd98f00b204e9800998ecf8427e"
+        },
+        "events": {
+          "rows": 0,
+          "canonical_json_md5_multiset_checksum": "d41d8cd98f00b204e9800998ecf8427e"
+        },
+        "evidence": {
+          "rows": 0,
+          "canonical_json_md5_multiset_checksum": "d41d8cd98f00b204e9800998ecf8427e"
+        },
+        "idempotency_records": {
+          "rows": 0,
+          "canonical_json_md5_multiset_checksum": "d41d8cd98f00b204e9800998ecf8427e"
+        },
+        "jobs": {
+          "rows": 100000,
+          "canonical_json_md5_multiset_checksum": "26f5f5ae2e1e46d48a9a5f359729f06f"
+        },
+        "memories": {
+          "rows": 100000,
+          "canonical_json_md5_multiset_checksum": "5a7e382b372047689cab3c26ffa7fa2a"
+        },
+        "memory_embeddings": {
+          "rows": 100000,
+          "canonical_json_md5_multiset_checksum": "fa0f608587e8d56e89e621a56f0fd4d5"
+        },
+        "memory_versions": {
+          "rows": 100000,
+          "canonical_json_md5_multiset_checksum": "3c1ff49189d0398fd42d84f1f4a1b1f7"
+        },
+        "outbox_messages": {
+          "rows": 0,
+          "canonical_json_md5_multiset_checksum": "d41d8cd98f00b204e9800998ecf8427e"
+        }
+      },
+      "random_sample_rows": 1000,
+      "retrieval_query_count": 32,
+      "RT1_at10": 1.0,
+      "environment": {
+        "postgres": "PostgreSQL 16.15 (Debian 16.15-1.pgdg12+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit",
+        "pgvector": "0.8.6",
+        "rls": [
+          [
+            "alembic_version",
+            false,
+            false
+          ],
+          [
+            "audit_logs",
+            true,
+            true
+          ],
+          [
+            "events",
+            true,
+            true
+          ],
+          [
+            "evidence",
+            true,
+            true
+          ],
+          [
+            "idempotency_records",
+            true,
+            true
+          ],
+          [
+            "jobs",
+            true,
+            true
+          ],
+          [
+            "memories",
+            true,
+            true
+          ],
+          [
+            "memory_embeddings",
+            true,
+            true
+          ],
+          [
+            "memory_versions",
+            true,
+            true
+          ],
+          [
+            "outbox_messages",
+            true,
+            true
+          ]
+        ],
+        "roles": [
+          [
+            "agent_memory",
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            "agent_memory_app",
+            false,
+            false,
+            true,
+            false
+          ],
+          [
+            "b0_pf_app",
+            false,
+            false,
+            true,
+            true
+          ]
+        ]
+      },
+      "role_checks": {
+        "cross_tenant_read_count": 0,
+        "foreign_write_rejected": true,
+        "own_tenant_readable": true,
+        "app_superuser": false,
+        "app_bypassrls": false
+      },
+      "seconds": 182.59302907111123,
+      "status": "passed",
+      "shared_memory_correction": {
+        "initial_bytes": 67108864,
+        "corrected_bytes": 536870912,
+        "initial_result": "DiskFull resizing shared memory during parallel search",
+        "container_cpu": 2,
+        "container_memory_bytes": 3221225472,
+        "business_code_changed": false
+      },
+      "backup": {
+        "backup_seconds": 39.14215057203546,
+        "bytes": 484088060,
+        "sha256": "eaf307b39f9ac49d2f836ce1987e8fcfcfebef93279598be2ab93f38f51c714c",
+        "rows": 100000,
+        "synthetic_only": true
+      },
+      "comparison": {
+        "table_counts_and_checksums_equal": true,
+        "all_1000_sample_row_checksums_equal": true,
+        "same_sample_sha256": true,
+        "all_32_query_results_equal": true,
+        "rt1_equal": true,
+        "rls_settings_equal": true,
+        "role_attributes_equal": true,
+        "target_rls_checks_pass": true
+      },
+      "target_environment": {
+        "postgres": "PostgreSQL 16.15 (Homebrew) on aarch64-apple-darwin27.0.0, compiled by Apple clang version 21.0.0 (clang-2100.3.34.2), 64-bit",
+        "pgvector": "0.8.7",
+        "rls": [
+          [
+            "alembic_version",
+            false,
+            false
+          ],
+          [
+            "audit_logs",
+            true,
+            true
+          ],
+          [
+            "events",
+            true,
+            true
+          ],
+          [
+            "evidence",
+            true,
+            true
+          ],
+          [
+            "idempotency_records",
+            true,
+            true
+          ],
+          [
+            "jobs",
+            true,
+            true
+          ],
+          [
+            "memories",
+            true,
+            true
+          ],
+          [
+            "memory_embeddings",
+            true,
+            true
+          ],
+          [
+            "memory_versions",
+            true,
+            true
+          ],
+          [
+            "outbox_messages",
+            true,
+            true
+          ]
+        ],
+        "roles": [
+          [
+            "agent_memory",
+            true,
+            true,
+            true,
+            true
+          ],
+          [
+            "agent_memory_app",
+            false,
+            false,
+            true,
+            false
+          ],
+          [
+            "b0_pf_app",
+            false,
+            false,
+            true,
+            true
+          ]
+        ]
+      },
+      "target_role_checks": {
+        "cross_tenant_read_count": 0,
+        "foreign_write_rejected": true,
+        "own_tenant_readable": true,
+        "app_superuser": false,
+        "app_bypassrls": false
+      },
+      "target_query_verification_seconds": 45.42299495797488,
+      "restore": {
+        "restore_seconds": 9.396245957992505,
+        "database": "b0pf_restored_100000_100",
+        "dump_bytes": 484088060,
+        "dump_sha256": "eaf307b39f9ac49d2f836ce1987e8fcfcfebef93279598be2ab93f38f51c714c",
+        "synthetic_only": true
+      },
+      "target": "Mac luomac.local, independent machine, native PostgreSQL16.15/pgvector0.8.7; source pgvector0.8.6; fully fictional performance data only",
+      "environment_note": "RL6 source verification used512MiB container shared memory after a recorded64MiB failure. Subsequent fault container restarts restore Docker configured64MiB mount; PF points must record actual shared memory separately and must not claim isolated cross-environment performance comparison."
+    },
+    "worker-crash": {
+      "scenario": "F5",
+      "observations": [
+        {
+          "repeat": 1,
+          "child_exit": 77,
+          "default_lease_seconds": 30,
+          "recovery_seconds": 30.964271027129143,
+          "status": "succeeded",
+          "attempts": 2,
+          "outcome": "succeeded",
+          "vector_rows_for_version": 1
+        },
+        {
+          "repeat": 2,
+          "child_exit": 77,
+          "default_lease_seconds": 30,
+          "recovery_seconds": 31.049279754050076,
+          "status": "succeeded",
+          "attempts": 2,
+          "outcome": "succeeded",
+          "vector_rows_for_version": 1
+        },
+        {
+          "repeat": 3,
+          "child_exit": 77,
+          "default_lease_seconds": 30,
+          "recovery_seconds": 31.185585571918637,
+          "status": "succeeded",
+          "attempts": 2,
+          "outcome": "succeeded",
+          "vector_rows_for_version": 1
+        }
+      ],
+      "passed": true,
+      "model_calls": 0,
+      "method": "Three actual subprocess os._exit deaths after committed native backend claim; default 30 second lease expires on real clock; frozen replacement EmbeddingWorker, exact precomputed Tencent native vectors; isolated synthetic clone. No SQL job status edits."
+    },
+    "provider-faults": {
+      "scenario": "F3_partial",
+      "observations": [
+        {
+          "repeat": 1,
+          "mode": "timeout",
+          "first_outcome": "retry_wait",
+          "reason_code": "PROVIDER_TRANSPORT_FAILURE",
+          "second_outcome": "succeeded",
+          "attempts": 2,
+          "http_attempts": 2,
+          "seconds": 12.166330354753882
+        },
+        {
+          "repeat": 1,
+          "mode": "429",
+          "first_outcome": "retry_wait",
+          "reason_code": "HTTP_429",
+          "second_outcome": "succeeded",
+          "attempts": 2,
+          "http_attempts": 2,
+          "seconds": 2.155719188041985
+        },
+        {
+          "repeat": 1,
+          "mode": "503",
+          "first_outcome": "retry_wait",
+          "reason_code": "HTTP_503",
+          "second_outcome": "succeeded",
+          "attempts": 2,
+          "http_attempts": 2,
+          "seconds": 2.1564233712852
+        },
+        {
+          "repeat": 2,
+          "mode": "timeout",
+          "first_outcome": "retry_wait",
+          "reason_code": "PROVIDER_TRANSPORT_FAILURE",
+          "second_outcome": "succeeded",
+          "attempts": 2,
+          "http_attempts": 2,
+          "seconds": 12.171429628971964
+        },
+        {
+          "repeat": 2,
+          "mode": "429",
+          "first_outcome": "retry_wait",
+          "reason_code": "HTTP_429",
+          "second_outcome": "succeeded",
+          "attempts": 2,
+          "http_attempts": 2,
+          "seconds": 2.1597058149054646
+        },
+        {
+          "repeat": 2,
+          "mode": "503",
+          "first_outcome": "retry_wait",
+          "reason_code": "HTTP_503",
+          "second_outcome": "succeeded",
+          "attempts": 2,
+          "http_attempts": 2,
+          "seconds": 2.1588804400525987
+        },
+        {
+          "repeat": 3,
+          "mode": "timeout",
+          "first_outcome": "retry_wait",
+          "reason_code": "PROVIDER_TRANSPORT_FAILURE",
+          "second_outcome": "succeeded",
+          "attempts": 2,
+          "http_attempts": 2,
+          "seconds": 12.16471042111516
+        },
+        {
+          "repeat": 3,
+          "mode": "429",
+          "first_outcome": "retry_wait",
+          "reason_code": "HTTP_429",
+          "second_outcome": "succeeded",
+          "attempts": 2,
+          "http_attempts": 2,
+          "seconds": 2.1553490050137043
+        },
+        {
+          "repeat": 3,
+          "mode": "503",
+          "first_outcome": "retry_wait",
+          "reason_code": "HTTP_503",
+          "second_outcome": "succeeded",
+          "attempts": 2,
+          "http_attempts": 2,
+          "seconds": 2.1559967258945107
+        }
+      ],
+      "passed": true,
+      "external_model_calls": 0,
+      "method": "Actual loopback HTTP provider and frozen default worker timeout10s/lease30s. First request times out, returns429 Retry-After2, or503; actual persisted backoff then successful exact native precomputed vector. Three repeats each; no job state/clock edits.",
+      "limitation": "Transient recovery only; HTTP exhaustion/dead-letter and search degradation require separate coverage."
+    },
+    "provider-exhaustion": {
+      "scenario": "F3_persistent_failure",
+      "observations": [
+        {
+          "repeat": 1,
+          "http_status": 503,
+          "http_attempts": 5,
+          "outcomes": [
+            "retry_wait",
+            "retry_wait",
+            "retry_wait",
+            "retry_wait",
+            "dead"
+          ],
+          "final_status": "dead",
+          "attempts": 5,
+          "seconds": 30.546028976794332
+        },
+        {
+          "repeat": 2,
+          "http_status": 503,
+          "http_attempts": 5,
+          "outcomes": [
+            "retry_wait",
+            "retry_wait",
+            "retry_wait",
+            "retry_wait",
+            "dead"
+          ],
+          "final_status": "dead",
+          "attempts": 5,
+          "seconds": 30.536955662071705
+        },
+        {
+          "repeat": 3,
+          "http_status": 503,
+          "http_attempts": 5,
+          "outcomes": [
+            "retry_wait",
+            "retry_wait",
+            "retry_wait",
+            "retry_wait",
+            "dead"
+          ],
+          "final_status": "dead",
+          "attempts": 5,
+          "seconds": 30.519874321762472
+        }
+      ],
+      "passed": true,
+      "external_model_calls": 0,
+      "method": "Actual loopback HTTP503 on every attempt, native max_attempts5 and real database backoff, three repetitions; no SQL job status/time edits.",
+      "limitation": "Search-degradation response semantics remain separate; dead-letter correctness does not prove all F3 requirements."
+    },
+    "database-restart": {
+      "scenario": "F1_partial",
+      "observations": [
+        {
+          "repeat": 1,
+          "confirmed_writes": 33,
+          "confirmed_present": 33,
+          "confirmed_missing": 0,
+          "status_counts": {
+            "transport_error": 12,
+            "201": 33,
+            "500": 6
+          },
+          "restart_to_ten_more_successful_writes_seconds": 2.3421586491167545,
+          "total_seconds": 4.342644624877721
+        },
+        {
+          "repeat": 2,
+          "confirmed_writes": 44,
+          "confirmed_present": 44,
+          "confirmed_missing": 0,
+          "status_counts": {
+            "201": 44,
+            "500": 4
+          },
+          "restart_to_ten_more_successful_writes_seconds": 2.217437549959868,
+          "total_seconds": 4.217881567776203
+        },
+        {
+          "repeat": 3,
+          "confirmed_writes": 43,
+          "confirmed_present": 43,
+          "confirmed_missing": 0,
+          "status_counts": {
+            "201": 43,
+            "500": 4
+          },
+          "restart_to_ten_more_successful_writes_seconds": 2.1582956947386265,
+          "total_seconds": 4.159099210053682
+        }
+      ],
+      "confirmed_write_loss": 0,
+      "limitation": "Actual API writes during three Docker database restarts and acknowledged-row verification. Recovery is ten additional successful writes, not p95 returning to baseline; explicit retryable error semantics must be assessed from actual status counts. Performance acceptance not inferred.",
+      "external_model_calls": 0
+    },
+    "log-leak-check": {
+      "status": "failed_body_logging",
+      "cases": {
+        "search_success": 200,
+        "validation_rejection": 422
+      },
+      "artifacts": [
+        {
+          "artifact": "trace-private.log",
+          "collected": true,
+          "bytes": 10207,
+          "sha256": "8a0421173013d703f7eb21bfbbaed20a3d40d63896e074446212dc3890c1dcba",
+          "canary_occurrences": 0,
+          "credential_occurrences": 0,
+          "trace_spans_observed": 12,
+          "metric_records_observed": 0
+        },
+        {
+          "artifact": "trace-http-private.jsonl",
+          "collected": true,
+          "bytes": 494,
+          "sha256": "71c121f5bbed3eedbf806d587b433fc1102f0dee2517119f0ee70ca5211bb914",
+          "canary_occurrences": 0,
+          "credential_occurrences": 0,
+          "trace_spans_observed": 0,
+          "metric_records_observed": 0
+        },
+        {
+          "artifact": "access.log",
+          "collected": true,
+          "bytes": 197,
+          "sha256": "e80ea8853c5f0120fa0a701fbd66460bc11cef3d5c2d517f5c13a6ea1f8d2554",
+          "canary_occurrences": 0,
+          "credential_occurrences": 0,
+          "trace_spans_observed": 0,
+          "metric_records_observed": 0
+        },
+        {
+          "artifact": "error.log",
+          "collected": true,
+          "bytes": 672,
+          "sha256": "574523f12e50a250aa722e35cfee5645347014cbd716d190f21d400f6f79c57e",
+          "canary_occurrences": 0,
+          "credential_occurrences": 0,
+          "trace_spans_observed": 0,
+          "metric_records_observed": 0
+        }
+      ],
+      "canary_leaks": 0,
+      "credential_leaks": 0,
+      "limitation": "Only isolated successful search and validation rejection with console telemetry and dedicated proxy logs. Full pressure/fault collection and external collectors not yet covered. Intentional private LLM request/response archives excluded; these are required evidence, not operational logs.",
+      "database_restart_log_scan": {
+        "bytes": 2620203,
+        "unique_fictional_body_matches": 0,
+        "credential_matches": 0,
+        "coverage": "three actual database restarts under acknowledged API writes; successful and failed requests; actual INFO logs, console traces and error stacks"
+      },
+      "public_pressure_logs": [
+        {
+          "artifact": "tx2-100k-r1-app-private.log",
+          "bytes": 2681094,
+          "sha256": "41f3c4c402df5c1ac2e34219236ec761da83e86ac2e0b2c52f49eb54552c0aad",
+          "unique_complete_fictional_query_body_matches": 6,
+          "complete_body_occurrences": 6,
+          "credential_occurrences": 0
+        },
+        {
+          "artifact": "tx2-100k-r2-app-private.log",
+          "bytes": 2674227,
+          "sha256": "8068dfae1084904d5f944ab8253bfcd03ace4cda2e10daab9868cade4cec2262",
+          "unique_complete_fictional_query_body_matches": 11,
+          "complete_body_occurrences": 11,
+          "credential_occurrences": 0
+        },
+        {
+          "artifact": "tx2-100k-r3-app-private.log",
+          "bytes": 2651449,
+          "sha256": "c576ee02109dd15f30fb58d17c8a4c0cd780760a73d19ed2beaa85ce46e94dc4",
+          "unique_complete_fictional_query_body_matches": 6,
+          "complete_body_occurrences": 6,
+          "credential_occurrences": 0
+        },
+        {
+          "artifact": "tx2-10k-r1-app-private.log",
+          "bytes": 1841072,
+          "sha256": "8a1194e4a745940d72b0dfaee92f0ef05760b204ddcbaf0d2ef8e44ca870f572",
+          "unique_complete_fictional_query_body_matches": 12,
+          "complete_body_occurrences": 13,
+          "credential_occurrences": 0
+        },
+        {
+          "artifact": "tx2-10k-r2-app-private.log",
+          "bytes": 1790415,
+          "sha256": "c7f6cead57c9d583b736bd07102d225cca012f191ea80a34c80c56f0e6c1da73",
+          "unique_complete_fictional_query_body_matches": 11,
+          "complete_body_occurrences": 11,
+          "credential_occurrences": 0
+        },
+        {
+          "artifact": "tx2-10k-r3-app-private.log",
+          "bytes": 1486391,
+          "sha256": "f5a8629cd2c8f08ccde106a2342630e831396a26fbbc3011ce2144b7afe43cd9",
+          "unique_complete_fictional_query_body_matches": 9,
+          "complete_body_occurrences": 11,
+          "credential_occurrences": 0
+        }
+      ],
+      "public_pressure_complete_body_occurrences": 58,
+      "public_pressure_credential_occurrences": 0
+    },
+    "extraction-diagnostic-v2": {
+      "dataset": "frozen selected DuLeMon dev8 conversations, full pipeline three repeats",
+      "memory_outputs": 43,
+      "human_gold_repeated": 30,
+      "prompt_sha256": "e172f63db36c8983a9bee80869de9c3d3a94a8f4bd2a00243484e1617897ab4d",
+      "prompt_version": 2,
+      "models": {
+        "glm-5.2": {
+          "EX1": {
+            "value": 0.5348837209302325,
+            "n": 8,
+            "numerator": 23,
+            "denominator": 43,
+            "ci95": [
+              0.18856752730883816,
+              0.8334183673469387
+            ]
+          },
+          "EX2": {
+            "value": 0.23333333333333334,
+            "n": 8,
+            "numerator": 7,
+            "denominator": 30,
+            "ci95": [
+              0.0,
+              0.48148148148148145
+            ]
+          },
+          "EX3": 0.3249243188698285,
+          "EX5": {
+            "value": 0.4186046511627907,
+            "n": 8,
+            "numerator": 18,
+            "denominator": 43,
+            "ci95": [
+              0.12238775510204082,
+              0.7894736842105263
+            ]
+          },
+          "invalid_cases": 0,
+          "formal": false,
+          "reason": "new extraction matching/validity task requires owner review; model-derived diagnostics only"
+        },
+        "minimax-m3": {
+          "EX1": {
+            "value": 0.5581395348837209,
+            "n": 8,
+            "numerator": 24,
+            "denominator": 43,
+            "ci95": [
+              0.21045183714001986,
+              0.8511107634543179
+            ]
+          },
+          "EX2": {
+            "value": 0.23333333333333334,
+            "n": 8,
+            "numerator": 7,
+            "denominator": 30,
+            "ci95": [
+              0.0,
+              0.48148148148148145
+            ]
+          },
+          "EX3": 0.3290891283055828,
+          "EX5": {
+            "value": 0.3953488372093023,
+            "n": 8,
+            "numerator": 17,
+            "denominator": 43,
+            "ci95": [
+              0.09297040169133193,
+              0.7647058823529411
+            ]
+          },
+          "invalid_cases": 0,
+          "formal": false,
+          "reason": "new extraction matching/validity task requires owner review; model-derived diagnostics only"
+        }
+      },
+      "owner_review_rows": 73,
+      "owner_review_sha256": "5f4be6cbfe8046b1521ab8e7f5c37820abe22a30e952f3c08b1b5c4c3fc1cbd8",
+      "model_comparison_independent": "different vendors GLM/MiniMax, same frozen inputs; agreement is not human calibration",
+      "human_semantic_calibration_complete": false,
+      "phase2_accepted": false,
+      "limitation": "Original QA300 calibrates question answering, not this new extraction task. No exact-string heuristic substituted for semantic precision/recall. Empty-candidate cases are deterministic recall misses, not model failures. Human data only server private."
+    },
+    "extraction-owner-calibration": {
+      "rows": 73,
+      "original_content_unchanged": true,
+      "all_reasons_present": true,
+      "filled_sha256": "66422c01944c423c0b154067f606f578ed1e2a29c707c4ac4e0b67600caa9236",
+      "original_sha256": "5f4be6cbfe8046b1521ab8e7f5c37820abe22a30e952f3c08b1b5c4c3fc1cbd8",
+      "models": {
+        "glm-5.2": {
+          "overall": {
+            "n": 73,
+            "accuracy": 0.9452054794520548,
+            "cohen_kappa": 0.8856695379796398,
+            "confusion_human_rows_judge_columns": [
+              [
+                42,
+                3
+              ],
+              [
+                1,
+                27
+              ]
+            ],
+            "judge_true_human_false": 3,
+            "false_positive_fraction_all": 0.0410958904109589,
+            "false_positive_fraction_judge_positive": 0.1,
+            "eligible": true
+          },
+          "recall": {
+            "n": 30,
+            "accuracy": 1.0,
+            "cohen_kappa": 1.0,
+            "confusion_human_rows_judge_columns": [
+              [
+                23,
+                0
+              ],
+              [
+                0,
+                7
+              ]
+            ],
+            "judge_true_human_false": 0,
+            "false_positive_fraction_all": 0.0,
+            "false_positive_fraction_judge_positive": 0.0,
+            "eligible": true
+          },
+          "precision": {
+            "n": 43,
+            "accuracy": 0.9069767441860465,
+            "cohen_kappa": 0.8142548596112309,
+            "confusion_human_rows_judge_columns": [
+              [
+                19,
+                3
+              ],
+              [
+                1,
+                20
+              ]
+            ],
+            "judge_true_human_false": 3,
+            "false_positive_fraction_all": 0.06976744186046512,
+            "false_positive_fraction_judge_positive": 0.13043478260869565,
+            "eligible": true
+          }
+        },
+        "minimax-m3": {
+          "overall": {
+            "n": 73,
+            "accuracy": 0.958904109589041,
+            "cohen_kappa": 0.9148191365227537,
+            "confusion_human_rows_judge_columns": [
+              [
+                42,
+                3
+              ],
+              [
+                0,
+                28
+              ]
+            ],
+            "judge_true_human_false": 3,
+            "false_positive_fraction_all": 0.0410958904109589,
+            "false_positive_fraction_judge_positive": 0.0967741935483871,
+            "eligible": true
+          },
+          "recall": {
+            "n": 30,
+            "accuracy": 1.0,
+            "cohen_kappa": 1.0,
+            "confusion_human_rows_judge_columns": [
+              [
+                23,
+                0
+              ],
+              [
+                0,
+                7
+              ]
+            ],
+            "judge_true_human_false": 0,
+            "false_positive_fraction_all": 0.0,
+            "false_positive_fraction_judge_positive": 0.0,
+            "eligible": true
+          },
+          "precision": {
+            "n": 43,
+            "accuracy": 0.9302325581395349,
+            "cohen_kappa": 0.8608414239482199,
+            "confusion_human_rows_judge_columns": [
+              [
+                19,
+                3
+              ],
+              [
+                0,
+                21
+              ]
+            ],
+            "judge_true_human_false": 3,
+            "false_positive_fraction_all": 0.06976744186046512,
+            "false_positive_fraction_judge_positive": 0.125,
+            "eligible": true
+          }
+        }
+      },
+      "human_metrics": {
+        "EX1": {
+          "value": 0.4883720930232558,
+          "n": 8,
+          "numerator": 21,
+          "denominator": 43,
+          "ci95": [
+            0.2,
+            0.7222222222222222
+          ]
+        },
+        "EX2": {
+          "value": 0.23333333333333334,
+          "n": 8,
+          "numerator": 7,
+          "denominator": 30,
+          "ci95": [
+            0.0,
+            0.48148148148148145
+          ]
+        },
+        "EX3": 0.3157894736842105
+      },
+      "method": "Full73 sampled extraction judgments, no extra model calls;43 candidate validity and30 gold coverage labels. Human EX1/EX2 use conversation-cluster intervals from8 conversations across3 repeats.",
+      "threshold": "Per-task kappa>=0.7 OR accuracy>=0.9. Failing task judge cannot supply formal metric; full owner judgments directly supply sampled human EX1/EX2.",
+      "limitations": [
+        "DuLeMon selected dev8 conversations only; not all dev data or a test-set estimate.",
+        "EX5 wrong-subject sublabel is not separately calibrated by these binary validity/coverage judgments and remains diagnostic.",
+        "Extraction judge repeat stability is not covered by QA100x3 results.",
+        "DeepSeek is also a gold annotation vendor; same-vendor extraction can bias scores upward; joint two-vendor gold retention partly mitigates this."
+      ],
+      "phase2_accepted": false,
+      "full_aggregate_ready": false
+    },
+    "public-load": {
+      "status": "invalid_load_host_resources",
+      "host": "Mac luomac.local",
+      "database_size": 10000,
+      "rate_per_second": 1,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 289,
+          "rate": 0.741020347480287
+        },
+        "b0_sample_errors": {
+          "count": 178,
+          "rate": 0.45640699602592066
+        },
+        "b0_sample_client_ms": {
+          "min": 62.097,
+          "med": 29953.824,
+          "max": 30000.842,
+          "p(90)": 29971.1298,
+          "p(95)": 30000.220800000003,
+          "avg": 21239.29402768165
+        },
+        "b0_sample_server_ms": {
+          "med": 5908.573151,
+          "max": 29828.716675,
+          "p(90)": 12517.47056,
+          "p(95)": 18454.492631499987,
+          "avg": 7223.728529819823,
+          "min": 46.105236
+        },
+        "dropped_iterations": {
+          "count": 11,
+          "rate": 0.028204926720702964
+        }
+      },
+      "max_host_cpu_percent": 98.2,
+      "max_host_memory_percent": 82.9,
+      "initial_host_memory_percent": 74.8,
+      "capacity_claim_allowed": false,
+      "remaining_repeats_stopped": true,
+      "observed_server_symptom": "QueuePool exhaustion/timeouts observed; this invalid client-resource run does not isolate server capacity."
+    },
+    "tx2-public-load": {
+      "status": "measurements_complete",
+      "points": [
+        {
+          "size": 10000,
+          "repeat": 1,
+          "control_exit": 0,
+          "server_monitor_exit": 0,
+          "load_host_resources_valid": true,
+          "maximum_load_cpu_fraction": 0.16666666666666663,
+          "maximum_load_memory_fraction": 0.25917874683850883,
+          "measured_metrics": {
+            "b0_sample_requests": {
+              "count": 289,
+              "rate": 0.7429221722669621
+            },
+            "b0_sample_errors": {
+              "count": 194,
+              "rate": 0.49870900145256275
+            },
+            "b0_sample_client_ms": {
+              "avg": 22318.35831206227,
+              "min": 26.574799,
+              "med": 29989.848473,
+              "max": 30005.173652,
+              "p(90)": 29992.704558200003,
+              "p(95)": 30000.496029
+            },
+            "b0_sample_server_ms": {
+              "avg": 6639.874820494734,
+              "min": 22.275632,
+              "med": 6459.61565,
+              "max": 29979.826392,
+              "p(90)": 11240.586173400005,
+              "p(95)": 13177.173700199997
+            },
+            "dropped_iterations": {
+              "count": 11,
+              "rate": 0.0282773145153515
+            }
+          },
+          "wall_seconds": 411.96607566298917,
+          "rate_per_second": 1,
+          "warmup_seconds": 60,
+          "measurement_seconds": 300
+        },
+        {
+          "size": 10000,
+          "repeat": 2,
+          "control_exit": 0,
+          "server_monitor_exit": 0,
+          "load_host_resources_valid": true,
+          "maximum_load_cpu_fraction": 0.13131313131313127,
+          "maximum_load_memory_fraction": 0.24714622070285364,
+          "measured_metrics": {
+            "b0_sample_requests": {
+              "count": 289,
+              "rate": 0.741024099017193
+            },
+            "b0_sample_errors": {
+              "rate": 0.49743486231603956,
+              "count": 194
+            },
+            "b0_sample_client_ms": {
+              "avg": 22248.504126557098,
+              "min": 31.743156,
+              "med": 29988.719381,
+              "max": 30003.542216,
+              "p(90)": 29992.39549,
+              "p(95)": 30000.4558528
+            },
+            "b0_sample_server_ms": {
+              "max": 26942.628857,
+              "p(90)": 13441.247509200024,
+              "p(95)": 20693.4798573,
+              "avg": 6430.752933084213,
+              "min": 25.778046,
+              "med": 5513.654653
+            },
+            "dropped_iterations": {
+              "count": 11,
+              "rate": 0.02820506951276513
+            }
+          },
+          "wall_seconds": 411.79705058038235,
+          "rate_per_second": 1,
+          "warmup_seconds": 60,
+          "measurement_seconds": 300
+        },
+        {
+          "size": 10000,
+          "repeat": 3,
+          "control_exit": 0,
+          "server_monitor_exit": 0,
+          "load_host_resources_valid": true,
+          "maximum_load_cpu_fraction": 0.13636363636363635,
+          "maximum_load_memory_fraction": 0.24367801031529546,
+          "measured_metrics": {
+            "b0_sample_requests": {
+              "count": 289,
+              "rate": 0.7410235182801702
+            },
+            "b0_sample_errors": {
+              "count": 169,
+              "rate": 0.433332092004667
+            },
+            "b0_sample_client_ms": {
+              "avg": 20623.276435429067,
+              "min": 35.230257,
+              "med": 29988.933734,
+              "max": 30001.369467,
+              "p(90)": 29992.0597446,
+              "p(95)": 30000.5960766
+            },
+            "b0_sample_server_ms": {
+              "avg": 7420.5745021249995,
+              "min": 26.016074,
+              "med": 5508.9197215,
+              "max": 29576.653753,
+              "p(90)": 17575.90482540001,
+              "p(95)": 24265.0228363
+            },
+            "dropped_iterations": {
+              "rate": 0.028205047408587793,
+              "count": 11
+            }
+          },
+          "wall_seconds": 411.8898278949782,
+          "rate_per_second": 1,
+          "warmup_seconds": 60,
+          "measurement_seconds": 300
+        },
+        {
+          "size": 100000,
+          "repeat": 1,
+          "control_exit": 0,
+          "server_monitor_exit": 0,
+          "load_host_resources_valid": true,
+          "maximum_load_cpu_fraction": 0.12060301507537685,
+          "maximum_load_memory_fraction": 0.2468424793237486,
+          "measured_metrics": {
+            "b0_sample_requests": {
+              "count": 296,
+              "rate": 0.7609186615283012
+            },
+            "b0_sample_errors": {
+              "count": 293,
+              "rate": 0.7532066480668658
+            },
+            "b0_sample_client_ms": {
+              "avg": 29986.793919905416,
+              "min": 29380.632882,
+              "med": 29990.190947,
+              "max": 30000.76559,
+              "p(90)": 29991.288950000002,
+              "p(95)": 29991.97898075
+            },
+            "b0_sample_server_ms": {
+              "avg": 29653.036068666668,
+              "min": 29373.282371,
+              "med": 29696.802103,
+              "max": 29889.023732,
+              "p(90)": 29850.579406200002,
+              "p(95)": 29869.8015691
+            },
+            "dropped_iterations": {
+              "count": 11,
+              "rate": 0.028277382691930114
+            }
+          },
+          "wall_seconds": 412.01365410909057,
+          "rate_per_second": 1,
+          "warmup_seconds": 60,
+          "measurement_seconds": 300
+        },
+        {
+          "size": 100000,
+          "repeat": 2,
+          "control_exit": 0,
+          "server_monitor_exit": 0,
+          "load_host_resources_valid": true,
+          "maximum_load_cpu_fraction": 0.10606060606060608,
+          "maximum_load_memory_fraction": 0.24478775822980314,
+          "measured_metrics": {
+            "b0_sample_requests": {
+              "count": 296,
+              "rate": 0.7589731307184111
+            },
+            "b0_sample_errors": {
+              "count": 287,
+              "rate": 0.7358962449871082
+            },
+            "b0_sample_client_ms": {
+              "avg": 29974.707648983094,
+              "min": 28792.076465,
+              "med": 29989.9921445,
+              "max": 30001.004633,
+              "p(90)": 29991.11091,
+              "p(95)": 29991.68750425
+            },
+            "b0_sample_server_ms": {
+              "avg": 29477.14880977778,
+              "min": 28784.227352,
+              "med": 29630.166831,
+              "max": 29878.794342,
+              "p(90)": 29817.7785692,
+              "p(95)": 29848.2864556
+            },
+            "dropped_iterations": {
+              "count": 11,
+              "rate": 0.028205082560481497
+            }
+          },
+          "wall_seconds": 411.96131689008325,
+          "rate_per_second": 1,
+          "warmup_seconds": 60,
+          "measurement_seconds": 300
+        },
+        {
+          "size": 100000,
+          "repeat": 3,
+          "control_exit": 0,
+          "server_monitor_exit": 0,
+          "load_host_resources_valid": true,
+          "maximum_load_cpu_fraction": 0.12060301507537685,
+          "maximum_load_memory_fraction": 0.24831751098829102,
+          "measured_metrics": {
+            "b0_sample_requests": {
+              "count": 296,
+              "rate": 0.75897349481103
+            },
+            "b0_sample_errors": {
+              "count": 289,
+              "rate": 0.741024797298607
+            },
+            "b0_sample_client_ms": {
+              "p(90)": 29991.162029,
+              "p(95)": 29991.86150375,
+              "avg": 29984.1226235169,
+              "min": 29295.883647,
+              "med": 29990.0521115,
+              "max": 30003.614869
+            },
+            "b0_sample_server_ms": {
+              "p(95)": 29956.7399898,
+              "avg": 29731.385049428576,
+              "min": 29287.134891,
+              "med": 29773.565379,
+              "max": 29980.512396,
+              "p(90)": 29932.9675836
+            },
+            "dropped_iterations": {
+              "count": 11,
+              "rate": 0.02820509609095044
+            }
+          },
+          "wall_seconds": 411.925926358439,
+          "rate_per_second": 1,
+          "warmup_seconds": 60,
+          "measurement_seconds": 300
+        }
+      ],
+      "external_model_calls": 0,
+      "phase2_accepted": false,
+      "full_aggregate_ready": false,
+      "environment": {
+        "load_host": "TX2 VM-4-5-ubuntu,2CPU/2GB",
+        "target": "TX isolated B0 PostgreSQL container,2CPU/3GiB/shm512MiB",
+        "model": "kinfra-text-embedding-0.6b native1024,precomputed exact real vectors",
+        "query_count": 128,
+        "corpus": "fixed fictional32-character query set sampled from first10k seed IDs and reused at both scales; no real conversations exported",
+        "repeats": "fresh API process and drained app database sessions before each timed run; database cache not reset"
+      },
+      "limitation": "Only read/search1QPS points at10k/100k,100tenants,80%hot tenant. Not write/context throughput, full tenant-count grid, maximum capacity or cross-region proof. Failed/dropped requests retained. Load host invalidity forbids capacity claims."
+    },
+    "tx2-results-audit": {
+      "source_report_sha256": "b9e214e2f16afdd5324d95de0def8fbbf1b82020bdb705df18c4814025e31393",
+      "groups": [
+        {
+          "size": 10000,
+          "repeats": 3,
+          "measured_requests": 867,
+          "measured_errors": 557,
+          "error_fraction": 0.6424452133794695,
+          "per_repeat_error_fractions": [
+            0.671280276816609,
+            0.671280276816609,
+            0.5847750865051903
+          ],
+          "error_fraction_ci95_repeat_bootstrap": [
+            0.603517877739331,
+            0.671280276816609
+          ],
+          "mean_per_repeat_client_p95_ms": 30000.515986133334,
+          "mean_per_repeat_p95_ci95_repeat_bootstrap_ms": [
+            30000.464557643336,
+            30000.57439962
+          ],
+          "dropped_arrivals_including_warmup": 33,
+          "all_load_host_resources_valid": true,
+          "capacity_acceptance_pass": false,
+          "observed_server_statuses_including_warmup_and_shutdown": {
+            "200": 542,
+            "500": 507
+          },
+          "observed_error_string_counts_including_shutdown": {
+            "QueuePool limit": 471,
+            "QueryCanceled": 72,
+            "DiskFull": 0,
+            "OutOfMemory": 0
+          },
+          "mean_recorded_sql_category_ms_including_warmup_and_shutdown": {
+            "other_sql": 2.2321680236839816,
+            "lexical_sql": 19965.500835915016,
+            "vector_sql": 417.33452044100915,
+            "structured_sql": 64.60218060490197
+          }
+        },
+        {
+          "size": 100000,
+          "repeats": 3,
+          "measured_requests": 888,
+          "measured_errors": 869,
+          "error_fraction": 0.9786036036036037,
+          "per_repeat_error_fractions": [
+            0.9898648648648649,
+            0.9695945945945946,
+            0.9763513513513513
+          ],
+          "error_fraction_ci95_repeat_bootstrap": [
+            0.9710585585585586,
+            0.986936936936937
+          ],
+          "mean_per_repeat_client_p95_ms": 29991.842662916664,
+          "mean_per_repeat_p95_ci95_repeat_bootstrap_ms": [
+            29991.725204141665,
+            29991.9535274
+          ],
+          "dropped_arrivals_including_warmup": 33,
+          "all_load_host_resources_valid": true,
+          "capacity_acceptance_pass": false,
+          "observed_server_statuses_including_warmup_and_shutdown": {
+            "200": 244,
+            "500": 805
+          },
+          "observed_error_string_counts_including_shutdown": {
+            "QueuePool limit": 778,
+            "QueryCanceled": 54,
+            "DiskFull": 0,
+            "OutOfMemory": 0
+          },
+          "mean_recorded_sql_category_ms_including_warmup_and_shutdown": {
+            "other_sql": 4.849913401178658,
+            "lexical_sql": 59274.01905665136,
+            "vector_sql": 5901.394631541869,
+            "structured_sql": 626.1886926825906
+          }
+        }
+      ],
+      "log_audits": [
+        {
+          "artifact": "tx2-10k-r1-app-private.log",
+          "bytes": 1841072,
+          "sha256": "8a1194e4a745940d72b0dfaee92f0ef05760b204ddcbaf0d2ef8e44ca870f572",
+          "complete_fictional_body_occurrences": 13,
+          "credential_occurrences": 0
+        },
+        {
+          "artifact": "tx2-10k-r2-app-private.log",
+          "bytes": 1790415,
+          "sha256": "c7f6cead57c9d583b736bd07102d225cca012f191ea80a34c80c56f0e6c1da73",
+          "complete_fictional_body_occurrences": 11,
+          "credential_occurrences": 0
+        },
+        {
+          "artifact": "tx2-10k-r3-app-private.log",
+          "bytes": 1486391,
+          "sha256": "f5a8629cd2c8f08ccde106a2342630e831396a26fbbc3011ce2144b7afe43cd9",
+          "complete_fictional_body_occurrences": 11,
+          "credential_occurrences": 0
+        },
+        {
+          "artifact": "tx2-100k-r1-app-private.log",
+          "bytes": 2681094,
+          "sha256": "41f3c4c402df5c1ac2e34219236ec761da83e86ac2e0b2c52f49eb54552c0aad",
+          "complete_fictional_body_occurrences": 6,
+          "credential_occurrences": 0
+        },
+        {
+          "artifact": "tx2-100k-r2-app-private.log",
+          "bytes": 2674227,
+          "sha256": "8068dfae1084904d5f944ab8253bfcd03ace4cda2e10daab9868cade4cec2262",
+          "complete_fictional_body_occurrences": 11,
+          "credential_occurrences": 0
+        },
+        {
+          "artifact": "tx2-100k-r3-app-private.log",
+          "bytes": 2651449,
+          "sha256": "c576ee02109dd15f30fb58d17c8a4c0cd780760a73d19ed2beaa85ce46e94dc4",
+          "complete_fictional_body_occurrences": 6,
+          "credential_occurrences": 0
+        }
+      ],
+      "complete_body_log_occurrences": 58,
+      "credential_log_occurrences": 0,
+      "performance_pass": false,
+      "SC4_pass": false,
+      "phase2_accepted": false,
+      "uncertainty_method": "Exact27 resamples of3 independent API-process repeats with replacement; percentile95% interval. n=3 has low precision. Latency CI is the mean of per-repeat p95s, not a pooled per-request p95 CI.",
+      "interpretation": [
+        "Use error count/request count, not the k6 Counter rate field, for error fractions.",
+        "All six load-host resource checks pass, but every run dropped arrivals; no sustainable1QPS capacity claim.",
+        "Slow lexical SQL and pool exhaustion are observed; this is not proof of a single root cause or an optimization result.",
+        "Server status and SQL logs include warmup and shutdown; client timeout and later server response counts cannot be directly equated.",
+        "Canceled query exceptions during cleanup can serialize SQL parameters containing full fictional queries. This fails the body-log requirement even though no real user conversation was used.",
+        "Both machines are in ap-shanghai. Independent-host public ingress was tested; cross-region path was not."
+      ]
+    },
+    "tx2-extra-public-load": {
+      "status": "measurements_complete",
+      "points": [
+        {
+          "workload": "write",
+          "queue_statuses_at_stop": [
+            [
+              "succeeded",
+              361
+            ]
+          ],
+          "completed_embedding_jobs": 361,
+          "completed_queue_average_ms": 283.69302216066484,
+          "completed_queue_p95_ms": 519.185,
+          "queue_latency_scope": "DB enqueue to completion; pending jobs censored, excludes WAN; do not substitute for client-visible freshness",
+          "size": 10000,
+          "repeat": 1,
+          "control_exit": 0,
+          "server_monitor_exit": 0,
+          "load_host_resources_valid": true,
+          "maximum_load_cpu_fraction": 0.2284263959390863,
+          "maximum_load_memory_fraction": 0.24610198563481944,
+          "measured_metrics": {
+            "b0_sample_requests": {
+              "count": 301,
+              "rate": 0.8360775782434412
+            },
+            "b0_sample_errors": {
+              "count": 0,
+              "rate": 0
+            },
+            "b0_sample_client_ms": {
+              "avg": 14.807177598006648,
+              "min": 11.51673,
+              "med": 13.523637,
+              "max": 39.874438,
+              "p(90)": 18.958266,
+              "p(95)": 21.128611
+            },
+            "b0_sample_server_ms": {
+              "avg": 10.295714202657807,
+              "min": 7.659317,
+              "med": 9.237864,
+              "max": 28.813921,
+              "p(90)": 13.387434,
+              "p(95)": 14.836076
+            },
+            "dropped_iterations": {
+              "count": 0,
+              "rate": 0
+            },
+            "b0_write_confirmed": {
+              "count": 361,
+              "rate": 1.002737560617549
+            }
+          },
+          "wall_seconds": 412.1600820911117,
+          "rate_per_second": 1,
+          "warmup_seconds": 60,
+          "measurement_seconds": 300,
+          "client_confirmed_writes": 361,
+          "client_confirmed_unique": 361,
+          "confirmed_missing": 0
+        },
+        {
+          "workload": "write",
+          "queue_statuses_at_stop": [
+            [
+              "succeeded",
+              361
+            ]
+          ],
+          "completed_embedding_jobs": 361,
+          "completed_queue_average_ms": 285.68761495844876,
+          "completed_queue_p95_ms": 516.481,
+          "queue_latency_scope": "DB enqueue to completion; pending jobs censored, excludes WAN; do not substitute for client-visible freshness",
+          "size": 10000,
+          "repeat": 2,
+          "control_exit": 0,
+          "server_monitor_exit": 0,
+          "load_host_resources_valid": true,
+          "maximum_load_cpu_fraction": 0.0505050505050505,
+          "maximum_load_memory_fraction": 0.24036861894949157,
+          "measured_metrics": {
+            "b0_sample_requests": {
+              "count": 301,
+              "rate": 0.8360670637817917
+            },
+            "b0_sample_errors": {
+              "count": 0,
+              "rate": 0
+            },
+            "b0_sample_client_ms": {
+              "avg": 13.898819169435207,
+              "min": 11.619212,
+              "med": 13.278034,
+              "max": 23.263611,
+              "p(90)": 16.425298,
+              "p(95)": 17.899613
+            },
+            "b0_sample_server_ms": {
+              "avg": 9.66662115614618,
+              "min": 7.850977,
+              "med": 9.208518,
+              "max": 17.448247,
+              "p(90)": 11.568845,
+              "p(95)": 12.875131
+            },
+            "dropped_iterations": {
+              "count": 0,
+              "rate": 0
+            },
+            "b0_write_confirmed": {
+              "count": 361,
+              "rate": 1.002724950249923
+            }
+          },
+          "wall_seconds": 412.0389457731508,
+          "rate_per_second": 1,
+          "warmup_seconds": 60,
+          "measurement_seconds": 300,
+          "client_confirmed_writes": 361,
+          "client_confirmed_unique": 361,
+          "confirmed_missing": 0
+        },
+        {
+          "workload": "write",
+          "queue_statuses_at_stop": [
+            [
+              "succeeded",
+              361
+            ]
+          ],
+          "completed_embedding_jobs": 361,
+          "completed_queue_average_ms": 283.59533518005543,
+          "completed_queue_p95_ms": 515.069,
+          "queue_latency_scope": "DB enqueue to completion; pending jobs censored, excludes WAN; do not substitute for client-visible freshness",
+          "size": 10000,
+          "repeat": 3,
+          "control_exit": 0,
+          "server_monitor_exit": 0,
+          "load_host_resources_valid": true,
+          "maximum_load_cpu_fraction": 0.05025125628140703,
+          "maximum_load_memory_fraction": 0.24130763641561348,
+          "measured_metrics": {
+            "b0_sample_requests": {
+              "count": 301,
+              "rate": 0.8360797951896406
+            },
+            "b0_sample_errors": {
+              "count": 0,
+              "rate": 0
+            },
+            "b0_sample_client_ms": {
+              "p(90)": 15.680226,
+              "p(95)": 16.882508,
+              "avg": 13.77942556478405,
+              "min": 11.919016,
+              "med": 13.255251,
+              "max": 37.728349
+            },
+            "b0_sample_server_ms": {
+              "avg": 9.601942142857153,
+              "min": 8.018463,
+              "med": 9.174715,
+              "max": 32.245751,
+              "p(90)": 11.106435,
+              "p(95)": 11.859392
+            },
+            "dropped_iterations": {
+              "count": 0,
+              "rate": 0
+            },
+            "b0_write_confirmed": {
+              "rate": 1.0027402194799344,
+              "count": 361
+            }
+          },
+          "wall_seconds": 412.3815295188688,
+          "rate_per_second": 1,
+          "warmup_seconds": 60,
+          "measurement_seconds": 300,
+          "client_confirmed_writes": 361,
+          "client_confirmed_unique": 361,
+          "confirmed_missing": 0
+        },
+        {
+          "workload": "write",
+          "queue_statuses_at_stop": [
+            [
+              "succeeded",
+              361
+            ]
+          ],
+          "completed_embedding_jobs": 361,
+          "completed_queue_average_ms": 309.4782548476454,
+          "completed_queue_p95_ms": 551.698,
+          "queue_latency_scope": "DB enqueue to completion; pending jobs censored, excludes WAN; do not substitute for client-visible freshness",
+          "size": 100000,
+          "repeat": 1,
+          "control_exit": 0,
+          "server_monitor_exit": 0,
+          "load_host_resources_valid": true,
+          "maximum_load_cpu_fraction": 0.050000000000000044,
+          "maximum_load_memory_fraction": 0.24249282336545452,
+          "measured_metrics": {
+            "b0_sample_requests": {
+              "count": 301,
+              "rate": 0.8360759866345842
+            },
+            "b0_sample_errors": {
+              "count": 0,
+              "rate": 0
+            },
+            "b0_sample_client_ms": {
+              "p(90)": 17.232428,
+              "p(95)": 19.116072,
+              "avg": 14.168353956810638,
+              "min": 11.84628,
+              "med": 13.284917,
+              "max": 27.634587
+            },
+            "b0_sample_server_ms": {
+              "avg": 9.739245093023259,
+              "min": 7.876966,
+              "med": 9.17207,
+              "max": 18.881019,
+              "p(90)": 11.73655,
+              "p(95)": 13.23679
+            },
+            "dropped_iterations": {
+              "count": 0,
+              "rate": 0
+            },
+            "b0_write_confirmed": {
+              "count": 361,
+              "rate": 1.002735651744468
+            }
+          },
+          "wall_seconds": 412.20166416605935,
+          "rate_per_second": 1,
+          "warmup_seconds": 60,
+          "measurement_seconds": 300,
+          "client_confirmed_writes": 361,
+          "client_confirmed_unique": 361,
+          "confirmed_missing": 0
+        },
+        {
+          "workload": "write",
+          "queue_statuses_at_stop": [
+            [
+              "succeeded",
+              360
+            ]
+          ],
+          "completed_embedding_jobs": 360,
+          "completed_queue_average_ms": 313.6177944444444,
+          "completed_queue_p95_ms": 557.0081,
+          "queue_latency_scope": "DB enqueue to completion; pending jobs censored, excludes WAN; do not substitute for client-visible freshness",
+          "size": 100000,
+          "repeat": 2,
+          "control_exit": 0,
+          "server_monitor_exit": 0,
+          "load_host_resources_valid": true,
+          "maximum_load_cpu_fraction": 0.07106598984771573,
+          "maximum_load_memory_fraction": 0.2422109196018407,
+          "measured_metrics": {
+            "b0_sample_requests": {
+              "count": 300,
+              "rate": 0.8333307735935109
+            },
+            "b0_sample_errors": {
+              "count": 0,
+              "rate": 0
+            },
+            "b0_sample_client_ms": {
+              "min": 11.860114,
+              "med": 13.932035500000001,
+              "max": 23.766246,
+              "p(90)": 18.1834258,
+              "p(95)": 19.6265508,
+              "avg": 14.643479130000003
+            },
+            "b0_sample_server_ms": {
+              "max": 18.872895,
+              "p(90)": 12.936076600000005,
+              "p(95)": 14.416058700000002,
+              "avg": 10.217159106666665,
+              "min": 7.987023,
+              "med": 9.5091295
+            },
+            "dropped_iterations": {
+              "count": 0,
+              "rate": 0
+            },
+            "b0_write_confirmed": {
+              "count": 360,
+              "rate": 0.9999969283122131
+            }
+          },
+          "wall_seconds": 412.1680163438432,
+          "rate_per_second": 1,
+          "warmup_seconds": 60,
+          "measurement_seconds": 300,
+          "client_confirmed_writes": 360,
+          "client_confirmed_unique": 360,
+          "confirmed_missing": 0
+        },
+        {
+          "workload": "write",
+          "queue_statuses_at_stop": [
+            [
+              "succeeded",
+              361
+            ]
+          ],
+          "completed_embedding_jobs": 361,
+          "completed_queue_average_ms": 307.6444182825485,
+          "completed_queue_p95_ms": 553.118,
+          "queue_latency_scope": "DB enqueue to completion; pending jobs censored, excludes WAN; do not substitute for client-visible freshness",
+          "size": 100000,
+          "repeat": 3,
+          "control_exit": 0,
+          "server_monitor_exit": 0,
+          "load_host_resources_valid": true,
+          "maximum_load_cpu_fraction": 0.04020100502512558,
+          "maximum_load_memory_fraction": 0.24117264024712237,
+          "measured_metrics": {
+            "b0_sample_requests": {
+              "count": 301,
+              "rate": 0.8360719394384131
+            },
+            "b0_sample_errors": {
+              "count": 0,
+              "rate": 0
+            },
+            "b0_sample_client_ms": {
+              "max": 32.688691,
+              "p(90)": 20.381215,
+              "p(95)": 22.462383,
+              "avg": 15.152388730897009,
+              "min": 11.762171,
+              "med": 13.781511
+            },
+            "b0_sample_server_ms": {
+              "p(95)": 15.907531,
+              "avg": 10.624420558139535,
+              "min": 7.967445,
+              "med": 9.654437,
+              "max": 21.459657,
+              "p(90)": 14.674664
+            },
+            "dropped_iterations": {
+              "count": 0,
+              "rate": 0
+            },
+            "b0_write_confirmed": {
+              "count": 361,
+              "rate": 1.0027307977982296
+            }
+          },
+          "wall_seconds": 412.2677394631319,
+          "rate_per_second": 1,
+          "warmup_seconds": 60,
+          "measurement_seconds": 300,
+          "client_confirmed_writes": 361,
+          "client_confirmed_unique": 361,
+          "confirmed_missing": 0
+        },
+        {
+          "workload": "context",
+          "queue_statuses_at_stop": [],
+          "completed_embedding_jobs": 0,
+          "completed_queue_average_ms": null,
+          "completed_queue_p95_ms": null,
+          "queue_latency_scope": "DB enqueue to completion; pending jobs censored, excludes WAN; do not substitute for client-visible freshness",
+          "size": 10000,
+          "repeat": 1,
+          "control_exit": 0,
+          "server_monitor_exit": 0,
+          "load_host_resources_valid": true,
+          "maximum_load_cpu_fraction": 0.1306532663316583,
+          "maximum_load_memory_fraction": 0.24838897954808048,
+          "measured_metrics": {
+            "b0_sample_requests": {
+              "count": 289,
+              "rate": 0.7410232600799053
+            },
+            "b0_sample_errors": {
+              "count": 178,
+              "rate": 0.4564087899454088
+            },
+            "b0_sample_client_ms": {
+              "min": 34.394032,
+              "med": 29989.414575,
+              "max": 30001.095037,
+              "p(90)": 29992.352841,
+              "p(95)": 30000.4079234,
+              "avg": 21336.313699429058
+            },
+            "b0_sample_server_ms": {
+              "min": 28.716761,
+              "med": 8017.769632,
+              "max": 27965.835683,
+              "p(90)": 12273.398414,
+              "p(95)": 13121.626941499999,
+              "avg": 7448.608921081082
+            },
+            "dropped_iterations": {
+              "count": 11,
+              "rate": 0.02820503758089605
+            },
+            "b0_write_confirmed": null
+          },
+          "wall_seconds": 412.3147500231862,
+          "rate_per_second": 1,
+          "warmup_seconds": 60,
+          "measurement_seconds": 300
+        },
+        {
+          "workload": "context",
+          "queue_statuses_at_stop": [],
+          "completed_embedding_jobs": 0,
+          "completed_queue_average_ms": null,
+          "completed_queue_p95_ms": null,
+          "queue_latency_scope": "DB enqueue to completion; pending jobs censored, excludes WAN; do not substitute for client-visible freshness",
+          "size": 10000,
+          "repeat": 2,
+          "control_exit": 0,
+          "server_monitor_exit": 0,
+          "load_host_resources_valid": true,
+          "maximum_load_cpu_fraction": 0.1725888324873096,
+          "maximum_load_memory_fraction": 0.25219070988132253,
+          "measured_metrics": {
+            "b0_sample_requests": {
+              "count": 289,
+              "rate": 0.7410248600063393
+            },
+            "b0_sample_errors": {
+              "count": 191,
+              "rate": 0.4897430735682035
+            },
+            "b0_sample_client_ms": {
+              "avg": 22365.501527190314,
+              "min": 28.947138,
+              "med": 29990.405704,
+              "max": 30001.218985,
+              "p(90)": 29994.8207748,
+              "p(95)": 30000.4680586
+            },
+            "b0_sample_server_ms": {
+              "med": 6831.464630500001,
+              "max": 29516.086451,
+              "p(90)": 13493.3171656,
+              "p(95)": 15506.543301849966,
+              "avg": 7490.759345704079,
+              "min": 23.885958
+            },
+            "dropped_iterations": {
+              "count": 11,
+              "rate": 0.028205098477749938
+            },
+            "b0_write_confirmed": null
+          },
+          "wall_seconds": 412.5018338779919,
+          "rate_per_second": 1,
+          "warmup_seconds": 60,
+          "measurement_seconds": 300
+        },
+        {
+          "workload": "context",
+          "queue_statuses_at_stop": [],
+          "completed_embedding_jobs": 0,
+          "completed_queue_average_ms": null,
+          "completed_queue_p95_ms": null,
+          "queue_latency_scope": "DB enqueue to completion; pending jobs censored, excludes WAN; do not substitute for client-visible freshness",
+          "size": 10000,
+          "repeat": 3,
+          "control_exit": 0,
+          "server_monitor_exit": 0,
+          "load_host_resources_valid": true,
+          "maximum_load_cpu_fraction": 0.12182741116751272,
+          "maximum_load_memory_fraction": 0.24832942241492262,
+          "measured_metrics": {
+            "b0_sample_requests": {
+              "rate": 0.7429223026722213,
+              "count": 289
+            },
+            "b0_sample_errors": {
+              "count": 192,
+              "rate": 0.4935677581767006
+            },
+            "b0_sample_client_ms": {
+              "avg": 22349.425663283742,
+              "min": 32.267388,
+              "med": 29990.720332,
+              "max": 30002.708007,
+              "p(90)": 29992.4178894,
+              "p(95)": 30000.3144012
+            },
+            "b0_sample_server_ms": {
+              "med": 6863.922103,
+              "max": 29907.893368,
+              "p(90)": 12082.088223600009,
+              "p(95)": 18501.746116399976,
+              "avg": 7212.773469020619,
+              "min": 21.40064
+            },
+            "dropped_iterations": {
+              "count": 11,
+              "rate": 0.028277319478873474
+            },
+            "b0_write_confirmed": null
+          },
+          "wall_seconds": 412.29062204714864,
+          "rate_per_second": 1,
+          "warmup_seconds": 60,
+          "measurement_seconds": 300
+        },
+        {
+          "workload": "context",
+          "queue_statuses_at_stop": [],
+          "completed_embedding_jobs": 0,
+          "completed_queue_average_ms": null,
+          "completed_queue_p95_ms": null,
+          "queue_latency_scope": "DB enqueue to completion; pending jobs censored, excludes WAN; do not substitute for client-visible freshness",
+          "size": 100000,
+          "repeat": 1,
+          "control_exit": 0,
+          "server_monitor_exit": 0,
+          "load_host_resources_valid": true,
+          "maximum_load_cpu_fraction": 0.13567839195979903,
+          "maximum_load_memory_fraction": 0.24867882426278198,
+          "measured_metrics": {
+            "b0_sample_requests": {
+              "count": 296,
+              "rate": 0.758971585408058
+            },
+            "b0_sample_errors": {
+              "count": 291,
+              "rate": 0.7461511194383273
+            },
+            "b0_sample_client_ms": {
+              "avg": 29981.938866006763,
+              "min": 29245.575504,
+              "med": 29990.9137825,
+              "max": 30001.077039,
+              "p(90)": 29991.927523,
+              "p(95)": 29992.106338999998
+            },
+            "b0_sample_server_ms": {
+              "avg": 29457.9653074,
+              "min": 29239.101093,
+              "med": 29507.539568,
+              "max": 29617.285093,
+              "p(90)": 29609.813718999998,
+              "p(95)": 29613.549406
+            },
+            "dropped_iterations": {
+              "rate": 0.02820502513340756,
+              "count": 11
+            },
+            "b0_write_confirmed": null
+          },
+          "wall_seconds": 412.5589262219146,
+          "rate_per_second": 1,
+          "warmup_seconds": 60,
+          "measurement_seconds": 300
+        },
+        {
+          "workload": "context",
+          "queue_statuses_at_stop": [],
+          "completed_embedding_jobs": 0,
+          "completed_queue_average_ms": null,
+          "completed_queue_p95_ms": null,
+          "queue_latency_scope": "DB enqueue to completion; pending jobs censored, excludes WAN; do not substitute for client-visible freshness",
+          "size": 100000,
+          "repeat": 2,
+          "control_exit": 0,
+          "server_monitor_exit": 0,
+          "load_host_resources_valid": true,
+          "maximum_load_cpu_fraction": 0.12060301507537685,
+          "maximum_load_memory_fraction": 0.24878404186469416,
+          "measured_metrics": {
+            "b0_sample_requests": {
+              "count": 296,
+              "rate": 0.7589724750762343
+            },
+            "b0_sample_errors": {
+              "count": 288,
+              "rate": 0.7384597054795793
+            },
+            "b0_sample_client_ms": {
+              "avg": 29975.35732852701,
+              "min": 28872.509606,
+              "med": 29990.6669245,
+              "max": 30000.924303,
+              "p(90)": 29991.98154,
+              "p(95)": 29992.365630250002
+            },
+            "b0_sample_server_ms": {
+              "p(90)": 29778.3764004,
+              "p(95)": 29790.504417699998,
+              "avg": 29417.933064,
+              "min": 28866.143183,
+              "med": 29410.7147955,
+              "max": 29802.632435
+            },
+            "dropped_iterations": {
+              "count": 11,
+              "rate": 0.0282050581954006
+            },
+            "b0_write_confirmed": null
+          },
+          "wall_seconds": 413.37784981774166,
+          "rate_per_second": 1,
+          "warmup_seconds": 60,
+          "measurement_seconds": 300
+        },
+        {
+          "workload": "context",
+          "queue_statuses_at_stop": [],
+          "completed_embedding_jobs": 0,
+          "completed_queue_average_ms": null,
+          "completed_queue_p95_ms": null,
+          "queue_latency_scope": "DB enqueue to completion; pending jobs censored, excludes WAN; do not substitute for client-visible freshness",
+          "size": 100000,
+          "repeat": 3,
+          "control_exit": 0,
+          "server_monitor_exit": 0,
+          "load_host_resources_valid": true,
+          "maximum_load_cpu_fraction": 0.12060301507537685,
+          "maximum_load_memory_fraction": 0.2502511325781489,
+          "measured_metrics": {
+            "b0_sample_requests": {
+              "count": 296,
+              "rate": 0.760918089326915
+            },
+            "b0_sample_errors": {
+              "rate": 0.7352113971199246,
+              "count": 286
+            },
+            "b0_sample_client_ms": {
+              "min": 28553.53364,
+              "med": 29991.2161005,
+              "max": 30001.126459,
+              "p(90)": 29992.018392500002,
+              "p(95)": 29992.253621249998,
+              "avg": 29972.230613148666
+            },
+            "b0_sample_server_ms": {
+              "med": 29486.258319,
+              "max": 29934.196603,
+              "p(90)": 29894.8941853,
+              "p(95)": 29914.545394149998,
+              "avg": 29417.4940962,
+              "min": 28545.395467
+            },
+            "dropped_iterations": {
+              "count": 11,
+              "rate": 0.02827736142768941
+            },
+            "b0_write_confirmed": null
+          },
+          "wall_seconds": 412.6025477061048,
+          "rate_per_second": 1,
+          "warmup_seconds": 60,
+          "measurement_seconds": 300
+        }
+      ],
+      "external_model_calls": 0,
+      "phase2_accepted": false,
+      "full_aggregate_ready": false,
+      "expected_points": 12,
+      "workloads": [
+        "write",
+        "context"
+      ],
+      "environment": {
+        "load_host": "TX2 VM-4-5-ubuntu,2CPU/2GB",
+        "target": "TX isolated B0 PostgreSQL container,2CPU/3GiB/shm512MiB",
+        "model": "kinfra-text-embedding-0.6b native1024,precomputed exact real vectors",
+        "query_count": 128,
+        "corpus": "fixed fictional32-character query set sampled from first10k seed IDs and reused at both scales; no real conversations exported",
+        "repeats": "fresh API process and drained app database sessions before each timed run; database cache not reset"
+      },
+      "limitation": "Only write/context1QPS points at10k/100k,100tenants,80%hot tenant. Not a full rate or tenant-count grid, maximum capacity or cross-region proof. Failed/dropped requests retained. Load host invalidity forbids capacity claims."
+    },
+    "remaining-faults": {
+      "baseline_commit": "1e9d6f3b25b58c85792344000d7e1b5a71a79737",
+      "external_vendor_calls": 0,
+      "observations": [
+        {
+          "scenario": "F12",
+          "repeat": 1,
+          "injected_application_clock_skew_seconds": -120,
+          "outcome": "succeeded",
+          "attempts": 1,
+          "passed": true,
+          "scope": "Worker now dependency offset; repository fencing uses database clock. Host OS clocks unchanged."
+        },
+        {
+          "scenario": "F12",
+          "repeat": 1,
+          "injected_application_clock_skew_seconds": 120,
+          "outcome": "succeeded",
+          "attempts": 1,
+          "passed": true,
+          "scope": "Worker now dependency offset; repository fencing uses database clock. Host OS clocks unchanged."
+        },
+        {
+          "scenario": "F12",
+          "repeat": 2,
+          "injected_application_clock_skew_seconds": -120,
+          "outcome": "succeeded",
+          "attempts": 1,
+          "passed": true,
+          "scope": "Worker now dependency offset; repository fencing uses database clock. Host OS clocks unchanged."
+        },
+        {
+          "scenario": "F12",
+          "repeat": 2,
+          "injected_application_clock_skew_seconds": 120,
+          "outcome": "succeeded",
+          "attempts": 1,
+          "passed": true,
+          "scope": "Worker now dependency offset; repository fencing uses database clock. Host OS clocks unchanged."
+        },
+        {
+          "scenario": "F12",
+          "repeat": 3,
+          "injected_application_clock_skew_seconds": -120,
+          "outcome": "succeeded",
+          "attempts": 1,
+          "passed": true,
+          "scope": "Worker now dependency offset; repository fencing uses database clock. Host OS clocks unchanged."
+        },
+        {
+          "scenario": "F12",
+          "repeat": 3,
+          "injected_application_clock_skew_seconds": 120,
+          "outcome": "succeeded",
+          "attempts": 1,
+          "passed": true,
+          "scope": "Worker now dependency offset; repository fencing uses database clock. Host OS clocks unchanged."
+        },
+        {
+          "scenario": "F6",
+          "repeat": 1,
+          "default_lease_seconds": 30,
+          "real_wait_seconds": 30.251993995159864,
+          "replacement": "succeeded",
+          "stale_vector_commit_rejected": true,
+          "passed": true
+        },
+        {
+          "scenario": "F6",
+          "repeat": 2,
+          "default_lease_seconds": 30,
+          "real_wait_seconds": 30.250429346226156,
+          "replacement": "succeeded",
+          "stale_vector_commit_rejected": true,
+          "passed": true
+        },
+        {
+          "scenario": "F6",
+          "repeat": 3,
+          "default_lease_seconds": 30,
+          "real_wait_seconds": 30.242261190898716,
+          "replacement": "succeeded",
+          "stale_vector_commit_rejected": true,
+          "passed": true
+        },
+        {
+          "scenario": "F3_search_degradation",
+          "repeat": 1,
+          "fixture_failure": 503,
+          "http": 200,
+          "vector_status": "degraded",
+          "channel_counts": {
+            "lexical": 20,
+            "vector": 0,
+            "structured": 20
+          },
+          "items": 10,
+          "target_at10": true,
+          "seconds": 0.12943926313892007,
+          "passed": null,
+          "valid_fault_injection": false,
+          "superseded_by": "search-degradation-verified.json",
+          "invalid_reason": "Initial fixture token absent; HTTP fault delivery was not proven. Use verified actual-receipt rerun only."
+        },
+        {
+          "scenario": "F3_search_degradation",
+          "repeat": 1,
+          "fixture_failure": 429,
+          "http": 200,
+          "vector_status": "degraded",
+          "channel_counts": {
+            "lexical": 20,
+            "vector": 0,
+            "structured": 20
+          },
+          "items": 10,
+          "target_at10": true,
+          "seconds": 0.07742127683013678,
+          "passed": null,
+          "valid_fault_injection": false,
+          "superseded_by": "search-degradation-verified.json",
+          "invalid_reason": "Initial fixture token absent; HTTP fault delivery was not proven. Use verified actual-receipt rerun only."
+        },
+        {
+          "scenario": "F3_search_degradation",
+          "repeat": 1,
+          "fixture_failure": "timeout",
+          "http": 200,
+          "vector_status": "degraded",
+          "channel_counts": {
+            "lexical": 20,
+            "vector": 0,
+            "structured": 20
+          },
+          "items": 10,
+          "target_at10": true,
+          "seconds": 0.07131582126021385,
+          "passed": null,
+          "valid_fault_injection": false,
+          "superseded_by": "search-degradation-verified.json",
+          "invalid_reason": "Initial fixture token absent; HTTP fault delivery was not proven. Use verified actual-receipt rerun only."
+        },
+        {
+          "scenario": "F3_search_degradation",
+          "repeat": 2,
+          "fixture_failure": 503,
+          "http": 200,
+          "vector_status": "degraded",
+          "channel_counts": {
+            "lexical": 20,
+            "vector": 0,
+            "structured": 20
+          },
+          "items": 10,
+          "target_at10": true,
+          "seconds": 0.0769471456296742,
+          "passed": null,
+          "valid_fault_injection": false,
+          "superseded_by": "search-degradation-verified.json",
+          "invalid_reason": "Initial fixture token absent; HTTP fault delivery was not proven. Use verified actual-receipt rerun only."
+        },
+        {
+          "scenario": "F3_search_degradation",
+          "repeat": 2,
+          "fixture_failure": 429,
+          "http": 200,
+          "vector_status": "degraded",
+          "channel_counts": {
+            "lexical": 20,
+            "vector": 0,
+            "structured": 20
+          },
+          "items": 10,
+          "target_at10": true,
+          "seconds": 0.07357156090438366,
+          "passed": null,
+          "valid_fault_injection": false,
+          "superseded_by": "search-degradation-verified.json",
+          "invalid_reason": "Initial fixture token absent; HTTP fault delivery was not proven. Use verified actual-receipt rerun only."
+        },
+        {
+          "scenario": "F3_search_degradation",
+          "repeat": 2,
+          "fixture_failure": "timeout",
+          "http": 200,
+          "vector_status": "degraded",
+          "channel_counts": {
+            "lexical": 20,
+            "vector": 0,
+            "structured": 20
+          },
+          "items": 10,
+          "target_at10": true,
+          "seconds": 0.07928314572200179,
+          "passed": null,
+          "valid_fault_injection": false,
+          "superseded_by": "search-degradation-verified.json",
+          "invalid_reason": "Initial fixture token absent; HTTP fault delivery was not proven. Use verified actual-receipt rerun only."
+        },
+        {
+          "scenario": "F3_search_degradation",
+          "repeat": 3,
+          "fixture_failure": 503,
+          "http": 200,
+          "vector_status": "degraded",
+          "channel_counts": {
+            "lexical": 20,
+            "vector": 0,
+            "structured": 20
+          },
+          "items": 10,
+          "target_at10": true,
+          "seconds": 0.07570097409188747,
+          "passed": null,
+          "valid_fault_injection": false,
+          "superseded_by": "search-degradation-verified.json",
+          "invalid_reason": "Initial fixture token absent; HTTP fault delivery was not proven. Use verified actual-receipt rerun only."
+        },
+        {
+          "scenario": "F3_search_degradation",
+          "repeat": 3,
+          "fixture_failure": 429,
+          "http": 200,
+          "vector_status": "degraded",
+          "channel_counts": {
+            "lexical": 20,
+            "vector": 0,
+            "structured": 20
+          },
+          "items": 10,
+          "target_at10": true,
+          "seconds": 0.07159443432465196,
+          "passed": null,
+          "valid_fault_injection": false,
+          "superseded_by": "search-degradation-verified.json",
+          "invalid_reason": "Initial fixture token absent; HTTP fault delivery was not proven. Use verified actual-receipt rerun only."
+        },
+        {
+          "scenario": "F3_search_degradation",
+          "repeat": 3,
+          "fixture_failure": "timeout",
+          "http": 200,
+          "vector_status": "degraded",
+          "channel_counts": {
+            "lexical": 20,
+            "vector": 0,
+            "structured": 20
+          },
+          "items": 10,
+          "target_at10": true,
+          "seconds": 0.07243364118039608,
+          "passed": null,
+          "valid_fault_injection": false,
+          "superseded_by": "search-degradation-verified.json",
+          "invalid_reason": "Initial fixture token absent; HTTP fault delivery was not proven. Use verified actual-receipt rerun only."
+        },
+        {
+          "scenario": "F2",
+          "repeat": 1,
+          "occupied_pool_connections": 15,
+          "http": 500,
+          "seconds": 30.032574637793005,
+          "independent_static_endpoint_http": 200,
+          "passed": false,
+          "criterion": "Record actual error/latency; unhandled500 and approximately30s pool wait do not satisfy quick explicit retryable failure."
+        },
+        {
+          "scenario": "F2",
+          "repeat": 2,
+          "occupied_pool_connections": 15,
+          "http": 500,
+          "seconds": 30.041063795331866,
+          "independent_static_endpoint_http": 200,
+          "passed": false,
+          "criterion": "Record actual error/latency; unhandled500 and approximately30s pool wait do not satisfy quick explicit retryable failure."
+        },
+        {
+          "scenario": "F2",
+          "repeat": 3,
+          "occupied_pool_connections": 15,
+          "http": 500,
+          "seconds": 30.047016794793308,
+          "independent_static_endpoint_http": 200,
+          "passed": false,
+          "criterion": "Record actual error/latency; unhandled500 and approximately30s pool wait do not satisfy quick explicit retryable failure."
+        }
+      ],
+      "phase2_accepted": false,
+      "method": "Fresh isolated clone; actual frozen API/worker/repository, real default leases and pool timeout; no SQL job state/time edits.",
+      "finished": true
+    },
+    "search-degradation-verified": {
+      "scenario": "F3_search_degradation",
+      "observations": [
+        {
+          "repeat": 1,
+          "failure": 503,
+          "actual_http_fixture_calls": 1,
+          "http": 200,
+          "vector_status": "degraded",
+          "channel_counts": {
+            "lexical": 20,
+            "vector": 0,
+            "structured": 20
+          },
+          "target_at10": true,
+          "seconds": 0.11686860490590334,
+          "passed": true
+        },
+        {
+          "repeat": 1,
+          "failure": 429,
+          "actual_http_fixture_calls": 1,
+          "http": 200,
+          "vector_status": "degraded",
+          "channel_counts": {
+            "lexical": 20,
+            "vector": 0,
+            "structured": 20
+          },
+          "target_at10": true,
+          "seconds": 0.0898666107095778,
+          "passed": true
+        },
+        {
+          "repeat": 1,
+          "failure": "timeout",
+          "actual_http_fixture_calls": 1,
+          "http": 200,
+          "vector_status": "degraded",
+          "channel_counts": {
+            "lexical": 20,
+            "vector": 0,
+            "structured": 20
+          },
+          "target_at10": true,
+          "seconds": 3.0495655331760645,
+          "passed": true
+        },
+        {
+          "repeat": 2,
+          "failure": 503,
+          "actual_http_fixture_calls": 1,
+          "http": 200,
+          "vector_status": "degraded",
+          "channel_counts": {
+            "lexical": 20,
+            "vector": 0,
+            "structured": 20
+          },
+          "target_at10": true,
+          "seconds": 0.07469582511112094,
+          "passed": true
+        },
+        {
+          "repeat": 2,
+          "failure": 429,
+          "actual_http_fixture_calls": 1,
+          "http": 200,
+          "vector_status": "degraded",
+          "channel_counts": {
+            "lexical": 20,
+            "vector": 0,
+            "structured": 20
+          },
+          "target_at10": true,
+          "seconds": 0.07659426284953952,
+          "passed": true
+        },
+        {
+          "repeat": 2,
+          "failure": "timeout",
+          "actual_http_fixture_calls": 1,
+          "http": 200,
+          "vector_status": "degraded",
+          "channel_counts": {
+            "lexical": 20,
+            "vector": 0,
+            "structured": 20
+          },
+          "target_at10": true,
+          "seconds": 3.0511883343569934,
+          "passed": true
+        },
+        {
+          "repeat": 3,
+          "failure": 503,
+          "actual_http_fixture_calls": 1,
+          "http": 200,
+          "vector_status": "degraded",
+          "channel_counts": {
+            "lexical": 20,
+            "vector": 0,
+            "structured": 20
+          },
+          "target_at10": true,
+          "seconds": 0.07942617498338223,
+          "passed": true
+        },
+        {
+          "repeat": 3,
+          "failure": 429,
+          "actual_http_fixture_calls": 1,
+          "http": 200,
+          "vector_status": "degraded",
+          "channel_counts": {
+            "lexical": 20,
+            "vector": 0,
+            "structured": 20
+          },
+          "target_at10": true,
+          "seconds": 0.07495100283995271,
+          "passed": true
+        },
+        {
+          "repeat": 3,
+          "failure": "timeout",
+          "actual_http_fixture_calls": 1,
+          "http": 200,
+          "vector_status": "degraded",
+          "channel_counts": {
+            "lexical": 20,
+            "vector": 0,
+            "structured": 20
+          },
+          "target_at10": true,
+          "seconds": 3.053368231281638,
+          "passed": true
+        }
+      ],
+      "passed": true,
+      "external_vendor_calls": 0,
+      "method": "Actual HTTP fixture receipt verified for each fault, explicit dummy fixture credential, default native query timeout3s, frozen ASGI route and PostgreSQL lexical/structured fallback. Synthetic data only. No server OS clock or job-state edits."
+    },
+    "disk-full": {
+      "scenario": "F9",
+      "observations": [
+        {
+          "repeat": 1,
+          "limited_filesystem_bytes": 16777216,
+          "tablespace_bytes": 3195000,
+          "failed_write_http": 500,
+          "captured_sqlstates": [
+            "53100"
+          ],
+          "read_during_full_http": 200,
+          "write_after_cleanup_http": 201,
+          "seconds": 0.12294311309233308,
+          "read_recovery_pass": true,
+          "explicit_retryable_error_semantics_pass": false
+        },
+        {
+          "repeat": 2,
+          "limited_filesystem_bytes": 16777216,
+          "tablespace_bytes": 3227788,
+          "failed_write_http": 500,
+          "captured_sqlstates": [
+            "53100"
+          ],
+          "read_during_full_http": 200,
+          "write_after_cleanup_http": 201,
+          "seconds": 0.10487826634198427,
+          "read_recovery_pass": true,
+          "explicit_retryable_error_semantics_pass": false
+        },
+        {
+          "repeat": 3,
+          "limited_filesystem_bytes": 16777216,
+          "tablespace_bytes": 3235980,
+          "failed_write_http": 500,
+          "captured_sqlstates": [
+            "53100"
+          ],
+          "read_during_full_http": 200,
+          "write_after_cleanup_http": 201,
+          "seconds": 0.11279080016538501,
+          "read_recovery_pass": true,
+          "explicit_retryable_error_semantics_pass": false
+        }
+      ],
+      "confirmed_writes": 7,
+      "confirmed_missing": 0,
+      "external_model_calls": 0,
+      "scope": "Separate1CPU/512MiB PostgreSQL container; only memory_versions physical tablespace relocated to a16MiB tmpfs. Schema/business code unchanged. Full-volume file removed between trials; host root disk was never filled. Read/recovery correctness distinct from error semantics."
+    },
+    "extraction-boundaries": {
+      "scenario": "F4_adapter",
+      "observations": [
+        {
+          "repeat": 1,
+          "case": "malformed_json",
+          "candidate_count": 1,
+          "reason": "RULE_FALLBACK",
+          "unsafe_model_content_returned": false,
+          "scope_fixed": true,
+          "passed": true
+        },
+        {
+          "repeat": 1,
+          "case": "scope_escalation",
+          "candidate_count": 1,
+          "reason": "RULE_FALLBACK",
+          "unsafe_model_content_returned": false,
+          "scope_fixed": true,
+          "passed": true
+        },
+        {
+          "repeat": 1,
+          "case": "authority_escalation",
+          "candidate_count": 1,
+          "reason": "RULE_FALLBACK",
+          "unsafe_model_content_returned": false,
+          "scope_fixed": true,
+          "passed": true
+        },
+        {
+          "repeat": 1,
+          "case": "too_many_memories",
+          "candidate_count": 1,
+          "reason": "RULE_FALLBACK",
+          "unsafe_model_content_returned": false,
+          "scope_fixed": true,
+          "passed": true
+        },
+        {
+          "repeat": 1,
+          "case": "oversized_content",
+          "candidate_count": 1,
+          "reason": "RULE_FALLBACK",
+          "unsafe_model_content_returned": false,
+          "scope_fixed": true,
+          "passed": true
+        },
+        {
+          "repeat": 1,
+          "case": "oversized_response",
+          "candidate_count": 1,
+          "reason": "RULE_FALLBACK",
+          "unsafe_model_content_returned": false,
+          "scope_fixed": true,
+          "passed": true
+        },
+        {
+          "repeat": 1,
+          "case": "sensitive_output",
+          "candidate_count": 0,
+          "reason": "OUTPUT_POLICY_REJECTED",
+          "unsafe_model_content_returned": false,
+          "scope_fixed": true,
+          "passed": true
+        },
+        {
+          "repeat": 1,
+          "case": "literal_instruction_output",
+          "candidate_count": 1,
+          "literal_instruction_retained": true,
+          "scope_fixed": true,
+          "unverified_inference_only": true,
+          "reason": "LLM_EXTRACTED",
+          "scope_authority_escalation": false,
+          "interpretation": "Literal instruction can remain candidate content; not evidence of execution or cross-tenant access. No automatic activation path exists."
+        },
+        {
+          "repeat": 2,
+          "case": "malformed_json",
+          "candidate_count": 1,
+          "reason": "RULE_FALLBACK",
+          "unsafe_model_content_returned": false,
+          "scope_fixed": true,
+          "passed": true
+        },
+        {
+          "repeat": 2,
+          "case": "scope_escalation",
+          "candidate_count": 1,
+          "reason": "RULE_FALLBACK",
+          "unsafe_model_content_returned": false,
+          "scope_fixed": true,
+          "passed": true
+        },
+        {
+          "repeat": 2,
+          "case": "authority_escalation",
+          "candidate_count": 1,
+          "reason": "RULE_FALLBACK",
+          "unsafe_model_content_returned": false,
+          "scope_fixed": true,
+          "passed": true
+        },
+        {
+          "repeat": 2,
+          "case": "too_many_memories",
+          "candidate_count": 1,
+          "reason": "RULE_FALLBACK",
+          "unsafe_model_content_returned": false,
+          "scope_fixed": true,
+          "passed": true
+        },
+        {
+          "repeat": 2,
+          "case": "oversized_content",
+          "candidate_count": 1,
+          "reason": "RULE_FALLBACK",
+          "unsafe_model_content_returned": false,
+          "scope_fixed": true,
+          "passed": true
+        },
+        {
+          "repeat": 2,
+          "case": "oversized_response",
+          "candidate_count": 1,
+          "reason": "RULE_FALLBACK",
+          "unsafe_model_content_returned": false,
+          "scope_fixed": true,
+          "passed": true
+        },
+        {
+          "repeat": 2,
+          "case": "sensitive_output",
+          "candidate_count": 0,
+          "reason": "OUTPUT_POLICY_REJECTED",
+          "unsafe_model_content_returned": false,
+          "scope_fixed": true,
+          "passed": true
+        },
+        {
+          "repeat": 2,
+          "case": "literal_instruction_output",
+          "candidate_count": 1,
+          "literal_instruction_retained": true,
+          "scope_fixed": true,
+          "unverified_inference_only": true,
+          "reason": "LLM_EXTRACTED",
+          "scope_authority_escalation": false,
+          "interpretation": "Literal instruction can remain candidate content; not evidence of execution or cross-tenant access. No automatic activation path exists."
+        },
+        {
+          "repeat": 3,
+          "case": "malformed_json",
+          "candidate_count": 1,
+          "reason": "RULE_FALLBACK",
+          "unsafe_model_content_returned": false,
+          "scope_fixed": true,
+          "passed": true
+        },
+        {
+          "repeat": 3,
+          "case": "scope_escalation",
+          "candidate_count": 1,
+          "reason": "RULE_FALLBACK",
+          "unsafe_model_content_returned": false,
+          "scope_fixed": true,
+          "passed": true
+        },
+        {
+          "repeat": 3,
+          "case": "authority_escalation",
+          "candidate_count": 1,
+          "reason": "RULE_FALLBACK",
+          "unsafe_model_content_returned": false,
+          "scope_fixed": true,
+          "passed": true
+        },
+        {
+          "repeat": 3,
+          "case": "too_many_memories",
+          "candidate_count": 1,
+          "reason": "RULE_FALLBACK",
+          "unsafe_model_content_returned": false,
+          "scope_fixed": true,
+          "passed": true
+        },
+        {
+          "repeat": 3,
+          "case": "oversized_content",
+          "candidate_count": 1,
+          "reason": "RULE_FALLBACK",
+          "unsafe_model_content_returned": false,
+          "scope_fixed": true,
+          "passed": true
+        },
+        {
+          "repeat": 3,
+          "case": "oversized_response",
+          "candidate_count": 1,
+          "reason": "RULE_FALLBACK",
+          "unsafe_model_content_returned": false,
+          "scope_fixed": true,
+          "passed": true
+        },
+        {
+          "repeat": 3,
+          "case": "sensitive_output",
+          "candidate_count": 0,
+          "reason": "OUTPUT_POLICY_REJECTED",
+          "unsafe_model_content_returned": false,
+          "scope_fixed": true,
+          "passed": true
+        },
+        {
+          "repeat": 3,
+          "case": "literal_instruction_output",
+          "candidate_count": 1,
+          "literal_instruction_retained": true,
+          "scope_fixed": true,
+          "unverified_inference_only": true,
+          "reason": "LLM_EXTRACTED",
+          "scope_authority_escalation": false,
+          "interpretation": "Literal instruction can remain candidate content; not evidence of execution or cross-tenant access. No automatic activation path exists."
+        }
+      ],
+      "external_vendor_calls": 0,
+      "method": "Frozen LLMExtractor with actual HTTPX mock transport response injection; three repetitions, exact malformed/privilege/length/policy cases. No business code modified.",
+      "limitation": "Adapter boundary observation, not a claim of whole-worker database persistence or execution of adversarial instructions."
+    }
+  },
+  "remaining": [
+    "Extraction owner73 judgments validated and both judges pass by task. EX1/EX2/F1 sampled human metrics available; separate EX5 ownership sublabel calibration and extraction repeat stability remain uncovered.",
+    "Complete PF coverage and capacity interpretation; timed runs are not automatically accepted.",
+    "Remaining F1–F12 coverage and full pressure/fault logs; completed individual observations do not certify all reliability controls."
+  ],
+  "limitations": [
+    "DeepSeek is also one gold annotation vendor; same-vendor answer/extraction can slightly inflate extraction scores; joint retention by two vendors partly mitigates this.",
+    "No new Ark/O10 model comparison because Ark has no quota; previous mixed-model results remain exploratory outside new B0.",
+    "Capacity corpus is entirely fictional, real native vectors,100k unique32-character texts; it is not natural semantic benchmark quality or the full natural memory length distribution.",
+    "Mac was explicitly authorized as an independent load host; physical cross-region placement is not independently verified.",
+    "MiniMax cross-reference and MiniMax backup are the same model and are not independent."
+  ]
+}

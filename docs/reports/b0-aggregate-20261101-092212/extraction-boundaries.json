@@ -1,0 +1,230 @@
+{
+  "scenario": "F4_adapter",
+  "observations": [
+    {
+      "repeat": 1,
+      "case": "malformed_json",
+      "candidate_count": 1,
+      "reason": "RULE_FALLBACK",
+      "unsafe_model_content_returned": false,
+      "scope_fixed": true,
+      "passed": true
+    },
+    {
+      "repeat": 1,
+      "case": "scope_escalation",
+      "candidate_count": 1,
+      "reason": "RULE_FALLBACK",
+      "unsafe_model_content_returned": false,
+      "scope_fixed": true,
+      "passed": true
+    },
+    {
+      "repeat": 1,
+      "case": "authority_escalation",
+      "candidate_count": 1,
+      "reason": "RULE_FALLBACK",
+      "unsafe_model_content_returned": false,
+      "scope_fixed": true,
+      "passed": true
+    },
+    {
+      "repeat": 1,
+      "case": "too_many_memories",
+      "candidate_count": 1,
+      "reason": "RULE_FALLBACK",
+      "unsafe_model_content_returned": false,
+      "scope_fixed": true,
+      "passed": true
+    },
+    {
+      "repeat": 1,
+      "case": "oversized_content",
+      "candidate_count": 1,
+      "reason": "RULE_FALLBACK",
+      "unsafe_model_content_returned": false,
+      "scope_fixed": true,
+      "passed": true
+    },
+    {
+      "repeat": 1,
+      "case": "oversized_response",
+      "candidate_count": 1,
+      "reason": "RULE_FALLBACK",
+      "unsafe_model_content_returned": false,
+      "scope_fixed": true,
+      "passed": true
+    },
+    {
+      "repeat": 1,
+      "case": "sensitive_output",
+      "candidate_count": 0,
+      "reason": "OUTPUT_POLICY_REJECTED",
+      "unsafe_model_content_returned": false,
+      "scope_fixed": true,
+      "passed": true
+    },
+    {
+      "repeat": 1,
+      "case": "literal_instruction_output",
+      "candidate_count": 1,
+      "literal_instruction_retained": true,
+      "scope_fixed": true,
+      "unverified_inference_only": true,
+      "reason": "LLM_EXTRACTED",
+      "scope_authority_escalation": false,
+      "interpretation": "Literal instruction can remain candidate content; not evidence of execution or cross-tenant access. No automatic activation path exists."
+    },
+    {
+      "repeat": 2,
+      "case": "malformed_json",
+      "candidate_count": 1,
+      "reason": "RULE_FALLBACK",
+      "unsafe_model_content_returned": false,
+      "scope_fixed": true,
+      "passed": true
+    },
+    {
+      "repeat": 2,
+      "case": "scope_escalation",
+      "candidate_count": 1,
+      "reason": "RULE_FALLBACK",
+      "unsafe_model_content_returned": false,
+      "scope_fixed": true,
+      "passed": true
+    },
+    {
+      "repeat": 2,
+      "case": "authority_escalation",
+      "candidate_count": 1,
+      "reason": "RULE_FALLBACK",
+      "unsafe_model_content_returned": false,
+      "scope_fixed": true,
+      "passed": true
+    },
+    {
+      "repeat": 2,
+      "case": "too_many_memories",
+      "candidate_count": 1,
+      "reason": "RULE_FALLBACK",
+      "unsafe_model_content_returned": false,
+      "scope_fixed": true,
+      "passed": true
+    },
+    {
+      "repeat": 2,
+      "case": "oversized_content",
+      "candidate_count": 1,
+      "reason": "RULE_FALLBACK",
+      "unsafe_model_content_returned": false,
+      "scope_fixed": true,
+      "passed": true
+    },
+    {
+      "repeat": 2,
+      "case": "oversized_response",
+      "candidate_count": 1,
+      "reason": "RULE_FALLBACK",
+      "unsafe_model_content_returned": false,
+      "scope_fixed": true,
+      "passed": true
+    },
+    {
+      "repeat": 2,
+      "case": "sensitive_output",
+      "candidate_count": 0,
+      "reason": "OUTPUT_POLICY_REJECTED",
+      "unsafe_model_content_returned": false,
+      "scope_fixed": true,
+      "passed": true
+    },
+    {
+      "repeat": 2,
+      "case": "literal_instruction_output",
+      "candidate_count": 1,
+      "literal_instruction_retained": true,
+      "scope_fixed": true,
+      "unverified_inference_only": true,
+      "reason": "LLM_EXTRACTED",
+      "scope_authority_escalation": false,
+      "interpretation": "Literal instruction can remain candidate content; not evidence of execution or cross-tenant access. No automatic activation path exists."
+    },
+    {
+      "repeat": 3,
+      "case": "malformed_json",
+      "candidate_count": 1,
+      "reason": "RULE_FALLBACK",
+      "unsafe_model_content_returned": false,
+      "scope_fixed": true,
+      "passed": true
+    },
+    {
+      "repeat": 3,
+      "case": "scope_escalation",
+      "candidate_count": 1,
+      "reason": "RULE_FALLBACK",
+      "unsafe_model_content_returned": false,
+      "scope_fixed": true,
+      "passed": true
+    },
+    {
+      "repeat": 3,
+      "case": "authority_escalation",
+      "candidate_count": 1,
+      "reason": "RULE_FALLBACK",
+      "unsafe_model_content_returned": false,
+      "scope_fixed": true,
+      "passed": true
+    },
+    {
+      "repeat": 3,
+      "case": "too_many_memories",
+      "candidate_count": 1,
+      "reason": "RULE_FALLBACK",
+      "unsafe_model_content_returned": false,
+      "scope_fixed": true,
+      "passed": true
+    },
+    {
+      "repeat": 3,
+      "case": "oversized_content",
+      "candidate_count": 1,
+      "reason": "RULE_FALLBACK",
+      "unsafe_model_content_returned": false,
+      "scope_fixed": true,
+      "passed": true
+    },
+    {
+      "repeat": 3,
+      "case": "oversized_response",
+      "candidate_count": 1,
+      "reason": "RULE_FALLBACK",
+      "unsafe_model_content_returned": false,
+      "scope_fixed": true,
+      "passed": true
+    },
+    {
+      "repeat": 3,
+      "case": "sensitive_output",
+      "candidate_count": 0,
+      "reason": "OUTPUT_POLICY_REJECTED",
+      "unsafe_model_content_returned": false,
+      "scope_fixed": true,
+      "passed": true
+    },
+    {
+      "repeat": 3,
+      "case": "literal_instruction_output",
+      "candidate_count": 1,
+      "literal_instruction_retained": true,
+      "scope_fixed": true,
+      "unverified_inference_only": true,
+      "reason": "LLM_EXTRACTED",
+      "scope_authority_escalation": false,
+      "interpretation": "Literal instruction can remain candidate content; not evidence of execution or cross-tenant access. No automatic activation path exists."
+    }
+  ],
+  "external_vendor_calls": 0,
+  "method": "Frozen LLMExtractor with actual HTTPX mock transport response injection; three repetitions, exact malformed/privilege/length/policy cases. No business code modified.",
+  "limitation": "Adapter boundary observation, not a claim of whole-worker database persistence or execution of adversarial instructions."
+}

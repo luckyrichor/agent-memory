@@ -1,0 +1,135 @@
+{
+  "audited_app_logs": 18,
+  "body_occurrences": 117,
+  "configured_key_occurrences": 0,
+  "artifacts": [
+    {
+      "artifact": "tx2-100k-r1-app-private.log",
+      "bytes": 2681094,
+      "sha256": "41f3c4c402df5c1ac2e34219236ec761da83e86ac2e0b2c52f49eb54552c0aad",
+      "complete_fictional_body_occurrences": 6,
+      "configured_key_occurrences": 0
+    },
+    {
+      "artifact": "tx2-100k-r2-app-private.log",
+      "bytes": 2674227,
+      "sha256": "8068dfae1084904d5f944ab8253bfcd03ace4cda2e10daab9868cade4cec2262",
+      "complete_fictional_body_occurrences": 11,
+      "configured_key_occurrences": 0
+    },
+    {
+      "artifact": "tx2-100k-r3-app-private.log",
+      "bytes": 2651449,
+      "sha256": "c576ee02109dd15f30fb58d17c8a4c0cd780760a73d19ed2beaa85ce46e94dc4",
+      "complete_fictional_body_occurrences": 6,
+      "configured_key_occurrences": 0
+    },
+    {
+      "artifact": "tx2-10k-r1-app-private.log",
+      "bytes": 1841072,
+      "sha256": "8a1194e4a745940d72b0dfaee92f0ef05760b204ddcbaf0d2ef8e44ca870f572",
+      "complete_fictional_body_occurrences": 13,
+      "configured_key_occurrences": 0
+    },
+    {
+      "artifact": "tx2-10k-r2-app-private.log",
+      "bytes": 1790415,
+      "sha256": "c7f6cead57c9d583b736bd07102d225cca012f191ea80a34c80c56f0e6c1da73",
+      "complete_fictional_body_occurrences": 11,
+      "configured_key_occurrences": 0
+    },
+    {
+      "artifact": "tx2-10k-r3-app-private.log",
+      "bytes": 1486391,
+      "sha256": "f5a8629cd2c8f08ccde106a2342630e831396a26fbbc3011ce2144b7afe43cd9",
+      "complete_fictional_body_occurrences": 11,
+      "configured_key_occurrences": 0
+    },
+    {
+      "artifact": "tx2-context-100k-r1-app-private.log",
+      "bytes": 2697290,
+      "sha256": "f03588f0d111f657b59d625d0654d028d7f3b9ebb3e42dbf39892cf0d4cafff7",
+      "complete_fictional_body_occurrences": 8,
+      "configured_key_occurrences": 0
+    },
+    {
+      "artifact": "tx2-context-100k-r2-app-private.log",
+      "bytes": 2707444,
+      "sha256": "8b1f4dda2a1dcc38129b4ea3a9b904c47be12433e9f18c432a56349e79a495f7",
+      "complete_fictional_body_occurrences": 5,
+      "configured_key_occurrences": 0
+    },
+    {
+      "artifact": "tx2-context-100k-r3-app-private.log",
+      "bytes": 2703797,
+      "sha256": "f1db7ea061df30ea29ebdf4dccc15148ec61c3285acfb001b241322a1cff783f",
+      "complete_fictional_body_occurrences": 7,
+      "configured_key_occurrences": 0
+    },
+    {
+      "artifact": "tx2-context-10k-r1-app-private.log",
+      "bytes": 1713568,
+      "sha256": "f88130618b308a90584206fdafb7f1af0268bf49effd5de96c35c75ce4754a5d",
+      "complete_fictional_body_occurrences": 13,
+      "configured_key_occurrences": 0
+    },
+    {
+      "artifact": "tx2-context-10k-r2-app-private.log",
+      "bytes": 1825374,
+      "sha256": "360c9bfa66fdbd1de49a4124f78fcbfd1ee9192416978a8ac410b3eb4de8382b",
+      "complete_fictional_body_occurrences": 14,
+      "configured_key_occurrences": 0
+    },
+    {
+      "artifact": "tx2-context-10k-r3-app-private.log",
+      "bytes": 1797354,
+      "sha256": "351d03a396b7443692312b1b888eceeef00d5d9265cd086fc544a05a22794ebd",
+      "complete_fictional_body_occurrences": 12,
+      "configured_key_occurrences": 0
+    },
+    {
+      "artifact": "tx2-write-100k-r1-app-private.log",
+      "bytes": 469,
+      "sha256": "4c765ecadb85e87d1244d3db9a2cf422099deb9225b44c5d3d94879d5cb35e00",
+      "complete_fictional_body_occurrences": 0,
+      "configured_key_occurrences": 0
+    },
+    {
+      "artifact": "tx2-write-100k-r2-app-private.log",
+      "bytes": 469,
+      "sha256": "e8dc1de315357da97dbb3b0122bae7772bc3f2c83272e99427b3438b9e88166f",
+      "complete_fictional_body_occurrences": 0,
+      "configured_key_occurrences": 0
+    },
+    {
+      "artifact": "tx2-write-100k-r3-app-private.log",
+      "bytes": 469,
+      "sha256": "b14ecc68f9a8880359408d12debcecbc1ec9fe598532de4000b2b19dd84fc521",
+      "complete_fictional_body_occurrences": 0,
+      "configured_key_occurrences": 0
+    },
+    {
+      "artifact": "tx2-write-10k-r1-app-private.log",
+      "bytes": 468,
+      "sha256": "ad791db32cd5771e770b8f5e2fcbf3ef2d678b394ec3ca5d1abe698c7622b268",
+      "complete_fictional_body_occurrences": 0,
+      "configured_key_occurrences": 0
+    },
+    {
+      "artifact": "tx2-write-10k-r2-app-private.log",
+      "bytes": 468,
+      "sha256": "308c67f3ba7dd9ff89b07c6307a847a4d4e12bad5d7ffc223cd4e704f75be7aa",
+      "complete_fictional_body_occurrences": 0,
+      "configured_key_occurrences": 0
+    },
+    {
+      "artifact": "tx2-write-10k-r3-app-private.log",
+      "bytes": 468,
+      "sha256": "46b6a8d5527102da0025b67eced6b8921031203e1cf25a436bb349be6378b8e5",
+      "complete_fictional_body_occurrences": 0,
+      "configured_key_occurrences": 0
+    }
+  ],
+  "SC4_pass": false,
+  "scope": "18 trial application logs, including cancellation/shutdown; synthetic bodies only. Does not cover every external telemetry collector or historic credential version."
+}

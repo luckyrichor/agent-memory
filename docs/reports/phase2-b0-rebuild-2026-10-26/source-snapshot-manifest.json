@@ -1,0 +1,8 @@
+{
+  "base_commit": "2fae08bdb524497070b6cd8ab5cdbaabfff5ced1",
+  "uncommitted": true,
+  "private_source_snapshot_path": ".local/phase2/b0/frozen-deepseek-20261026-v1/harness-source-private.zip",
+  "sha256": "e25344d1c5f2a62585125de856ab0993d3aa0459863dca42a5306dbe46713473",
+  "contents": "eval harness sources and tracked diff only; no credentials or datasets",
+  "not_a_business_B0_tag_change": true
+}

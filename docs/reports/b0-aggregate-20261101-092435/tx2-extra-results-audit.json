@@ -1,0 +1,56 @@
+{
+  "status": "reviewed",
+  "groups": [
+    {
+      "workload": "write",
+      "size": 10000,
+      "rounds": 3,
+      "measured_requests": 903,
+      "errors": 0,
+      "error_fraction": 0.0,
+      "resources_valid": true,
+      "confirmed_writes_including_warmup": 1083,
+      "confirmed_missing": 0,
+      "completed_embedding_jobs": 1083
+    },
+    {
+      "workload": "write",
+      "size": 100000,
+      "rounds": 3,
+      "measured_requests": 902,
+      "errors": 0,
+      "error_fraction": 0.0,
+      "resources_valid": true,
+      "confirmed_writes_including_warmup": 1082,
+      "confirmed_missing": 0,
+      "completed_embedding_jobs": 1082
+    },
+    {
+      "workload": "context",
+      "size": 10000,
+      "rounds": 3,
+      "measured_requests": 867,
+      "errors": 561,
+      "error_fraction": 0.6470588235294118,
+      "resources_valid": true,
+      "confirmed_writes_including_warmup": 0,
+      "confirmed_missing": 0,
+      "completed_embedding_jobs": 0
+    },
+    {
+      "workload": "context",
+      "size": 100000,
+      "rounds": 3,
+      "measured_requests": 888,
+      "errors": 865,
+      "error_fraction": 0.9740990990990991,
+      "resources_valid": true,
+      "confirmed_writes_including_warmup": 0,
+      "confirmed_missing": 0,
+      "completed_embedding_jobs": 0
+    }
+  ],
+  "temporary_ingress_closed": true,
+  "phase2_accepted": false,
+  "limitation": "Writing success does not imply read/context performance passes. Confirmed writes include warmup; errors use measurement requests. Queue completion timings omit pending jobs and WAN visibility."
+}

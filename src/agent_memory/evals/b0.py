@@ -120,6 +120,8 @@ def measurement_signature(config: dict[str, Any]) -> dict[str, Any]:
     keys = ('seed', 'conversations_per_dataset', 'conversations_per_question_type',
             'questions_per_conversation', 'system_context_budget', 'offline_fixture')
     result = {key: config.get(key) for key in keys}
+    if config.get('dev_selection'):
+        result['dev_selection'] = config['dev_selection']
     result.update(extraction_model=config.get('extraction_model', 'doubao-seed-2-1-pro-260915'),
                   extraction_provider=config.get('extraction_provider', 'Ark'),
                   embedding_model=config.get('embedding_model', 'doubao-embedding-vision-251215'),
@@ -169,3 +171,32 @@ def compatible_result_model(actual: str | None, configured: str, config: dict[st
         config.get('family_continuation_authorization') == FAMILY_CONTINUATION_AUTH
         and vendor(configured) is not None and actual is not None
         and vendor(actual) == vendor(configured))
+
+
+def embedding_probe_observations(vectors: Sequence[Any]) -> dict[str, Any]:
+    """Schema/actual-call qualification; repeated floats are diagnostics, not judge labels."""
+    def valid(value: Any) -> bool:
+        return (isinstance(value, list) and len(value) == 1024
+                and all(isinstance(x, (int, float)) and not isinstance(x, bool)
+                        and math.isfinite(x) for x in value) and any(value))
+
+    repeated = vectors[1:6]
+    formats = vectors[6:]
+    count = sum(valid(v) for v in formats)
+    repeated_valid = len(repeated) == 5 and all(valid(v) for v in repeated)
+    return {'passed': (len(vectors) == 106 and valid(vectors[0])
+                       and repeated_valid and len(formats) == 100 and count >= 99),
+            'format_n': len(formats), 'format_valid': count,
+            'repeated_valid': repeated_valid,
+            'exact_repeat_equality_diagnostic': (
+                all(v == repeated[0] for v in repeated) if repeated_valid else None),
+            'exact_vector_equality_is_gate': False,
+            'criterion_source': 'native1024 finite nonzero schema and actual success; '
+                                'five identical grading decisions apply to judges, not embeddings'}
+
+
+def normalize_embedding_request(body: dict[str, Any], provider: str) -> dict[str, Any]:
+    """TokenHub Kinfra has fixed output dimensions and rejects the dimensions field."""
+    if provider == 'TokenHub' and str(body.get('model', '')).startswith('kinfra-'):
+        return {key: value for key, value in body.items() if key != 'dimensions'}
+    return body

@@ -2,7 +2,7 @@
 
 B0为已有不可覆盖标签，提交 `1e9d6f3b25b58c85792344000d7e1b5a71a79737`。评测脚本从只读worktree加载该版本API、领域、存储和worker；评测辅助代码与数据从当前仓库加载。当前检索代码曾在阶段1改动，不用于冒充原B0。
 
-当前策略：[b0-policy-v5.json](../../evals/b0-policy-v5.json)。负责人本轮仅授权测量，不作优化、改阈值或进入阶段3；阶段1已验收。
+当前策略：[b0-policy-v7.json](../../evals/b0-policy-v7.json)。负责人本轮仅授权测量，不作优化、改阈值或进入阶段3；阶段1已验收。
 
 ## 单一运行入口
 
@@ -11,7 +11,7 @@ uv run python scripts/with-llm-account.py ark-secondary \
  .venv/bin/python scripts/with-llm-account.py tokenhub-secondary \
  .venv/bin/python scripts/run-b0.py \
  --dataset all --mode both \
- --config docs/baselines/b0/config-sample-v8.json \
+ --config docs/baselines/b0/config-frozen-deepseek-v1.json \
  --metrics EX,LC,RT,CX,E,RL,SC \
  --output .local/phase2/b0/REPLACE_WITH_NEW_IMMUTABLE_RUN
 ```
@@ -32,7 +32,7 @@ uv run python scripts/with-llm-account.py ark-secondary \
 
 先有真实运行时3次调用小样，随后验证真实API。第一轮API小样随机档案无问答，只作导入/向量化操作证据，不作质量结论；后续QA采样仅从有问题的开发集会话选取，完整保留这些会话历史，抽样种子与数量固定。预算依据与估算假设见 [workload-estimate-v1.json](workload-estimate-v1.json)。重复三次采用新模型调用，不将缓存重放当独立重复。
 
-评测模型额度触发时，受影响表的所有系统组和重复用新预检合格模型整体重跑/重判，旧部分保留历史；运行时抽取/向量模型不切换，额度不足暂停。主裁判glm-5.2，备选沿用阶段1技术池并逐表排除厂商；目前均未人工校准，判分只能作为校准前诊断，不能发布正式质量结论。
+当前负责人新方案：抽取和答题只准同一官网DeepSeek-v4-pro；原生腾讯Kinfra1024重建；禁止方舟和模型自动混用。主裁判GLM、合格备选整表重判；旧结果探索性，不计新配置B0。原同系列续跑/DeepSeek最后后备规则均已被覆盖，历史段落不可作为当前执行依据。主裁判glm-5.2，备选沿用阶段1技术池并逐表排除厂商；目前均未人工校准，判分只能作为校准前诊断，不能发布正式质量结论。
 
 ## 人工与压测闸门
 

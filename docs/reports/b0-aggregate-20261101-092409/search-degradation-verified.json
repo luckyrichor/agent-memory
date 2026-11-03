@@ -1,0 +1,143 @@
+{
+  "scenario": "F3_search_degradation",
+  "observations": [
+    {
+      "repeat": 1,
+      "failure": 503,
+      "actual_http_fixture_calls": 1,
+      "http": 200,
+      "vector_status": "degraded",
+      "channel_counts": {
+        "lexical": 20,
+        "vector": 0,
+        "structured": 20
+      },
+      "target_at10": true,
+      "seconds": 0.11686860490590334,
+      "passed": true
+    },
+    {
+      "repeat": 1,
+      "failure": 429,
+      "actual_http_fixture_calls": 1,
+      "http": 200,
+      "vector_status": "degraded",
+      "channel_counts": {
+        "lexical": 20,
+        "vector": 0,
+        "structured": 20
+      },
+      "target_at10": true,
+      "seconds": 0.0898666107095778,
+      "passed": true
+    },
+    {
+      "repeat": 1,
+      "failure": "timeout",
+      "actual_http_fixture_calls": 1,
+      "http": 200,
+      "vector_status": "degraded",
+      "channel_counts": {
+        "lexical": 20,
+        "vector": 0,
+        "structured": 20
+      },
+      "target_at10": true,
+      "seconds": 3.0495655331760645,
+      "passed": true
+    },
+    {
+      "repeat": 2,
+      "failure": 503,
+      "actual_http_fixture_calls": 1,
+      "http": 200,
+      "vector_status": "degraded",
+      "channel_counts": {
+        "lexical": 20,
+        "vector": 0,
+        "structured": 20
+      },
+      "target_at10": true,
+      "seconds": 0.07469582511112094,
+      "passed": true
+    },
+    {
+      "repeat": 2,
+      "failure": 429,
+      "actual_http_fixture_calls": 1,
+      "http": 200,
+      "vector_status": "degraded",
+      "channel_counts": {
+        "lexical": 20,
+        "vector": 0,
+        "structured": 20
+      },
+      "target_at10": true,
+      "seconds": 0.07659426284953952,
+      "passed": true
+    },
+    {
+      "repeat": 2,
+      "failure": "timeout",
+      "actual_http_fixture_calls": 1,
+      "http": 200,
+      "vector_status": "degraded",
+      "channel_counts": {
+        "lexical": 20,
+        "vector": 0,
+        "structured": 20
+      },
+      "target_at10": true,
+      "seconds": 3.0511883343569934,
+      "passed": true
+    },
+    {
+      "repeat": 3,
+      "failure": 503,
+      "actual_http_fixture_calls": 1,
+      "http": 200,
+      "vector_status": "degraded",
+      "channel_counts": {
+        "lexical": 20,
+        "vector": 0,
+        "structured": 20
+      },
+      "target_at10": true,
+      "seconds": 0.07942617498338223,
+      "passed": true
+    },
+    {
+      "repeat": 3,
+      "failure": 429,
+      "actual_http_fixture_calls": 1,
+      "http": 200,
+      "vector_status": "degraded",
+      "channel_counts": {
+        "lexical": 20,
+        "vector": 0,
+        "structured": 20
+      },
+      "target_at10": true,
+      "seconds": 0.07495100283995271,
+      "passed": true
+    },
+    {
+      "repeat": 3,
+      "failure": "timeout",
+      "actual_http_fixture_calls": 1,
+      "http": 200,
+      "vector_status": "degraded",
+      "channel_counts": {
+        "lexical": 20,
+        "vector": 0,
+        "structured": 20
+      },
+      "target_at10": true,
+      "seconds": 3.053368231281638,
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "external_vendor_calls": 0,
+  "method": "Actual HTTP fixture receipt verified for each fault, explicit dummy fixture credential, default native query timeout3s, frozen ASGI route and PostgreSQL lexical/structured fallback. Synthetic data only. No server OS clock or job-state edits."
+}

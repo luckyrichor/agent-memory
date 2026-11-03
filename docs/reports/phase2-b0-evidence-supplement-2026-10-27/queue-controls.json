@@ -1,0 +1,190 @@
+{
+  "created_at": "2026-10-28T00:17:37.057842+00:00",
+  "baseline_commit": "1e9d6f3b25b58c85792344000d7e1b5a71a79737",
+  "harness_script_sha256": "69f4ace11ec2a1731b7f57397fa17c37fad90d74177af1d630fed23c4f5c8fd5",
+  "method": "Frozen PostgresJobQueue, actual new disposable PostgreSQL with non-owner/non-bypass role, three repeats, real database-clock expiry/backoff; no SQL state/time edits and no models",
+  "data_level": "C synthetic queue controls, not real model/worker-process fault injection or PF",
+  "environment": {
+    "postgres": "PostgreSQL 16.15 (Debian 16.15-1.pgdg12+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit",
+    "non_owner_superuser": false,
+    "non_owner_bypassrls": false,
+    "container_image_id": "sha256:ccc6e83d6e35e931dc7c5def2022729d5a6c370318d099181995567ff1fb4d6b"
+  },
+  "observations": [
+    {
+      "repeat": 0,
+      "scenario": "normal",
+      "status": "succeeded",
+      "attempts": 1,
+      "stale_actions_rejected": 0,
+      "stale_actions_attempted": 0,
+      "lease_owner_after": null,
+      "model_calls": 0
+    },
+    {
+      "repeat": 0,
+      "scenario": "transient_retry",
+      "status": "succeeded",
+      "attempts": 2,
+      "stale_actions_rejected": 0,
+      "stale_actions_attempted": 0,
+      "lease_owner_after": null,
+      "model_calls": 0
+    },
+    {
+      "repeat": 0,
+      "scenario": "expired_owner",
+      "status": "succeeded",
+      "attempts": 2,
+      "stale_actions_rejected": 3,
+      "stale_actions_attempted": 3,
+      "lease_owner_after": null,
+      "model_calls": 0
+    },
+    {
+      "repeat": 0,
+      "scenario": "permanent_failure",
+      "status": "dead",
+      "attempts": 1,
+      "stale_actions_rejected": 0,
+      "stale_actions_attempted": 0,
+      "lease_owner_after": null,
+      "model_calls": 0
+    },
+    {
+      "repeat": 0,
+      "scenario": "retry_exhaustion",
+      "status": "dead",
+      "attempts": 2,
+      "stale_actions_rejected": 0,
+      "stale_actions_attempted": 0,
+      "lease_owner_after": null,
+      "model_calls": 0
+    },
+    {
+      "repeat": 1,
+      "scenario": "normal",
+      "status": "succeeded",
+      "attempts": 1,
+      "stale_actions_rejected": 0,
+      "stale_actions_attempted": 0,
+      "lease_owner_after": null,
+      "model_calls": 0
+    },
+    {
+      "repeat": 1,
+      "scenario": "transient_retry",
+      "status": "succeeded",
+      "attempts": 2,
+      "stale_actions_rejected": 0,
+      "stale_actions_attempted": 0,
+      "lease_owner_after": null,
+      "model_calls": 0
+    },
+    {
+      "repeat": 1,
+      "scenario": "expired_owner",
+      "status": "succeeded",
+      "attempts": 2,
+      "stale_actions_rejected": 3,
+      "stale_actions_attempted": 3,
+      "lease_owner_after": null,
+      "model_calls": 0
+    },
+    {
+      "repeat": 1,
+      "scenario": "permanent_failure",
+      "status": "dead",
+      "attempts": 1,
+      "stale_actions_rejected": 0,
+      "stale_actions_attempted": 0,
+      "lease_owner_after": null,
+      "model_calls": 0
+    },
+    {
+      "repeat": 1,
+      "scenario": "retry_exhaustion",
+      "status": "dead",
+      "attempts": 2,
+      "stale_actions_rejected": 0,
+      "stale_actions_attempted": 0,
+      "lease_owner_after": null,
+      "model_calls": 0
+    },
+    {
+      "repeat": 2,
+      "scenario": "normal",
+      "status": "succeeded",
+      "attempts": 1,
+      "stale_actions_rejected": 0,
+      "stale_actions_attempted": 0,
+      "lease_owner_after": null,
+      "model_calls": 0
+    },
+    {
+      "repeat": 2,
+      "scenario": "transient_retry",
+      "status": "succeeded",
+      "attempts": 2,
+      "stale_actions_rejected": 0,
+      "stale_actions_attempted": 0,
+      "lease_owner_after": null,
+      "model_calls": 0
+    },
+    {
+      "repeat": 2,
+      "scenario": "expired_owner",
+      "status": "succeeded",
+      "attempts": 2,
+      "stale_actions_rejected": 3,
+      "stale_actions_attempted": 3,
+      "lease_owner_after": null,
+      "model_calls": 0
+    },
+    {
+      "repeat": 2,
+      "scenario": "permanent_failure",
+      "status": "dead",
+      "attempts": 1,
+      "stale_actions_rejected": 0,
+      "stale_actions_attempted": 0,
+      "lease_owner_after": null,
+      "model_calls": 0
+    },
+    {
+      "repeat": 2,
+      "scenario": "retry_exhaustion",
+      "status": "dead",
+      "attempts": 2,
+      "stale_actions_rejected": 0,
+      "stale_actions_attempted": 0,
+      "lease_owner_after": null,
+      "model_calls": 0
+    }
+  ],
+  "RL3": {
+    "status": "partial measured: real queue persistence, no candidate-commit transaction race yet",
+    "stale_mutation_success_count": 0,
+    "stale_mutation_attempts": 9,
+    "repeats": 3,
+    "ci95": null,
+    "ci_reason": "fixed fixture count, not population failure probability"
+  },
+  "RL4": {
+    "status": "partial queue fault controls only; not model outage/process crash or full-pipeline recovery",
+    "total_tasks": 15,
+    "succeeded": 9,
+    "dead": 6,
+    "all_tasks_success_fraction": 0.6,
+    "all_tasks_denominator_includes_injected_permanent_and_exhausted_failures": true,
+    "attempts_distribution": {
+      "1": 6,
+      "2": 9
+    },
+    "ci95": null,
+    "ci_reason": "finite prescribed scenario matrix; empirical repeats separately, not IID deployment tasks"
+  },
+  "phase2_accepted": false,
+  "stage3_started": false,
+  "model_calls": 0
+}

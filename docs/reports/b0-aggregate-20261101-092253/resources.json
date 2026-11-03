@@ -1,0 +1,82 @@
+{
+  "answer": {
+    "post_attempts": 1560,
+    "known_usage_responses": 1560,
+    "usage_unknown": 0,
+    "input_tokens": 6368927,
+    "output_tokens": 31225,
+    "total_tokens": 6400152,
+    "latency_seconds": {
+      "n": 1560,
+      "p50": 1.1867052359739318,
+      "p95": 1.9250730023137292,
+      "p99": 4.148421249836732
+    },
+    "attempted_wire_json_bytes": 27504262,
+    "scope": "all new HTTP attempts across identical-config recovery lineage; no evaluation-row replays double counted; failures/retries included; calibration/preflights excluded"
+  },
+  "cross-reference": {
+    "post_attempts": 300,
+    "known_usage_responses": 300,
+    "usage_unknown": 0,
+    "input_tokens": 95355,
+    "output_tokens": 3779,
+    "total_tokens": 99134,
+    "latency_seconds": {
+      "n": 300,
+      "p50": 1.9825925671029836,
+      "p95": 6.616257626039444,
+      "p99": 10.073006911019306
+    },
+    "attempted_wire_json_bytes": 289693,
+    "scope": "all new HTTP attempts across identical-config recovery lineage; no evaluation-row replays double counted; failures/retries included; calibration/preflights excluded"
+  },
+  "embedding": {
+    "post_attempts": 13051,
+    "known_usage_responses": 13038,
+    "usage_unknown": 13,
+    "input_tokens": 1015982,
+    "output_tokens": 0,
+    "total_tokens": 1015982,
+    "latency_seconds": {
+      "n": 13051,
+      "p50": 2.190721753053367,
+      "p95": 2.991072664037347,
+      "p99": 3.800645390409045
+    },
+    "attempted_wire_json_bytes": 5424657,
+    "scope": "all new HTTP attempts across identical-config recovery lineage; no evaluation-row replays double counted; failures/retries included; calibration/preflights excluded"
+  },
+  "extraction": {
+    "post_attempts": 7987,
+    "known_usage_responses": 7985,
+    "usage_unknown": 2,
+    "input_tokens": 1955576,
+    "output_tokens": 279741,
+    "total_tokens": 2235317,
+    "latency_seconds": {
+      "n": 7987,
+      "p50": 1.219264319166541,
+      "p95": 2.225418666843325,
+      "p99": 2.73655910210684
+    },
+    "attempted_wire_json_bytes": 9943957,
+    "scope": "all new HTTP attempts across identical-config recovery lineage; no evaluation-row replays double counted; failures/retries included; calibration/preflights excluded"
+  },
+  "judge": {
+    "post_attempts": 1561,
+    "known_usage_responses": 1560,
+    "usage_unknown": 1,
+    "input_tokens": 232784,
+    "output_tokens": 21176,
+    "total_tokens": 253960,
+    "latency_seconds": {
+      "n": 1561,
+      "p50": 4.790560386842117,
+      "p95": 5.933343779994175,
+      "p99": 7.4105407651513975
+    },
+    "attempted_wire_json_bytes": 1404565,
+    "scope": "all new HTTP attempts across identical-config recovery lineage; no evaluation-row replays double counted; failures/retries included; calibration/preflights excluded"
+  }
+}

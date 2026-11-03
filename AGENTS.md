@@ -1,5 +1,114 @@
 # AGENTS.md
 
+<!-- SERVICE_STOP_HANDOFF_20261102_START -->
+- 2026-11-02T15:08:37+08:00（北京时间）停服交接：用户明确要求停止 agent-memory 全部服务，本轮已执行并核对，本段优先于下文全部“正在运行”描述。
+- 实际状态：本项目 API/worker 没有运行（无 agent_memory 进程、无自有 8000/8080/55432/13051 端口监听、无 agent-memory systemd 单元/计时器）。Docker 中 `agent-memory-b0-capacity-20261028` 已 `docker stop`，`agent-memory-postgres-1` 与两个 `agent-memory-b0-diskfull` 容器同为 Exited，所有 `agent-memory*` 前缀容器均不再运行，56432 端口已关闭。
+- 容器、卷（`agent-memory_agent-memory-postgres`）、数据与 restart 策略全部保留，未删除任何文件或容器；本轮未改代码。属于 agent-ops-platform 的 `agent-ops-p7-memory`、`agent-ops-customer-memory.service` 及其他服务未触碰。
+- 下文各段（含 `agent-memory-b0-*` 单元、扩展/容量测量、阶梯与 PerLTQA 等描述）中的“正在运行/等待/托管中”均为历史记录，不代表当前运行状态；恢复运行须等用户新指示，不得据本文件自行拉起服务或重跑测量。
+- 版本核对：仓库 HEAD `53cba0f`（Document isolated customer-memory contract for Agent Ops P7），工作区已有未提交修改（含本文件、CLAUDE.md 及 97 项状态变更），本轮只改本文件、未提交未推送。
+- 分工与凭据：本轮由 Codex 指导、CodeBuddy 实施，Codex 已独立验收：本项目进程与运行容器均为 0、56432 无监听；agent-ops-customer-memory 用户服务及其他应用服务仍 active；`CLAUDE.md` 仍只有 `@AGENTS.md` 一行，保持不动。
+- 按用户历史约定暂不写 Wiki；**飞书待同步：2026-11-02 本次全部停服与保留数据交接**，原因同上，不是授权失效。
+<!-- SERVICE_STOP_HANDOFF_20261102_END -->
+
+<!-- STAGE1_VERIFY_20261103_START -->
+- 2026-11-03（北京时间）阶段1收尾复核，CodeBuddy 实施、deepseek-v4.1-flash，Codex 待验；服务仍全部停止，本轮未启动任何进程/容器。
+- 只改/只核对 4 个文件：`src/agent_memory/evals/b0_selection.py`（`select_questions` 注解已补）、`tests/unit/evals/test_b0_selection.py`（import 已排序）、`scripts/run-b0-mac-load.py`、`scripts/run-b0-linux-load-point.py`。两个 load 脚本已无公网 IP/派生主机名，目标必须由 `--base-url/--host` 或 `B0_BASE_URL/B0_HOST` 提供，缺失在 `mkdir` 前 `parser.error` 退出 2；实测缺失目标时无目录创建。
+- 四道离线检查：`pytest tests/unit` 409 passed；`ruff check src tests migrations` All checks passed；`mypy src` 102 文件无错；`git diff --check` 通过。未调用任何付费 API，未跑集成/容器测试。
+- 可删清单只列不删：`.local` A 类 8 项共 487,069,042 B（464.5 MiB），精确路径/大小/sha256 见 `.agent-tasks/2026-11-03-stage1-deletable-a-class.json`（本机排除，不入库）；B 类派生目录与 C 类独占证据均不列入。
+- 本轮未 commit/push/删除/启停服务，未新增服务与依赖；飞书 Wiki 按用户要求仍暂缓，等待 Codex 下一步。
+<!-- STAGE1_VERIFY_20261103_END -->
+
+<!-- B0_EXPANSION_20261101_START -->
+- 2026-11-01T17:18:08.358941+08:00 负责人已核对上一聚合报告无误，授权阶段2再补一轮并再次要求继续，仍不进入阶段3。本段优先于下文历史进度。
+- 实际运行：agent-memory-b0-rate-staircase-v2-20261101.service，搜索/context×10k×0.1/0.25/0.5QPS×3轮；控制器scripts/run-b0-rate-staircase.py；私有日志/检查点.local/phase2/b0/expansion-20261101/。当前第1点恢复轮实际200，不能提前称稳定通过。
+- 原stair-search-01首轮在TX主机重启前中断，远端完整证据已迁回；30测量请求14错误、0drop，目标机监控内存峰值97%并有probe失败。重启/内存压力原因未确定，不作系统容量结论，单列interrupted-point.json。重启后新boot_id151b2eb9-3250-4069-aae6-870e90ee843c，自有DB重新启动并用host nsenter恢复shm512MiB。未影响其他业务容器。
+- v2新标签stair2-*不覆盖旧结果；增加目标主机80%内存保护，目标主机资源超过70%不作稳定容量结论；发压端仍70%约束。结束只清自有API/Nginx入口，不修改B0业务。
+- 后续实际托管单元agent-memory-b0-expansion-continuation-20261101.service正在等阶梯18点测完；只有序列完成才运行PerLTQA300题×四组×两模式×3次，固定GLM主裁判无fallback，避免与压测同时争用本机资源。配置config-perltqa300-private.json、预算账budget-ledger.json；旧lineage向量已用13051，本批硬上限24990，合计38041<=原66293；未增加原总上限。厂商额度/型号变化/预算到顶即暂停，不自动进阶段3，不自动发未完成报告。
+- 其余扩样已选定冻结dev ID：中文质量150题/102会话、LongMemEval每子集50题；连同PerLTQA共550题向量估算696060，含25%余量870075。其余批次等待预算选择；LoCoMo冻结dev只有3会话，等待保留3并列例外或补2新dev会话的选择，不能挪测试。
+- 仅测量层增加池队列等待/物理建连计时；真实单池饱和校验约121ms等待。小数k6速率inspect确认1次/10s；ID选题防止非dev、重复、错会话、流程题混入；选题签名纳入恢复校验，13相关测试通过。业务source-B0未改且干净，无提交推送。
+- 计划/预算/9项例外位于docs/reports/phase2-b0-expansion-2026-11-01/；新完成报告尚未出，旧交付包不覆盖。Wiki待同步：本轮扩样预算、重启中断证据、阶梯恢复与自动后续；用户暂不写Wiki。
+- 2026-11-01T17:24:18.091519+08:00 v2已完成1/18点：搜索0.1QPS第1轮31测量请求0错误0drop，remote k6_exit0、发压机CPU峰12.1%/内存24.1%、目标机内存峰36.1%。SSH控制退出255但远端status/summary/resources/log独立回收核对；保留control_exit，不把它改成0。
+- 该点客户端p95约26.24s，服务端词法SQLp95约26.06s、向量0.127s、结构化0.016s，池blocking get0次；初步定位尾耗时落在词法SQL，不能称已证明唯一根因或稳定最大速率。原始阶段统计含预热，后续还需测量窗口分析。当前第2轮仍实际运行。
+- 监控等待/SSH回收使单点约466s，当前自有阶梯unit运行上限已通过runtime drop-in调整3h；不改变测量6分钟窗口。后续等待单元已重新启动并将等待上限增至11000s，仍等18点结束后再开PerLTQA，避免资源干扰。4份提示词SHA均与旧运行manifest一致，run-b0启动时会再次严格核对。
+<!-- B0_EXPANSION_20261101_END -->
+
+<!-- B0_REPORT_DELIVERY_START -->
+- 2026-11-01T09:26:11.240894+08:00 本轮报告收尾已实际完成并发群，不再等待上传：正文消息om_x100b615d1e7378a8cff7688457cc147，ZIP消息om_x100b615d1e1900acb013c78c46ec173。最新索引docs/reports/B0-aggregate-latest.md，正文docs/reports/b0-aggregate-20261101-092435/B0-report.md；ZIP SHA256 899250cefcdfb706d45c2b5a87eab296728f6367ebb5575d21d68f7aaf7356d0。
+- 交付含40个四系统/两模式质量表、372条总体指标、752条题型指标、18轮公网测量及资源/区间、QA300/抽取73校准、66项覆盖、匿名失败案例、故障与恢复。1272质量行与288流程行分开，Chinese数据内B类题不误作全部流程。
+- 全18轮日志复核：完整虚构查询正文117次（首6轮58次）；已配置且能获取的APIkey0命中。原文/人工标签理由/凭据不入包。文件哈希/ZIP/分母/隐私检查通过，7相关单测通过；B0冻结源仍干净。
+- report_document_finalized与report_delivered=true；measurement_coverage_complete、phase2_accepted、full_aggregate_ready均false，stage3_started=false。报告内明确已测/局部/未测：{'已测（限定范围）': 27, '局部观察': 19, '未测': 20}。原始全覆盖自动交付闸门未擅自解除；本次交付按用户“标通过/失败/未测并汇总发群→开始吧”授权范围完成。
+- 接手先读最新索引和本地aggregate/current-state.json；旧report.json是冻结数值来源，旧“校准待办/未开始PF”文字属历史，不得当当前状态。剩余缺口明确保留，不把报告已发解释为验收通过或进入修复阶段。
+- 本轮未提交/推送，工具来源agent-memory@53cba0f含未提交修改；Wiki按用户暂不写，飞书开发记录待同步：本轮最终汇总和交付。
+<!-- B0_REPORT_DELIVERY_END -->
+
+<!-- B0_ACTIVE_REMAINING_START -->
+- 2026-10-31T16:29:36.827133+08:00 不再等待负责人催促：后续公网write/context序列已实际启动，单元agent-memory-tx2-extra-sequence-20261031.service，最长6600秒；12/12点现已完成并核对，单元退出0、自有入口已关闭。写入测量1805请求0错误，2165确认写入全在；context10k失败561/867、100k865/888，两端负载机资源合格。计划write/context×10k/100k×3次，共12点，每点60s预热+300s测量与两端采样，预计约80余分钟，完成仅指此批测量，不表示性能通过或阶段2全覆盖。
+- 控制脚本scripts/run-b0-tx2-extra.py；私有日志capacity/tx2-extra-sequence.log，逐点检查点tx2-extra-sequence-private.json；最终聚合tx2-extra-public-load.json，自动清本任务API/自有Nginx入口并调用报告/交接收尾。异常/资源超限即保留证据并停，不自行修B0。每轮新克隆，原始10k/100k种子不写入；已实际烟测write201、context200。
+- write请求只用完全虚构32字文本、精确预计算腾讯原生向量；0厂商模型调用。记录客户端确认写入ID并核对存在，真实worker入库队列耗时只代表DB入队到完成；待完成jobs删失，不能冒称客户端公网可见新鲜度。原query/reader实验源码已归档load-tools/read-*-used.*，不覆盖旧结果。
+- 本轮故障补齐已完成：F12 now依赖±120秒6次成功（不改OS时钟），F6默认30秒租约实际等待3次晚到向量提交均拒绝；F2占满原生15连接3次均约30s/HTTP500，快速可重试失败未通过。搜索503/429/超时各3次实际HTTP夹具收到1次请求后降级200/零vector通道，超时实际约3s，见search-degradation-verified.json；旧缺fixture token的观测已标无效，不采纳。
+- F9独立16MiB tmpfs tablespace真实满3次，API500且捕获SQLSTATE53100；读200/清理后写201/确认写入无丢失，错误语义不合格。第一版遇422不证明磁盘满，已单列disk-full-unverified-v1.json，不能冒称通过。独立新容器已停止，无主机磁盘写满。
+- F4冻结adapter24次边界观测（21次非法/越权/超长/敏感输出阻断或回退，3次指令文字可成为unverified候选但不能改scope/authority），不声称整条DB持久化验证。冻结B0原有全套234tests通过17.80秒，源worktree仍干净。仅后台测量脚本改动，工具来源agent-memory@53cba0f含未提交修改，无自行提交。
+- F10变更向量型号与当前固定型号约束冲突，未擅自换型号；F11无新的业务迁移目标，未伪造结构变更；这两项仅明确缺口，不偷改验收。更全面PF网格/跨地域链路仍未测。完整文件门保持false，不进入阶段3；Wiki按用户暂不写。
+<!-- B0_ACTIVE_REMAINING_END -->
+
+<!-- B0_EXTRACTION_OWNER_START -->
+- 2026-10-31T15:54:33.137888+08:00 负责人已回传extraction-owner-review-private_filled.csv（消息om_x100b616daf13a8b4c135662086ec5e6）。73行完整唯一匹配，question/reference/answer零修改，判定0/1与理由全有效；原件600权限私有保留，SHA见extraction-owner-calibration.json。
+- 专项校准通过：GLM73条accuracy94.52%/κ0.88567，MiniMax95.89%/κ0.91482；precision43与recall30分别也过κ>=0.7或accuracy>=90%门槛。无需仅为通过门槛修订提示词或重复调用模型。
+- 人工抽取指标（DuLeMon冻结dev8会话×3次）：EX1=21/43=48.84%，95%会话簇区间[20.00%,72.22%]；EX2=7/30=23.33%，区间[0,48.15%]；F1=0.315789。不能外推完整dev/test，不把此前模型诊断值当人工结果。
+- EX5独立归属错误子标签及抽取裁判重复稳定性未由本73条覆盖；QA稳定性不得替代。本次仅聚合数字进入公开报告，标签/理由/对话仅服务器私有目录。73条人工复核缺口已关闭，其他故障/PF覆盖仍缺；完整报告未放行，不进阶段3。
+- 已更新本地B0报告；本次工具agent-memory@53cba0f含未提交修改，业务B0@1e9d6f3不变。编译/4个相关校准及交付门单测/diff通过，无新增模型调用，Wiki按用户要求暂不写。
+<!-- B0_EXTRACTION_OWNER_END -->
+
+<!-- B0_LATEST_AUDIT_START -->
+- 2026-10-31T15:36:32.752087+08:00 最新人工核对：TX2全部6轮完成，压测API/发压进程无存活，自有Nginx入口已移除。100k恢复通过。
+- 性能未通过：1QPS下10k失败557/867=64.24%，100k869/888=97.86%，p95约30秒，各轮丢弃11（共66）。发压端资源均合格；词法SQL慢/连接池超时仅为症状证据，不声称已证明单一根因。跨公网独立主机，不是跨地域（两台上海）。
+- SC4确认失败：取消查询异常中的SQL参数带出完整虚构查询正文58次；所检查API密钥0命中。不得再用早期两个成功/422场景0泄漏宣称SC4通过。详见tx2-results-audit.json/md和log-leak-check.json。
+- 已更新本地B0聚合delivery.md补齐核验段；full_aggregate_ready仍false，未发完整最终文件、未进阶段3。73条抽取盲审CSV及说明已按负责人明确授权发群（文件消息om_x100b616d81e1b8a4cf080fa11685d1e，73行SHA保持不变），待填写human_correct/human_reason；人工结果回收后仅服务器私有处理。其余故障/PF覆盖仍缺。原始负载日志已迁回TX私有目录（tx2-load-generator-private），TX2不保留唯一副本。
+- 核验代码来源agent-memory@53cba0f加未提交修改，业务B0@1e9d6f3不变且干净；本次未自行提交/推送。Wiki依用户暂不写继续待同步。
+<!-- B0_LATEST_AUDIT_END -->
+
+<!-- B0_CAPACITY_SEQUENCE_START -->
+- 2026-11-01T09:10:40.303775+08:00 TX2托管容量测量状态：measurements_complete，已收集12/12点；实际结果与有效性见docs/reports/phase2-b0-completion-2026-10-28/tx2-public-load.json。
+- 本托管程序已尝试清理自有API与临时Nginx入口，接手者应核对服务和入口确已关闭；失败记录保留。
+- 本记录不表示阶段2全部完成：抽取专项人工校准、其余PF/故障覆盖、跨地域链路等缺口仍须核对；完整报告未放行，未进入阶段3，Wiki按用户暂缓。
+<!-- B0_CAPACITY_SEQUENCE_END -->
+
+## 当前交接状态（2026-10-26T17:51:51.263543+08:00；优先于下文历史记录）
+
+<!-- B0_RUN_STATE_START -->
+- 2026-10-30T13:32:28.217645+08:00 阶段2仍未完成，未进入阶段3，full_aggregate_ready=false，完整文件继续延期；用户暂不写Wiki。
+- 新B01560答题判分、QA300人工校准和两裁判100×3稳定性已完成。100k真实腾讯原生向量及100k种子库全部完成；答题/抽取固定官网deepseek-v4-pro，向量固定kinfra-text-embedding-0.6b1024，禁止Ark；凭据只经私有helper取，禁止日志/报告出现密钥。
+- RL6跨Mac恢复已通过：484088060字节备份SHA一致，恢复9.40秒，全部表/1000随机行/32检索/RLS/角色相等；Mac原生PG已停。源/目标pgvector0.8.6/0.8.7差异及源共享内存64->512MiB修正均记录recovery100k.json。
+- F3持续HTTP503失败补测已完成：三次均原生max_attempts5、真实退避后进入dead；证据provider-exhaustion.json，初版污染库导致的夹具断言失败保留，正式结果来自干净独立克隆。搜索降级语义和其余故障覆盖仍待做。
+- F5真实进程死亡3次通过（默认30秒租约、约31秒接手，向量版本1行）；F3真实HTTP超时/429/503各3次退避恢复通过（持续失败/死信/降级仍未全覆盖）。F1实际API压力下数据库重启3次，120确认写入全在，14个HTTP500、12传输失败；错误语义缺陷保留，不整体称通过。
+- 官方tokenizer390上下文/8usage差分均0。EX语义仍待73条专项人工校准（私有completion-20261028/extraction-v2/extraction-owner-review-private.csv），不能借QA κ放行。负责人已明确要求将待判定内容发群；73条表和说明已实际成功发送，等待回填。
+- Mac公网10k/1QPS第一轮无效：初始内存74.8%，峰值82.9%，CPU峰值98.2%；测量289请求/178失败/11丢弃。已停后续Mac发压，保留public-load.json，不据此称系统容量。Mac可正常使用/休眠，不能再次未经必要性让其发压。
+- 切至用户授权TX2独立负载机，已实核VM-4-5-ubuntu、ubuntu、2核、1967MiB，初始约23%内存；无常驻业务。临时目录~/project/agent-memory-b0-load-private，只传全虚构128查询/原生向量/短期隔离JWT，不传真实对话、人工标签或厂商APIkey。工具官方k6v2.3.0Linux包30847764B，SHA39c3117b6af817592dcd0ce4242105c0a7af10948c2a425306f0be8f7a8a8ab1已与官方核对，SCP安装与SHA复核完成，实测k6v2.3.0/e088784614/go1.26.8。TX2真实HTTPS检索烟测200后已开始正式托管发压。
+- 已准备run-b0-tx2-capacity.py托管监督：10k/100k各1QPS×3轮，每轮60秒预热+300秒测量，两端资源，独立API进程并清空上一轮本应用会话；固定同一128虚构查询。只测读取search点，不冒称完整PF网格/写入context/最大容量。启动前已完成安装、限源49.234.33.103实测匹配、烟测和统一独立容器shm512MiB；CPU2/mem3GiB不变。实际单元agent-memory-tx2-capacity-sequence-20261030.service（最大3300秒），日志capacity/tx2-sequence.log，检查点capacity/tx2-sequence-private.json；目前第1轮运行，不能当完成。脚本结束自动关自有API/移除自有Nginx虚拟主机/写聚合局部报告，始终不自动放行阶段2或发不完整报告。
+- 当前由托管程序启动独立测试API，Nginx自有虚拟主机限源TX2；两台IMDS地域均ap-shanghai，只证明独立主机跨公网，不宣称跨地域测量。结束清除自身文件并reload。不得影响其他服务。
+- 主代码B0@1e9d6f3干净；根HEAD2fae08b及未提交测量脚本，未提交/推送。7个交付门/校准/补充证据单测通过，新增脚本py_compile与diff检查通过。证据docs/reports/phase2-b0-completion-2026-10-28/；私有.local/phase2/b0/completion-20261028/。Wiki待同步：本次全部补齐进展（用户明确暂不写）。
+<!-- B0_RUN_STATE_END -->
+
+- 项目：企业级跨会话记忆服务；Python3.12/FastAPI/SQLAlchemy/PostgreSQL+pgvector。阶段1已验收，当前仅阶段2测量，不优化业务、不进阶段3；阶段1数据/切分保持冻结。
+- 最新方案原件`docs/plans/2026-10-26-agent-memory-interview-plan-v4.md`，928行已完整读；比上版新增8行权威角色调整，保留原作者。用户最新消息ID`om_x100b62c56df1b8b0ce44568e5c1acc0`覆盖此前同系列混用/方舟/DeepSeek后备规则。
+- B0业务源码标签不变，`B0@1e9d6f3`；实际加载`.local/phase2/b0/source-B0`。新的结果配置身份`B0-deepseek-v4-pro-kinfra-20261026-v1`，配置`docs/baselines/b0/config-frozen-deepseek-v1.json`，策略`docs/evals/b0-policy-v7.json`。
+- 答题/运行抽取固定同一个官网`deepseek-v4-pro`：温度0、关闭思考、5标签一致、100格式全过及原生角色实测已通过。任何其他答题/抽取型号、观察到的响应ID变化均不采纳，不再同系列拼接。
+- 方舟真实请求禁止；腾讯原生1024维`kinfra-text-embedding-0.6b`，新库从输入重算、不复用旧Ark向量。不传该服务不支持的dimensions参数，不裁向量凑维度，不自动换向量模型。向量原生106检查/100格式有效；浮点逐元素一致不是裁判5次标签一致门槛。
+- 主裁判GLM5.2，备选MiniMax3，均TokenHub新预检通过。每对比表单一裁判，备选整表重判；MiniMax标注的中文构造表排除MiniMax裁判。MiMo两已配Key均402，整批交叉参照暂用合格MiniMax；若采样裁判同型号则不冒称独立，单列缺口。
+- 必须写入每份报告的局限：DeepSeek同时是金标准标注模型之一，抽取/答题与标注同厂商可能使抽取指标略偏高；双厂商共同保留已部分抵消。O10因Ark无额度不做新公平对照；旧Ark数据仅探索参考，不算新B0优化收益。
+- 旧全链路零分已只读逐会话核查：6640记忆均有映射但active为0，主因是候选被状态过滤；111个会话×重复单元中2个无产出、109个被过滤；失败/回退尝试241/6484单列。**不偷偷激活候选或修改B0检索。** 每个新单元记录候选/active/映射/返回/向量入库，证据在`docs/reports/phase2-b0-rebuild-2026-10-26/fullchain-zero-diagnosis.json`。
+- 候选确认补充核查：`B0-CANDIDATE-ACTIVATION-MISSING`，冻结B0没有原候选转active的正式公开路径；restore仅归档恢复，显式写入创建新ID。未追加确认后测量（null/不适用），不改业务或数据库状态；审计脚本和哈希证据见`candidate-confirmation-audit.json`。当前进程未停止/重启，新校准表仍整组完成后生成。
+- 小样两模式×3次×4组完成24行，答题/判分均有效；187次调用，仅DeepSeek/TokenHub，无旧向量重放。原生重建观察显示直写active、全链路candidate，均已落腾讯向量。整组固定开发抽样规划1560实验行，不是全部开发集。
+- 向量预算53034次加25%余量13259，本轮上限66293；预检/小样另列。是规划上限，不是余额查询或供应商已锁定额度。向量耗尽、预算耗尽或固定版本漂移暂停；服务不自动换其他模型。全新300种子`2026102601`，每行ID带本配置身份，旧表不能用于本次κ。
+- 发布检查460 passed in45.79s，ruff/strict mypy/foundation通过；覆盖网络前禁止Ark、固定响应版本、预算阻止额外HTTP、旧表禁采纳、自动收尾不覆盖新运行/他人文字。来源基于2fae08b加未提交修改，本轮未自行提交或推送，私有源码快照哈希已留证据。
+- 单一实际入口见执行报告；`scripts/start-b0-managed.py`启动后`managed-b0-execution.py`运行`run-b0.py`，完整后自动`summary`和本地交接收尾、发本群聚合文件；CSV仍只服务器。`scripts/record-frozen-b0-handoff.py`仅在当前运行身份/路径匹配时改上述动态状态块并追加开发记录，不写Wiki。
+- 下一步：让唯一托管任务完成；检查原始usage与version/budget暂停文件；新300表生成后交负责人，按实际裁判分别校准κ/准确率/混淆矩阵，负责人最新300条校准指令已明确改为κ≥0.7或准确率≥90%，最多3轮，仍未达标则该指标纯人工（替代此前κ单闸门），也不能用一个κ替未覆盖备选放行。100条3次稳定性、缺失功能观察适配器、独立跨地域Linux发压机/PF仍未完成，不进入阶段3。
+- 快速检查：`systemctl --user show agent-memory-b0-frozen-20261026-v1.service -p ActiveState -p SubState -p MainPID`；完整本机回归`bash scripts/check.sh`。启动命令已执行，勿重复起同一组；原始数据/对话/答案/校准/密钥均不进Git或公开报告。新配置正确性摘要必须来自本轮correctness-observations.json；缺失就未测，不借用旧全局摘要。
+- 关键文件：新配置约束`src/agent_memory/evals/b0_frozen.py`；诊断`diagnose-b0-fullchain.py`；预算/历史排除`prepare-frozen-b0.py`；小样/预检证明`report-frozen-b0-readiness.py`；报告`report-frozen-b0-execution.py`。指标数据、报告、manifest与哈希见`docs/reports/phase2-b0-rebuild-2026-10-26/`；详细开发记录`docs/devlog/2026-10-26-phase2-b0-frozen-deepseek-rebuild.md`。
+- 飞书只读核对：我的文档库/WorkPlan/agent-memory：Agent长期记忆服务，节点XQZgwJseiieKvpk6HWqcBOACnFg，无子节点。已提出用户本人--as user/profile codex同步三篇（项目概览/开发记录/B0模型配置与诊断报告）的标题范围位置方案，用户已明确暂不写飞书，没有发布。**飞书待同步：2026-10-26 新方案差异、预诊断、预检/预算/重建启动；原因是用户明确要求暂不写飞书，不是登录授权失效。**
+
+以下保留原作者的历史背景与基础约定；模型角色和阶段状态以本节与当前policy为准。
+
 最后更新：2026-10-08（北京时间）
 
 本文件为在本仓库工作的编码 agent 提供指引（Claude Code 读 `CLAUDE.md`、Codex 读 `AGENTS.md`，两者都指向这里）。
@@ -323,3 +432,13 @@ V5单条调用修复了格式问题，但随后当前腾讯侧也返回402；运
 ## 负责人同系列续跑授权（北京时间2026-10-24，覆盖此前换型号整组重跑）
 
 消息om_x100b628d31ba14a0df2cc7d1869eac1明确允许同系列模型额度切换后继续。当前policy-v5/sample-v8，保留并验证完成的会话组合与逐题答题判分检查点，实际型号/Key代号/原始调用/父哈希留痕；版本混用不称精确单型号实验。不同系列仍整组重跑；向量化不同模型/提供方/协议不混用旧向量空间。预检、厂商独立、人工校准、仅开发集与阶段2范围不变。300人工表仍导出后暂停，不代判、不进阶段3。
+
+
+### 2026-10-27 负责人校准补充口径
+
+本次任务以负责人消息om_x100b6133e7ac4cacc069e724a36afa5为准：采用κ≥0.7或准确率≥90%，替代先前κ单闸门。人工原CSV和理由不可修改，回填只服务器私有使用。`scripts/calibrate-b0-owner.py`为单一校准入口，先验证300个ID/冻结字段，再关联原GLM和同批已有MiniMax交叉判分；备选与交叉参照同模型，不称独立。`agent-memory-b0-calibration-20261027.service`正在同批固定100条×3×两模型新增600次判分；断点私有`calibration-owner-20261027/repeats-private.json`，原始调用留痕。整批结束自动更新聚合B0报告、本地交接并发送聚合报告至本群，人工逐行数据不外发。飞书Wiki仍暂缓，不进入阶段3。公式方向/无效输出/稳定性分母三项回归通过，未改业务或冻结提示词，无提交推送。
+
+
+### 2026-10-27T18:36:29.156896+08:00 聚合报告交付暂缓
+
+负责人消息om_x100b6133a655c8a8c0ae8068a9f07da明确要求未完成则完成后再发。本轮1560答题判分及300人工校准、同批100×3×两裁判均已完成，但全功能指标覆盖与独立跨公网PF尚未齐；不把当前带缺项报告作为最终完成版发出。本次没有发送新的聚合文件。交付状态见docs/evals/b0-current.json的aggregate_delivery_request；后续收尾须先核查完整性与本条交付约束，不因已有delivery.md就自动外发未完成版。原始标签/理由不动，飞书Wiki仍暂缓，不进阶段3。

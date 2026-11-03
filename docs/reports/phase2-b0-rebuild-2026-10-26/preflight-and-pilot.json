@@ -1,0 +1,284 @@
+{
+  "at": "2026-10-26T10:06:10.657436+00:00",
+  "pilot_status": {
+    "status": "incomplete_calibration_population",
+    "rows": 24,
+    "model_records_including_replays": 187,
+    "model_attempts": 187,
+    "vector_cache_replays": 0,
+    "baseline_configuration_id": "B0-deepseek-v4-pro-kinfra-20261026-v1",
+    "classification": "new B0 configuration, calibration pending",
+    "index_model": "kinfra-text-embedding-0.6b",
+    "index_rebuilt_from_new_inputs": true,
+    "bias_limitation": "DeepSeek 同时是金标准标注模型之一，答题与抽取模型与标注模型同厂商，可能使抽取类指标略偏高；金标准要求两个厂商模型共同保留，已部分抵消这一影响。",
+    "dev_only": true,
+    "formal_scores": false,
+    "baseline_commit": "1e9d6f3b25b58c85792344000d7e1b5a71a79737",
+    "runtime_source": "/home/ubuntu/project/WorkPlan/agent-memory/.local/phase2/b0/source-B0",
+    "full_evaluation_complete": false,
+    "phase2_accepted": false
+  },
+  "pilot_answer_rows": 24,
+  "pilot_valid_answers": 24,
+  "pilot_valid_grades": 24,
+  "actual_calls": 187,
+  "roles": {
+    "answer": {
+      "calls": 24,
+      "reported_total_tokens": 42308,
+      "unknown_usage": 0,
+      "http_counts": {
+        "200": 24
+      }
+    },
+    "embedding": {
+      "calls": 91,
+      "reported_total_tokens": 15242,
+      "unknown_usage": 1,
+      "http_counts": {
+        "None": 1,
+        "200": 90
+      }
+    },
+    "extraction": {
+      "calls": 48,
+      "reported_total_tokens": 20024,
+      "unknown_usage": 0,
+      "http_counts": {
+        "200": 48
+      }
+    },
+    "judge": {
+      "calls": 24,
+      "reported_total_tokens": 10339,
+      "unknown_usage": 0,
+      "http_counts": {
+        "200": 24
+      }
+    }
+  },
+  "answer_models": {
+    "deepseek-v4-pro": 24
+  },
+  "judge_models": {
+    "glm-5.2": 24
+  },
+  "vector_models": [
+    "kinfra-text-embedding-0.6b"
+  ],
+  "providers": [
+    "DeepSeek",
+    "TokenHub"
+  ],
+  "old_vector_replays": 0,
+  "index_rebuild_observations": [
+    {
+      "mode": "direct",
+      "repeat": 0,
+      "memories": 16,
+      "unique_memory_versions": 16,
+      "stored_current_model_vectors": 16,
+      "vector_index_rebuilt": true,
+      "memory_status_counts": {
+        "active": 16
+      },
+      "evidence_mapping_present": 16
+    },
+    {
+      "mode": "full",
+      "repeat": 0,
+      "memories": 11,
+      "unique_memory_versions": 11,
+      "stored_current_model_vectors": 11,
+      "vector_index_rebuilt": true,
+      "memory_status_counts": {
+        "candidate": 11
+      },
+      "evidence_mapping_present": 11
+    },
+    {
+      "mode": "direct",
+      "repeat": 1,
+      "memories": 16,
+      "unique_memory_versions": 16,
+      "stored_current_model_vectors": 16,
+      "vector_index_rebuilt": true,
+      "memory_status_counts": {
+        "active": 16
+      },
+      "evidence_mapping_present": 16
+    },
+    {
+      "mode": "full",
+      "repeat": 1,
+      "memories": 9,
+      "unique_memory_versions": 9,
+      "stored_current_model_vectors": 9,
+      "vector_index_rebuilt": true,
+      "memory_status_counts": {
+        "candidate": 9
+      },
+      "evidence_mapping_present": 9
+    },
+    {
+      "mode": "direct",
+      "repeat": 2,
+      "memories": 16,
+      "unique_memory_versions": 16,
+      "stored_current_model_vectors": 16,
+      "vector_index_rebuilt": true,
+      "memory_status_counts": {
+        "active": 16
+      },
+      "evidence_mapping_present": 16
+    },
+    {
+      "mode": "full",
+      "repeat": 2,
+      "memories": 10,
+      "unique_memory_versions": 10,
+      "stored_current_model_vectors": 10,
+      "vector_index_rebuilt": true,
+      "memory_status_counts": {
+        "candidate": 10
+      },
+      "evidence_mapping_present": 10
+    }
+  ],
+  "sample_choice": "same previously frozen seeded development sample; pilot measured calls and protocol, never selects favorable scores",
+  "single_model_freeze_request_and_observed_id": "deepseek-v4-pro",
+  "preflight_proofs": {
+    "deepseek-preflight": {
+      "summary": {
+        "model": "deepseek-v4-pro",
+        "provider": "DeepSeek",
+        "account": "deepseek-direct",
+        "standard_source": "src/agent_memory/evals/model_preflight.py",
+        "prompt_sha256": "d4f9d30b34c28049829f15cb8cdb2d5a6013665b6533e39a8f9d8602ef4596ef",
+        "temperature": 0,
+        "thinking_requested": "disabled",
+        "consistent_5_labels": true,
+        "format_n": 100,
+        "format_valid": 100,
+        "observed_disabled_thinking": true,
+        "calls": 106,
+        "response_models": [
+          "deepseek-v4-pro"
+        ],
+        "passed": true
+      },
+      "sha256": "3f27773718b7426fad4c7b81041f40956736e7d7b786736ba58e212be68ec29c"
+    },
+    "judge-preflight": {
+      "summary": {
+        "model": "glm-5.2",
+        "provider": "TokenHub",
+        "account": "tokenhub-secondary",
+        "standard_source": "src/agent_memory/evals/model_preflight.py",
+        "prompt_sha256": "d4f9d30b34c28049829f15cb8cdb2d5a6013665b6533e39a8f9d8602ef4596ef",
+        "temperature": 0,
+        "thinking_requested": "disabled",
+        "consistent_5_labels": true,
+        "format_n": 100,
+        "format_valid": 100,
+        "observed_disabled_thinking": true,
+        "calls": 106,
+        "response_models": [
+          "glm-5.2"
+        ],
+        "passed": true
+      },
+      "sha256": "7fe4e383ac5f474fa7847838e37c9304c1feb9d56d57e2f1970b136cdfc1acbc"
+    },
+    "judge-minimax-preflight-v2": {
+      "summary": {
+        "model": "minimax-m3",
+        "provider": "TokenHub",
+        "account": "tokenhub-secondary",
+        "standard_source": "src/agent_memory/evals/model_preflight.py",
+        "prompt_sha256": "d4f9d30b34c28049829f15cb8cdb2d5a6013665b6533e39a8f9d8602ef4596ef",
+        "temperature": 0,
+        "thinking_requested": "disabled",
+        "consistent_5_labels": true,
+        "format_n": 100,
+        "format_valid": 100,
+        "observed_disabled_thinking": true,
+        "calls": 106,
+        "http_attempts": 106,
+        "response_models": [
+          "minimax-m3"
+        ],
+        "passed": true
+      },
+      "sha256": "7db11b15eb7fc38d349cf1c0e8bc6837627dd8918a92e547eb4a503abce16e98"
+    },
+    "vector-native": {
+      "summary": {
+        "role": "embedding",
+        "passed": true,
+        "checks": {
+          "passed": true,
+          "format_n": 100,
+          "format_valid": 100,
+          "repeated_valid": true,
+          "exact_repeat_equality_diagnostic": true,
+          "exact_vector_equality_is_gate": false,
+          "criterion_source": "native1024 finite nonzero schema and actual success; five identical grading decisions apply to judges, not embeddings"
+        },
+        "fictional_only": true,
+        "http_attempts": 106,
+        "format_standard": "same native runtime schema; embedding native1024 finite nonzero, actual success and100 format trials; exact repeat equality diagnostic only"
+      },
+      "sha256": "7f304f74c372c2e53a8dbf3f6141f9c8444a6d1e18f69d4b82ec7c02cc6e389b"
+    },
+    "extraction-native": {
+      "summary": {
+        "role": "extraction",
+        "passed": true,
+        "checks": [],
+        "fictional_only": true,
+        "http_attempts": 1,
+        "format_standard": "same native runtime schema; embedding native1024 finite nonzero, actual success and100 format trials; exact repeat equality diagnostic only"
+      },
+      "sha256": "c0482627c7cf8d730859334d2b81965561ad5b01945c9ef3d31cbf296fe0b1cf"
+    },
+    "answer-native": {
+      "summary": {
+        "role": "answer",
+        "passed": true,
+        "checks": [],
+        "fictional_only": true,
+        "http_attempts": 1,
+        "format_standard": "same native runtime schema; embedding native1024 finite nonzero, actual success and100 format trials; exact repeat equality diagnostic only"
+      },
+      "sha256": "a419ef9c1d73de8b80c38c54b01c0874dd58e7f77d14ce372222daccc110db8b"
+    },
+    "judge-native": {
+      "summary": {
+        "role": "judge",
+        "passed": true,
+        "checks": [],
+        "fictional_only": true,
+        "http_attempts": 1,
+        "format_standard": "same native runtime schema; embedding native1024 finite nonzero, actual success and100 format trials; exact repeat equality diagnostic only"
+      },
+      "sha256": "1a4c63f8204bffeca832e4da955c2754a49d7be5348c770c26c0a4887cc23466"
+    },
+    "cross-reference-native": {
+      "summary": {
+        "role": "cross-reference",
+        "passed": true,
+        "checks": [],
+        "fictional_only": true,
+        "http_attempts": 1,
+        "format_standard": "same native runtime schema; embedding native1024 finite nonzero, actual success and100 format trials; exact repeat equality diagnostic only"
+      },
+      "sha256": "4a5ac677d659452cc85d86d23166af8f3efb44d4714fde6d105138af801a31ac"
+    }
+  },
+  "source_hashes": {
+    ".local/phase2/b0/frozen-deepseek-20261026-v1/pilot-run/run-manifest.json": "f594310b23e6674db3f562c7fbda2bad370eeb7049a33d2dd9dae91723346e7a",
+    ".local/phase2/b0/frozen-deepseek-20261026-v1/pilot-run/usage.jsonl": "9c888f84912afdf6b1ed9fd045b23d9e24bf10a9d933800d6d627cd3d5c2dbf9",
+    ".local/phase2/b0/frozen-deepseek-20261026-v1/pilot-run/graded-results-private.json": "3d39f81d8919d9ae6bd3b804ae0ca37fb1fdbb0784608b904cadeb2941993dfc"
+  }
+}

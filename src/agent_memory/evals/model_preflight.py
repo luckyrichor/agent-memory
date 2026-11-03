@@ -72,12 +72,16 @@ async def probe(
         if ark
         else (os.environ.get("TOKENHUB_API_KEY") or os.environ.get("TENCENT_API_KEY"))
     )
+    direct = os.environ.get('AGENT_MEMORY_LLM_ACCOUNT') == 'deepseek-direct'
+    if direct:
+        base = 'https://api.deepseek.com'
+        token = os.environ.get('DEEPSEEK_API_KEY')
     if not token:
         raise ValueError("shared provider credential missing; use with-ark or with-tencent")
     started = time.monotonic()
     record: dict[str, Any] = {
         "model": model,
-        "provider": "Ark" if ark else "TokenHub",
+        "provider": "DeepSeek" if direct else ("Ark" if ark else "TokenHub"),
         "base_url": base,
         "number": number,
         "repeated": repeated,

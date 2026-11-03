@@ -1,47 +1,40 @@
 {
-  "at": "2026-10-23T13:24:34.502298+08:00",
+  "at": "2026-10-26T09:22:09.977115+00:00",
   "phase2_started": true,
   "phase2_accepted": false,
   "owner_message_id": "om_x100b62986bf4a0a8b0f170f0116e796",
   "baseline_tag": "B0",
   "baseline_commit": "1e9d6f3b25b58c85792344000d7e1b5a71a79737",
-  "status": "paused_no_qualified_embedding_candidate",
-  "calibration_exported": false,
+  "status": "local evidence supplement completed; full metrics/PF still incomplete",
+  "calibration_exported": true,
   "public_load_test_started": false,
   "test_set_executed": false,
   "phase3_started": false,
-  "policy": "docs/evals/b0-policy-v5.json",
-  "active_run": ".local/phase2/b0/development-sample-v7-rotation/attempt-003",
-  "harness_commit": "9e49d3fb3f32d3db7cc6d7fade5a6cad9ed74fe7",
-  "runtime_extraction_model": "hy-mt2-plus",
-  "runtime_extraction_provider": "TokenHub",
+  "policy": "docs/evals/b0-policy-v7.json",
+  "active_run": ".local/phase2/b0/frozen-deepseek-20261026-v1/recovery-run-2",
+  "harness_commit": "2fae08bdb524497070b6cd8ab5cdbaabfff5ced1",
+  "runtime_extraction_model": "deepseek-v4-pro",
+  "runtime_extraction_provider": "DeepSeek",
   "replacement_owner_message_id": "om_x100b62846f735ca8df833bd67f54736",
-  "prior_run_status": "interrupted, no closing status; final known request HTTP200",
-  "answer_model": "hy-mt2-plus",
-  "sample_config": ".local/phase2/b0/development-sample-v7-rotation/continuation-003-profile.json",
+  "prior_run_status": "exploratory, superseded by new frozen configuration",
+  "answer_model": "deepseek-v4-pro",
+  "sample_config": ".local/phase2/b0/frozen-deepseek-20261026-v1/recovery-config-2.json",
   "budget": "docs/baselines/b0/replacement-sample-budget-v1.json",
-  "managed_unit": "agent-memory-b0-dev-v7.service",
+  "managed_unit": "agent-memory-b0-frozen-20261027-recovery-2.service",
   "complete_dataset_reused": "see current run resumed-datasets.jsonl; original actual repetitions only",
   "partial_dataset_rebuilt": "only incomplete conversation units; completed units validated and retained",
   "managed_process_completed": true,
-  "managed_verified_at": "2026-10-24T04:25:56.725761+00:00",
-  "aggregate_report": ".local/phase2/b0/development-sample-v7-rotation/attempt-003/aggregate/delivery.md",
+  "managed_verified_at": "2026-10-26T09:22:09.977136+00:00",
   "four_key_owner_message_id": "om_x100b6280467a68a4c3cc0005fe78816",
   "active_role_accounts": {
     "extraction": {
-      "Ark": "ark-primary",
-      "TokenHub": "tokenhub-primary"
+      "DeepSeek": "deepseek-direct"
     },
     "answer": {
-      "Ark": "ark-primary",
-      "TokenHub": "tokenhub-primary"
-    },
-    "tokenizer": {
-      "Ark": "ark-primary",
-      "TokenHub": "tokenhub-primary"
+      "DeepSeek": "deepseek-direct"
     },
     "embedding": {
-      "Ark": "ark-secondary"
+      "TokenHub": "tokenhub-secondary"
     },
     "judge": {
       "TokenHub": "tokenhub-secondary"
@@ -50,18 +43,94 @@
       "TokenHub": "tokenhub-secondary"
     }
   },
-  "runtime_model_auto_switch": true,
+  "runtime_model_auto_switch": false,
   "judge_model": "glm-5.2",
   "judge_provider": "TokenHub",
-  "embedding_model": "doubao-embedding-vision-251215",
-  "embedding_provider": "Ark",
-  "four_key_rotation_root": ".local/phase2/b0/development-sample-v7-rotation",
+  "embedding_model": "kinfra-text-embedding-0.6b",
+  "embedding_provider": "TokenHub",
   "family_continuation_owner_message_id": "om_x100b628d31ba14a0df2cc7d1869eac1",
-  "managed_active_state": "inactive",
-  "recovery_report": "docs/baselines/b0/overdue-recovery-status-v1.json",
+  "recovery_report": "docs/reports/phase2-b0-rebuild-2026-10-26/preflight-and-pilot.json",
   "quota_bug_fixed_commit": "fdd8944",
-  "embedding_replacement_qualified": false,
+  "embedding_replacement_qualified": true,
   "pause_handoff_report": "docs/reports/phase2-b0-pause-2026-10-24/report.md",
   "embedding_gate_plan_deviation_reported": true,
-  "embedding_gate_deviation": "implementation imposed exact repeated vector equality; plan five-repeat consistency is for judge decisions; report-only delivery, no restart or implementation change"
+  "embedding_gate_deviation": "corrected: repeated vector equality diagnostic only; judges retain5-decision consistency gate",
+  "harness_uncommitted_changes": true,
+  "deepseek_used_for_measurement": true,
+  "baseline_configuration_id": "B0-deepseek-v4-pro-kinfra-20261026-v1",
+  "prior_calibration_superseded": true,
+  "prior_results_classification": "探索性，不计入 B0",
+  "vector_model_auto_switch": false,
+  "Ark_allowed": false,
+  "new_config": "docs/baselines/b0/config-frozen-deepseek-v1.json",
+  "preparation_root": ".local/phase2/b0/frozen-deepseek-20261026-v1",
+  "freeze_owner_message_id": "om_x100b62c56df1b8b0ce44568e5c1acc0",
+  "answer_provider": "DeepSeek",
+  "judge_backups": [
+    "minimax-m3"
+  ],
+  "config_sha256": "26d18038d08700d7d89102e051e8debf17ffece1e6afd4ac543a563266f65e50",
+  "historical_classification": "docs/reports/phase2-b0-rebuild-2026-10-26/historical-classification.json",
+  "new_calibration_seed": 2026102601,
+  "vector_call_budget": 66293,
+  "aggregate_report": ".local/phase2/b0/frozen-deepseek-20261026-v1/recovery-run-2/aggregate/delivery.md",
+  "human_calibration_received": true,
+  "judge_calibration_report": "docs/reports/phase2-b0-owner-calibration-2026-10-27/calibration-report.json",
+  "self_consistency_complete": true,
+  "aggregate_delivery_request": {
+    "owner_message_id": "om_x100b6133a655c8a8c0ae8068a9f07da",
+    "requested_at": "2026-10-27T18:36:29.156896+08:00",
+    "status": "deferred_until_complete",
+    "scope": "new configuration B0 full aggregate: four systems/datasets/direct+full/metrics+CI/worst types/failure cases",
+    "instruction": "Do not send incomplete aggregate as final; owner explicitly requests delivery after completion. Functional1560+calibration done; full metric coverage and PF remain incomplete."
+  },
+  "full_aggregate_ready": false,
+  "evidence_supplement": "docs/reports/phase2-b0-evidence-supplement-2026-10-27/evidence-supplement.json",
+  "new_model_calls_this_supplement": 0,
+  "closure_report_delivery": {
+    "updated_at": "2026-11-01T09:26:11.240894+08:00",
+    "report_document_finalized": true,
+    "report_delivered": true,
+    "measurement_coverage_complete": false,
+    "phase2_accepted": false,
+    "full_aggregate_ready": false,
+    "stage3_started": false,
+    "report_directory": "docs/reports/b0-aggregate-20261101-092435",
+    "archive": "docs/reports/b0-aggregate-20261101-092435.zip",
+    "archive_sha256": "899250cefcdfb706d45c2b5a87eab296728f6367ebb5575d21d68f7aaf7356d0",
+    "messages": [
+      {
+        "kind": "report",
+        "message_id": "om_x100b615d1e7378a8cff7688457cc147",
+        "file_name": "B0-report.md"
+      },
+      {
+        "kind": "bundle",
+        "message_id": "om_x100b615d1e1900acb013c78c46ec173",
+        "file_name": "b0-aggregate-20261101-092435.zip"
+      }
+    ],
+    "metric_coverage_counts": {
+      "已测（限定范围）": 27,
+      "局部观察": 19,
+      "未测": 20
+    },
+    "scope": "Owner-approved closure report of completed measurements with explicit failed/unmeasured items. Not all-metrics completion or acceptance. Original full-coverage auto-delivery guard remains closed."
+  },
+  "stage3_started": false,
+  "stage2_expansion_20261101": {
+    "status": "running_staircase_v2",
+    "plan": "docs/reports/phase2-b0-expansion-2026-11-01/round-plan.md",
+    "exceptions": "docs/reports/phase2-b0-expansion-2026-11-01/exceptions.md",
+    "staircase_unit": "agent-memory-b0-rate-staircase-v2-20261101.service",
+    "continuation_unit": "agent-memory-b0-expansion-continuation-20261101.service",
+    "private_root": ".local/phase2/b0/expansion-20261101",
+    "quality_first_batch": "PerLTQA300 queued after staircase; original aggregate vector cap unchanged",
+    "decisions_pending": [
+      "remaining expansion budget",
+      "LoCoMo dev3 conversations versus required5"
+    ],
+    "interrupted_point_excluded": true,
+    "stage3_started": false
+  }
 }

@@ -1,0 +1,3142 @@
+{
+  "created_beijing": "2026-10-27T18:30:34.197735+08:00",
+  "baseline_configuration_id": "B0-deepseek-v4-pro-kinfra-20261026-v1",
+  "baseline_commit": "1e9d6f3b25b58c85792344000d7e1b5a71a79737",
+  "harness_base_commit": "2fae08bdb524497070b6cd8ab5cdbaabfff5ced1",
+  "uncommitted": true,
+  "owner_labels_sha256": "fd6acc538e5e3bce82ebea4ad8e2c8deb5f48c6e4eaa0e38f42114f3d3791457",
+  "original_export_sha256": "d905dfb27ee40f7530107e9ff3a66cfd8b6508cab264c4a12627788731265f2e",
+  "mapping_sha256": "13573a1b40ba8b336ae77e1be249b7ed9fa879e577e29de8f7750a5e1dc6f142",
+  "cross_reference_sha256": "bc83d5a7a7d5827fb8b087bc1c03de9721fa4f33026f8c9d2b68c8869d643cab",
+  "prompt_hashes": {
+    "docs/evals/prompts/judge-v1.txt": "30772f880cf2eefe3a53aa728a245597a651821d31a9a749f65c1683120ebb8e",
+    "docs/evals/prompts/b0-lme-judge-rubrics-v1.json": "58b2a895c7be7a2e585e4c1f7ea159bc85b185752fe06c6c87ba97fea6953d71"
+  },
+  "validation": {
+    "rows": 300,
+    "unique_ids": 300,
+    "frozen_fields_equal": true,
+    "human_positives": 126,
+    "human_negatives": 174,
+    "reasons_all_filled": true
+  },
+  "judge_models": {
+    "glm-5.2": {
+      "overall": {
+        "n": 300,
+        "invalid": 0,
+        "accuracy": 0.95,
+        "kappa": 0.8972602739726027,
+        "confusion": {
+          "judge0_human0": 167,
+          "judge0_human1": 8,
+          "judge1_human0": 7,
+          "judge1_human1": 118
+        },
+        "false_positive_over_all": 0.023333333333333334,
+        "false_positive_over_judge_positive": 0.056,
+        "judge_positive_n": 125,
+        "false_negative_over_all": 0.02666666666666667,
+        "adoptable_on_this_calibration": true,
+        "ci95": {
+          "accuracy": [
+            0.9219858156028369,
+            0.9808917197452229
+          ],
+          "kappa": [
+            0.839184508816121,
+            0.9608699781555703
+          ],
+          "false_positive_over_all": [
+            0.0,
+            0.05813953488372093
+          ],
+          "false_positive_over_judge_positive": [
+            0.0,
+            0.125
+          ]
+        },
+        "ci_method": "1000 percentile resamples of dataset+conversation clusters within the fixed stratified calibration sample; conditional diagnostic, not dev-population CI",
+        "clusters": 21
+      },
+      "by_type": {
+        "1": {
+          "n": 20,
+          "invalid": 0,
+          "accuracy": 0.9,
+          "kappa": 0.736842105263158,
+          "confusion": {
+            "judge0_human0": 14,
+            "judge0_human1": 2,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.1,
+          "adoptable_on_this_calibration": false
+        },
+        "2": {
+          "n": 16,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 12,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "3": {
+          "n": 16,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 16,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "4": {
+          "n": 20,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 12,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 8
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 8,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "5": {
+          "n": 19,
+          "invalid": 0,
+          "accuracy": 0.8421052631578947,
+          "kappa": 0.4770642201834861,
+          "confusion": {
+            "judge0_human0": 14,
+            "judge0_human1": 2,
+            "judge1_human0": 1,
+            "judge1_human1": 2
+          },
+          "false_positive_over_all": 0.05263157894736842,
+          "false_positive_over_judge_positive": 0.3333333333333333,
+          "judge_positive_n": 3,
+          "false_negative_over_all": 0.10526315789473684,
+          "adoptable_on_this_calibration": false
+        },
+        "abstention": {
+          "n": 16,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 16
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 16,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "dialogues": {
+          "n": 32,
+          "invalid": 0,
+          "accuracy": 0.84375,
+          "kappa": 0.6875,
+          "confusion": {
+            "judge0_human0": 16,
+            "judge0_human1": 0,
+            "judge1_human0": 5,
+            "judge1_human1": 11
+          },
+          "false_positive_over_all": 0.15625,
+          "false_positive_over_judge_positive": 0.3125,
+          "judge_positive_n": 16,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "events": {
+          "n": 24,
+          "invalid": 0,
+          "accuracy": 0.9583333333333334,
+          "kappa": 0.9166666666666667,
+          "confusion": {
+            "judge0_human0": 11,
+            "judge0_human1": 1,
+            "judge1_human0": 0,
+            "judge1_human1": 12
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 12,
+          "false_negative_over_all": 0.041666666666666664,
+          "adoptable_on_this_calibration": false
+        },
+        "knowledge-update": {
+          "n": 21,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 9,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 12
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 12,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "multi-session": {
+          "n": 28,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 16,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 12
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 12,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "preference": {
+          "n": 25,
+          "invalid": 0,
+          "accuracy": 0.88,
+          "kappa": 0.7572815533980582,
+          "confusion": {
+            "judge0_human0": 13,
+            "judge0_human1": 3,
+            "judge1_human0": 0,
+            "judge1_human1": 9
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 9,
+          "false_negative_over_all": 0.12,
+          "adoptable_on_this_calibration": false
+        },
+        "profile": {
+          "n": 17,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 10,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 7
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 7,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "single-session-assistant": {
+          "n": 18,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 9,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 9
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 9,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "single-session-preference": {
+          "n": 12,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 6,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 6
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 6,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "temporal-reasoning": {
+          "n": 16,
+          "invalid": 0,
+          "accuracy": 0.9375,
+          "kappa": 0.8709677419354839,
+          "confusion": {
+            "judge0_human0": 9,
+            "judge0_human1": 0,
+            "judge1_human0": 1,
+            "judge1_human1": 6
+          },
+          "false_positive_over_all": 0.0625,
+          "false_positive_over_judge_positive": 0.14285714285714285,
+          "judge_positive_n": 7,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        }
+      },
+      "by_system": {
+        "full-context": {
+          "n": 74,
+          "invalid": 0,
+          "accuracy": 0.9324324324324325,
+          "kappa": 0.8370044052863437,
+          "confusion": {
+            "judge0_human0": 19,
+            "judge0_human1": 5,
+            "judge1_human0": 0,
+            "judge1_human1": 50
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 50,
+          "false_negative_over_all": 0.06756756756756757,
+          "adoptable_on_this_calibration": false
+        },
+        "naive-vector": {
+          "n": 88,
+          "invalid": 0,
+          "accuracy": 0.9431818181818182,
+          "kappa": 0.8860103626943007,
+          "confusion": {
+            "judge0_human0": 44,
+            "judge0_human1": 3,
+            "judge1_human0": 2,
+            "judge1_human1": 39
+          },
+          "false_positive_over_all": 0.022727272727272728,
+          "false_positive_over_judge_positive": 0.04878048780487805,
+          "judge_positive_n": 41,
+          "false_negative_over_all": 0.03409090909090909,
+          "adoptable_on_this_calibration": false
+        },
+        "no-memory": {
+          "n": 60,
+          "invalid": 0,
+          "accuracy": 0.9333333333333333,
+          "kappa": 0.6341463414634146,
+          "confusion": {
+            "judge0_human0": 52,
+            "judge0_human1": 0,
+            "judge1_human0": 4,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.06666666666666667,
+          "false_positive_over_judge_positive": 0.5,
+          "judge_positive_n": 8,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "system": {
+          "n": 78,
+          "invalid": 0,
+          "accuracy": 0.9871794871794872,
+          "kappa": 0.9708737864077671,
+          "confusion": {
+            "judge0_human0": 52,
+            "judge0_human1": 0,
+            "judge1_human0": 1,
+            "judge1_human1": 25
+          },
+          "false_positive_over_all": 0.01282051282051282,
+          "false_positive_over_judge_positive": 0.038461538461538464,
+          "judge_positive_n": 26,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        }
+      },
+      "by_type_system": {
+        "1/full-context": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 0.875,
+          "kappa": 0.75,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 1,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.125,
+          "adoptable_on_this_calibration": false
+        },
+        "1/naive-vector": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 0.75,
+          "kappa": 0.0,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 1,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.25,
+          "adoptable_on_this_calibration": false
+        },
+        "1/no-memory": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "1/system": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "2/full-context": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "2/naive-vector": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "2/no-memory": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "2/system": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "3/full-context": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "3/naive-vector": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "3/no-memory": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "3/system": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "4/full-context": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "4/naive-vector": {
+          "n": 7,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 3
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 3,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "4/no-memory": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "4/system": {
+          "n": 5,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 1
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 1,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "5/full-context": {
+          "n": 5,
+          "invalid": 0,
+          "accuracy": 0.6,
+          "kappa": 0.28571428571428564,
+          "confusion": {
+            "judge0_human0": 2,
+            "judge0_human1": 2,
+            "judge1_human0": 0,
+            "judge1_human1": 1
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 1,
+          "false_negative_over_all": 0.4,
+          "adoptable_on_this_calibration": false
+        },
+        "5/naive-vector": {
+          "n": 6,
+          "invalid": 0,
+          "accuracy": 0.8333333333333334,
+          "kappa": 0.5714285714285715,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 1,
+            "judge1_human1": 1
+          },
+          "false_positive_over_all": 0.16666666666666666,
+          "false_positive_over_judge_positive": 0.5,
+          "judge_positive_n": 2,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "5/no-memory": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "5/system": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "abstention/full-context": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "abstention/naive-vector": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "abstention/no-memory": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "abstention/system": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "dialogues/full-context": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "dialogues/naive-vector": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 0.875,
+          "kappa": 0.75,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 1,
+            "judge1_human1": 3
+          },
+          "false_positive_over_all": 0.125,
+          "false_positive_over_judge_positive": 0.25,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "dialogues/no-memory": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 0.5,
+          "kappa": 0.0,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 4,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.5,
+          "false_positive_over_judge_positive": 1.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "dialogues/system": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "events/full-context": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "events/naive-vector": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 0.875,
+          "kappa": 0.75,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 1,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.125,
+          "adoptable_on_this_calibration": false
+        },
+        "events/no-memory": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "events/system": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "knowledge-update/full-context": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "knowledge-update/naive-vector": {
+          "n": 5,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 1,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "knowledge-update/no-memory": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "knowledge-update/system": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "multi-session/full-context": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "multi-session/naive-vector": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "multi-session/no-memory": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "multi-session/system": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "preference/full-context": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 0.75,
+          "kappa": 0.5,
+          "confusion": {
+            "judge0_human0": 2,
+            "judge0_human1": 2,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.25,
+          "adoptable_on_this_calibration": false
+        },
+        "preference/naive-vector": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 0.875,
+          "kappa": 0.75,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 1,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.125,
+          "adoptable_on_this_calibration": false
+        },
+        "preference/no-memory": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "preference/system": {
+          "n": 5,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 1
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 1,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "profile/full-context": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "profile/naive-vector": {
+          "n": 7,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 3
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 3,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "profile/no-memory": {
+          "n": 3,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "profile/system": {
+          "n": 3,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "single-session-assistant/full-context": {
+          "n": 3,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 3
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 3,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "single-session-assistant/naive-vector": {
+          "n": 6,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 3
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 3,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "single-session-assistant/no-memory": {
+          "n": 3,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "single-session-assistant/system": {
+          "n": 6,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 3
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 3,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "single-session-preference/full-context": {
+          "n": 3,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 3
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 3,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "single-session-preference/naive-vector": {
+          "n": 3,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 3
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 3,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "single-session-preference/no-memory": {
+          "n": 3,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "single-session-preference/system": {
+          "n": 3,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "temporal-reasoning/full-context": {
+          "n": 3,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 3
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 3,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "temporal-reasoning/naive-vector": {
+          "n": 6,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 3
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 3,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "temporal-reasoning/no-memory": {
+          "n": 3,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "temporal-reasoning/system": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 0.75,
+          "kappa": 0.0,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 0,
+            "judge1_human0": 1,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.25,
+          "false_positive_over_judge_positive": 1.0,
+          "judge_positive_n": 1,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        }
+      },
+      "by_dataset": {
+        "chinese_queries_v2": {
+          "n": 83,
+          "invalid": 0,
+          "accuracy": 0.9518072289156626,
+          "kappa": 0.8983466013472137,
+          "confusion": {
+            "judge0_human0": 30,
+            "judge0_human1": 3,
+            "judge1_human0": 1,
+            "judge1_human1": 49
+          },
+          "false_positive_over_all": 0.012048192771084338,
+          "false_positive_over_judge_positive": 0.02,
+          "judge_positive_n": 50,
+          "false_negative_over_all": 0.03614457831325301,
+          "adoptable_on_this_calibration": false
+        },
+        "locomo": {
+          "n": 91,
+          "invalid": 0,
+          "accuracy": 0.945054945054945,
+          "kappa": 0.8428324697754749,
+          "confusion": {
+            "judge0_human0": 68,
+            "judge0_human1": 4,
+            "judge1_human0": 1,
+            "judge1_human1": 18
+          },
+          "false_positive_over_all": 0.01098901098901099,
+          "false_positive_over_judge_positive": 0.05263157894736842,
+          "judge_positive_n": 19,
+          "false_negative_over_all": 0.04395604395604396,
+          "adoptable_on_this_calibration": false
+        },
+        "longmemeval_oracle": {
+          "n": 47,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 26,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 21
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 21,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "longmemeval_s": {
+          "n": 6,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 6,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "perltqa_zh": {
+          "n": 73,
+          "invalid": 0,
+          "accuracy": 0.9178082191780822,
+          "kappa": 0.8345921450151057,
+          "confusion": {
+            "judge0_human0": 37,
+            "judge0_human1": 1,
+            "judge1_human0": 5,
+            "judge1_human1": 30
+          },
+          "false_positive_over_all": 0.0684931506849315,
+          "false_positive_over_judge_positive": 0.14285714285714285,
+          "judge_positive_n": 35,
+          "false_negative_over_all": 0.0136986301369863,
+          "adoptable_on_this_calibration": false
+        }
+      },
+      "flow_only": {
+        "False": {
+          "n": 253,
+          "invalid": 0,
+          "accuracy": 0.9446640316205533,
+          "kappa": 0.8825051416439992,
+          "confusion": {
+            "judge0_human0": 150,
+            "judge0_human1": 8,
+            "judge1_human0": 6,
+            "judge1_human1": 89
+          },
+          "false_positive_over_all": 0.023715415019762844,
+          "false_positive_over_judge_positive": 0.06315789473684211,
+          "judge_positive_n": 95,
+          "false_negative_over_all": 0.03162055335968379,
+          "adoptable_on_this_calibration": false
+        },
+        "True": {
+          "n": 47,
+          "invalid": 0,
+          "accuracy": 0.9787234042553191,
+          "kappa": 0.9545014520813165,
+          "confusion": {
+            "judge0_human0": 17,
+            "judge0_human1": 0,
+            "judge1_human0": 1,
+            "judge1_human1": 29
+          },
+          "false_positive_over_all": 0.02127659574468085,
+          "false_positive_over_judge_positive": 0.03333333333333333,
+          "judge_positive_n": 30,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        }
+      },
+      "self_consistency": {
+        "planned_rows": 100,
+        "new_repeats_per_row": 3,
+        "complete_rows": 100,
+        "changed_any_of_three_n": 3,
+        "changed_any_of_three_ratio": 0.03,
+        "pairwise_disagreement_n": 6,
+        "pairwise_denominator": 300,
+        "pairwise_disagreement_ratio": 0.02,
+        "valid_repeat_calls": 300,
+        "invalid_repeat_calls": 0
+      },
+      "disagreement_types": {
+        "dialogues": 5,
+        "5": 3,
+        "1": 2,
+        "events": 1,
+        "preference": 3,
+        "temporal-reasoning": 1
+      },
+      "worst_type_system": {
+        "dialogues/no-memory": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 0.5,
+          "kappa": 0.0,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 4,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.5,
+          "false_positive_over_judge_positive": 1.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        }
+      }
+    },
+    "minimax-m3": {
+      "overall": {
+        "n": 300,
+        "invalid": 0,
+        "accuracy": 0.9766666666666667,
+        "kappa": 0.9518436984039627,
+        "confusion": {
+          "judge0_human0": 173,
+          "judge0_human1": 6,
+          "judge1_human0": 1,
+          "judge1_human1": 120
+        },
+        "false_positive_over_all": 0.0033333333333333335,
+        "false_positive_over_judge_positive": 0.008264462809917356,
+        "judge_positive_n": 121,
+        "false_negative_over_all": 0.02,
+        "adoptable_on_this_calibration": true,
+        "ci95": {
+          "accuracy": [
+            0.9622641509433962,
+            0.9921259842519685
+          ],
+          "kappa": [
+            0.9190092020673138,
+            0.9841269841269842
+          ],
+          "false_positive_over_all": [
+            0.0,
+            0.013513513513513514
+          ],
+          "false_positive_over_judge_positive": [
+            0.0,
+            0.029411764705882353
+          ]
+        },
+        "ci_method": "1000 percentile resamples of dataset+conversation clusters within the fixed stratified calibration sample; conditional diagnostic, not dev-population CI",
+        "clusters": 21
+      },
+      "by_type": {
+        "1": {
+          "n": 20,
+          "invalid": 0,
+          "accuracy": 0.9,
+          "kappa": 0.736842105263158,
+          "confusion": {
+            "judge0_human0": 14,
+            "judge0_human1": 2,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.1,
+          "adoptable_on_this_calibration": false
+        },
+        "2": {
+          "n": 16,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 12,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "3": {
+          "n": 16,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 16,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "4": {
+          "n": 20,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 12,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 8
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 8,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "5": {
+          "n": 19,
+          "invalid": 0,
+          "accuracy": 0.9473684210526315,
+          "kappa": 0.8256880733944952,
+          "confusion": {
+            "judge0_human0": 15,
+            "judge0_human1": 1,
+            "judge1_human0": 0,
+            "judge1_human1": 3
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 3,
+          "false_negative_over_all": 0.05263157894736842,
+          "adoptable_on_this_calibration": false
+        },
+        "abstention": {
+          "n": 16,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 16
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 16,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "dialogues": {
+          "n": 32,
+          "invalid": 0,
+          "accuracy": 0.96875,
+          "kappa": 0.9292035398230089,
+          "confusion": {
+            "judge0_human0": 21,
+            "judge0_human1": 1,
+            "judge1_human0": 0,
+            "judge1_human1": 10
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 10,
+          "false_negative_over_all": 0.03125,
+          "adoptable_on_this_calibration": false
+        },
+        "events": {
+          "n": 24,
+          "invalid": 0,
+          "accuracy": 0.9583333333333334,
+          "kappa": 0.9166666666666667,
+          "confusion": {
+            "judge0_human0": 11,
+            "judge0_human1": 1,
+            "judge1_human0": 0,
+            "judge1_human1": 12
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 12,
+          "false_negative_over_all": 0.041666666666666664,
+          "adoptable_on_this_calibration": false
+        },
+        "knowledge-update": {
+          "n": 21,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 9,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 12
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 12,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "multi-session": {
+          "n": 28,
+          "invalid": 0,
+          "accuracy": 0.9642857142857143,
+          "kappa": 0.9278350515463918,
+          "confusion": {
+            "judge0_human0": 15,
+            "judge0_human1": 0,
+            "judge1_human0": 1,
+            "judge1_human1": 12
+          },
+          "false_positive_over_all": 0.03571428571428571,
+          "false_positive_over_judge_positive": 0.07692307692307693,
+          "judge_positive_n": 13,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "preference": {
+          "n": 25,
+          "invalid": 0,
+          "accuracy": 0.96,
+          "kappa": 0.9196141479099678,
+          "confusion": {
+            "judge0_human0": 13,
+            "judge0_human1": 1,
+            "judge1_human0": 0,
+            "judge1_human1": 11
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 11,
+          "false_negative_over_all": 0.04,
+          "adoptable_on_this_calibration": false
+        },
+        "profile": {
+          "n": 17,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 10,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 7
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 7,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "single-session-assistant": {
+          "n": 18,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 9,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 9
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 9,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "single-session-preference": {
+          "n": 12,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 6,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 6
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 6,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "temporal-reasoning": {
+          "n": 16,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 10,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 6
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 6,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        }
+      },
+      "by_system": {
+        "full-context": {
+          "n": 74,
+          "invalid": 0,
+          "accuracy": 0.9594594594594594,
+          "kappa": 0.8989990900818926,
+          "confusion": {
+            "judge0_human0": 19,
+            "judge0_human1": 3,
+            "judge1_human0": 0,
+            "judge1_human1": 52
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 52,
+          "false_negative_over_all": 0.04054054054054054,
+          "adoptable_on_this_calibration": false
+        },
+        "naive-vector": {
+          "n": 88,
+          "invalid": 0,
+          "accuracy": 0.9545454545454546,
+          "kappa": 0.9087136929460582,
+          "confusion": {
+            "judge0_human0": 45,
+            "judge0_human1": 3,
+            "judge1_human0": 1,
+            "judge1_human1": 39
+          },
+          "false_positive_over_all": 0.011363636363636364,
+          "false_positive_over_judge_positive": 0.025,
+          "judge_positive_n": 40,
+          "false_negative_over_all": 0.03409090909090909,
+          "adoptable_on_this_calibration": false
+        },
+        "no-memory": {
+          "n": 60,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 56,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "system": {
+          "n": 78,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 53,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 25
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 25,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        }
+      },
+      "by_type_system": {
+        "1/full-context": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 0.875,
+          "kappa": 0.75,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 1,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.125,
+          "adoptable_on_this_calibration": false
+        },
+        "1/naive-vector": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 0.75,
+          "kappa": 0.0,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 1,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.25,
+          "adoptable_on_this_calibration": false
+        },
+        "1/no-memory": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "1/system": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "2/full-context": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "2/naive-vector": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "2/no-memory": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "2/system": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "3/full-context": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "3/naive-vector": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "3/no-memory": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "3/system": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "4/full-context": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "4/naive-vector": {
+          "n": 7,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 3
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 3,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "4/no-memory": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "4/system": {
+          "n": 5,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 1
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 1,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "5/full-context": {
+          "n": 5,
+          "invalid": 0,
+          "accuracy": 0.8,
+          "kappa": 0.6153846153846155,
+          "confusion": {
+            "judge0_human0": 2,
+            "judge0_human1": 1,
+            "judge1_human0": 0,
+            "judge1_human1": 2
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 2,
+          "false_negative_over_all": 0.2,
+          "adoptable_on_this_calibration": false
+        },
+        "5/naive-vector": {
+          "n": 6,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 5,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 1
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 1,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "5/no-memory": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "5/system": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "abstention/full-context": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "abstention/naive-vector": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "abstention/no-memory": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "abstention/system": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "dialogues/full-context": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 0.875,
+          "kappa": 0.75,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 1,
+            "judge1_human0": 0,
+            "judge1_human1": 3
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 3,
+          "false_negative_over_all": 0.125,
+          "adoptable_on_this_calibration": false
+        },
+        "dialogues/naive-vector": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 5,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 3
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 3,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "dialogues/no-memory": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 8,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "dialogues/system": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "events/full-context": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "events/naive-vector": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 0.875,
+          "kappa": 0.75,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 1,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.125,
+          "adoptable_on_this_calibration": false
+        },
+        "events/no-memory": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "events/system": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "knowledge-update/full-context": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "knowledge-update/naive-vector": {
+          "n": 5,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 1,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "knowledge-update/no-memory": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "knowledge-update/system": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "multi-session/full-context": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "multi-session/naive-vector": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 0.875,
+          "kappa": 0.75,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 0,
+            "judge1_human0": 1,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.125,
+          "false_positive_over_judge_positive": 0.2,
+          "judge_positive_n": 5,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "multi-session/no-memory": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "multi-session/system": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "preference/full-context": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 2,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 6
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 6,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "preference/naive-vector": {
+          "n": 8,
+          "invalid": 0,
+          "accuracy": 0.875,
+          "kappa": 0.75,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 1,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.125,
+          "adoptable_on_this_calibration": false
+        },
+        "preference/no-memory": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "preference/system": {
+          "n": 5,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 1
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 1,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "profile/full-context": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 4
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 4,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "profile/naive-vector": {
+          "n": 7,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 3
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 3,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "profile/no-memory": {
+          "n": 3,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "profile/system": {
+          "n": 3,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "single-session-assistant/full-context": {
+          "n": 3,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 3
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 3,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "single-session-assistant/naive-vector": {
+          "n": 6,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 3
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 3,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "single-session-assistant/no-memory": {
+          "n": 3,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "single-session-assistant/system": {
+          "n": 6,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 3
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 3,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "single-session-preference/full-context": {
+          "n": 3,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 3
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 3,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "single-session-preference/naive-vector": {
+          "n": 3,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 3
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 3,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "single-session-preference/no-memory": {
+          "n": 3,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "single-session-preference/system": {
+          "n": 3,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "temporal-reasoning/full-context": {
+          "n": 3,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 0,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 3
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 3,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "temporal-reasoning/naive-vector": {
+          "n": 6,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 3
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 3,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "temporal-reasoning/no-memory": {
+          "n": 3,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "temporal-reasoning/system": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 4,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        }
+      },
+      "by_dataset": {
+        "chinese_queries_v2": {
+          "n": 83,
+          "invalid": 0,
+          "accuracy": 0.9879518072289156,
+          "kappa": 0.9744221879815099,
+          "confusion": {
+            "judge0_human0": 31,
+            "judge0_human1": 1,
+            "judge1_human0": 0,
+            "judge1_human1": 51
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 51,
+          "false_negative_over_all": 0.012048192771084338,
+          "adoptable_on_this_calibration": false
+        },
+        "locomo": {
+          "n": 91,
+          "invalid": 0,
+          "accuracy": 0.967032967032967,
+          "kappa": 0.905699481865285,
+          "confusion": {
+            "judge0_human0": 69,
+            "judge0_human1": 3,
+            "judge1_human0": 0,
+            "judge1_human1": 19
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 19,
+          "false_negative_over_all": 0.03296703296703297,
+          "adoptable_on_this_calibration": false
+        },
+        "longmemeval_oracle": {
+          "n": 47,
+          "invalid": 0,
+          "accuracy": 0.9787234042553191,
+          "kappa": 0.9571558796718322,
+          "confusion": {
+            "judge0_human0": 25,
+            "judge0_human1": 0,
+            "judge1_human0": 1,
+            "judge1_human1": 21
+          },
+          "false_positive_over_all": 0.02127659574468085,
+          "false_positive_over_judge_positive": 0.045454545454545456,
+          "judge_positive_n": 22,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "longmemeval_s": {
+          "n": 6,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": null,
+          "confusion": {
+            "judge0_human0": 6,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        },
+        "perltqa_zh": {
+          "n": 73,
+          "invalid": 0,
+          "accuracy": 0.9726027397260274,
+          "kappa": 0.9434546862896979,
+          "confusion": {
+            "judge0_human0": 42,
+            "judge0_human1": 2,
+            "judge1_human0": 0,
+            "judge1_human1": 29
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 29,
+          "false_negative_over_all": 0.0273972602739726,
+          "adoptable_on_this_calibration": false
+        }
+      },
+      "flow_only": {
+        "False": {
+          "n": 253,
+          "invalid": 0,
+          "accuracy": 0.9723320158102767,
+          "kappa": 0.9409056024558712,
+          "confusion": {
+            "judge0_human0": 155,
+            "judge0_human1": 6,
+            "judge1_human0": 1,
+            "judge1_human1": 91
+          },
+          "false_positive_over_all": 0.003952569169960474,
+          "false_positive_over_judge_positive": 0.010869565217391304,
+          "judge_positive_n": 92,
+          "false_negative_over_all": 0.023715415019762844,
+          "adoptable_on_this_calibration": false
+        },
+        "True": {
+          "n": 47,
+          "invalid": 0,
+          "accuracy": 1.0,
+          "kappa": 1.0,
+          "confusion": {
+            "judge0_human0": 18,
+            "judge0_human1": 0,
+            "judge1_human0": 0,
+            "judge1_human1": 29
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": 0.0,
+          "judge_positive_n": 29,
+          "false_negative_over_all": 0.0,
+          "adoptable_on_this_calibration": false
+        }
+      },
+      "self_consistency": {
+        "planned_rows": 100,
+        "new_repeats_per_row": 3,
+        "complete_rows": 100,
+        "changed_any_of_three_n": 1,
+        "changed_any_of_three_ratio": 0.01,
+        "pairwise_disagreement_n": 2,
+        "pairwise_denominator": 300,
+        "pairwise_disagreement_ratio": 0.006666666666666667,
+        "valid_repeat_calls": 300,
+        "invalid_repeat_calls": 0
+      },
+      "disagreement_types": {
+        "1": 2,
+        "events": 1,
+        "preference": 1,
+        "dialogues": 1,
+        "5": 1,
+        "multi-session": 1
+      },
+      "worst_type_system": {
+        "1/naive-vector": {
+          "n": 4,
+          "invalid": 0,
+          "accuracy": 0.75,
+          "kappa": 0.0,
+          "confusion": {
+            "judge0_human0": 3,
+            "judge0_human1": 1,
+            "judge1_human0": 0,
+            "judge1_human1": 0
+          },
+          "false_positive_over_all": 0.0,
+          "false_positive_over_judge_positive": null,
+          "judge_positive_n": 0,
+          "false_negative_over_all": 0.25,
+          "adoptable_on_this_calibration": false
+        }
+      }
+    }
+  },
+  "round": 1,
+  "max_rounds": 3,
+  "gate": "kappa >= 0.7 OR accuracy >= 0.90; all300 valid; latest explicit owner rule",
+  "prompt_revised": false,
+  "backup_provenance": "Reuse the completed same300 minimax-m3 cross-reference judgments under frozen v1, exact row_id join, no relabel/cherry-pick; backup and cross-reference are the SAME model, not independent evidence",
+  "selection": "300 stratified by category/system/primary judge outcome; 100 fixed seed2026102702 from SAME300 and same strata; repeats3 new calls per model, not original run counts",
+  "self_consistency_complete": true,
+  "phase2_accepted": false,
+  "stage3_started": false,
+  "metric_scope": "Judge calibration validates answer-grading reliability only; does not validate missing EX/LC/RT/CX/RL/SC/PF adapters or candidate activation",
+  "population_correction": "No naive accuracy multiplier or global correction: outcome/type/system stratified calibration is not a simple random population sample; no unweighted300 CI claimed as full1560 system accuracy; original E1 kept with provenance and calibration attached",
+  "remaining": [
+    "independent cross-region PF host and measurements",
+    "missing functional observation adapters and true tokenizer coverage",
+    "phase2 acceptance; no automatic phase3"
+  ],
+  "bias": "DeepSeek同时是金标准标注模型之一，答题/抽取与标注同厂商可能使抽取指标偏高，双厂商共同保留已部分抵消；ECD客服领域不代表一般对话；程序构造题只作流程验证"
+}

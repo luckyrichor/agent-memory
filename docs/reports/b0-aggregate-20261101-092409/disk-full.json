@@ -1,0 +1,51 @@
+{
+  "scenario": "F9",
+  "observations": [
+    {
+      "repeat": 1,
+      "limited_filesystem_bytes": 16777216,
+      "tablespace_bytes": 3195000,
+      "failed_write_http": 500,
+      "captured_sqlstates": [
+        "53100"
+      ],
+      "read_during_full_http": 200,
+      "write_after_cleanup_http": 201,
+      "seconds": 0.12294311309233308,
+      "read_recovery_pass": true,
+      "explicit_retryable_error_semantics_pass": false
+    },
+    {
+      "repeat": 2,
+      "limited_filesystem_bytes": 16777216,
+      "tablespace_bytes": 3227788,
+      "failed_write_http": 500,
+      "captured_sqlstates": [
+        "53100"
+      ],
+      "read_during_full_http": 200,
+      "write_after_cleanup_http": 201,
+      "seconds": 0.10487826634198427,
+      "read_recovery_pass": true,
+      "explicit_retryable_error_semantics_pass": false
+    },
+    {
+      "repeat": 3,
+      "limited_filesystem_bytes": 16777216,
+      "tablespace_bytes": 3235980,
+      "failed_write_http": 500,
+      "captured_sqlstates": [
+        "53100"
+      ],
+      "read_during_full_http": 200,
+      "write_after_cleanup_http": 201,
+      "seconds": 0.11279080016538501,
+      "read_recovery_pass": true,
+      "explicit_retryable_error_semantics_pass": false
+    }
+  ],
+  "confirmed_writes": 7,
+  "confirmed_missing": 0,
+  "external_model_calls": 0,
+  "scope": "Separate1CPU/512MiB PostgreSQL container; only memory_versions physical tablespace relocated to a16MiB tmpfs. Schema/business code unchanged. Full-volume file removed between trials; host root disk was never filled. Read/recovery correctness distinct from error semantics."
+}

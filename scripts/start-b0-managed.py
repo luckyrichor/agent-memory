@@ -13,7 +13,8 @@ def main():
  for name in ('LARK_CHANNEL','LARK_CHANNEL_HOME','LARK_CHANNEL_PROFILE','LARK_CHANNEL_CONFIG','LARKSUITE_CLI_CONFIG_DIR','PATH','DOCKER_HOST','DOCKER_TLS_VERIFY','DOCKER_CERT_PATH'):
   if name in os.environ:command.append('--setenv='+name+'='+os.environ[name])
  python=str(repo/'.venv/bin/python');wrapper=str(repo/'scripts/with-llm-account.py')
- command.extend([python,wrapper,'ark-secondary',python,wrapper,'tokenhub-secondary',python,str(repo/'scripts/managed-b0-execution.py'),'--dataset','longmemeval_oracle,locomo,perltqa_zh,chinese_queries_v2,dulemon_gold,ecd_negative,longmemeval_s','--mode','both','--config',str(a.config.resolve()),'--metrics','EX,LC,RT,CX,E,RL,SC','--output',str(output)])
+ config=json.loads(a.config.read_text());prefix=[python] if config.get('frozen_b0_authorization')=='om_x100b62c56df1b8b0ce44568e5c1acc0' else [python,wrapper,'ark-secondary',python,wrapper,'tokenhub-secondary',python]
+ command.extend([*prefix,str(repo/'scripts/managed-b0-execution.py'),'--dataset','longmemeval_oracle,locomo,perltqa_zh,chinese_queries_v2,dulemon_gold,ecd_negative,longmemeval_s','--mode','both','--config',str(a.config.resolve()),'--metrics','EX,LC,RT,CX,E,RL,SC','--output',str(output)])
  subprocess.run(command,check=True)
  state=subprocess.check_output(['systemctl','--user','show',a.unit+'.service','--property=ActiveState','--value'],text=True).strip()
  print(json.dumps({'unit':a.unit+'.service','state':state,'log':str(log),'run':str(output),'credentials_in_command':False,'automatic_restart':False}))

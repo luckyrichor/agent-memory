@@ -1,0 +1,19 @@
+{
+  "DeepSeek": {
+    "attempts_with_request_body": 9547,
+    "attempted_text_strings": 19094,
+    "attempted_text_utf8_bytes": 33952828,
+    "responded_attempts": 9547,
+    "responded_text_strings": 19094,
+    "responded_text_utf8_bytes": 33952828
+  },
+  "TokenHub": {
+    "attempts_with_request_body": 14912,
+    "attempted_text_strings": 16773,
+    "attempted_text_utf8_bytes": 5953385,
+    "responded_attempts": 14899,
+    "responded_text_strings": 16759,
+    "responded_text_utf8_bytes": 5951079,
+    "transport_unknown_attempts": 13
+  }
+}

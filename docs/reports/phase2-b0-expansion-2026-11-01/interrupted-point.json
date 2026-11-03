@@ -1,0 +1,11 @@
+{
+  "status": "interrupted_by_target_host_reboot",
+  "valid_capacity_point": false,
+  "load_host_measured_requests": 30,
+  "load_host_errors": 14,
+  "load_host_dropped_arrivals": 0,
+  "server_monitor_peak_memory_fraction": 0.9727367452640782,
+  "reason": "Target host memory reached 97% and probes failed before observed host reboot; cause of memory pressure/reboot not established. No stable-rate conclusion.",
+  "target_boot_id_after": "151b2eb9-3250-4069-aae6-870e90ee843c",
+  "raw_evidence_private": true
+}

@@ -1,0 +1,42 @@
+{
+  "status": "invalid_load_host_resources",
+  "host": "Mac luomac.local",
+  "database_size": 10000,
+  "rate_per_second": 1,
+  "measured_metrics": {
+    "b0_sample_requests": {
+      "count": 289,
+      "rate": 0.741020347480287
+    },
+    "b0_sample_errors": {
+      "count": 178,
+      "rate": 0.45640699602592066
+    },
+    "b0_sample_client_ms": {
+      "min": 62.097,
+      "med": 29953.824,
+      "max": 30000.842,
+      "p(90)": 29971.1298,
+      "p(95)": 30000.220800000003,
+      "avg": 21239.29402768165
+    },
+    "b0_sample_server_ms": {
+      "med": 5908.573151,
+      "max": 29828.716675,
+      "p(90)": 12517.47056,
+      "p(95)": 18454.492631499987,
+      "avg": 7223.728529819823,
+      "min": 46.105236
+    },
+    "dropped_iterations": {
+      "count": 11,
+      "rate": 0.028204926720702964
+    }
+  },
+  "max_host_cpu_percent": 98.2,
+  "max_host_memory_percent": 82.9,
+  "initial_host_memory_percent": 74.8,
+  "capacity_claim_allowed": false,
+  "remaining_repeats_stopped": true,
+  "observed_server_symptom": "QueuePool exhaustion/timeouts observed; this invalid client-resource run does not isolate server capacity."
+}

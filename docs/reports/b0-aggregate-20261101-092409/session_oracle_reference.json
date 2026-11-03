@@ -1,0 +1,126 @@
+{
+  "direct": {
+    "estimate": {
+      "value": 0.75,
+      "n": 4,
+      "numerator": 9,
+      "denominator": 12,
+      "ci95": [
+        0.25,
+        1.0
+      ]
+    },
+    "rows": 12,
+    "unique_questions": 4,
+    "dataset_sha256": "d584ee193cd972f2ed3d2efc5ce8d7bff23d73d1a75fb1ac4441e0ceb4c36037",
+    "method": "original public session-oracle input; all source sessions verified relevant; raw full-context baseline, no truncation; abstention excluded because no positive oracle evidence",
+    "oracle_granularity": "supporting sessions, not manually isolated answer-bearing spans",
+    "oracle_minus_system_paired_gap": {
+      "delta": 0.16666666666666674,
+      "ci95": [
+        -0.25,
+        0.75
+      ],
+      "conversation_clusters": 4,
+      "paired_rows": 12,
+      "improved_rows": 3,
+      "worsened_rows": 1,
+      "method": "paired conversation-cluster ratio-of-sums bootstrap1000 seed42"
+    },
+    "comparison": {
+      "no-memory": {
+        "value": 0.0,
+        "n": 4,
+        "numerator": 0,
+        "denominator": 12,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "naive-vector": {
+        "value": 0.6666666666666666,
+        "n": 4,
+        "numerator": 8,
+        "denominator": 12,
+        "ci95": [
+          0.25,
+          1.0
+        ]
+      },
+      "system": {
+        "value": 0.5833333333333334,
+        "n": 4,
+        "numerator": 7,
+        "denominator": 12,
+        "ci95": [
+          0.16666666666666666,
+          1.0
+        ]
+      }
+    },
+    "limitation": "empirical same-model session-oracle reference, not a guaranteed mathematical upper bound; no comparison to independently sampled longmemeval_s questions"
+  },
+  "full": {
+    "estimate": {
+      "value": 0.75,
+      "n": 4,
+      "numerator": 9,
+      "denominator": 12,
+      "ci95": [
+        0.25,
+        1.0
+      ]
+    },
+    "rows": 12,
+    "unique_questions": 4,
+    "dataset_sha256": "d584ee193cd972f2ed3d2efc5ce8d7bff23d73d1a75fb1ac4441e0ceb4c36037",
+    "method": "original public session-oracle input; all source sessions verified relevant; raw full-context baseline, no truncation; abstention excluded because no positive oracle evidence",
+    "oracle_granularity": "supporting sessions, not manually isolated answer-bearing spans",
+    "oracle_minus_system_paired_gap": {
+      "delta": 0.75,
+      "ci95": [
+        0.25,
+        1.0
+      ],
+      "conversation_clusters": 4,
+      "paired_rows": 12,
+      "improved_rows": 9,
+      "worsened_rows": 0,
+      "method": "paired conversation-cluster ratio-of-sums bootstrap1000 seed42"
+    },
+    "comparison": {
+      "no-memory": {
+        "value": 0.0,
+        "n": 4,
+        "numerator": 0,
+        "denominator": 12,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "naive-vector": {
+        "value": 0.5,
+        "n": 4,
+        "numerator": 6,
+        "denominator": 12,
+        "ci95": [
+          0.0,
+          1.0
+        ]
+      },
+      "system": {
+        "value": 0.0,
+        "n": 4,
+        "numerator": 0,
+        "denominator": 12,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "limitation": "empirical same-model session-oracle reference, not a guaranteed mathematical upper bound; no comparison to independently sampled longmemeval_s questions"
+  }
+}

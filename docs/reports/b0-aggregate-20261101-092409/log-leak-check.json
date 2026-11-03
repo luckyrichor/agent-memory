@@ -1,0 +1,110 @@
+{
+  "status": "failed_body_logging",
+  "cases": {
+    "search_success": 200,
+    "validation_rejection": 422
+  },
+  "artifacts": [
+    {
+      "artifact": "trace-private.log",
+      "collected": true,
+      "bytes": 10207,
+      "sha256": "8a0421173013d703f7eb21bfbbaed20a3d40d63896e074446212dc3890c1dcba",
+      "canary_occurrences": 0,
+      "credential_occurrences": 0,
+      "trace_spans_observed": 12,
+      "metric_records_observed": 0
+    },
+    {
+      "artifact": "trace-http-private.jsonl",
+      "collected": true,
+      "bytes": 494,
+      "sha256": "71c121f5bbed3eedbf806d587b433fc1102f0dee2517119f0ee70ca5211bb914",
+      "canary_occurrences": 0,
+      "credential_occurrences": 0,
+      "trace_spans_observed": 0,
+      "metric_records_observed": 0
+    },
+    {
+      "artifact": "access.log",
+      "collected": true,
+      "bytes": 197,
+      "sha256": "e80ea8853c5f0120fa0a701fbd66460bc11cef3d5c2d517f5c13a6ea1f8d2554",
+      "canary_occurrences": 0,
+      "credential_occurrences": 0,
+      "trace_spans_observed": 0,
+      "metric_records_observed": 0
+    },
+    {
+      "artifact": "error.log",
+      "collected": true,
+      "bytes": 672,
+      "sha256": "574523f12e50a250aa722e35cfee5645347014cbd716d190f21d400f6f79c57e",
+      "canary_occurrences": 0,
+      "credential_occurrences": 0,
+      "trace_spans_observed": 0,
+      "metric_records_observed": 0
+    }
+  ],
+  "canary_leaks": 0,
+  "credential_leaks": 0,
+  "limitation": "Only isolated successful search and validation rejection with console telemetry and dedicated proxy logs. Full pressure/fault collection and external collectors not yet covered. Intentional private LLM request/response archives excluded; these are required evidence, not operational logs.",
+  "database_restart_log_scan": {
+    "bytes": 2620203,
+    "unique_fictional_body_matches": 0,
+    "credential_matches": 0,
+    "coverage": "three actual database restarts under acknowledged API writes; successful and failed requests; actual INFO logs, console traces and error stacks"
+  },
+  "public_pressure_logs": [
+    {
+      "artifact": "tx2-100k-r1-app-private.log",
+      "bytes": 2681094,
+      "sha256": "41f3c4c402df5c1ac2e34219236ec761da83e86ac2e0b2c52f49eb54552c0aad",
+      "unique_complete_fictional_query_body_matches": 6,
+      "complete_body_occurrences": 6,
+      "credential_occurrences": 0
+    },
+    {
+      "artifact": "tx2-100k-r2-app-private.log",
+      "bytes": 2674227,
+      "sha256": "8068dfae1084904d5f944ab8253bfcd03ace4cda2e10daab9868cade4cec2262",
+      "unique_complete_fictional_query_body_matches": 11,
+      "complete_body_occurrences": 11,
+      "credential_occurrences": 0
+    },
+    {
+      "artifact": "tx2-100k-r3-app-private.log",
+      "bytes": 2651449,
+      "sha256": "c576ee02109dd15f30fb58d17c8a4c0cd780760a73d19ed2beaa85ce46e94dc4",
+      "unique_complete_fictional_query_body_matches": 6,
+      "complete_body_occurrences": 6,
+      "credential_occurrences": 0
+    },
+    {
+      "artifact": "tx2-10k-r1-app-private.log",
+      "bytes": 1841072,
+      "sha256": "8a1194e4a745940d72b0dfaee92f0ef05760b204ddcbaf0d2ef8e44ca870f572",
+      "unique_complete_fictional_query_body_matches": 12,
+      "complete_body_occurrences": 13,
+      "credential_occurrences": 0
+    },
+    {
+      "artifact": "tx2-10k-r2-app-private.log",
+      "bytes": 1790415,
+      "sha256": "c7f6cead57c9d583b736bd07102d225cca012f191ea80a34c80c56f0e6c1da73",
+      "unique_complete_fictional_query_body_matches": 11,
+      "complete_body_occurrences": 11,
+      "credential_occurrences": 0
+    },
+    {
+      "artifact": "tx2-10k-r3-app-private.log",
+      "bytes": 1486391,
+      "sha256": "f5a8629cd2c8f08ccde106a2342630e831396a26fbbc3011ce2144b7afe43cd9",
+      "unique_complete_fictional_query_body_matches": 9,
+      "complete_body_occurrences": 11,
+      "credential_occurrences": 0
+    }
+  ],
+  "public_pressure_complete_body_occurrences": 58,
+  "public_pressure_credential_occurrences": 0
+}

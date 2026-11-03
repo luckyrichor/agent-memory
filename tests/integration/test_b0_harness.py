@@ -175,6 +175,18 @@ async def run():
  assert len(io.calls)==1 and io.runtime_blocked
  assert json.loads((root/'overdue/runtime-quota-pause.json').read_text())['error_code']=='AccountOverdueError'
  for client in io.clients.values():await client.aclose()
+ def native_fixed(request):
+  body=json.loads(request.content)
+  assert 'dimensions' not in body and body['model']=='kinfra-text-embedding-0.6b'
+  return m.httpx.Response(200,json={'model':body['model'],'data':[{'embedding':[1.0]+[0.0]*1023}]})
+ io=m.ModelIO(root/'kinfra-corrected',config={'embedding_model':'kinfra-text-embedding-0.6b','embedding_provider':'TokenHub','embedding_protocol':'openai'})
+ io.clients[id(asyncio.get_running_loop())]=m.httpx.AsyncClient(transport=m.httpx.MockTransport(native_fixed))
+ assert len(await io.embedding('Fictional schema check'))==1024
+ for client in io.clients.values():await client.aclose()
+ replay=m.ModelIO(root/'kinfra-replay',cache_roots=[root/'kinfra-corrected'],config=io.config)
+ assert len(await replay.embedding('Fictional schema check'))==1024
+ assert replay.calls[0]['cache_hit'] and not replay.calls[0]['new_http_call']
+ for client in replay.clients.values():await client.aclose()
  io=m.ModelIO(root/'openai-fixture',fixture=True,config={'embedding_model':'fictional-1024','embedding_provider':'TokenHub','embedding_protocol':'openai'})
  vector=await io.embedding('Fictional embedding fixture')
  assert len(vector)==1024 and io.calls[0]['fixture_only'] and not io.calls[0]['new_http_call']
@@ -185,3 +197,48 @@ asyncio.run(run())
 """
     subprocess.run([sys.executable, '-c', program, str(tmp_path / 'ledger'), '--config', str(config)],
                    cwd=repo, check=True, capture_output=True, text=True, timeout=30)
+
+
+def test_frozen_profile_rejects_ark_version_drift_and_budget_overrun(tmp_path):
+    repo = Path(__file__).resolve().parents[2]
+    config = tmp_path / 'fixture-source.json'
+    config.write_text(json.dumps({'offline_fixture': True}))
+    program = r"""
+import asyncio,importlib.util,json,sys
+from pathlib import Path
+sys.path.insert(0,'scripts')
+import b0_accounts
+spec=importlib.util.spec_from_file_location('driver','scripts/run-b0.py')
+m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+from agent_memory.evals.b0_frozen import AUTH
+b0_accounts.credential=lambda a:('DeepSeek' if a=='deepseek-direct' else 'TokenHub','https://fixture.invalid','fictional-secret')
+root=Path(sys.argv[1]);config={'frozen_b0_authorization':AUTH,'extraction_model':'deepseek-v4-pro','answer_models':['deepseek-v4-pro'],'embedding_model':'kinfra-text-embedding-0.6b','embedding_provider':'TokenHub','embedding_protocol':'openai','embedding_call_budget':1,'expected_response_models':{'answer':'deepseek-v4-pro'},'role_accounts':{'answer':{'DeepSeek':'deepseek-direct'}}}
+async def run():
+ called=[]
+ def respond(request):
+  called.append(json.loads(request.content))
+  return m.httpx.Response(200,json={'model':'kinfra-text-embedding-0.6b','data':[{'embedding':[1.0]+[0.0]*1023}]})
+ io=m.ModelIO(root/'budget',config=config)
+ io.clients[id(asyncio.get_running_loop())]=m.httpx.AsyncClient(transport=m.httpx.MockTransport(respond))
+ try:await io.request('answer',{'model':'doubao-any'},provider='Ark')
+ except RuntimeError as e:assert str(e)=='FROZEN_ROLE_MODEL_OR_PROVIDER_MISMATCH'
+ else:raise AssertionError('Ark must be blocked before credentials/network')
+ assert not called
+ assert len(await io.embedding('first fictional input'))==1024
+ try:await io.embedding('second fictional input')
+ except RuntimeError as e:assert str(e)=='VECTOR_BUDGET_EXHAUSTED'
+ else:raise AssertionError('budget must stop without another HTTP')
+ assert len(called)==1 and io.budget_exhausted and io.runtime_blocked
+ for client in io.clients.values():await client.aclose()
+ io=m.ModelIO(root/'version',config=config)
+ io.clients[id(asyncio.get_running_loop())]=m.httpx.AsyncClient(transport=m.httpx.MockTransport(lambda req:m.httpx.Response(200,json={'model':'deepseek-different','choices':[{'message':{'content':'wrong version'}}]})))
+ try:await io.request('answer',{'model':'deepseek-v4-pro'},provider='DeepSeek')
+ except RuntimeError as e:assert str(e)=='FROZEN_RESPONSE_VERSION_CHANGED'
+ else:raise AssertionError('a different response version cannot be admitted')
+ assert io.version_changed and io.runtime_blocked
+ for client in io.clients.values():await client.aclose()
+asyncio.run(run())
+"""
+    subprocess.run([sys.executable, '-c', program, str(tmp_path / 'ledger'),
+                    '--config', str(config)], cwd=repo, check=True,
+                   capture_output=True, text=True, timeout=30)

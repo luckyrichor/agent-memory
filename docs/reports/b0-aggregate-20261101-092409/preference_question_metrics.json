@@ -1,0 +1,274 @@
+{
+  "chinese_queries_v2/direct/full-context": {
+    "estimate": {
+      "value": 0.25,
+      "n": 4,
+      "numerator": 3,
+      "denominator": 12,
+      "ci95": [
+        0.0,
+        0.75
+      ]
+    },
+    "rows": 12,
+    "unique_questions": 4,
+    "method": "fixed native/existing preference-question subset; original GLM answer correctness against preference gold, not proof of causal memory use",
+    "baseline": "same questions no-memory/full-context/naive-vector/system",
+    "limitation": "small dev subset; no new question selection, gold or preference tags; no general personalization claim"
+  },
+  "chinese_queries_v2/direct/naive-vector": {
+    "estimate": {
+      "value": 0.5,
+      "n": 4,
+      "numerator": 6,
+      "denominator": 12,
+      "ci95": [
+        0.0,
+        1.0
+      ]
+    },
+    "rows": 12,
+    "unique_questions": 4,
+    "method": "fixed native/existing preference-question subset; original GLM answer correctness against preference gold, not proof of causal memory use",
+    "baseline": "same questions no-memory/full-context/naive-vector/system",
+    "limitation": "small dev subset; no new question selection, gold or preference tags; no general personalization claim"
+  },
+  "chinese_queries_v2/direct/no-memory": {
+    "estimate": {
+      "value": 0.0,
+      "n": 4,
+      "numerator": 0,
+      "denominator": 12,
+      "ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    "rows": 12,
+    "unique_questions": 4,
+    "method": "fixed native/existing preference-question subset; original GLM answer correctness against preference gold, not proof of causal memory use",
+    "baseline": "same questions no-memory/full-context/naive-vector/system",
+    "limitation": "small dev subset; no new question selection, gold or preference tags; no general personalization claim"
+  },
+  "chinese_queries_v2/direct/system": {
+    "estimate": {
+      "value": 0.08333333333333333,
+      "n": 4,
+      "numerator": 1,
+      "denominator": 12,
+      "ci95": [
+        0.0,
+        0.25
+      ]
+    },
+    "rows": 12,
+    "unique_questions": 4,
+    "method": "fixed native/existing preference-question subset; original GLM answer correctness against preference gold, not proof of causal memory use",
+    "baseline": "same questions no-memory/full-context/naive-vector/system",
+    "limitation": "small dev subset; no new question selection, gold or preference tags; no general personalization claim"
+  },
+  "chinese_queries_v2/full/full-context": {
+    "estimate": {
+      "value": 0.25,
+      "n": 4,
+      "numerator": 3,
+      "denominator": 12,
+      "ci95": [
+        0.0,
+        0.75
+      ]
+    },
+    "rows": 12,
+    "unique_questions": 4,
+    "method": "fixed native/existing preference-question subset; original GLM answer correctness against preference gold, not proof of causal memory use",
+    "baseline": "same questions no-memory/full-context/naive-vector/system",
+    "limitation": "small dev subset; no new question selection, gold or preference tags; no general personalization claim"
+  },
+  "chinese_queries_v2/full/naive-vector": {
+    "estimate": {
+      "value": 0.16666666666666666,
+      "n": 4,
+      "numerator": 2,
+      "denominator": 12,
+      "ci95": [
+        0.0,
+        0.5
+      ]
+    },
+    "rows": 12,
+    "unique_questions": 4,
+    "method": "fixed native/existing preference-question subset; original GLM answer correctness against preference gold, not proof of causal memory use",
+    "baseline": "same questions no-memory/full-context/naive-vector/system",
+    "limitation": "small dev subset; no new question selection, gold or preference tags; no general personalization claim"
+  },
+  "chinese_queries_v2/full/no-memory": {
+    "estimate": {
+      "value": 0.0,
+      "n": 4,
+      "numerator": 0,
+      "denominator": 12,
+      "ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    "rows": 12,
+    "unique_questions": 4,
+    "method": "fixed native/existing preference-question subset; original GLM answer correctness against preference gold, not proof of causal memory use",
+    "baseline": "same questions no-memory/full-context/naive-vector/system",
+    "limitation": "small dev subset; no new question selection, gold or preference tags; no general personalization claim"
+  },
+  "chinese_queries_v2/full/system": {
+    "estimate": {
+      "value": 0.0,
+      "n": 4,
+      "numerator": 0,
+      "denominator": 12,
+      "ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    "rows": 12,
+    "unique_questions": 4,
+    "method": "fixed native/existing preference-question subset; original GLM answer correctness against preference gold, not proof of causal memory use",
+    "baseline": "same questions no-memory/full-context/naive-vector/system",
+    "limitation": "small dev subset; no new question selection, gold or preference tags; no general personalization claim"
+  },
+  "longmemeval_oracle/direct/full-context": {
+    "estimate": {
+      "value": 1.0,
+      "n": 1,
+      "numerator": 3,
+      "denominator": 3,
+      "ci95": [
+        1.0,
+        1.0
+      ]
+    },
+    "rows": 3,
+    "unique_questions": 1,
+    "method": "fixed native/existing preference-question subset; original GLM answer correctness against preference gold, not proof of causal memory use",
+    "baseline": "same questions no-memory/full-context/naive-vector/system",
+    "limitation": "small dev subset; no new question selection, gold or preference tags; no general personalization claim"
+  },
+  "longmemeval_oracle/direct/naive-vector": {
+    "estimate": {
+      "value": 1.0,
+      "n": 1,
+      "numerator": 3,
+      "denominator": 3,
+      "ci95": [
+        1.0,
+        1.0
+      ]
+    },
+    "rows": 3,
+    "unique_questions": 1,
+    "method": "fixed native/existing preference-question subset; original GLM answer correctness against preference gold, not proof of causal memory use",
+    "baseline": "same questions no-memory/full-context/naive-vector/system",
+    "limitation": "small dev subset; no new question selection, gold or preference tags; no general personalization claim"
+  },
+  "longmemeval_oracle/direct/no-memory": {
+    "estimate": {
+      "value": 0.0,
+      "n": 1,
+      "numerator": 0,
+      "denominator": 3,
+      "ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    "rows": 3,
+    "unique_questions": 1,
+    "method": "fixed native/existing preference-question subset; original GLM answer correctness against preference gold, not proof of causal memory use",
+    "baseline": "same questions no-memory/full-context/naive-vector/system",
+    "limitation": "small dev subset; no new question selection, gold or preference tags; no general personalization claim"
+  },
+  "longmemeval_oracle/direct/system": {
+    "estimate": {
+      "value": 0.0,
+      "n": 1,
+      "numerator": 0,
+      "denominator": 3,
+      "ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    "rows": 3,
+    "unique_questions": 1,
+    "method": "fixed native/existing preference-question subset; original GLM answer correctness against preference gold, not proof of causal memory use",
+    "baseline": "same questions no-memory/full-context/naive-vector/system",
+    "limitation": "small dev subset; no new question selection, gold or preference tags; no general personalization claim"
+  },
+  "longmemeval_oracle/full/full-context": {
+    "estimate": {
+      "value": 1.0,
+      "n": 1,
+      "numerator": 3,
+      "denominator": 3,
+      "ci95": [
+        1.0,
+        1.0
+      ]
+    },
+    "rows": 3,
+    "unique_questions": 1,
+    "method": "fixed native/existing preference-question subset; original GLM answer correctness against preference gold, not proof of causal memory use",
+    "baseline": "same questions no-memory/full-context/naive-vector/system",
+    "limitation": "small dev subset; no new question selection, gold or preference tags; no general personalization claim"
+  },
+  "longmemeval_oracle/full/naive-vector": {
+    "estimate": {
+      "value": 1.0,
+      "n": 1,
+      "numerator": 3,
+      "denominator": 3,
+      "ci95": [
+        1.0,
+        1.0
+      ]
+    },
+    "rows": 3,
+    "unique_questions": 1,
+    "method": "fixed native/existing preference-question subset; original GLM answer correctness against preference gold, not proof of causal memory use",
+    "baseline": "same questions no-memory/full-context/naive-vector/system",
+    "limitation": "small dev subset; no new question selection, gold or preference tags; no general personalization claim"
+  },
+  "longmemeval_oracle/full/no-memory": {
+    "estimate": {
+      "value": 0.0,
+      "n": 1,
+      "numerator": 0,
+      "denominator": 3,
+      "ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    "rows": 3,
+    "unique_questions": 1,
+    "method": "fixed native/existing preference-question subset; original GLM answer correctness against preference gold, not proof of causal memory use",
+    "baseline": "same questions no-memory/full-context/naive-vector/system",
+    "limitation": "small dev subset; no new question selection, gold or preference tags; no general personalization claim"
+  },
+  "longmemeval_oracle/full/system": {
+    "estimate": {
+      "value": 0.0,
+      "n": 1,
+      "numerator": 0,
+      "denominator": 3,
+      "ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    "rows": 3,
+    "unique_questions": 1,
+    "method": "fixed native/existing preference-question subset; original GLM answer correctness against preference gold, not proof of causal memory use",
+    "baseline": "same questions no-memory/full-context/naive-vector/system",
+    "limitation": "small dev subset; no new question selection, gold or preference tags; no general personalization claim"
+  }
+}

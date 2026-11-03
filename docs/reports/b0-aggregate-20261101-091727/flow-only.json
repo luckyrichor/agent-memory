@@ -1,0 +1,450 @@
+{
+  "longmemeval_oracle/direct/no-memory": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "longmemeval_oracle/direct/full-context": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "longmemeval_oracle/direct/naive-vector": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "longmemeval_oracle/direct/system": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "longmemeval_oracle/full/no-memory": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "longmemeval_oracle/full/full-context": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "longmemeval_oracle/full/naive-vector": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "longmemeval_oracle/full/system": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "locomo/direct/no-memory": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "locomo/direct/full-context": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "locomo/direct/naive-vector": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "locomo/direct/system": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "locomo/full/no-memory": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "locomo/full/full-context": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "locomo/full/naive-vector": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "locomo/full/system": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "perltqa_zh/direct/no-memory": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "perltqa_zh/direct/full-context": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "perltqa_zh/direct/naive-vector": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "perltqa_zh/direct/system": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "perltqa_zh/full/no-memory": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "perltqa_zh/full/full-context": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "perltqa_zh/full/naive-vector": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "perltqa_zh/full/system": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "chinese_queries_v2/direct/no-memory": {
+    "status": "流程验证，不作质量证据",
+    "types": {
+      "temporal-reasoning": {
+        "value": 0.0,
+        "n": 4,
+        "numerator": 0.0,
+        "denominator": 12.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "multi-session": {
+        "value": 0.0,
+        "n": 4,
+        "numerator": 0.0,
+        "denominator": 12.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "knowledge-update": {
+        "value": 0.0,
+        "n": 4,
+        "numerator": 0.0,
+        "denominator": 12.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "rows": 36
+  },
+  "chinese_queries_v2/direct/full-context": {
+    "status": "流程验证，不作质量证据",
+    "types": {
+      "temporal-reasoning": {
+        "value": 1.0,
+        "n": 4,
+        "numerator": 12.0,
+        "denominator": 12.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "multi-session": {
+        "value": 1.0,
+        "n": 4,
+        "numerator": 12.0,
+        "denominator": 12.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "knowledge-update": {
+        "value": 1.0,
+        "n": 4,
+        "numerator": 12.0,
+        "denominator": 12.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      }
+    },
+    "rows": 36
+  },
+  "chinese_queries_v2/direct/naive-vector": {
+    "status": "流程验证，不作质量证据",
+    "types": {
+      "temporal-reasoning": {
+        "value": 1.0,
+        "n": 4,
+        "numerator": 12.0,
+        "denominator": 12.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "multi-session": {
+        "value": 1.0,
+        "n": 4,
+        "numerator": 12.0,
+        "denominator": 12.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "knowledge-update": {
+        "value": 1.0,
+        "n": 4,
+        "numerator": 12.0,
+        "denominator": 12.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      }
+    },
+    "rows": 36
+  },
+  "chinese_queries_v2/direct/system": {
+    "status": "流程验证，不作质量证据",
+    "types": {
+      "temporal-reasoning": {
+        "value": 0.08333333333333333,
+        "n": 4,
+        "numerator": 1.0,
+        "denominator": 12.0,
+        "ci95": [
+          0.0,
+          0.25
+        ]
+      },
+      "multi-session": {
+        "value": 0.8333333333333334,
+        "n": 4,
+        "numerator": 10.0,
+        "denominator": 12.0,
+        "ci95": [
+          0.6666666666666666,
+          1.0
+        ]
+      },
+      "knowledge-update": {
+        "value": 1.0,
+        "n": 4,
+        "numerator": 12.0,
+        "denominator": 12.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      }
+    },
+    "rows": 36
+  },
+  "chinese_queries_v2/full/no-memory": {
+    "status": "流程验证，不作质量证据",
+    "types": {
+      "temporal-reasoning": {
+        "value": 0.0,
+        "n": 4,
+        "numerator": 0.0,
+        "denominator": 12.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "multi-session": {
+        "value": 0.0,
+        "n": 4,
+        "numerator": 0.0,
+        "denominator": 12.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "knowledge-update": {
+        "value": 0.0,
+        "n": 4,
+        "numerator": 0.0,
+        "denominator": 12.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "rows": 36
+  },
+  "chinese_queries_v2/full/full-context": {
+    "status": "流程验证，不作质量证据",
+    "types": {
+      "temporal-reasoning": {
+        "value": 1.0,
+        "n": 4,
+        "numerator": 12.0,
+        "denominator": 12.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "multi-session": {
+        "value": 1.0,
+        "n": 4,
+        "numerator": 12.0,
+        "denominator": 12.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "knowledge-update": {
+        "value": 1.0,
+        "n": 4,
+        "numerator": 12.0,
+        "denominator": 12.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      }
+    },
+    "rows": 36
+  },
+  "chinese_queries_v2/full/naive-vector": {
+    "status": "流程验证，不作质量证据",
+    "types": {
+      "temporal-reasoning": {
+        "value": 0.0,
+        "n": 4,
+        "numerator": 0.0,
+        "denominator": 12.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "multi-session": {
+        "value": 1.0,
+        "n": 4,
+        "numerator": 12.0,
+        "denominator": 12.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "knowledge-update": {
+        "value": 1.0,
+        "n": 4,
+        "numerator": 12.0,
+        "denominator": 12.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      }
+    },
+    "rows": 36
+  },
+  "chinese_queries_v2/full/system": {
+    "status": "流程验证，不作质量证据",
+    "types": {
+      "temporal-reasoning": {
+        "value": 0.0,
+        "n": 4,
+        "numerator": 0.0,
+        "denominator": 12.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "multi-session": {
+        "value": 0.0,
+        "n": 4,
+        "numerator": 0.0,
+        "denominator": 12.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "knowledge-update": {
+        "value": 0.0,
+        "n": 4,
+        "numerator": 0.0,
+        "denominator": 12.0,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "rows": 36
+  },
+  "longmemeval_s/direct/no-memory": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "longmemeval_s/direct/full-context": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "longmemeval_s/direct/naive-vector": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "longmemeval_s/direct/system": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "longmemeval_s/full/no-memory": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "longmemeval_s/full/full-context": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "longmemeval_s/full/naive-vector": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  },
+  "longmemeval_s/full/system": {
+    "status": "流程验证，不作质量证据",
+    "types": {},
+    "rows": 0
+  }
+}

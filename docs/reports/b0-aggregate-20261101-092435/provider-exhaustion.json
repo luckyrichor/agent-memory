@@ -1,0 +1,54 @@
+{
+  "scenario": "F3_persistent_failure",
+  "observations": [
+    {
+      "repeat": 1,
+      "http_status": 503,
+      "http_attempts": 5,
+      "outcomes": [
+        "retry_wait",
+        "retry_wait",
+        "retry_wait",
+        "retry_wait",
+        "dead"
+      ],
+      "final_status": "dead",
+      "attempts": 5,
+      "seconds": 30.546028976794332
+    },
+    {
+      "repeat": 2,
+      "http_status": 503,
+      "http_attempts": 5,
+      "outcomes": [
+        "retry_wait",
+        "retry_wait",
+        "retry_wait",
+        "retry_wait",
+        "dead"
+      ],
+      "final_status": "dead",
+      "attempts": 5,
+      "seconds": 30.536955662071705
+    },
+    {
+      "repeat": 3,
+      "http_status": 503,
+      "http_attempts": 5,
+      "outcomes": [
+        "retry_wait",
+        "retry_wait",
+        "retry_wait",
+        "retry_wait",
+        "dead"
+      ],
+      "final_status": "dead",
+      "attempts": 5,
+      "seconds": 30.519874321762472
+    }
+  ],
+  "passed": true,
+  "external_model_calls": 0,
+  "method": "Actual loopback HTTP503 on every attempt, native max_attempts5 and real database backoff, three repetitions; no SQL job status/time edits.",
+  "limitation": "Search-degradation response semantics remain separate; dead-letter correctness does not prove all F3 requirements."
+}

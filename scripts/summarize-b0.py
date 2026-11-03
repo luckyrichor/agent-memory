@@ -1,5 +1,5 @@
 """Aggregate private B0 evidence. Missing adapters/labels never become zero scores."""
-import argparse,json,hashlib,re,subprocess
+import argparse,json,hashlib,re,subprocess,sys
 from collections import defaultdict,Counter
 from datetime import datetime
 from pathlib import Path
@@ -7,6 +7,7 @@ from zoneinfo import ZoneInfo
 
 from agent_memory.evals.metrics import ratio,latency
 from agent_memory.evals.b0 import clustered_paired
+from agent_memory.evals.b0_frozen import BIAS,is_frozen
 
 
 def load(path):return json.loads(Path(path).read_text())
@@ -14,6 +15,11 @@ def rows(path):
  if not path.exists():return []
  with path.open() as stream:return [json.loads(s) for s in stream if s.strip()]
 def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+def controls_for_run(root,config,historical=Path('docs/baselines/b0/correctness-observations-v2.json')):
+ source=root/'correctness-observations.json' if is_frozen(config) else historical
+ return load(source) if source.exists() else {'status':'not_measured','reason':'current run correctness observations missing; no historical B0 adoption'}
+
+
 def clustered(records,name):
  values=defaultdict(list)
  for row,numerator,denominator in records:values[row['conversation_id']].append((numerator,denominator))
@@ -92,6 +98,7 @@ def main():
  for r in graded:
   if r.get('judge_correct') is False or not r.get('answer_valid'):
    reason='invalid_model_output' if not r.get('answer_valid') else ('no_usable_full_chain_memory' if r['mode']=='full' and r['system']=='system' and not r['ranked_evidence_sets'] else ('retrieval_miss' if r['system'] in ('system','naive-vector') and r.get('retrieval',{}).get('10',{}).get('RT1')==0 else ('no_history_baseline_mismatch' if r['system']=='no-memory' else 'answer_mismatch_despite_context_pending_human_calibration')))
+   if r['mode']=='full' and r['system']=='system' and r.get('retrieval_diagnosis'):reason=r['retrieval_diagnosis']['primary_cause']
    failures.append({'id':r['row_id'],'dataset':r['dataset'],'mode':r['mode'],'system':r['system'],'type':r['category'],'reason':reason,'private_source':str(root/'graded-results-private.json'),'flow_only':r['flow_only']})
  used={metric.split('@')[0] for table in measures.values() for metric in table['values']}
  metric_status=[]
@@ -116,16 +123,34 @@ def main():
  imported=defaultdict(list)
  for row in imports:imported[(row['dataset'],row['mode'],row['repeat'])].append(row)
  import_summary=[{'dataset':k[0],'mode':k[1],'repeat':k[2],'conversations':len(v),'source_documents':sum(r['source_documents'] for r in v),'memories':sum(r['memories'] for r in v),'active_memories':sum(r['active_memories'] for r in v),'rejected_chunks':sum(len(r['rejected']) for r in v),'extraction_jobs':sum(sum(x['outcome']!='no_job' for x in r['extraction_outcomes']) for r in v),'extraction_failure_or_fallback_jobs':sum(sum(x['outcome']!='no_job' and x['extractor_last_failure']!='NONE' for x in r['extraction_outcomes']) for r in v)} for k,v in imported.items()]
- controls=load('docs/baselines/b0/correctness-observations-v2.json')
- report={'created_beijing':datetime.now(ZoneInfo('Asia/Shanghai')).isoformat(),'summary_generator_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'run_manifest':manifest,'execution_status':status,'phase2_accepted':False,'formal_quality_scores_allowed':False,'plan':load(load('docs/evals/b0-current.json').get('policy','docs/evals/b0-policy-v4.json')),'data':source,'measurements':measures,'by_type':by_type,'paired_comparisons':comparisons,'full_minus_direct':mode_gaps,'worst_types':worst_types,'flow_only':flows,'invalid_results':invalid,'repeated_three_range':repeat_ranges,'failure_cases':failures[:20],'failure_count':len(failures),'failure_reason_counts':dict(Counter(r['reason'] for r in failures)),'extraction_failure_rates_EX8':extraction_failures,'resources':costs,'imports':import_summary,'correctness_controls':controls,'metric_coverage':metric_status,'calibration_private_csv_exists':(root/'calibration-300-private.csv').exists(),'calibration_rows':300 if (root/'calibration-300-private.csv').exists() else 0,'human_calibration_received':False,'performance_measured':False,'stage3_started':False,'model_mixture':{'owner_authorization':manifest['config'].get('family_continuation_authorization'),'actual_answer_model_counts':dict(Counter(r.get('answer_model') for r in graded)),'actual_judge_model_counts':dict(Counter(r.get('judge_model') for r in graded)),'limitation':'same-family version mixtures are owner-authorized, not a single exact-model experiment; calibration pending for the actual grading mixture; mode differences with model changes remain non-comparable'},'remaining':['owner judge calibration if private sheet available','unmeasured metric observation adapters/required labels; no invented zeros','independent load host and PF measurements','full-context over-limit truncation and context tokenizer validation','complete phase2 review and acceptance']}
+ controls=controls_for_run(root,manifest['config'])
+ chain=defaultdict(lambda:defaultdict(int))
+ for entry in imports:
+  if entry['mode']!='full':continue
+  for field in ('memories','active_memories','evidence_mapping_present','stored_current_model_vectors'):
+   if field in entry:chain[entry['dataset']][field]+=entry[field]
+  chain[entry['dataset']]['conversation_mode_repeat_units']+=1
+ for row in graded:
+  if row['mode']=='full' and row['system']=='system' and row.get('retrieval_diagnosis'):chain[row['dataset']]['cause/'+row['retrieval_diagnosis']['primary_cause']]+=1
+ report={'created_beijing':datetime.now(ZoneInfo('Asia/Shanghai')).isoformat(),'summary_generator_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'run_manifest':manifest,'execution_status':status,'baseline_configuration_id':manifest['config'].get('baseline_configuration_id'),'classification':'new B0 configuration, calibration pending' if is_frozen(manifest['config']) else '探索性，不计入 B0','bias_limitation':BIAS if is_frozen(manifest['config']) else None,'O10_status':'not measured: Ark has no quota; old data exploratory and not a controlled comparator; Tencent-only rebuild, no claim Tencent is better','phase2_accepted':False,'formal_quality_scores_allowed':False,'plan':load(load('docs/evals/b0-current.json').get('policy','docs/evals/b0-policy-v4.json')),'data':source,'measurements':measures,'by_type':by_type,'paired_comparisons':comparisons,'full_minus_direct':mode_gaps,'worst_types':worst_types,'flow_only':flows,'invalid_results':invalid,'repeated_three_range':repeat_ranges,'failure_cases':failures[:20],'failure_count':len(failures),'failure_reason_counts':dict(Counter(r['reason'] for r in failures)),'extraction_failure_rates_EX8':extraction_failures,'resources':costs,'imports':import_summary,'correctness_controls':controls,'fullchain_diagnosis':{k:dict(v) for k,v in chain.items()},'metric_coverage':metric_status,'calibration_private_csv_exists':(root/'calibration-300-private.csv').exists(),'calibration_rows':300 if (root/'calibration-300-private.csv').exists() else 0,'human_calibration_received':False,'performance_measured':False,'stage3_started':False,'model_mixture':{'owner_authorization':manifest['config'].get('family_continuation_authorization'),'actual_answer_model_counts':dict(Counter(r.get('answer_model') for r in graded)),'actual_judge_model_counts':dict(Counter(r.get('judge_model') for r in graded)),'limitation':('strict single DeepSeek request/observed model; all prior answers and vectors excluded; new human calibration pending' if is_frozen(manifest['config']) else 'same-family version mixtures are owner-authorized, not a single exact-model experiment; calibration pending for the actual grading mixture; mode differences with model changes remain non-comparable')},'remaining':['owner judge calibration if private sheet available','unmeasured metric observation adapters/required labels; no invented zeros','independent load host and PF measurements','full-context over-limit truncation and context tokenizer validation','complete phase2 review and acceptance']}
+ audit_path=Path('docs/reports/phase2-b0-rebuild-2026-10-26/candidate-confirmation-audit.json')
+ if is_frozen(manifest['config']) and audit_path.exists():
+  report['candidate_confirmation_audit']=load(audit_path)
  out.mkdir(parents=True,exist_ok=True);(out/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
- text=['# 阶段2 B0测量进展（非完成报告）','',f"源码B0：{manifest.get('runtime_application_file')}；运行提交 {manifest['harness_commit']}；生成器提交 {report['summary_generator_commit']}。",f"状态：{status['status']}；阶段2未验收，阶段3未开始。",'', '## 型号与续跑口径','',json.dumps(report['model_mixture'],ensure_ascii=False),'','## 方案与数据','', '最新版方案与逐条出入见 report.json.plan；B0标签未覆盖。所有输入为冻结开发集投影，测试集未运行。756个记忆点和828个可分类会话是阶段1全局混合来源规模，不冒充开发集分母。所有原文、答案和裁判原判仅服务器私有；本报告只放聚合指标和失败ID。','', '## 指标与对比（均为校准前诊断）','', '| 数据/模式/系统 | 指标 | 值 | 分母 | 会话数 | 95% CI |','| --- | --- | --- | --- | --- | --- |']
+ text=['# 阶段2 B0测量进展（非完成报告）','',f"源码B0：{manifest.get('runtime_application_file')}；运行提交 {manifest['harness_commit']}；生成器提交 {report['summary_generator_commit']}。",f"状态：{status['status']}；阶段2未验收，阶段3未开始。",'', '## 新配置与局限','',str(report['classification']),str(report['bias_limitation'] or ''),str(report['O10_status']),'','## 型号与续跑口径','',json.dumps(report['model_mixture'],ensure_ascii=False),'','## 方案与数据','', '最新版方案与逐条出入见 report.json.plan；B0标签未覆盖。所有输入为冻结开发集投影，测试集未运行。756个记忆点和828个可分类会话是阶段1全局混合来源规模，不冒充开发集分母。所有原文、答案和裁判原判仅服务器私有；本报告只放聚合指标和失败ID。','', '## 指标与对比（均为校准前诊断）','', '| 数据/模式/系统 | 指标 | 值 | 分母 | 会话数 | 95% CI |','| --- | --- | --- | --- | --- | --- |']
  for key,table in measures.items():
   for mid,value in table['values'].items():text.append(f"| {key} | {mid} | {value['value']} | {value['denominator']} | {value['n']} | {value['ci95']} |")
  text+=['','## 三次重复与分题型','', '逐表三次独立调用波动、分题型及配对差异见report.json；缺少三次时不声称重复完成。三类构造题在flow_only单列“流程验证，不作质量证据”，不计入真实中文汇总；本报告也不做跨数据集混合总分。', '', '## 失败案例','',f"当前失败/无效 {len(failures)} 条，列出 {min(20,len(failures))} 个真实失败ID；不足20时不凑数。"]
  text += [f"- {r['id']}：{r['dataset']}/{r['mode']}/{r['system']}，{r['reason']}" for r in failures[:20]]
  text+=['','## 正确性小样与已知不足','', '独立非属主PostgreSQL、冻结B0公开API的程序构造控制结果见correctness_controls；不称真实用户或生产数据。LC5非法状态矩阵穷举；RL1/RL2/SC1/SC3为固定三轮控制，不能外推所有对抗输入。LC7已知逻辑删除边界实测仍保留正文版本，不能声称删除完整性通过；未优化或偷偷清理被测对象。','', '## 用量与局限','',f"新HTTP尝试 {sum(r['post_attempts'] for r in costs.values())} 次；含重放台账 {len(usage)} 条。各角色token、未知usage及延迟见resources；完整每次输入输出仅私有。成本未折算，不查询余额、不充值。校准表当前存在：{report['calibration_private_csv_exists']}，人工结果未收到。", '裁判技术预检不代表人工校准。无效输出单列，不默认对/错；问答绝对值不与论文GPT4o口径等同。公开基准训练污染未确认。ECD客服领域不代表一般对话；现有中文查询参考的来源/审批范围如实保留。','', '## 全指标缺口与下一步','', 'EX、LC、RT、CX、E、RL、SC、PF全部目录逐项在metric_coverage列出。没有适配器、确认标签或真实观测的指标保留null/n=0/CI=null，绝不拿0冒充通过；已有观测在measurements或correctness_controls另列。当前尚不是B0全指标完成报告。', '公网PF尚未运行，等待独立压测机；准备说明已发负责人。校准私有表导出后交负责人人工判定并暂停；未校准主备不得进入正式结果，不进入阶段3。']
+ if report.get('candidate_confirmation_audit'):
+  audit=report['candidate_confirmation_audit']
+  text+=['','## 候选确认公开路径核查','',audit['defect_id']+'：'+audit['conclusion'],audit['public_restore'],audit['explicit_write'],'确认后测量：未实施/不适用（缺少正式路径），值为null；不直接修改候选状态。当前全链路仍是候选不激活的原始B0测量。']
  (out/'delivery.md').write_text('\n'.join(text)+'\n')
+ if is_frozen(manifest['config']):
+  recorded=subprocess.run([sys.executable,'scripts/record-frozen-b0-handoff.py','--report',str(out/'report.json')],check=False)
+  if recorded.returncode:
+   with (out/'delivery.md').open('a') as stream:stream.write('\n本地AGENTS/开发记录收尾同步失败，需补写；原始测量结果仍保留。\n')
  print(json.dumps({'status':status['status'],'graded_rows':len(graded),'raw_prepared_rows':len(raw),'model_records_including_replays':len(usage),'new_http_attempts':sum(r['post_attempts'] for r in costs.values()),'calibration_rows':report['calibration_rows']}))
 
 if __name__=='__main__':main()

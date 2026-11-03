@@ -1,0 +1,56 @@
+{
+  "longmemeval_oracle": {
+    "memories": 258,
+    "active_memories": 0,
+    "evidence_mapping_present": 258,
+    "stored_current_model_vectors": 258,
+    "conversation_mode_repeat_units": 15,
+    "cause/filtered_nonactive": 15
+  },
+  "locomo": {
+    "memories": 876,
+    "active_memories": 0,
+    "evidence_mapping_present": 876,
+    "stored_current_model_vectors": 876,
+    "conversation_mode_repeat_units": 3,
+    "cause/filtered_nonactive": 30
+  },
+  "perltqa_zh": {
+    "memories": 426,
+    "active_memories": 0,
+    "evidence_mapping_present": 426,
+    "stored_current_model_vectors": 426,
+    "conversation_mode_repeat_units": 9,
+    "cause/filtered_nonactive": 90
+  },
+  "chinese_queries_v2": {
+    "memories": 66,
+    "active_memories": 0,
+    "evidence_mapping_present": 66,
+    "stored_current_model_vectors": 66,
+    "conversation_mode_repeat_units": 30,
+    "cause/filtered_nonactive": 54
+  },
+  "dulemon_gold": {
+    "memories": 43,
+    "active_memories": 0,
+    "evidence_mapping_present": 43,
+    "stored_current_model_vectors": 43,
+    "conversation_mode_repeat_units": 24
+  },
+  "ecd_negative": {
+    "memories": 37,
+    "active_memories": 0,
+    "evidence_mapping_present": 37,
+    "stored_current_model_vectors": 37,
+    "conversation_mode_repeat_units": 24
+  },
+  "longmemeval_s": {
+    "memories": 3485,
+    "active_memories": 0,
+    "evidence_mapping_present": 3485,
+    "stored_current_model_vectors": 3485,
+    "conversation_mode_repeat_units": 6,
+    "cause/filtered_nonactive": 6
+  }
+}

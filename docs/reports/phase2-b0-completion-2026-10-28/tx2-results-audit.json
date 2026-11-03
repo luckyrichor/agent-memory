@@ -1,0 +1,143 @@
+{
+  "source_report_sha256": "b9e214e2f16afdd5324d95de0def8fbbf1b82020bdb705df18c4814025e31393",
+  "groups": [
+    {
+      "size": 10000,
+      "repeats": 3,
+      "measured_requests": 867,
+      "measured_errors": 557,
+      "error_fraction": 0.6424452133794695,
+      "per_repeat_error_fractions": [
+        0.671280276816609,
+        0.671280276816609,
+        0.5847750865051903
+      ],
+      "error_fraction_ci95_repeat_bootstrap": [
+        0.603517877739331,
+        0.671280276816609
+      ],
+      "mean_per_repeat_client_p95_ms": 30000.515986133334,
+      "mean_per_repeat_p95_ci95_repeat_bootstrap_ms": [
+        30000.464557643336,
+        30000.57439962
+      ],
+      "dropped_arrivals_including_warmup": 33,
+      "all_load_host_resources_valid": true,
+      "capacity_acceptance_pass": false,
+      "observed_server_statuses_including_warmup_and_shutdown": {
+        "200": 542,
+        "500": 507
+      },
+      "observed_error_string_counts_including_shutdown": {
+        "QueuePool limit": 471,
+        "QueryCanceled": 72,
+        "DiskFull": 0,
+        "OutOfMemory": 0
+      },
+      "mean_recorded_sql_category_ms_including_warmup_and_shutdown": {
+        "other_sql": 2.2321680236839816,
+        "lexical_sql": 19965.500835915016,
+        "vector_sql": 417.33452044100915,
+        "structured_sql": 64.60218060490197
+      }
+    },
+    {
+      "size": 100000,
+      "repeats": 3,
+      "measured_requests": 888,
+      "measured_errors": 869,
+      "error_fraction": 0.9786036036036037,
+      "per_repeat_error_fractions": [
+        0.9898648648648649,
+        0.9695945945945946,
+        0.9763513513513513
+      ],
+      "error_fraction_ci95_repeat_bootstrap": [
+        0.9710585585585586,
+        0.986936936936937
+      ],
+      "mean_per_repeat_client_p95_ms": 29991.842662916664,
+      "mean_per_repeat_p95_ci95_repeat_bootstrap_ms": [
+        29991.725204141665,
+        29991.9535274
+      ],
+      "dropped_arrivals_including_warmup": 33,
+      "all_load_host_resources_valid": true,
+      "capacity_acceptance_pass": false,
+      "observed_server_statuses_including_warmup_and_shutdown": {
+        "200": 244,
+        "500": 805
+      },
+      "observed_error_string_counts_including_shutdown": {
+        "QueuePool limit": 778,
+        "QueryCanceled": 54,
+        "DiskFull": 0,
+        "OutOfMemory": 0
+      },
+      "mean_recorded_sql_category_ms_including_warmup_and_shutdown": {
+        "other_sql": 4.849913401178658,
+        "lexical_sql": 59274.01905665136,
+        "vector_sql": 5901.394631541869,
+        "structured_sql": 626.1886926825906
+      }
+    }
+  ],
+  "log_audits": [
+    {
+      "artifact": "tx2-10k-r1-app-private.log",
+      "bytes": 1841072,
+      "sha256": "8a1194e4a745940d72b0dfaee92f0ef05760b204ddcbaf0d2ef8e44ca870f572",
+      "complete_fictional_body_occurrences": 13,
+      "credential_occurrences": 0
+    },
+    {
+      "artifact": "tx2-10k-r2-app-private.log",
+      "bytes": 1790415,
+      "sha256": "c7f6cead57c9d583b736bd07102d225cca012f191ea80a34c80c56f0e6c1da73",
+      "complete_fictional_body_occurrences": 11,
+      "credential_occurrences": 0
+    },
+    {
+      "artifact": "tx2-10k-r3-app-private.log",
+      "bytes": 1486391,
+      "sha256": "f5a8629cd2c8f08ccde106a2342630e831396a26fbbc3011ce2144b7afe43cd9",
+      "complete_fictional_body_occurrences": 11,
+      "credential_occurrences": 0
+    },
+    {
+      "artifact": "tx2-100k-r1-app-private.log",
+      "bytes": 2681094,
+      "sha256": "41f3c4c402df5c1ac2e34219236ec761da83e86ac2e0b2c52f49eb54552c0aad",
+      "complete_fictional_body_occurrences": 6,
+      "credential_occurrences": 0
+    },
+    {
+      "artifact": "tx2-100k-r2-app-private.log",
+      "bytes": 2674227,
+      "sha256": "8068dfae1084904d5f944ab8253bfcd03ace4cda2e10daab9868cade4cec2262",
+      "complete_fictional_body_occurrences": 11,
+      "credential_occurrences": 0
+    },
+    {
+      "artifact": "tx2-100k-r3-app-private.log",
+      "bytes": 2651449,
+      "sha256": "c576ee02109dd15f30fb58d17c8a4c0cd780760a73d19ed2beaa85ce46e94dc4",
+      "complete_fictional_body_occurrences": 6,
+      "credential_occurrences": 0
+    }
+  ],
+  "complete_body_log_occurrences": 58,
+  "credential_log_occurrences": 0,
+  "performance_pass": false,
+  "SC4_pass": false,
+  "phase2_accepted": false,
+  "uncertainty_method": "Exact27 resamples of3 independent API-process repeats with replacement; percentile95% interval. n=3 has low precision. Latency CI is the mean of per-repeat p95s, not a pooled per-request p95 CI.",
+  "interpretation": [
+    "Use error count/request count, not the k6 Counter rate field, for error fractions.",
+    "All six load-host resource checks pass, but every run dropped arrivals; no sustainable1QPS capacity claim.",
+    "Slow lexical SQL and pool exhaustion are observed; this is not proof of a single root cause or an optimization result.",
+    "Server status and SQL logs include warmup and shutdown; client timeout and later server response counts cannot be directly equated.",
+    "Canceled query exceptions during cleanup can serialize SQL parameters containing full fictional queries. This fails the body-log requirement even though no real user conversation was used.",
+    "Both machines are in ap-shanghai. Independent-host public ingress was tested; cross-region path was not."
+  ]
+}

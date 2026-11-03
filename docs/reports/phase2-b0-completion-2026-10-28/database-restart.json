@@ -1,0 +1,45 @@
+{
+  "scenario": "F1_partial",
+  "observations": [
+    {
+      "repeat": 1,
+      "confirmed_writes": 33,
+      "confirmed_present": 33,
+      "confirmed_missing": 0,
+      "status_counts": {
+        "transport_error": 12,
+        "201": 33,
+        "500": 6
+      },
+      "restart_to_ten_more_successful_writes_seconds": 2.3421586491167545,
+      "total_seconds": 4.342644624877721
+    },
+    {
+      "repeat": 2,
+      "confirmed_writes": 44,
+      "confirmed_present": 44,
+      "confirmed_missing": 0,
+      "status_counts": {
+        "201": 44,
+        "500": 4
+      },
+      "restart_to_ten_more_successful_writes_seconds": 2.217437549959868,
+      "total_seconds": 4.217881567776203
+    },
+    {
+      "repeat": 3,
+      "confirmed_writes": 43,
+      "confirmed_present": 43,
+      "confirmed_missing": 0,
+      "status_counts": {
+        "201": 43,
+        "500": 4
+      },
+      "restart_to_ten_more_successful_writes_seconds": 2.1582956947386265,
+      "total_seconds": 4.159099210053682
+    }
+  ],
+  "confirmed_write_loss": 0,
+  "limitation": "Actual API writes during three Docker database restarts and acknowledged-row verification. Recovery is ten additional successful writes, not p95 returning to baseline; explicit retryable error semantics must be assessed from actual status counts. Performance acceptance not inferred.",
+  "external_model_calls": 0
+}

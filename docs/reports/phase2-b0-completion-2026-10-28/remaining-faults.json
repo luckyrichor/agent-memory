@@ -1,0 +1,291 @@
+{
+  "baseline_commit": "1e9d6f3b25b58c85792344000d7e1b5a71a79737",
+  "external_vendor_calls": 0,
+  "observations": [
+    {
+      "scenario": "F12",
+      "repeat": 1,
+      "injected_application_clock_skew_seconds": -120,
+      "outcome": "succeeded",
+      "attempts": 1,
+      "passed": true,
+      "scope": "Worker now dependency offset; repository fencing uses database clock. Host OS clocks unchanged."
+    },
+    {
+      "scenario": "F12",
+      "repeat": 1,
+      "injected_application_clock_skew_seconds": 120,
+      "outcome": "succeeded",
+      "attempts": 1,
+      "passed": true,
+      "scope": "Worker now dependency offset; repository fencing uses database clock. Host OS clocks unchanged."
+    },
+    {
+      "scenario": "F12",
+      "repeat": 2,
+      "injected_application_clock_skew_seconds": -120,
+      "outcome": "succeeded",
+      "attempts": 1,
+      "passed": true,
+      "scope": "Worker now dependency offset; repository fencing uses database clock. Host OS clocks unchanged."
+    },
+    {
+      "scenario": "F12",
+      "repeat": 2,
+      "injected_application_clock_skew_seconds": 120,
+      "outcome": "succeeded",
+      "attempts": 1,
+      "passed": true,
+      "scope": "Worker now dependency offset; repository fencing uses database clock. Host OS clocks unchanged."
+    },
+    {
+      "scenario": "F12",
+      "repeat": 3,
+      "injected_application_clock_skew_seconds": -120,
+      "outcome": "succeeded",
+      "attempts": 1,
+      "passed": true,
+      "scope": "Worker now dependency offset; repository fencing uses database clock. Host OS clocks unchanged."
+    },
+    {
+      "scenario": "F12",
+      "repeat": 3,
+      "injected_application_clock_skew_seconds": 120,
+      "outcome": "succeeded",
+      "attempts": 1,
+      "passed": true,
+      "scope": "Worker now dependency offset; repository fencing uses database clock. Host OS clocks unchanged."
+    },
+    {
+      "scenario": "F6",
+      "repeat": 1,
+      "default_lease_seconds": 30,
+      "real_wait_seconds": 30.251993995159864,
+      "replacement": "succeeded",
+      "stale_vector_commit_rejected": true,
+      "passed": true
+    },
+    {
+      "scenario": "F6",
+      "repeat": 2,
+      "default_lease_seconds": 30,
+      "real_wait_seconds": 30.250429346226156,
+      "replacement": "succeeded",
+      "stale_vector_commit_rejected": true,
+      "passed": true
+    },
+    {
+      "scenario": "F6",
+      "repeat": 3,
+      "default_lease_seconds": 30,
+      "real_wait_seconds": 30.242261190898716,
+      "replacement": "succeeded",
+      "stale_vector_commit_rejected": true,
+      "passed": true
+    },
+    {
+      "scenario": "F3_search_degradation",
+      "repeat": 1,
+      "fixture_failure": 503,
+      "http": 200,
+      "vector_status": "degraded",
+      "channel_counts": {
+        "lexical": 20,
+        "vector": 0,
+        "structured": 20
+      },
+      "items": 10,
+      "target_at10": true,
+      "seconds": 0.12943926313892007,
+      "passed": null,
+      "valid_fault_injection": false,
+      "superseded_by": "search-degradation-verified.json",
+      "invalid_reason": "Initial fixture token absent; HTTP fault delivery was not proven. Use verified actual-receipt rerun only."
+    },
+    {
+      "scenario": "F3_search_degradation",
+      "repeat": 1,
+      "fixture_failure": 429,
+      "http": 200,
+      "vector_status": "degraded",
+      "channel_counts": {
+        "lexical": 20,
+        "vector": 0,
+        "structured": 20
+      },
+      "items": 10,
+      "target_at10": true,
+      "seconds": 0.07742127683013678,
+      "passed": null,
+      "valid_fault_injection": false,
+      "superseded_by": "search-degradation-verified.json",
+      "invalid_reason": "Initial fixture token absent; HTTP fault delivery was not proven. Use verified actual-receipt rerun only."
+    },
+    {
+      "scenario": "F3_search_degradation",
+      "repeat": 1,
+      "fixture_failure": "timeout",
+      "http": 200,
+      "vector_status": "degraded",
+      "channel_counts": {
+        "lexical": 20,
+        "vector": 0,
+        "structured": 20
+      },
+      "items": 10,
+      "target_at10": true,
+      "seconds": 0.07131582126021385,
+      "passed": null,
+      "valid_fault_injection": false,
+      "superseded_by": "search-degradation-verified.json",
+      "invalid_reason": "Initial fixture token absent; HTTP fault delivery was not proven. Use verified actual-receipt rerun only."
+    },
+    {
+      "scenario": "F3_search_degradation",
+      "repeat": 2,
+      "fixture_failure": 503,
+      "http": 200,
+      "vector_status": "degraded",
+      "channel_counts": {
+        "lexical": 20,
+        "vector": 0,
+        "structured": 20
+      },
+      "items": 10,
+      "target_at10": true,
+      "seconds": 0.0769471456296742,
+      "passed": null,
+      "valid_fault_injection": false,
+      "superseded_by": "search-degradation-verified.json",
+      "invalid_reason": "Initial fixture token absent; HTTP fault delivery was not proven. Use verified actual-receipt rerun only."
+    },
+    {
+      "scenario": "F3_search_degradation",
+      "repeat": 2,
+      "fixture_failure": 429,
+      "http": 200,
+      "vector_status": "degraded",
+      "channel_counts": {
+        "lexical": 20,
+        "vector": 0,
+        "structured": 20
+      },
+      "items": 10,
+      "target_at10": true,
+      "seconds": 0.07357156090438366,
+      "passed": null,
+      "valid_fault_injection": false,
+      "superseded_by": "search-degradation-verified.json",
+      "invalid_reason": "Initial fixture token absent; HTTP fault delivery was not proven. Use verified actual-receipt rerun only."
+    },
+    {
+      "scenario": "F3_search_degradation",
+      "repeat": 2,
+      "fixture_failure": "timeout",
+      "http": 200,
+      "vector_status": "degraded",
+      "channel_counts": {
+        "lexical": 20,
+        "vector": 0,
+        "structured": 20
+      },
+      "items": 10,
+      "target_at10": true,
+      "seconds": 0.07928314572200179,
+      "passed": null,
+      "valid_fault_injection": false,
+      "superseded_by": "search-degradation-verified.json",
+      "invalid_reason": "Initial fixture token absent; HTTP fault delivery was not proven. Use verified actual-receipt rerun only."
+    },
+    {
+      "scenario": "F3_search_degradation",
+      "repeat": 3,
+      "fixture_failure": 503,
+      "http": 200,
+      "vector_status": "degraded",
+      "channel_counts": {
+        "lexical": 20,
+        "vector": 0,
+        "structured": 20
+      },
+      "items": 10,
+      "target_at10": true,
+      "seconds": 0.07570097409188747,
+      "passed": null,
+      "valid_fault_injection": false,
+      "superseded_by": "search-degradation-verified.json",
+      "invalid_reason": "Initial fixture token absent; HTTP fault delivery was not proven. Use verified actual-receipt rerun only."
+    },
+    {
+      "scenario": "F3_search_degradation",
+      "repeat": 3,
+      "fixture_failure": 429,
+      "http": 200,
+      "vector_status": "degraded",
+      "channel_counts": {
+        "lexical": 20,
+        "vector": 0,
+        "structured": 20
+      },
+      "items": 10,
+      "target_at10": true,
+      "seconds": 0.07159443432465196,
+      "passed": null,
+      "valid_fault_injection": false,
+      "superseded_by": "search-degradation-verified.json",
+      "invalid_reason": "Initial fixture token absent; HTTP fault delivery was not proven. Use verified actual-receipt rerun only."
+    },
+    {
+      "scenario": "F3_search_degradation",
+      "repeat": 3,
+      "fixture_failure": "timeout",
+      "http": 200,
+      "vector_status": "degraded",
+      "channel_counts": {
+        "lexical": 20,
+        "vector": 0,
+        "structured": 20
+      },
+      "items": 10,
+      "target_at10": true,
+      "seconds": 0.07243364118039608,
+      "passed": null,
+      "valid_fault_injection": false,
+      "superseded_by": "search-degradation-verified.json",
+      "invalid_reason": "Initial fixture token absent; HTTP fault delivery was not proven. Use verified actual-receipt rerun only."
+    },
+    {
+      "scenario": "F2",
+      "repeat": 1,
+      "occupied_pool_connections": 15,
+      "http": 500,
+      "seconds": 30.032574637793005,
+      "independent_static_endpoint_http": 200,
+      "passed": false,
+      "criterion": "Record actual error/latency; unhandled500 and approximately30s pool wait do not satisfy quick explicit retryable failure."
+    },
+    {
+      "scenario": "F2",
+      "repeat": 2,
+      "occupied_pool_connections": 15,
+      "http": 500,
+      "seconds": 30.041063795331866,
+      "independent_static_endpoint_http": 200,
+      "passed": false,
+      "criterion": "Record actual error/latency; unhandled500 and approximately30s pool wait do not satisfy quick explicit retryable failure."
+    },
+    {
+      "scenario": "F2",
+      "repeat": 3,
+      "occupied_pool_connections": 15,
+      "http": 500,
+      "seconds": 30.047016794793308,
+      "independent_static_endpoint_http": 200,
+      "passed": false,
+      "criterion": "Record actual error/latency; unhandled500 and approximately30s pool wait do not satisfy quick explicit retryable failure."
+    }
+  ],
+  "phase2_accepted": false,
+  "method": "Fresh isolated clone; actual frozen API/worker/repository, real default leases and pool timeout; no SQL job state/time edits.",
+  "finished": true
+}

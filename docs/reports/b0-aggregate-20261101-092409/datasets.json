@@ -1,0 +1,79 @@
+{
+  "longmemeval_s": {
+    "sha256": "2333df04b08179c4e5faf33b6f795537a55391663de24c62523ae30b8a8452ba",
+    "data_level": "A: public benchmark; model-judged scores not comparable to official GPT4o scores",
+    "full_conversations": 500,
+    "dev_conversations": 150,
+    "dev_documents": 74049,
+    "dev_questions": 150,
+    "dev_memory_points": 0,
+    "dev_only": true,
+    "test_executed": false
+  },
+  "longmemeval_oracle": {
+    "sha256": "d584ee193cd972f2ed3d2efc5ce8d7bff23d73d1a75fb1ac4441e0ceb4c36037",
+    "data_level": "A: public benchmark; model-judged scores not comparable to official GPT4o scores",
+    "full_conversations": 500,
+    "dev_conversations": 150,
+    "dev_documents": 3191,
+    "dev_questions": 150,
+    "dev_memory_points": 0,
+    "dev_only": true,
+    "test_executed": false
+  },
+  "locomo": {
+    "sha256": "3827d2f4a087c549c15d38cdf35c6ff7d53359c784b33fdada589974b72a109e",
+    "data_level": "A: public benchmark; model-judged scores not comparable to official GPT4o scores",
+    "full_conversations": 10,
+    "dev_conversations": 3,
+    "dev_documents": 1973,
+    "dev_questions": 692,
+    "dev_memory_points": 0,
+    "dev_only": true,
+    "test_executed": false
+  },
+  "perltqa_zh": {
+    "sha256": "e650b3bd7150469d1992075a516338f81cf70ffa7eddf128f84f670cb6f1bf61",
+    "data_level": "A: public benchmark; model-judged scores not comparable to official GPT4o scores",
+    "full_conversations": 141,
+    "dev_conversations": 42,
+    "dev_documents": 2761,
+    "dev_questions": 2413,
+    "dev_memory_points": 0,
+    "dev_only": true,
+    "test_executed": false
+  },
+  "chinese_queries_v2": {
+    "sha256": "1d4b6314651436071d63dca3b18fd8fbb5222fa074f8c4d12b9afc3e5f9162f9",
+    "data_level": "B/C: frozen source provenance; constructed temporal/update/multi-session FLOW ONLY",
+    "full_conversations": 745,
+    "dev_conversations": 225,
+    "dev_documents": 3440,
+    "dev_questions": 672,
+    "dev_memory_points": 0,
+    "dev_only": true,
+    "test_executed": false
+  },
+  "dulemon_gold": {
+    "sha256": "112bb85573e5c2d09b48dad14af884c37206c9c6b782cc8743d7fdf276bae4ac",
+    "data_level": "B: AI candidates plus owner confirmation/audit-approved pools; not exhaustive human annotation",
+    "full_conversations": 533,
+    "dev_conversations": 158,
+    "dev_documents": 2574,
+    "dev_questions": 0,
+    "dev_memory_points": 220,
+    "dev_only": true,
+    "test_executed": false
+  },
+  "ecd_negative": {
+    "sha256": "f025b8715ab8a0895d58ba4e7d5b2228c7e6a539e11dab43cf754bab086021a3",
+    "data_level": "B: AI draft plus owner confirmation, customer service only",
+    "full_conversations": 282,
+    "dev_conversations": 80,
+    "dev_documents": 606,
+    "dev_questions": 0,
+    "dev_memory_points": 0,
+    "dev_only": true,
+    "test_executed": false
+  }
+}

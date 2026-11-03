@@ -7,6 +7,7 @@ from agent_memory.evals.b0 import measurement_signature,compatible_measurement,F
 from agent_memory.evals.b0_rotation import candidates,quota,vendor
 
 AUTH='om_x100b6280467a68a4c3cc0005fe78816'
+DEEPSEEK_AUTH='om_x100b62eb3a5868a4dfb71774cd2213a'
 
 def save(path,value):
  path.parent.mkdir(parents=True,exist_ok=True,mode=0o700);path.write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n');path.chmod(0o600)
@@ -32,15 +33,16 @@ def apply(config,role,provider,account,model):
 
 class Rotation:
  def __init__(self,root,config):
-  self.root=root;self.root.mkdir(parents=True,exist_ok=True,mode=0o700);self.unavailable=set();self.catalog=None;self.qualifications={}
+  self.root=root;self.root.mkdir(parents=True,exist_ok=True,mode=0o700);self.unavailable=set();self.catalog=None;self.qualifications={};self.deepseek_enabled=config.get('deepseek_last_resort_authorization')==DEEPSEEK_AUTH
   histories=set(config.get('embedding_cache_roots',[])+config.get('resume_roots',[]))
   for path in histories:
    for r in ledger(path):
     if quota(r):self.unavailable.add((r.get('account','ark-secondary' if r.get('provider')=='Ark' else 'tokenhub-secondary'),r['model']))
  def models(self):
   if self.catalog is not None:return self.catalog
-  result={'Ark':[],'TokenHub':[]}
+  result={'Ark':[],'TokenHub':[],'DeepSeek':[]}
   for account,(provider,_file,_key) in ACCOUNTS.items():
+   if provider=='DeepSeek' and not self.deepseek_enabled:continue
    p=self.root/f'catalog-{account}.json'
    try:
     if p.exists():record=load(p)
@@ -94,7 +96,7 @@ class Rotation:
   if config.get('family_continuation_authorization')==FAMILY_CONTINUATION_AUTH:
    if role=='cross-reference':
     options=[o for o in candidates('answer',model,provider,catalog,self.unavailable,answer_vendor=vendor(config.get('answer_models',['doubao-seed-2-1-pro-260915'])[0]),judge_vendor=vendor(config.get('judge_model','glm-5.2'))) if vendor(o[2])==vendor(model)]
-   options.sort(key=lambda option:(option[2]!=model, vendor(option[2])!=vendor(model)))
+   options.sort(key=lambda option:(option[0]=='DeepSeek',option[2]!=model, vendor(option[2])!=vendor(model)))
   for new_provider,new_account,new_model in options:
    updated=apply(config,role,new_provider,new_account,new_model)
    if not self.qualify(updated,role,new_provider,new_account,new_model):continue

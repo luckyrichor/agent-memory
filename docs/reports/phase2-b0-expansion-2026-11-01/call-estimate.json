@@ -1,0 +1,69 @@
+{
+  "perltqa_zh": {
+    "questions": 300,
+    "conversations": 9,
+    "source_chunks": 608,
+    "source_characters": 197641,
+    "answer_calls": 7200,
+    "primary_judge_calls": 7200,
+    "source_extraction_calls": 1824,
+    "conservative_vector_calls": 19992,
+    "vector_calls_with_25pct_reserve": 24990,
+    "source_sha256": "e650b3bd7150469d1992075a516338f81cf70ffa7eddf128f84f670cb6f1bf61"
+  },
+  "chinese_queries_v2": {
+    "questions": 150,
+    "conversations": 102,
+    "source_chunks": 2108,
+    "source_characters": 252563,
+    "answer_calls": 3600,
+    "primary_judge_calls": 3600,
+    "source_extraction_calls": 6324,
+    "conservative_vector_calls": 53292,
+    "vector_calls_with_25pct_reserve": 66615,
+    "source_sha256": "1d4b6314651436071d63dca3b18fd8fbb5222fa074f8c4d12b9afc3e5f9162f9"
+  },
+  "longmemeval_oracle": {
+    "questions": 50,
+    "conversations": 50,
+    "source_chunks": 975,
+    "source_characters": 1138488,
+    "answer_calls": 1200,
+    "primary_judge_calls": 1200,
+    "source_extraction_calls": 2925,
+    "conservative_vector_calls": 24300,
+    "vector_calls_with_25pct_reserve": 30375,
+    "source_sha256": "d584ee193cd972f2ed3d2efc5ce8d7bff23d73d1a75fb1ac4441e0ceb4c36037"
+  },
+  "longmemeval_s": {
+    "questions": 50,
+    "conversations": 50,
+    "source_chunks": 24899,
+    "source_characters": 24504923,
+    "answer_calls": 1200,
+    "primary_judge_calls": 1200,
+    "source_extraction_calls": 74697,
+    "conservative_vector_calls": 598476,
+    "vector_calls_with_25pct_reserve": 748095,
+    "source_sha256": "2333df04b08179c4e5faf33b6f795537a55391663de24c62523ae30b8a8452ba"
+  },
+  "totals": {
+    "questions": 550,
+    "conversations": 211,
+    "source_chunks": 28590,
+    "source_characters": 26093615,
+    "answer_calls": 13200,
+    "primary_judge_calls": 13200,
+    "source_extraction_calls": 85770,
+    "conservative_vector_calls": 696060,
+    "vector_calls_with_25pct_reserve": 870075,
+    "vector_minimum_pacing_hours_conservative": 232.02
+  },
+  "notes": [
+    "No vendor call performed by this planner. Request counts exclude retries and cross-reference up to 300.",
+    "Vector count is a conservative planning bound, not a bill or balance check; extracted memories are response dependent.",
+    "No prior cached vectors enabled, matching original config.",
+    "LoCoMo frozen dev has only 3 conversations; owner decision pending; not included in totals.",
+    "Test registry/files untouched. Quality targets use category-balanced round robin seed42."
+  ]
+}

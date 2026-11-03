@@ -1,0 +1,151 @@
+{
+  "metric": "EX4",
+  "dataset": "ecd_negative",
+  "mode": "full",
+  "system": "system",
+  "data_level": "B: AI draft plus owner confirmation, customer service only",
+  "source_sha256": "f025b8715ab8a0895d58ba4e7d5b2228c7e6a539e11dab43cf754bab086021a3",
+  "memory_error_ratio": {
+    "value": 1.0,
+    "n": 8,
+    "numerator": 37,
+    "denominator": 37,
+    "ci95": [
+      1.0,
+      1.0
+    ]
+  },
+  "conversation_false_extraction_ratio": {
+    "value": 0.75,
+    "n": 8,
+    "numerator": 18,
+    "denominator": 24,
+    "ci95": [
+      0.375,
+      1.0
+    ]
+  },
+  "unique_conversations": 8,
+  "conversation_repeat_units": 24,
+  "repeat_counts": {
+    "0": {
+      "false_candidates": 11,
+      "all_candidates": 11,
+      "nonempty_conversations": 6,
+      "conversations": 8
+    },
+    "1": {
+      "false_candidates": 13,
+      "all_candidates": 13,
+      "nonempty_conversations": 6,
+      "conversations": 8
+    },
+    "2": {
+      "false_candidates": 13,
+      "all_candidates": 13,
+      "nonempty_conversations": 6,
+      "conversations": 8
+    }
+  },
+  "mapping_hashes": [
+    {
+      "opaque_unit_hash": "e20eb62bb7594008d6d4679e17f762d17fd17027b2f1513887de72cb3d1ffb33",
+      "sha256": "0d3e7353c03b771ddaaa4353c7a9a4b89a5c93b29fa8c5df246df2e70d5c5f59"
+    },
+    {
+      "opaque_unit_hash": "56e0b36f06f9aff7c4294bd7a7bcf0410d776fde49224a7b89c7e92428734403",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "opaque_unit_hash": "ade4c31536a0840b05ac2c76a48c63ebc9e10f8bb8c6df3e075665ea3d24b6e9",
+      "sha256": "798a5636e356f982d134e3c06c4c596114d0ba6be79ca1b331a9f48ba7e415ea"
+    },
+    {
+      "opaque_unit_hash": "ad416ad41f7be703e8ec844a518f464f5078638ebdad403850c297afd712c935",
+      "sha256": "6bfc8d8874223ad3fd80fecc1e1159b469afe01acd9d64fd613428e3fa96baad"
+    },
+    {
+      "opaque_unit_hash": "90429443bb01e44ee1a8369d97881561fc61297d6c95a5a6486829c9b160d61e",
+      "sha256": "cbd1ee116f3bb5a556e2888f4b077c13a3c27da58c6a43410c0ab6644da097aa"
+    },
+    {
+      "opaque_unit_hash": "a9952b8cf89244010703928ce7567d9dd6a9df1fd476c19f864f5603cd688e7d",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "opaque_unit_hash": "dd5f16cc95a9c89df9aa91d2a74bb32c7e3b0815be01685b4b1d3245cf9e1a33",
+      "sha256": "1443000e3b8241950a24687aa5895697f6b6c06d3e07de15e81c0a910a26ebed"
+    },
+    {
+      "opaque_unit_hash": "d2c4479f0b71db4c063fd4c6ee602e8be5a9986b17f41a6e901eeeac03389648",
+      "sha256": "79753db51b03aa4ff9eb549e30feb304fbe7d976c0b0f8850895d65275029c80"
+    },
+    {
+      "opaque_unit_hash": "0ef580e916e3a58b35f400dd9ae63df85af78fba4f7d59945877726fb3a3d21c",
+      "sha256": "3d26bee13bffdef75048e0d97282b15c8f774e856ee4634fedec8188fbf83e86"
+    },
+    {
+      "opaque_unit_hash": "ea6d852a173547effd588c38de496178383f7a37f9a010cfba5f9a5ef79a26ae",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "opaque_unit_hash": "71488e90f175e5b5304aee03c52fa06c4815558c2e0e846cc8082939505f780b",
+      "sha256": "1a4a1513a4e670ff701d45d391c742b5c66eadebeb203f4685adfd8731c2ac9b"
+    },
+    {
+      "opaque_unit_hash": "7b151e148dcac6a68f738a1eae27d09cafaa23fd048780a1b890c45477e3e24a",
+      "sha256": "307faed0bd00807619bb789a416982628877cffca2a1bb167119853eafb446f7"
+    },
+    {
+      "opaque_unit_hash": "04917754a9526c20b8f31c4d7133801a44848a0619126eb7352e7bd71774a55b",
+      "sha256": "8527a4bae643c20b064507863dfdd6c21f18cf7669965477a71521ecaf469d2a"
+    },
+    {
+      "opaque_unit_hash": "51b30cb25a1f2ce99b558bfcd397ba8be20783a83fa0c42979f436cf6e514f01",
+      "sha256": "89cc2cc0dfb14e1ce82f0d850f22ee1719e1b799b5459d5b735a2df078a166ad"
+    },
+    {
+      "opaque_unit_hash": "01c614bcf20f40480f58abbf1179b7de10f9e9ec27bee638ad4a46b3f05cd07f",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "opaque_unit_hash": "15f555a683bde7834c51fd10663f5d286c55eb4ab9a772b905da832666e15dde",
+      "sha256": "c2f181596c46a1451378e0dae9e6d3405eb6898a99c91168ba290a2f787d8e7b"
+    },
+    {
+      "opaque_unit_hash": "a1d02da8222ecb033a01c38f32bb4c4bc65fb5e5e986a8f707d11f92989aec96",
+      "sha256": "180b1edf5e9e24b329a1588551c3dea7c32c4a86f8196edc0bdce848b6d3c05c"
+    },
+    {
+      "opaque_unit_hash": "bb21cd1ed786ed37dff7bea8871ca2356f3235d27ef665858695a685006e031b",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "opaque_unit_hash": "facdb58199eedce44f0713ca422eb59052e181bb7dff0fe1ef24d80c3e589be1",
+      "sha256": "2851139ca02f5f749f11a02f9e0353d6ff85b0d888c97c707c23e953b50850ef"
+    },
+    {
+      "opaque_unit_hash": "56025c5b0f74b04e596191385167a882959c3888fdc1471eeeacccc15143bf24",
+      "sha256": "022107bebb8e4f8c374548694c5efd3c6da5d5a6e2d6c906bac16176a969dcb2"
+    },
+    {
+      "opaque_unit_hash": "5785a310bc4080efbe276f6aa0fa71f82225e57bc9df965b613e785ed2db6aca",
+      "sha256": "05907368de7d413ef8360ff4fbac6791268bf86aded0b81d327036f9110acf21"
+    },
+    {
+      "opaque_unit_hash": "ee7af843f4e461b1682d9f4ace53bb2e9deceaf144bd2e79556cf77acb651616",
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    {
+      "opaque_unit_hash": "ec4c64f460b9034064fc62e4c8004036892d353b1a2eacde213df8415901f64c",
+      "sha256": "d1917d59e13ba942dc2cb75d1002276830d2ba24b32373c09be674d2ed2bfefd"
+    },
+    {
+      "opaque_unit_hash": "45a3030f18fc9327ac291e19b0f9f31c1dd52a7659dcf4d1974a9ffd9b0ae126",
+      "sha256": "114441a597d61155f85a72c63209da8cb8ff0e13744bcaf291ed30ae0315d7e5"
+    }
+  ],
+  "method": "All candidates output by full-chain extraction in owner-confirmed no-memory conversations are false extractions. Candidate outputs, not active retrieval; no semantic judge and no model calls. Three repeats clustered by original conversation.",
+  "baseline": "frozen B0 candidate output (no-memory system does not extract; full-context/raw vector chunks are not extracted memories)",
+  "limitation": "8-conversation fixed dev sample of282 confirmed ECD negatives, NOT full282. ECD is customer-service domain, not general conversation. AI draft+human confirmation; all errors bootstrap can degenerate, no proof of population100%. Not EX1/EX2/EX5 general semantic calibration."
+}

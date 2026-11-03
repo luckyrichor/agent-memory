@@ -104,3 +104,35 @@ def test_overdue_is_quota_but_generic_forbidden_is_not():
 
     assert quota({'http': 403, 'error_code': 'AccountOverdueError'})
     assert not quota({'http': 403, 'error_code': 'AccessDenied'})
+
+
+def test_embedding_float_variation_does_not_inherit_judge_label_gate():
+    from agent_memory.evals.b0 import embedding_probe_observations, normalize_embedding_request
+
+    vectors = [[1.0, i * .00001] + [0.0] * 1022 for i in range(106)]
+    result = embedding_probe_observations(vectors)
+    assert result['passed'] and not result['exact_repeat_equality_diagnostic']
+    assert result['format_valid'] == 100 and not result['exact_vector_equality_is_gate']
+    invalid = [v[:] for v in vectors]
+    invalid[0][0] = float('nan')
+    assert not embedding_probe_observations(invalid)['passed']
+    assert not embedding_probe_observations(vectors[:105])['passed']
+    body = {'model': 'kinfra-text-embedding-0.6b', 'input': 'fictional', 'dimensions': 1024}
+    assert 'dimensions' not in normalize_embedding_request(body, 'TokenHub')
+    assert normalize_embedding_request(body, 'Ark')['dimensions'] == 1024
+    assert body['dimensions'] == 1024
+
+
+def test_direct_deepseek_is_last_and_cannot_judge_own_annotation():
+    from agent_memory.evals.b0_rotation import candidates
+
+    catalog = {'TokenHub': ['hy3'], 'Ark': ['doubao-seed-2-1-lite-260915'],
+               'DeepSeek': ['deepseek-flash']}
+    choices = candidates('answer', 'deepseek-flash', 'DeepSeek', catalog, set(),
+                         answer_vendor='DeepSeek', judge_vendor='Zhipu')
+    assert choices and choices[-1][0] == 'DeepSeek'
+    first_direct = next(i for i, c in enumerate(choices) if c[0] == 'DeepSeek')
+    assert all(c[0] != 'DeepSeek' for c in choices[:first_direct])
+    judges = candidates('judge', 'glm-5.2', 'TokenHub', catalog, set(),
+                        answer_vendor='Tencent', judge_vendor='Zhipu')
+    assert all(c[0] != 'DeepSeek' for c in judges)

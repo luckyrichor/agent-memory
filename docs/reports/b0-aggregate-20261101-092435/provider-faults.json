@@ -1,0 +1,99 @@
+{
+  "scenario": "F3_partial",
+  "observations": [
+    {
+      "repeat": 1,
+      "mode": "timeout",
+      "first_outcome": "retry_wait",
+      "reason_code": "PROVIDER_TRANSPORT_FAILURE",
+      "second_outcome": "succeeded",
+      "attempts": 2,
+      "http_attempts": 2,
+      "seconds": 12.166330354753882
+    },
+    {
+      "repeat": 1,
+      "mode": "429",
+      "first_outcome": "retry_wait",
+      "reason_code": "HTTP_429",
+      "second_outcome": "succeeded",
+      "attempts": 2,
+      "http_attempts": 2,
+      "seconds": 2.155719188041985
+    },
+    {
+      "repeat": 1,
+      "mode": "503",
+      "first_outcome": "retry_wait",
+      "reason_code": "HTTP_503",
+      "second_outcome": "succeeded",
+      "attempts": 2,
+      "http_attempts": 2,
+      "seconds": 2.1564233712852
+    },
+    {
+      "repeat": 2,
+      "mode": "timeout",
+      "first_outcome": "retry_wait",
+      "reason_code": "PROVIDER_TRANSPORT_FAILURE",
+      "second_outcome": "succeeded",
+      "attempts": 2,
+      "http_attempts": 2,
+      "seconds": 12.171429628971964
+    },
+    {
+      "repeat": 2,
+      "mode": "429",
+      "first_outcome": "retry_wait",
+      "reason_code": "HTTP_429",
+      "second_outcome": "succeeded",
+      "attempts": 2,
+      "http_attempts": 2,
+      "seconds": 2.1597058149054646
+    },
+    {
+      "repeat": 2,
+      "mode": "503",
+      "first_outcome": "retry_wait",
+      "reason_code": "HTTP_503",
+      "second_outcome": "succeeded",
+      "attempts": 2,
+      "http_attempts": 2,
+      "seconds": 2.1588804400525987
+    },
+    {
+      "repeat": 3,
+      "mode": "timeout",
+      "first_outcome": "retry_wait",
+      "reason_code": "PROVIDER_TRANSPORT_FAILURE",
+      "second_outcome": "succeeded",
+      "attempts": 2,
+      "http_attempts": 2,
+      "seconds": 12.16471042111516
+    },
+    {
+      "repeat": 3,
+      "mode": "429",
+      "first_outcome": "retry_wait",
+      "reason_code": "HTTP_429",
+      "second_outcome": "succeeded",
+      "attempts": 2,
+      "http_attempts": 2,
+      "seconds": 2.1553490050137043
+    },
+    {
+      "repeat": 3,
+      "mode": "503",
+      "first_outcome": "retry_wait",
+      "reason_code": "HTTP_503",
+      "second_outcome": "succeeded",
+      "attempts": 2,
+      "http_attempts": 2,
+      "seconds": 2.1559967258945107
+    }
+  ],
+  "passed": true,
+  "external_model_calls": 0,
+  "method": "Actual loopback HTTP provider and frozen default worker timeout10s/lease30s. First request times out, returns429 Retry-After2, or503; actual persisted backoff then successful exact native precomputed vector. Three repeats each; no job state/clock edits.",
+  "limitation": "Transient recovery only; HTTP exhaustion/dead-letter and search degradation require separate coverage."
+}

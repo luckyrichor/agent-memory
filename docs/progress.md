@@ -478,3 +478,113 @@ api-pilot-lite-v1已完成四组、两模式、三次：24答题/判分行、156
 ## B0暂停交接报告（2026-10-24T12:33:16.612555+08:00）
 
 完整报告与脚本生成数字见docs/reports/phase2-b0-pause-2026-10-24/。核对完成360条诊断答题判分，23组替代检查按当前实现未通过。报告明确纠正：原方案裁判五次判分一致被执行泛化为向量五次逐元素完全一致，这是额外门槛，不应称冻结方案要求。另一Key原型号实际HTTP成功且格式检查全过；浮点差异统计仅作诊断，不另设阈值。本轮仅报告交付，未启动模型计算、不含对话原文/逐题答案/凭据。附件只含report.md、numbers.json、生成脚本；服务实际inactive，阶段2未验收。
+
+
+## B0恢复与DeepSeek最后后备（2026-10-25T20:42:31.331276+08:00）
+
+负责人要求继续，腾讯真实可用性已核实，见`docs/baselines/b0/tencent-availability-20261025-v1.json`。两腾讯Key的Kinfra0.6b均返回原生1024维；此前400由错误dimensions参数造成，不是额度失败。修复请求适配及向量额外精确一致性门槛，未更改裁判五标签一致、100格式、厂商独立、人工校准、指标/切分/阈值。
+
+hy3首次106预检后46次429，保留历史；降速至每请求1.2秒后新106次原预检通过：五标签一致、100格式全部有效、观测关闭思考；原生抽取/答题均通过。原Ark向量另Key106次原生检查也通过、100格式有效，浮点差异仅诊断，不假设精确相同。证明见`docs/baselines/b0/resume-qualification-20261025-v2.json`。当前运行仍使用原Ark模型1024维，没有切换腾讯向量空间。
+
+新的唯一托管任务`agent-memory-b0-dev-v8.service`已active，`development-sample-v8`已校验恢复360条完整历史答题/判分实验行、没有新调用冒充重复，另恢复完整会话组合。检查时已有新真实HTTP200；接着处理未完成部分。运行提交基于2fae08b加未提交修改，manifest记录脏工作区和脚本/配置哈希，B0业务标签不变。本轮未提交/推送修复。
+
+新增官方DeepSeek凭据只从用户授权的私有env读取，已接入排序：先腾讯/Ark所有合格候选，最后DeepSeek；尚未承担任何本轮正式测量或实际模型预检，不用“文件存在”冒称已通过。DeepSeek厂商不得作为当前DeepSeek标注数据的裁判，其他角色须原预检通过；仍按同系列/跨系列规则续跑或重跑，向量不同空间重建。
+
+检查由脚本生成：456 passed in45.04s，ruff、strict mypy、foundation通过。当前仍无完整300私有校准表，PF独立机器待负责人准备，阶段2未完成、不进入阶段3。飞书同步已提出标题/范围/现有目录/user身份codex确认，尚未收到回复，待同步，不代用户发布或执行授权/策略开关。
+
+
+<!-- frozen-b0-rebuild-start-20261026 -->
+## 2026-10-26T17:51:51.263543+08:00 新配置B0重建启动
+
+最新方案完整读取，新增权威模型分工以本次为准。DeepSeek-v4-pro单一型号、腾讯Kinfra1024、GLM主裁判/MiniMax备选；不再使用方舟。旧25实测运行均探索性、不计B0。零检索诊断发现6640记忆映射齐全但active为0，候选被过滤；不修分。新小样24行全部有效，187真实调用；460 passed in45.79s，四道门过。完整固定开发抽样1560行的唯一托管任务已启动，向量预算66293，无旧向量/答案复用。详见docs/reports/phase2-b0-rebuild-2026-10-26/与对应devlog。新300表尚未生成，整组结束后交负责人；PF/人工校准等未完成，不进阶段3；飞书首次同步待确认，本轮未提交推送。
+
+
+## 2026-10-26T21:10:18.757947+08:00 候选确认路径补充核查
+
+由 Codex 记录。冻结业务源码 agent-memory@1e9d6f3；评测工具基于2fae08b加未提交修改。
+
+B0-CANDIDATE-ACTIVATION-MISSING：候选记忆无自动生效路径；冻结B0也未实现将原候选确认转为active的公开接口或流程。
+
+公开 restore 只允许 archived→active；候选与 needs_review→active 均被冻结状态机拒绝。POST /v1/memories 创建新的 memory_id，不能作为原候选批准流程。历史文档提到“独立提取批准路径”，但实现只有候选落库，不能据文案宣称已实现。没有正式路径，所以不追加“确认后”实验，值保留 null；不改状态、不重建替代记忆、不改业务代码。
+
+验证：`uv run python scripts/audit-b0-candidate-confirmation.py` 使用冻结状态机执行三种转移（candidate/needs_review拒绝，archived允许），并保存 API 声明与源码哈希；不调用模型，不接触运行数据库。证据：`docs/reports/phase2-b0-rebuild-2026-10-26/candidate-confirmation-audit.json`。未来整组聚合报告自动附此缺陷。当前运行PID3596841保持active，未停止/重启。校准表仅整组完成后按新结果抽样。
+
+飞书待同步：用户本次明确“暂不写飞书”，仅更新本地交接与报告，不创建或修改Wiki。
+
+
+<!-- frozen-b0-closeout:c5bb4d57e991be34225d -->
+## 2026-10-26T22:15:40.142447+08:00 新配置B0运行收尾
+
+由Codex记录，agent-memory@2fae08b，含未提交修改。状态runtime_quota_paused，聚合实验行1512，新校准表0行。证据`.local/phase2/b0/frozen-deepseek-20261026-v1/full-run/aggregate/report.json`。阶段2未验收，PF、负责人校准和缺失观察适配器仍需后续完成，不进阶段3。原始答案/对话不写入此记录；飞书同步按用户要求暂缓。
+
+
+## 2026-10-27T08:33:52.116549+08:00 DeepSeek额度恢复后同配置续跑
+
+由Codex记录，代码基于agent-memory@2fae08b加未提交修改，业务B0@1e9d6f3不改。官网最小探测HTTP200、响应deepseek-v4-pro，共9token；原402暂停记录保留。新运行`.local/phase2/b0/frozen-deepseek-20261026-v1/recovery-run-1`，unit`agent-memory-b0-frozen-20261026-recovery-1.service`。仅resume_roots不同，其余冻结配置逐字段严格相等；旧混用结果仍禁用。复用完整数据/会话检查点，未完成会话重新抽取与建库、仅上下文哈希一致才复用答题判分。原向量尝试9249累计进入66293上限，不重新给预算。新300表仅整组结束后生成，用户仍要求暂不写飞书。
+
+修改：b0_frozen.py允许严格同配置恢复，run-b0.py累计父运行向量尝试；新增配置一致/变更拒绝回归。验证2条冻结策略测试通过、ruff修复导入后通过、strict mypy单文件通过；最初探测本地代理缺socksio未发请求，随后与运行客户端一致使用trust_env=False完成探测。无模型切换、无业务优化、无提交推送。
+
+
+<!-- frozen-b0-closeout:e7baeb120a99d26e929d -->
+## 2026-10-27T09:45:51.106601+08:00 新配置B0运行收尾
+
+由Codex记录，agent-memory@2fae08b，含未提交修改。状态runtime_quota_paused，聚合实验行1512，新校准表0行。证据`.local/phase2/b0/frozen-deepseek-20261026-v1/recovery-run-1/aggregate/report.json`。阶段2未验收，PF、负责人校准和缺失观察适配器仍需后续完成，不进阶段3。原始答案/对话不写入此记录；飞书同步按用户要求暂缓。
+
+
+## 2026-10-27T13:07:47.592032+08:00 腾讯向量同型号切换已授权密钥后续跑
+
+由Codex记录，agent-memory@2fae08b加未提交修改；业务B0@1e9d6f3不改。上次续跑于1552/1560条准备结果因TokenHub向量secondary HTTP402（401008）暂停，已有1512条判分；并非DeepSeek再次不足。今日实测：DeepSeek固定型号200；同一向量型号secondary仍402、primary返回200/原生1024维；GLM与MiniMax在secondary均200，primary均402（不采用）。仅向量密钥切primary，其他角色不变。
+
+本轮`.local/phase2/b0/frozen-deepseek-20261026-v1/recovery-run-2`；unit`agent-memory-b0-frozen-20261027-recovery-2.service`。恢复校验只允许TokenHub已授权primary/secondary槽位互换，固定配置的型号、数据、提示词、裁判池、种子和预算仍须一致，不采纳旧混用结果。父运行累计向量HTTP尝试11880，仍共享66293总上限。检查：冻结策略2测试通过（含未知密钥/配置变更拒绝）、ruff通过、mypy单文件通过、探测原始请求响应仅私有目录。新300仅整组完成后导出。飞书按用户要求暂缓，无提交推送。
+
+
+<!-- frozen-b0-closeout:36798487fe32acba0243 -->
+## 2026-10-27T13:56:54.798806+08:00 新配置B0运行收尾
+
+由Codex记录，agent-memory@2fae08b，含未提交修改。状态paused_for_owner_calibration，聚合实验行1560，新校准表300行。证据`.local/phase2/b0/frozen-deepseek-20261026-v1/recovery-run-2/aggregate/report.json`。阶段2未验收，PF、负责人校准和缺失观察适配器仍需后续完成，不进阶段3。原始答案/对话不写入此记录；飞书同步按用户要求暂缓。
+
+
+## 2026-10-27T18:22:48.989403+08:00 负责人300条裁判校准
+
+由Codex记录，agent-memory@2fae08b加未提交修改。人工300标签核验/冻结字段比对通过，原文件SHA256已记录。主裁判与备选均为第1轮冻结提示词；备选复用同批完整cross-reference，非独立第二模型。 glm-5.2：n=300，准确率0.950000，κ=0.897260，门槛通过=True。 minimax-m3：n=300，准确率0.976667，κ=0.951844，门槛通过=True。 同批100×3新判分完成=False。报告`docs/reports/phase2-b0-owner-calibration-2026-10-27/calibration-report.md`；不外发原文/人工标签/理由。阶段2未验收，PF与缺失指标仍待完成，不进入阶段3；飞书Wiki按用户要求暂缓。
+
+
+## 2026-10-27T18:23:06.711901+08:00 负责人300条裁判校准
+
+由Codex记录，agent-memory@2fae08b加未提交修改。人工300标签核验/冻结字段比对通过，原文件SHA256已记录。主裁判与备选均为第1轮冻结提示词；备选复用同批完整cross-reference，非独立第二模型。 glm-5.2：n=300，准确率0.950000，κ=0.897260，门槛通过=True。 minimax-m3：n=300，准确率0.976667，κ=0.951844，门槛通过=True。 同批100×3新判分完成=False。报告`docs/reports/phase2-b0-owner-calibration-2026-10-27/calibration-report.md`；不外发原文/人工标签/理由。阶段2未验收，PF与缺失指标仍待完成，不进入阶段3；飞书Wiki按用户要求暂缓。
+
+
+## 2026-10-27T18:30:34.197735+08:00 负责人300条裁判校准
+
+由Codex记录，agent-memory@2fae08b加未提交修改。人工300标签核验/冻结字段比对通过，原文件SHA256已记录。主裁判与备选均为第1轮冻结提示词；备选复用同批完整cross-reference，非独立第二模型。 glm-5.2：n=300，准确率0.950000，κ=0.897260，门槛通过=True。 minimax-m3：n=300，准确率0.976667，κ=0.951844，门槛通过=True。 同批100×3新判分完成=True。报告`docs/reports/phase2-b0-owner-calibration-2026-10-27/calibration-report.md`；不外发原文/人工标签/理由。阶段2未验收，PF与缺失指标仍待完成，不进入阶段3；飞书Wiki按用户要求暂缓。
+
+
+### 2026-10-27T18:36:29.156896+08:00 聚合报告交付暂缓
+
+负责人消息om_x100b6133a655c8a8c0ae8068a9f07da明确要求未完成则完成后再发。本轮1560答题判分及300人工校准、同批100×3×两裁判均已完成，但全功能指标覆盖与独立跨公网PF尚未齐；不把当前带缺项报告作为最终完成版发出。本次没有发送新的聚合文件。交付状态见docs/evals/b0-current.json的aggregate_delivery_request；后续收尾须先核查完整性与本条交付约束，不因已有delivery.md就自动外发未完成版。原始标签/理由不动，飞书Wiki仍暂缓，不进阶段3。
+
+
+## 2026-10-28T08:24:07.827701+08:00 B0观测证据补齐（局部完成，聚合报告继续暂缓）
+
+由Codex记录，agent-memory@2fae08b，含未提交修改；业务B0@1e9d6f3工作树保持干净。无新增模型调用、未改数据/切分/指标定义/人工原文件。
+
+- `scripts/supplement-b0-evidence.py`累计3次同配置运行的实际HTTP尝试24459次，修正仅统计最后续跑的问题；未知usage不记0。SC8按实际发送文本UTF8字节统计，HTTP响应与传输未知分列，不将第三方发送等同于地理跨境。
+- ECD完整负会话开发抽样：8段×3重复，候选误抽37/37；会话重复单元非空18/24，比例75.00%，会话聚类95%区间[0.375, 1.0]。候选均未激活，检索空不代表抽取正确；只代表8段客服样本，非282全量或一般对话。
+- 对齐已有LC4/LC5/RL1/RL2/RT10/SC1/SC3观测到目录；LC7仍只正文残留局部证据，不冒充全副本删除通过。
+- `scripts/measure-b0-queue-controls.py`在新临时PostgreSQL、非owner/non-bypass角色实测3轮5场景。RL3过期owner修改成功0/9；RL4总任务15，成功9，预设永久失败/重试耗尽死信6。不外推模型故障、进程崩溃或候选提交事务竞态，不称PF。
+- E5按既有偏好标签生成16个数据/模式/系统子表。E6逐源验证LongMemEval会话级oracle仅含相关证据会话，剔除无正证据的拒答题、确认未截断；两模式各12实验行/4题，给出与本系统的配对会话bootstrap差值。不是全数据集或句子级oracle。
+- 4项相关回归通过，ruff通过、脚本编译和diff检查通过；新增临时PG集成控制真实完成。模型、业务、数据不变，未提交/推送。
+
+证据：`docs/reports/phase2-b0-evidence-supplement-2026-10-27/evidence-supplement.json`、`docs/reports/phase2-b0-evidence-supplement-2026-10-27/queue-controls.json`；完整本地B0 JSON已更新。用户要求未齐项不发，所以没有发送新聚合文件；托管自动交付也加入deferred_until_complete保护，必须显式核验full_aggregate_ready后才允许发出。
+
+仍待：抽取语义逐条对应及相应评审校准、真正目标tokenizer/预算实验、相关度分级标签、通道/参数实验、端到端故障与备份恢复、日志全量覆盖、按系统归因的总成本、独立跨地域PF等。不能因为队列或局部样本通过就宣布全指标完成。压测机准备说明`docs/baselines/b0/load-generator-preparation.md`。阶段2未验收，不进入阶段3；飞书Wiki仍按用户要求暂缓。
+
+## 2026-11-03 阶段1收尾复核（仅代码修正与离线校验）
+
+由 CodeBuddy 实施（deepseek-v4.1-flash），Codex 待验收。服务仍全部停止，本轮未启动任何进程/容器，未调用付费模型，未提交/推送/删除。
+
+- 修复两处既有门禁问题：`src/agent_memory/evals/b0_selection.py` 的 `select_questions` 补类型注解；`tests/unit/evals/test_b0_selection.py` 的 import 排序。
+- `scripts/run-b0-mac-load.py` 与 `scripts/run-b0-linux-load-point.py` 去掉公网地址/派生主机名硬编码，目标改为 `--base-url/--host` 或环境变量 `B0_BASE_URL/B0_HOST` 必填；缺失时在创建输出目录前 `parser.error` 退出 2（实测两脚本 exit 2 且未创建目录）。
+- 离线门禁：`pytest tests/unit` 409 passed；`ruff check src tests migrations` 通过；`mypy src` strict 102 文件无错；`git diff --check` 通过。未跑集成/Testcontainers 测试。
+- 清理只出清单、未执行：A 类可重新下载 8 项共 487,069,042 B（464.5 MiB），路径/大小/sha256 见 `.agent-tasks/2026-11-03-stage1-deletable-a-class.json`；B 类派生重复目录与 C 类独占证据均不列入。
+- 飞书 Wiki 按用户要求仍暂缓；阶段2 状态不变，仍未验收、未进入阶段3。

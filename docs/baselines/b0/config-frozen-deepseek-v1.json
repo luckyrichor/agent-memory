@@ -1,0 +1,61 @@
+{
+  "seed": 42,
+  "conversations_per_dataset": {
+    "longmemeval_oracle": 5,
+    "longmemeval_s": 2,
+    "locomo": 1,
+    "perltqa_zh": 3,
+    "chinese_queries_v2": 10,
+    "dulemon_gold": 8,
+    "ecd_negative": 8
+  },
+  "questions_per_conversation": 10,
+  "system_context_budget": 2000,
+  "purpose": "New B0 under owner-frozen single DeepSeek model and native Tencent1024 vectors; fresh index, all old results exploratory; no Ark calls",
+  "workload_basis": "docs/baselines/b0/workload-estimate-v1.json; measured pilot input/output costs",
+  "embedding_cache_roots": [],
+  "extraction_model": "deepseek-v4-pro",
+  "extraction_provider": "DeepSeek",
+  "answer_models": [
+    "deepseek-v4-pro"
+  ],
+  "resume_roots": [],
+  "role_accounts": {
+    "extraction": {
+      "DeepSeek": "deepseek-direct"
+    },
+    "answer": {
+      "DeepSeek": "deepseek-direct"
+    },
+    "embedding": {
+      "TokenHub": "tokenhub-secondary"
+    },
+    "judge": {
+      "TokenHub": "tokenhub-secondary"
+    },
+    "cross-reference": {
+      "TokenHub": "tokenhub-secondary"
+    }
+  },
+  "answer_provider": "DeepSeek",
+  "judge_model": "glm-5.2",
+  "judge_provider": "TokenHub",
+  "embedding_model": "kinfra-text-embedding-0.6b",
+  "embedding_provider": "TokenHub",
+  "embedding_protocol": "openai",
+  "judge_models": [
+    "glm-5.2",
+    "minimax-m3"
+  ],
+  "cross_reference_model": "minimax-m3",
+  "cross_reference_provider": "TokenHub",
+  "frozen_b0_authorization": "om_x100b62c56df1b8b0ce44568e5c1acc0",
+  "baseline_configuration_id": "B0-deepseek-v4-pro-kinfra-20261026-v1",
+  "expected_response_models": {
+    "answer": "deepseek-v4-pro",
+    "extraction": "deepseek-v4-pro"
+  },
+  "calibration_seed": 2026102601,
+  "conversation_concurrency": 2,
+  "embedding_call_budget": 66293
+}

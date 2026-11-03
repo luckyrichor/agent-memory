@@ -1,0 +1,485 @@
+{
+  "model": "deepseek-v4-pro",
+  "official_repository": "deepseek-ai/DeepSeek-V4-Pro",
+  "revision": "b5968e9190ef611bbf34a7229255be88a0e937c1",
+  "tokenizer_sha256": "8f9f37ca37fdc4f5fd36d5cf4d3b0e8392edb4e894fd10cc0d70b4957c8633cf",
+  "tokenizer_config_sha256": "6ac8c8dc065ed118161d02dd532749ae3f52c243deac27872134fae2f50d8547",
+  "tokenizers_package": "0.22.2",
+  "source_results_sha256": "963d877d5cf1f159f02d4768c72dfc60d435b65cf6ffec64dce6c3073be9fb61",
+  "rows": 390,
+  "by_dataset_mode": {
+    "longmemeval_oracle/direct": {
+      "CX1": {
+        "value": 0.28113333333333335,
+        "n": 5,
+        "numerator": 8434,
+        "denominator": 30000,
+        "ci95": [
+          0.26303333333333334,
+          0.29923333333333335
+        ]
+      },
+      "CX2_signed_estimate_minus_true_per_true": {
+        "value": 2.547308513161015,
+        "n": 5,
+        "numerator": 21484,
+        "denominator": 8434,
+        "ci95": [
+          2.332627826668152,
+          2.791534659738943
+        ]
+      },
+      "CX2_absolute_error_per_true": {
+        "value": 2.547308513161015,
+        "n": 5,
+        "numerator": 21484,
+        "denominator": 8434,
+        "ci95": [
+          2.332627826668152,
+          2.791534659738943
+        ]
+      },
+      "rows": 15,
+      "method": "frozen rendered context only, official tokenizer add_special_tokens=False; conversation-cluster bootstrap, no API question/chat framing or counter change"
+    },
+    "longmemeval_oracle/full": {
+      "CX1": {
+        "value": 0.0,
+        "n": 5,
+        "numerator": 0,
+        "denominator": 30000,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "CX2_signed_estimate_minus_true_per_true": {
+        "value": null,
+        "n": 5,
+        "numerator": 0,
+        "denominator": 0,
+        "ci95": null
+      },
+      "CX2_absolute_error_per_true": {
+        "value": null,
+        "n": 5,
+        "numerator": 0,
+        "denominator": 0,
+        "ci95": null
+      },
+      "rows": 15,
+      "method": "frozen rendered context only, official tokenizer add_special_tokens=False; conversation-cluster bootstrap, no API question/chat framing or counter change"
+    },
+    "locomo/direct": {
+      "CX1": {
+        "value": 0.3176833333333333,
+        "n": 1,
+        "numerator": 19061,
+        "denominator": 60000,
+        "ci95": [
+          0.3176833333333333,
+          0.3176833333333333
+        ]
+      },
+      "CX2_signed_estimate_minus_true_per_true": {
+        "value": 2.073343476207964,
+        "n": 1,
+        "numerator": 39520,
+        "denominator": 19061,
+        "ci95": [
+          2.073343476207964,
+          2.073343476207964
+        ]
+      },
+      "CX2_absolute_error_per_true": {
+        "value": 2.073343476207964,
+        "n": 1,
+        "numerator": 39520,
+        "denominator": 19061,
+        "ci95": [
+          2.073343476207964,
+          2.073343476207964
+        ]
+      },
+      "rows": 30,
+      "method": "frozen rendered context only, official tokenizer add_special_tokens=False; conversation-cluster bootstrap, no API question/chat framing or counter change"
+    },
+    "locomo/full": {
+      "CX1": {
+        "value": 0.0,
+        "n": 1,
+        "numerator": 0,
+        "denominator": 60000,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "CX2_signed_estimate_minus_true_per_true": {
+        "value": null,
+        "n": 1,
+        "numerator": 0,
+        "denominator": 0,
+        "ci95": null
+      },
+      "CX2_absolute_error_per_true": {
+        "value": null,
+        "n": 1,
+        "numerator": 0,
+        "denominator": 0,
+        "ci95": null
+      },
+      "rows": 30,
+      "method": "frozen rendered context only, official tokenizer add_special_tokens=False; conversation-cluster bootstrap, no API question/chat framing or counter change"
+    },
+    "perltqa_zh/direct": {
+      "CX1": {
+        "value": 0.2519722222222222,
+        "n": 3,
+        "numerator": 45355,
+        "denominator": 180000,
+        "ci95": [
+          0.2429,
+          0.2657
+        ]
+      },
+      "CX2_signed_estimate_minus_true_per_true": {
+        "value": 2.8921397861316285,
+        "n": 3,
+        "numerator": 131173,
+        "denominator": 45355,
+        "ci95": [
+          2.709446744448626,
+          3.0424042815973653
+        ]
+      },
+      "CX2_absolute_error_per_true": {
+        "value": 2.8921397861316285,
+        "n": 3,
+        "numerator": 131173,
+        "denominator": 45355,
+        "ci95": [
+          2.709446744448626,
+          3.0424042815973653
+        ]
+      },
+      "rows": 90,
+      "method": "frozen rendered context only, official tokenizer add_special_tokens=False; conversation-cluster bootstrap, no API question/chat framing or counter change"
+    },
+    "perltqa_zh/full": {
+      "CX1": {
+        "value": 0.0,
+        "n": 3,
+        "numerator": 0,
+        "denominator": 180000,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "CX2_signed_estimate_minus_true_per_true": {
+        "value": null,
+        "n": 3,
+        "numerator": 0,
+        "denominator": 0,
+        "ci95": null
+      },
+      "CX2_absolute_error_per_true": {
+        "value": null,
+        "n": 3,
+        "numerator": 0,
+        "denominator": 0,
+        "ci95": null
+      },
+      "rows": 90,
+      "method": "frozen rendered context only, official tokenizer add_special_tokens=False; conversation-cluster bootstrap, no API question/chat framing or counter change"
+    },
+    "chinese_queries_v2/direct": {
+      "CX1": {
+        "value": 0.27428703703703705,
+        "n": 10,
+        "numerator": 29623,
+        "denominator": 108000,
+        "ci95": [
+          0.24647673611111112,
+          0.3305715277777778
+        ]
+      },
+      "CX2_signed_estimate_minus_true_per_true": {
+        "value": 2.390406103365628,
+        "n": 10,
+        "numerator": 70811,
+        "denominator": 29623,
+        "ci95": [
+          1.9155320221886032,
+          2.71273730581401
+        ]
+      },
+      "CX2_absolute_error_per_true": {
+        "value": 2.390406103365628,
+        "n": 10,
+        "numerator": 70811,
+        "denominator": 29623,
+        "ci95": [
+          1.9155320221886032,
+          2.71273730581401
+        ]
+      },
+      "rows": 54,
+      "method": "frozen rendered context only, official tokenizer add_special_tokens=False; conversation-cluster bootstrap, no API question/chat framing or counter change"
+    },
+    "chinese_queries_v2/full": {
+      "CX1": {
+        "value": 0.0,
+        "n": 10,
+        "numerator": 0,
+        "denominator": 108000,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "CX2_signed_estimate_minus_true_per_true": {
+        "value": null,
+        "n": 10,
+        "numerator": 0,
+        "denominator": 0,
+        "ci95": null
+      },
+      "CX2_absolute_error_per_true": {
+        "value": null,
+        "n": 10,
+        "numerator": 0,
+        "denominator": 0,
+        "ci95": null
+      },
+      "rows": 54,
+      "method": "frozen rendered context only, official tokenizer add_special_tokens=False; conversation-cluster bootstrap, no API question/chat framing or counter change"
+    },
+    "longmemeval_s/direct": {
+      "CX1": {
+        "value": 0.29158333333333336,
+        "n": 2,
+        "numerator": 3499,
+        "denominator": 12000,
+        "ci95": [
+          0.2853333333333333,
+          0.29783333333333334
+        ]
+      },
+      "CX2_signed_estimate_minus_true_per_true": {
+        "value": 2.3498142326378963,
+        "n": 2,
+        "numerator": 8222,
+        "denominator": 3499,
+        "ci95": [
+          2.3417056074766354,
+          2.357582540570789
+        ]
+      },
+      "CX2_absolute_error_per_true": {
+        "value": 2.3498142326378963,
+        "n": 2,
+        "numerator": 8222,
+        "denominator": 3499,
+        "ci95": [
+          2.3417056074766354,
+          2.357582540570789
+        ]
+      },
+      "rows": 6,
+      "method": "frozen rendered context only, official tokenizer add_special_tokens=False; conversation-cluster bootstrap, no API question/chat framing or counter change"
+    },
+    "longmemeval_s/full": {
+      "CX1": {
+        "value": 0.0,
+        "n": 2,
+        "numerator": 0,
+        "denominator": 12000,
+        "ci95": [
+          0.0,
+          0.0
+        ]
+      },
+      "CX2_signed_estimate_minus_true_per_true": {
+        "value": null,
+        "n": 2,
+        "numerator": 0,
+        "denominator": 0,
+        "ci95": null
+      },
+      "CX2_absolute_error_per_true": {
+        "value": null,
+        "n": 2,
+        "numerator": 0,
+        "denominator": 0,
+        "ci95": null
+      },
+      "rows": 6,
+      "method": "frozen rendered context only, official tokenizer add_special_tokens=False; conversation-cluster bootstrap, no API question/chat framing or counter change"
+    }
+  },
+  "api_crosscheck": [
+    {
+      "index": 0,
+      "content_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "official_text_tokens": 0,
+      "api_prompt_tokens": 4,
+      "usage": {
+        "prompt_tokens": 4,
+        "completion_tokens": 1,
+        "total_tokens": 5,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 4
+      },
+      "api_delta_without_empty_chat_overhead": 0,
+      "local_minus_api_delta": 0
+    },
+    {
+      "index": 1,
+      "content_sha256": "340f1d0e76c45954a55622db0b3bc6a134d5876a2011bc407e46f4e0358de5e7",
+      "official_text_tokens": 7,
+      "api_prompt_tokens": 11,
+      "usage": {
+        "prompt_tokens": 11,
+        "completion_tokens": 1,
+        "total_tokens": 12,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 11
+      },
+      "api_delta_without_empty_chat_overhead": 7,
+      "local_minus_api_delta": 0
+    },
+    {
+      "index": 2,
+      "content_sha256": "050b5e086bb5c678d2495e3b1ca482bef32c4190b64ec1a4da7955b770d536b4",
+      "official_text_tokens": 7,
+      "api_prompt_tokens": 11,
+      "usage": {
+        "prompt_tokens": 11,
+        "completion_tokens": 1,
+        "total_tokens": 12,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 11
+      },
+      "api_delta_without_empty_chat_overhead": 7,
+      "local_minus_api_delta": 0
+    },
+    {
+      "index": 3,
+      "content_sha256": "0af8f5ac1cdb6ac5abfc011b8d53a0a7d582799e35ba320138bb007ea12f2f42",
+      "official_text_tokens": 469,
+      "api_prompt_tokens": 473,
+      "usage": {
+        "prompt_tokens": 473,
+        "completion_tokens": 1,
+        "total_tokens": 474,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 473
+      },
+      "api_delta_without_empty_chat_overhead": 469,
+      "local_minus_api_delta": 0
+    },
+    {
+      "index": 4,
+      "content_sha256": "d57193b73f5889bc193052648522a88a1f041d6e0907ef793bde3c324e7a632b",
+      "official_text_tokens": 594,
+      "api_prompt_tokens": 598,
+      "usage": {
+        "prompt_tokens": 598,
+        "completion_tokens": 1,
+        "total_tokens": 599,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 598
+      },
+      "api_delta_without_empty_chat_overhead": 594,
+      "local_minus_api_delta": 0
+    },
+    {
+      "index": 5,
+      "content_sha256": "eabc85ce9bdc90f19c0e5579d838a0b0715aa29d015358bd28fdecab2af6cbe1",
+      "official_text_tokens": 519,
+      "api_prompt_tokens": 523,
+      "usage": {
+        "prompt_tokens": 523,
+        "completion_tokens": 1,
+        "total_tokens": 524,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 523
+      },
+      "api_delta_without_empty_chat_overhead": 519,
+      "local_minus_api_delta": 0
+    },
+    {
+      "index": 6,
+      "content_sha256": "f510744a8309a5f52c8bd577850519d49978b478d246e9bf86e7bcf902ae0178",
+      "official_text_tokens": 598,
+      "api_prompt_tokens": 602,
+      "usage": {
+        "prompt_tokens": 602,
+        "completion_tokens": 1,
+        "total_tokens": 603,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 602
+      },
+      "api_delta_without_empty_chat_overhead": 598,
+      "local_minus_api_delta": 0
+    },
+    {
+      "index": 7,
+      "content_sha256": "21fa1f251aaf919a3ffc1738364c03a072454ffa09d9ee760da1fce263d4414e",
+      "official_text_tokens": 459,
+      "api_prompt_tokens": 463,
+      "usage": {
+        "prompt_tokens": 463,
+        "completion_tokens": 1,
+        "total_tokens": 464,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        },
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 463
+      },
+      "api_delta_without_empty_chat_overhead": 459,
+      "local_minus_api_delta": 0
+    }
+  ],
+  "api_calls": 8,
+  "api_token_differences": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "source_urls": [
+    "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro",
+    "https://api-docs.deepseek.com/quick_start/token_usage/"
+  ],
+  "limit": "Official released same-model tokenizer, sample-checked against live API. API usage remains authority for billing; hidden tokenizer/version drift outside sampled texts unverified. Empty context has zero text tokens, so CX2 zero denominator stays null. B0 UTF8 counter/budget unchanged.",
+  "phase2_accepted": false
+}

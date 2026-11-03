@@ -1,5 +1,5 @@
-"""Actual fictional role probe, or 5-consistency plus 100-format embedding checks."""
-import argparse,asyncio,hashlib,importlib.util,json
+"""Actual fictional role probe; embedding format checks do not impose judge-label equality."""
+import argparse,asyncio,importlib.util,json
 from pathlib import Path
 
 async def main():
@@ -11,8 +11,8 @@ async def main():
   if role=='embedding':
    first=await io.embedding('Fictional vector consistency control.')
    vectors=[first,*await asyncio.gather(*(io.embedding('Fictional vector consistency control.' if i<6 else f'Fictional vector format input {i}.') for i in range(1,106)),return_exceptions=True)]
-   hashes=[hashlib.sha256(json.dumps(v).encode()).hexdigest() for v in vectors[1:6] if isinstance(v,list)]
-   count=sum(isinstance(v,list) and len(v)==1024 for v in vectors[6:]);valid=len(hashes)==5 and len(set(hashes))==1 and count>=99 and len(vectors[6:])==100;checks={'consistent_5':len(hashes)==5 and len(set(hashes))==1,'format_n':len(vectors[6:]),'format_valid':count}
+   from agent_memory.evals.b0 import embedding_probe_observations
+   checks=embedding_probe_observations(vectors);valid=checks['passed']
   elif role=='extraction':
    body={'model':config['extraction_model'],'temperature':0,'thinking':{'type':'disabled'},'response_format':{'type':'json_object'},'max_tokens':800,'messages':[{'role':'system','content':Path('docs/evals/prompts/b0-extraction-frozen-v1.txt').read_text()},{'role':'user','content':json.dumps({'event_type':'tool.result','summary':'Fictional build needs its generated fixtures initialized before running tests.'})}]}
    data=await io.request('extraction',body,provider=config.get('extraction_provider','Ark'));value=json.loads(data['choices'][0]['message']['content']);valid=set(value)=={'memories'} and isinstance(value['memories'],list) and len(value['memories'])<=3 and all(set(x)=={'content'} and isinstance(x['content'],str) and 1<=len(x['content'].strip())<=2000 for x in value['memories'])
@@ -29,6 +29,6 @@ async def main():
    for record in io.calls:
     if record.get('http')==200:require_disabled_thinking(json.loads((a.output/f"calls/{record['call_id']:07d}-response-{record['attempt']}-private.json").read_text()))
   except (RuntimeError,ValueError,KeyError):valid=False
- summary={'role':role,'passed':valid,'checks':checks,'fictional_only':True,'http_attempts':len(io.calls),'format_standard':'same native runtime schema; embedding exactly1024 finite nonzero, 5 identical outputs and100 distinct format trials'};module.write(a.output/'summary.json',summary);print(json.dumps(summary),flush=True)
+ summary={'role':role,'passed':valid,'checks':checks,'fictional_only':True,'http_attempts':len(io.calls),'format_standard':'same native runtime schema; embedding native1024 finite nonzero, actual success and100 format trials; exact repeat equality diagnostic only'};module.write(a.output/'summary.json',summary);print(json.dumps(summary),flush=True)
 
 if __name__=='__main__':asyncio.run(main())

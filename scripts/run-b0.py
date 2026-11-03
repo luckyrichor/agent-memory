@@ -40,9 +40,10 @@ from agent_memory.evals.api_import import source_time
 from agent_memory.infrastructure.db import create_session_factory,session_for_principal
 from agent_memory.infrastructure.event_repositories import PostgresExtractionBackend,PostgresOutboxRepository
 from agent_memory.evals.datasets import file_hash
-from agent_memory.evals.b0 import cosine_rank,calibration_sample,chunk_source_documents,measurement_signature,complete_checkpoint,compatible_measurement,compatible_result_model
+from agent_memory.evals.b0 import cosine_rank,calibration_sample,chunk_source_documents,measurement_signature,complete_checkpoint,compatible_measurement,compatible_result_model,normalize_embedding_request
 from agent_memory.evals.b0_rotation import vendor,quota as quota_response
 from agent_memory.evals.metrics import ratio,evidence_retrieval,latency
+from agent_memory.evals.b0_frozen import is_frozen,validate as validate_frozen,request_allowed,BIAS
 
 
 def write(path,data):
@@ -59,7 +60,7 @@ def digest(value):return hashlib.sha256(json.dumps(value,sort_keys=True,ensure_a
 class ModelIO:
  def __init__(self,out,cache_roots=(),fixture=False,config=None):
   self.config=config or {};self.embedding_model=self.config.get('embedding_model','doubao-embedding-vision-251215');self.embedding_provider=self.config.get('embedding_provider','Ark');self.embedding_protocol=self.config.get('embedding_protocol','ark')
-  self.fixture=fixture;self.credentials={}
+  self.fixture=fixture;self.credentials={};self.pace_lock=threading.Lock();self.next_send={}
   self.vector_cache={}
   for root in cache_roots:
    root=Path(root)
@@ -69,14 +70,30 @@ class ModelIO:
     request=root/f"calls/{record['call_id']:07d}-request-private.json";response=root/f"calls/{record['call_id']:07d}-response-{record['attempt']}-private.json"
     if not request.exists() or not response.exists():continue
     body=json.loads(request.read_text());data=json.loads(response.read_text())
-    if body.get("model")!=self.embedding_model or body.get("dimensions")!=1024:continue
+    if body.get("model")!=self.embedding_model:continue
+    native_fixed=self.embedding_provider=='TokenHub' and self.embedding_model=='kinfra-text-embedding-0.6b' and 'dimensions' not in body
+    if body.get('dimensions')!=1024 and not native_fixed:continue
     if data.get("model")!=self.embedding_model:continue
     vector=(data.get("data",{}).get("embedding",[]) if isinstance(data.get("data"),dict) else (data.get("data") or [{}])[0].get("embedding",[]))
     if len(vector)!=1024:continue
     if not all(isinstance(x,(int,float)) and math.isfinite(x) for x in vector) or not any(vector):continue
     self.vector_cache.setdefault(digest(body),(response,file_hash(response)))
-  self.out=out;self.clients={};self.semaphores={};self.counter_lock=threading.Lock();self.index=0;self.calls=[];self.runtime_blocked=False;self.exhausted=set()
+  self.out=out;self.clients={};self.semaphores={};self.counter_lock=threading.Lock();self.index=0;self.calls=[];self.runtime_blocked=False;self.exhausted=set();self.embedding_posts=0;self.budget_exhausted=False;self.version_changed=False
+  if is_frozen(self.config):
+   # Preserve the whole configuration's original vector cap across quota recovery.
+   seen=set()
+   def count_prior(root):
+    root=Path(root).resolve()
+    if root in seen:return 0
+    seen.add(root)
+    prior=json.loads((root/'run-manifest.json').read_text())
+    used=sum(r.get('role')=='embedding' and not r.get('cache_hit',False) for r in rows(root/'usage.jsonl'))
+    return used+sum(count_prior(parent) for parent in prior['config'].get('resume_roots',[]))
+   self.embedding_posts=sum(count_prior(parent) for parent in self.config.get('resume_roots',[]))
  async def request(self,role,body,*,provider='Ark'):
+  if not request_allowed(self.config,role,body['model'],provider):raise RuntimeError('FROZEN_ROLE_MODEL_OR_PROVIDER_MISMATCH')
+  if role=='embedding':body=normalize_embedding_request(body,provider)
+  if body.get('model')=='hy3':body={**{k:v for k,v in body.items() if k!='thinking'},'reasoning_effort':'none'}
   if self.runtime_blocked:raise RuntimeError('RUNTIME_QUOTA_PAUSED')
   loop=id(asyncio.get_running_loop())
   if loop not in self.clients:self.clients[loop]=httpx.AsyncClient(timeout=90,trust_env=False)
@@ -108,9 +125,18 @@ class ModelIO:
    if account not in self.credentials:self.credentials[account]=credential(account)
    actual_provider,base,token=self.credentials[account]
    if actual_provider!=provider:raise ValueError('ACCOUNT_PROVIDER_MISMATCH')
+   def pace_tokenhub():
+    with self.pace_lock:
+     target=self.next_send.get((account,body['model']),0);time.sleep(max(0,target-time.monotonic()));self.next_send[(account,body['model'])]=time.monotonic()+1.2
    start=time.monotonic();response=None
    for attempt in range(3):
     try:
+     if is_frozen(self.config) and role=='embedding':
+      with self.counter_lock:
+       if self.embedding_posts>=self.config['embedding_call_budget']:
+        self.budget_exhausted=True;self.runtime_blocked=True;raise RuntimeError('VECTOR_BUDGET_EXHAUSTED')
+       self.embedding_posts+=1
+     if provider=='TokenHub':await asyncio.to_thread(pace_tokenhub)
      response=await self.clients[loop].post(base+'/'+endpoint,json=body,headers={'Authorization':'Bearer '+token})
      data=response.json()
     except (httpx.HTTPError,ValueError) as error:
@@ -124,7 +150,11 @@ class ModelIO:
     if quota and role in ('extraction','embedding'):
      self.runtime_blocked=True;write(self.out/'runtime-quota-pause.json',record)
      raise RuntimeError('RUNTIME_QUOTA_PAUSED')
-    if status==200:return data
+    if status==200:
+     expected=self.config.get('expected_response_models',{}).get(role)
+     if is_frozen(self.config) and role in ('answer','extraction') and data.get('model')!=expected:
+      self.version_changed=True;self.runtime_blocked=True;write(self.out/'version-mismatch.json',{'role':role,'expected':expected,'actual':data.get('model'),'call_id':index});raise RuntimeError('FROZEN_RESPONSE_VERSION_CHANGED')
+     return data
     if quota:
      self.exhausted.add((role,provider,body['model']))
      raise RuntimeError('EVALUATION_MODEL_QUOTA')
@@ -198,7 +228,10 @@ async def measure(args,appurl):
  app=create_app(settings);sessions=create_session_factory(app.state.engine)
  from b0_correctness import measure_correctness
  await measure_correctness(app,sessions,key,out,runtime_label='offline fixture on current source' if config.get('offline_fixture') else 'B0')
+ conversation_gate=asyncio.Semaphore(config.get('conversation_concurrency',1000000))
  async def run_conversation(dataset,conv,mode,repeat):
+  async with conversation_gate:return await run_conversation_impl(dataset,conv,mode,repeat)
+ async def run_conversation_impl(dataset,conv,mode,repeat):
   tenant,user=uuid4(),uuid4();workspace='b0';scope=MemoryScope(ScopeKind.WORKSPACE,workspace,None)
   token=jwt.encode({'iss':'b0-eval','aud':'b0-eval','sub':str(user),'tenant_id':str(tenant),'roles':['developer'],'permissions':['memory:read','memory:write'],'allowed_workspace_ids':[workspace],'exp':datetime.now(timezone.utc)+timedelta(hours=12)},key,algorithm='RS256')
   mapping=[];rejected=[];chunks=[];naive_source=chunk_source_documents(conv['documents'])
@@ -274,7 +307,7 @@ async def measure(args,appurl):
    async def external_vector(item):
     return by_text[item['text']] if item['text'] in by_text else await io.embedding(item['text'])
    vectors=await asyncio.gather(*(external_vector(r) for r in naive_mapping))
-   import_record={'extraction_model':config.get('extraction_model','doubao-seed-2-1-pro-260915') if mode=='full' else None,'embedding_model':io.embedding_model,'embedding_provider':io.embedding_provider,'dataset':dataset,'conversation_id':cid,'mode':mode,'repeat':repeat,'source_documents':len(conv['documents']),'chunks':len(chunks),'memories':len(mapping),'naive_corpus_count':len(naive_mapping),'naive_includes_system_rejected_source_chunks':mode=='direct','embedding_outcomes':embedding_outcomes,'rejected':rejected,'extraction_outcomes':outcomes,'source_role_unknown_as_tool_result':sum(d['role']=='source' for d in conv['documents']),'event_occurred_at_basis':'original source time when parseable, otherwise explicit import receipt time; source text/time retained in mapping','active_memories':sum(r.get('memory_status','active')=='active' for r in mapping)}
+   import_record={'memory_status_counts':dict(__import__('collections').Counter(r.get('memory_status','active') for r in mapping)),'evidence_mapping_present':sum(bool(r.get('version_id') and r.get('source_id') and r.get('session_id')) for r in mapping),'vector_index_model':settings.embedding_model,'vector_index_rebuilt':{str(r['version_id']) for r in mapping}<={str(r[0]) for r in loaded},'unique_memory_versions':len({r['version_id'] for r in mapping}),'stored_current_model_vectors':len({str(r[0]) for r in loaded}),'extraction_model':config.get('extraction_model','doubao-seed-2-1-pro-260915') if mode=='full' else None,'embedding_model':io.embedding_model,'embedding_provider':io.embedding_provider,'dataset':dataset,'conversation_id':cid,'mode':mode,'repeat':repeat,'source_documents':len(conv['documents']),'chunks':len(chunks),'memories':len(mapping),'naive_corpus_count':len(naive_mapping),'naive_includes_system_rejected_source_chunks':mode=='direct','embedding_outcomes':embedding_outcomes,'rejected':rejected,'extraction_outcomes':outcomes,'source_role_unknown_as_tool_result':sum(d['role']=='source' for d in conv['documents']),'event_occurred_at_basis':'original source time when parseable, otherwise explicit import receipt time; source text/time retained in mapping','active_memories':sum(r.get('memory_status','active')=='active' for r in mapping)}
    imports.append(import_record);append(out/'imports-private.jsonl',import_record);write(out/f'mappings/{digest([dataset,cid,mode,repeat])}.json',mapping)
    questions=list(conv['questions']);rng=random.Random(seed);rng.shuffle(questions);questions=questions[:config['questions_per_conversation']]
    for q in questions:
@@ -287,7 +320,7 @@ async def measure(args,appurl):
     for group,(context,evidence) in groups.items():
      answer,data=None,{}
      row={'pipeline_extraction_model':config.get('extraction_model','doubao-seed-2-1-pro-260915') if mode=='full' else None,'pipeline_embedding_model':io.embedding_model,'pipeline_embedding_provider':io.embedding_provider,'row_id':digest([dataset,cid,q['question_id'],mode,group,repeat]),'dataset':dataset,'conversation_id':cid,'question_id':q['question_id'],'category':q['category'],'mode':mode,'system':group,'repeat':repeat,'question':q['text'],'reference':q['answer'],'answer':answer,'answer_model':data.get('model'),'answer_usage':data.get('usage'),'answer_valid':answer is not None,'ranked_evidence_sets':evidence,'retrieval':{str(k):evidence_retrieval(evidence,q['relevant'],k) for k in (1,3,5,10)} if q['evidence_available'] and not q['abstention'] and group in ('system','naive-vector') else {},'system_vector_status':observed.vector_status if group=='system' else None,'RT6':float(not evidence) if q['abstention'] and group in ('system','naive-vector') else None,'flow_only':q['category'] in conv.get('metadata',{}).get('flow_only_categories',[]),'full_context_truncated':False,'full_context_input_bytes':len(json.dumps(context,ensure_ascii=False).encode()),'system_context':{'used_tokens':packet.used_tokens,'budget':packet.budget,'truncated':packet.truncated,'counter':packet.counter} if group=='system' else None,'judge_correct':None,'judge_model':'glm-5.2','formal_score':False}
-     row.update(context=context,question_date=conv.get('metadata',{}).get('question_date'))
+     row.update(context=context,question_date=conv.get('metadata',{}).get('question_date'),retrieval_diagnosis={'extracted_memories':len(mapping),'active_memories':import_record['active_memories'],'mapped_memories':import_record['evidence_mapping_present'],'returned_hits':len(observed.items),'primary_cause':'extraction_no_output' if not mapping else ('evidence_mapping_missing' if import_record['evidence_mapping_present']<len(mapping) else ('filtered_nonactive' if not import_record['active_memories'] else ('retrieval_no_recall' if not observed.items else 'nonzero_return')))})
      all_results.append(row);append(out/'results-private.jsonl',row)
      print(json.dumps({'dataset':dataset,'mode':mode,'repeat':repeat,'group':group,'completed_rows':len(all_results),'model_calls':len(io.calls)}),flush=True)
  def resume_dataset(dataset,selected):
@@ -377,6 +410,7 @@ async def measure(args,appurl):
   # Measure the frozen byte counter; never replace it with the target-model tokenizer.
   async def context_tokens(row):
    if row['system']!='system' or row.get('_answer_checkpoint'):return
+   if is_frozen(config):row.update(actual_rendered_context_tokens=None,context_tokenization_status='not measured: target tokenizer API unavailable, no Ark calls');return
    try:
     data=await io.request('tokenizer',{'model':config.get('answer_models',['doubao-seed-2-1-pro-260915'])[0],'text':[row['context']]})
     row['actual_rendered_context_tokens']=data['data'][0]['total_tokens'];row['context_tokenizer_model']=data.get('model')
@@ -404,7 +438,10 @@ async def measure(args,appurl):
     answers_complete=True;break
    if not answers_complete:raise RuntimeError('EVALUATION_MODEL_QUOTA')
    answer_vendor=vendor(model)
-   judge_options=([{'model':config['judge_model'],'vendor':vendor(config['judge_model'])}] if config.get('judge_model') else [pools['primary'],*pools['backups']])
+   judge_options=([{'model':m,'vendor':vendor(m)} for m in config['judge_models']] if config.get('judge_models') else ([{'model':config['judge_model'],'vendor':vendor(config['judge_model'])}] if config.get('judge_model') else [pools['primary'],*pools['backups']]))
+   if args.fixed_judge:
+    assert args.fixed_judge==config.get('judge_model')
+    judge_options=[j for j in judge_options if j['model']==args.fixed_judge]
    for judge in judge_options:
     if judge['vendor']==answer_vendor or (dataset=='chinese_queries_v2' and judge['vendor']=='MiniMax'):continue
     async def one_grade(row):
@@ -428,7 +465,14 @@ async def measure(args,appurl):
    corpus=rows(source)
    if dataset not in ('dulemon_gold','ecd_negative'):corpus=[c for c in corpus if c['questions']]
    rng=random.Random(seed);rng.shuffle(corpus)
-   if dataset.startswith('longmemeval') and config.get('conversations_per_question_type'):
+   if config.get('dev_selection'):
+    from agent_memory.evals.b0_selection import select_questions
+    sample_spec=config['dev_selection'];sample_path=REPO/sample_spec['path']
+    assert file_hash(sample_path)==sample_spec['sha256']
+    sample=json.loads(sample_path.read_text())[dataset]
+    assert sample['source_sha256']==manifest[dataset]['sha256']
+    selected=select_questions(corpus,sample['questions_by_conversation'],quality_only=dataset=='chinese_queries_v2')
+   elif dataset.startswith('longmemeval') and config.get('conversations_per_question_type'):
     by_category={}
     for conv in corpus:by_category.setdefault(conv['questions'][0]['category'],[]).append(conv)
     selected=[conv for category in sorted(by_category) for conv in by_category[category][:config['conversations_per_question_type']]]
@@ -447,26 +491,27 @@ async def measure(args,appurl):
   write(out/'graded-results-private.json',all_results)
   valid=[r for r in all_results if r['judge_correct'] is not None]
   if len(valid)>=300 and not config.get('offline_fixture'):
-   chosen=calibration_sample(valid,300,seed=seed);write(out/'calibration-mapping-private.json',chosen)
+   chosen=calibration_sample(valid,300,seed=config.get('calibration_seed',seed));write(out/'calibration-mapping-private.json',chosen)
    import csv
    with (out/'calibration-300-private.csv').open('w',encoding='utf-8-sig',newline='') as f:
     writer=csv.DictWriter(f,fieldnames=['item_id','question','reference','answer','human_correct','human_reason']);writer.writeheader()
-    for i,row in enumerate(chosen):writer.writerow({'item_id':'c-'+digest([seed,row['row_id']])[:20],**{k:__import__('agent_memory.evals.human_review',fromlist=['csv_text']).csv_text(row[k]) for k in ('question','reference','answer')},'human_correct':'','human_reason':''})
+    for i,row in enumerate(chosen):writer.writerow({'item_id':'c-'+digest([config.get('calibration_seed',seed),row['row_id'],config.get('baseline_configuration_id')])[:20],**{k:__import__('agent_memory.evals.human_review',fromlist=['csv_text']).csv_text(row[k]) for k in ('question','reference','answer')},'human_correct':'','human_reason':''})
    (out/'calibration-300-private.csv').chmod(0o600)
    cross=[]
    try:
+    if is_frozen(config) and any(row['judge_model']==config['cross_reference_model'] for row in chosen):raise RuntimeError('CROSS_REFERENCE_NOT_INDEPENDENT')
     for row in chosen:cross.append({'row_id':row['row_id'],'model':config.get('cross_reference_model','hunyuan-role-latest'),'correct':await io.grade(row,config.get('cross_reference_model','hunyuan-role-latest'),role='cross-reference')});write(out/'cross-reference-private.json',cross)
-   except RuntimeError:
-    write(out/'cross-reference-incomplete.json',{'completed':len(cross),'required':len(chosen),'model':config.get('cross_reference_model','hunyuan-role-latest'),'reason':'quota; no unqualified cross-reference substitution'})
+   except RuntimeError as cross_error:
+    write(out/'cross-reference-incomplete.json',{'completed':len(cross),'required':len(chosen),'model':config.get('cross_reference_model','hunyuan-role-latest'),'reason':str(cross_error) if str(cross_error)=='CROSS_REFERENCE_NOT_INDEPENDENT' else 'quota or unavailable; no unqualified cross-reference substitution'})
    status='paused_for_owner_calibration'
   else:status='offline_fixture_completed' if config.get('offline_fixture') else 'incomplete_calibration_population'
  except Exception as error:
-  status='runtime_quota_paused' if io.runtime_blocked else 'failed'
+  status='model_version_paused' if io.version_changed else ('vector_budget_paused' if io.budget_exhausted else ('runtime_quota_paused' if io.runtime_blocked else 'failed'))
   write(out/'failure.json',{'exception_type':type(error).__name__,'reason_code':str(error) if str(error) in ('RUNTIME_QUOTA_PAUSED','EVALUATION_MODEL_QUOTA') else 'details_private','completed_rows':len(all_results)})
   import traceback
   (out/'traceback-private.txt').write_text(traceback.format_exc());(out/'traceback-private.txt').chmod(0o600)
  finally:
-  write(out/'status.json',{'status':status,'rows':len(all_results),'model_records_including_replays':len(io.calls),'model_attempts':sum(r.get('new_http_call',not r.get('cache_hit',False)) for r in io.calls),'vector_cache_replays':sum(r.get('cache_hit',False) for r in io.calls),'dev_only':True,'formal_scores':False,'baseline_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=SOURCE,text=True).strip(),'runtime_source':str(SOURCE),'full_evaluation_complete':False,'phase2_accepted':False})
+  write(out/'status.json',{'status':status,'rows':len(all_results),'model_records_including_replays':len(io.calls),'model_attempts':sum(r.get('new_http_call',not r.get('cache_hit',False)) for r in io.calls),'vector_cache_replays':sum(r.get('cache_hit',False) for r in io.calls),'baseline_configuration_id':config.get('baseline_configuration_id'),'classification':'new B0 configuration, calibration pending' if is_frozen(config) else '探索性，不计入 B0','index_model':io.embedding_model,'index_rebuilt_from_new_inputs':is_frozen(config),'bias_limitation':BIAS if is_frozen(config) else None,'dev_only':True,'formal_scores':False,'baseline_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=SOURCE,text=True).strip(),'runtime_source':str(SOURCE),'full_evaluation_complete':False,'phase2_accepted':False})
   # Proxy clients belong to their original event loop; shut down proxy before main-loop client.
   await app.state.engine.dispose();server.should_exit=True;thread.join(timeout=5)
   client=io.clients.get(id(asyncio.get_running_loop()))
@@ -476,26 +521,33 @@ async def measure(args,appurl):
 
 def main():
  p=argparse.ArgumentParser();p.add_argument('--dataset',required=True);p.add_argument('--mode',choices=['direct','full','both'],required=True);p.add_argument('--config',type=Path,required=True);p.add_argument('--metrics',required=True);p.add_argument('--output',type=Path,required=True)
+ p.add_argument('--fixed-judge',choices=['glm-5.2'])
  a=p.parse_args();assert '.local' in a.output.resolve().parts
  catalog=json.loads((REPO/'docs/evals/metric-catalog.json').read_text())
  identifiers={r['id'] for r in catalog};families={r.rstrip('0123456789') for r in identifiers}
  requested=set(a.metrics.split(','))
  if requested-identifiers-families:p.error('unknown metric identifier or family')
  a.expanded_metrics=sorted({mid for mid in identifiers if mid in requested or mid.rstrip('0123456789') in requested})
- config=json.loads(a.config.read_text())
- allowed={'seed','conversations_per_dataset','conversations_per_question_type','questions_per_conversation','system_context_budget','purpose','workload_basis','embedding_cache_roots','datasets_manifest','offline_fixture','extraction_model','extraction_provider','runtime_change_authorization','answer_models','resume_roots','role_accounts','answer_provider','judge_model','judge_provider','embedding_model','embedding_provider','embedding_protocol','cross_reference_provider','four_key_authorization','family_continuation_authorization','cross_reference_model'}
+ config=json.loads(a.config.read_text());validate_frozen(config)
+ if config.get('dev_selection'):
+  guard_path=(REPO/config['dev_selection']['path']).parent/'same-configuration-check.json'
+  guard=json.loads(guard_path.read_text())
+  assert all(file_hash(REPO/name)==expected for name,expected in guard['prompt_sha256'].items()),'EXPANSION_PROMPT_CHANGED'
+  assert all(config.get(key)==value for key,value in guard['expected_algorithm_model_values'].items()),'EXPANSION_MODEL_OR_ALGORITHM_CHANGED'
+  assert a.fixed_judge==guard['fixed_judge_no_fallback'],'EXPANSION_PRIMARY_JUDGE_NOT_FIXED'
+ allowed={'seed','conversations_per_dataset','conversations_per_question_type','questions_per_conversation','system_context_budget','purpose','workload_basis','embedding_cache_roots','dev_selection','datasets_manifest','offline_fixture','extraction_model','extraction_provider','runtime_change_authorization','answer_models','resume_roots','role_accounts','answer_provider','judge_model','judge_provider','embedding_model','embedding_provider','embedding_protocol','cross_reference_provider','four_key_authorization','family_continuation_authorization','cross_reference_model','deepseek_last_resort_authorization','frozen_b0_authorization','baseline_configuration_id','embedding_call_budget','judge_models','expected_response_models','calibration_seed','conversation_concurrency'}
  if set(config)-allowed:p.error('unknown system configuration fields; credentials must use the private environment')
- if config.get('extraction_model','doubao-seed-2-1-pro-260915')!='doubao-seed-2-1-pro-260915' and config.get('runtime_change_authorization')!='om_x100b62846f735ca8df833bd67f54736':p.error('runtime replacement requires the recorded explicit owner authorization')
+ if not is_frozen(config) and config.get('extraction_model','doubao-seed-2-1-pro-260915')!='doubao-seed-2-1-pro-260915' and config.get('runtime_change_authorization')!='om_x100b62846f735ca8df833bd67f54736':p.error('runtime replacement requires the recorded explicit owner authorization')
  if config.get('offline_fixture') and a.dataset!='offline-fixture':p.error('fixture configuration cannot measure actual benchmark data')
  if config.get('datasets_manifest') and not config.get('offline_fixture'):p.error('real runs require frozen dev registry')
  if not config.get('offline_fixture') and config.get('judge_model'):
   answer_vendor=vendor(config.get('answer_models',['doubao-seed-2-1-pro-260915'])[0]);judge_vendor=vendor(config['judge_model'])
-  if answer_vendor is None or judge_vendor is None or judge_vendor in {answer_vendor,'DeepSeek','Tencent','MiniMax'}:p.error('judge vendor cannot be verified independent from answer and table annotation vendors')
+  if answer_vendor is None or judge_vendor is None or (judge_vendor not in {'Zhipu','Xiaomi','MiniMax'} if is_frozen(config) else judge_vendor in {answer_vendor,'DeepSeek','Tencent','MiniMax'}):p.error('judge vendor cannot be verified independent from answer and table annotation vendors')
  a.output.mkdir(parents=True,exist_ok=False,mode=0o700)
  if not config.get('offline_fixture'):
   assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=SOURCE,text=True).strip()==subprocess.check_output(['git','rev-parse','B0^{}'],cwd=REPO,text=True).strip()
   assert not subprocess.check_output(['git','status','--porcelain'],cwd=SOURCE,text=True)
- write(a.output/'run-manifest.json',{'baseline_tag':None if config.get('offline_fixture') else 'B0','baseline_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=SOURCE,text=True).strip(),'harness_uncommitted_changes':bool(subprocess.check_output(['git','status','--porcelain'],cwd=REPO,text=True).strip()),'harness_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip(),'harness_script_sha256':file_hash(Path(__file__)),'harness_support_sha256':{str(p.relative_to(REPO)):file_hash(p) for p in [REPO/'scripts/b0_correctness.py',REPO/'src/agent_memory/evals/b0.py',REPO/'src/agent_memory/evals/metrics.py']},'config':json.loads(a.config.read_text()),'config_sha256':file_hash(a.config),'dataset':a.dataset,'mode':a.mode,'metrics_requested':a.metrics.split(','),'metrics_expanded':a.expanded_metrics,'runtime_application_file':__import__('agent_memory.api.app',fromlist=['x']).__file__,'prompt_hashes':{str(x.relative_to(REPO)):file_hash(x) for x in [*(REPO/'docs/evals/prompts').glob('b0-*'),REPO/'docs/evals/prompts/judge-v1.txt'] if x.is_file()},'seed':42,'dev_only':True,'test_execution':False,'offline_fixture_only':bool(config.get('offline_fixture')),'grade_status':'pre-calibration diagnostic only'})
+ write(a.output/'run-manifest.json',{'baseline_configuration_id':config.get('baseline_configuration_id'),'bias_limitation':BIAS if is_frozen(config) else None,'baseline_tag':None if config.get('offline_fixture') else 'B0','baseline_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=SOURCE,text=True).strip(),'harness_uncommitted_changes':bool(subprocess.check_output(['git','status','--porcelain'],cwd=REPO,text=True).strip()),'harness_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip(),'harness_script_sha256':file_hash(Path(__file__)),'harness_support_sha256':{str(p.relative_to(REPO)):file_hash(p) for p in [REPO/'scripts/b0_correctness.py',REPO/'src/agent_memory/evals/b0.py',REPO/'src/agent_memory/evals/b0_frozen.py',REPO/'src/agent_memory/evals/metrics.py']},'config':json.loads(a.config.read_text()),'config_sha256':file_hash(a.config),'fixed_judge_no_fallback':a.fixed_judge,'dataset':a.dataset,'mode':a.mode,'metrics_requested':a.metrics.split(','),'metrics_expanded':a.expanded_metrics,'runtime_application_file':__import__('agent_memory.api.app',fromlist=['x']).__file__,'prompt_hashes':{str(x.relative_to(REPO)):file_hash(x) for x in [*(REPO/'docs/evals/prompts').glob('b0-*'),REPO/'docs/evals/prompts/judge-v1.txt'] if x.is_file()},'seed':42,'dev_only':True,'test_execution':False,'offline_fixture_only':bool(config.get('offline_fixture')),'grade_status':'pre-calibration diagnostic only'})
  with PostgresContainer('pgvector/pgvector:pg16',username='agent_memory',password='disposable-b0-only',dbname='agent_memory',driver='psycopg') as pg:
   url=pg.get_connection_url();cfg=Config(str(SOURCE/'alembic.ini'));cfg.set_main_option('script_location',str(SOURCE/'migrations'));cfg.set_main_option('sqlalchemy.url',url);command.upgrade(cfg,'head')
   engine=create_engine(url)

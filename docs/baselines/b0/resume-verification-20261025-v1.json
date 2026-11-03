@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-25T20:38:57.920358+08:00",
+  "base_commit": "2fae08bdb524497070b6cd8ab5cdbaabfff5ced1",
+  "uncommitted_changes": true,
+  "pytest_passed": 456,
+  "pytest_seconds": 45.04,
+  "ruff_passed": true,
+  "strict_mypy_passed": true,
+  "foundation_passed": true,
+  "log_sha256": "876f8797b42c4be19ed55cbce99ce19bb6c9e65c8201ebf727b9768c3a25471e",
+  "tested": [
+    "varying finite1024 vectors do not inherit judge-label equality gate",
+    "Kinfra native fixed-dimension request omits unsupported dimensions",
+    "exact valid native vector replay retains response hash check",
+    "direct DeepSeek candidates sorted after all Tencent/Ark candidates and excluded from annotation-conflicting judge roles"
+  ]
+}

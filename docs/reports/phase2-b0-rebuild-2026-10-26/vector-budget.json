@@ -1,0 +1,92 @@
+{
+  "datasets": {
+    "longmemeval_s": {
+      "conversations": 2,
+      "chunks": 913,
+      "questions": 2,
+      "answer_rows": 48,
+      "source_extraction_calls": 2739,
+      "conservative_vector_calls_before_retries": 21948,
+      "source_sha256": "2333df04b08179c4e5faf33b6f795537a55391663de24c62523ae30b8a8452ba",
+      "selection_sha256": "a545d143b054513e6cc5a67561c719779b35c4449dc8a1273ae437be4eb4c55c"
+    },
+    "longmemeval_oracle": {
+      "conversations": 5,
+      "chunks": 82,
+      "questions": 5,
+      "answer_rows": 120,
+      "source_extraction_calls": 246,
+      "conservative_vector_calls_before_retries": 2058,
+      "source_sha256": "d584ee193cd972f2ed3d2efc5ce8d7bff23d73d1a75fb1ac4441e0ceb4c36037",
+      "selection_sha256": "69c19c7c1472a600f623032263aad83dcaa8561821bbafb74121eb8b97d1206a"
+    },
+    "locomo": {
+      "conversations": 1,
+      "chunks": 629,
+      "questions": 10,
+      "answer_rows": 240,
+      "source_extraction_calls": 1887,
+      "conservative_vector_calls_before_retries": 15276,
+      "source_sha256": "3827d2f4a087c549c15d38cdf35c6ff7d53359c784b33fdada589974b72a109e",
+      "selection_sha256": "4d7e81261dfcaa235b86cb03952581a7a1c21e78abe620f090bd035772e07926"
+    },
+    "perltqa_zh": {
+      "conversations": 3,
+      "chunks": 193,
+      "questions": 30,
+      "answer_rows": 720,
+      "source_extraction_calls": 579,
+      "conservative_vector_calls_before_retries": 5172,
+      "source_sha256": "e650b3bd7150469d1992075a516338f81cf70ffa7eddf128f84f670cb6f1bf61",
+      "selection_sha256": "ac5f5d0840240c90b9a9d845606269c4a0a34c62956257481077195f3a541b85"
+    },
+    "chinese_queries_v2": {
+      "conversations": 10,
+      "chunks": 132,
+      "questions": 18,
+      "answer_rows": 432,
+      "source_extraction_calls": 396,
+      "conservative_vector_calls_before_retries": 3492,
+      "source_sha256": "1d4b6314651436071d63dca3b18fd8fbb5222fa074f8c4d12b9afc3e5f9162f9",
+      "selection_sha256": "1c117e5dbd7a8ed045bb2ad55b9d0e83cd6b7fac9cbddc3e7fb48981a72f3e8e"
+    },
+    "dulemon_gold": {
+      "conversations": 8,
+      "chunks": 128,
+      "questions": 0,
+      "answer_rows": 0,
+      "source_extraction_calls": 384,
+      "conservative_vector_calls_before_retries": 3072,
+      "source_sha256": "112bb85573e5c2d09b48dad14af884c37206c9c6b782cc8743d7fdf276bae4ac",
+      "selection_sha256": "d85e8cf130284716ab38bd732defb730ac8d1b8dc55c2e4b51214d4d0e95987b"
+    },
+    "ecd_negative": {
+      "conversations": 8,
+      "chunks": 84,
+      "questions": 0,
+      "answer_rows": 0,
+      "source_extraction_calls": 252,
+      "conservative_vector_calls_before_retries": 2016,
+      "source_sha256": "f025b8715ab8a0895d58ba4e7d5b2228c7e6a539e11dab43cf754bab086021a3",
+      "selection_sha256": "d53c0d3fa14adc363eb9af68e9a682057a293a523fb185b964083756a98fc9ef"
+    }
+  },
+  "answer_rows": 1560,
+  "vector_calls_before_retries": 53034,
+  "reserve_fraction": 0.25,
+  "reserved_vector_calls": 13259,
+  "vector_call_budget": 66293,
+  "pilot_vector_budget": 600,
+  "total_planned_vector_allowance_including600pilot106preflight1length_probe": 67000,
+  "preflight_vector_trials": 106,
+  "estimated_extra_vector_character_limit_probes": 1,
+  "allowance_is_planning_not_provider_reservation": true,
+  "balance_not_queried": true,
+  "vector_model_auto_switch": false,
+  "approximate_serial_seconds_at_1_2sec_pacing": 79551.59999999999,
+  "new_vectors_only": true,
+  "old_ark_vectors_reused": false,
+  "old_answers_reused": false,
+  "bias_limitation": "DeepSeek 同时是金标准标注模型之一，答题与抽取模型与标注模型同厂商，可能使抽取类指标略偏高；金标准要求两个厂商模型共同保留，已部分抵消这一影响。",
+  "O10": "new controlled Ark-vs-Tencent comparison not available because Ark quota exhausted; old measurements exploratory only, not new B0 comparator; no superiority claim"
+}

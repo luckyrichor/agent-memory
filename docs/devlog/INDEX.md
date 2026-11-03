@@ -46,3 +46,7 @@
 - [ECD180真实回填与负会话双闸门](2026-10-23-ecd180-human-confirmed.md)
 
 - [阶段2 B0测量准备与执行](2026-10-23-phase2-b0.md)
+
+- [2026-10-26 冻结DeepSeek+腾讯向量重新建立B0](2026-10-26-phase2-b0-frozen-deepseek-rebuild.md)
+
+- [2026-10-28 B0观测证据补齐](2026-10-28-phase2-b0-evidence-supplement.md)

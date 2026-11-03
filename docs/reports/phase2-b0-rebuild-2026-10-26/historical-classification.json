@@ -1,0 +1,158 @@
+{
+  "baseline_code_tag_unchanged": "B0",
+  "new_configuration_id": "B0-deepseek-v4-pro-kinfra-20261026-v1",
+  "old_results": [
+    {
+      "run": ".local/phase2/b0/development-sample-v3",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "80c5b1173a48473f7d734357c4c09c4e97ad1e83a7504e779654e1a43b93acd7",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    },
+    {
+      "run": ".local/phase2/b0/development-sample-v1",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "95635fb5adbd030e420062c7e15f7dcea277446fb4d41ce50aac4b5c349c60dc",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    },
+    {
+      "run": ".local/phase2/b0/development-sample-v5",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "0ffa70aa41adaf775f8457b9b880d2e0791c8e81e3eafd28299458ddfa01fa86",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    },
+    {
+      "run": ".local/phase2/b0/development-sample-v4",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "37c02c66905bcc6d1dc50b2c4677ede64f9fe191aba608a7a82ab11dc67a985d",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    },
+    {
+      "run": ".local/phase2/b0/correctness-v2",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "e2c1ad774bbedab51f4891d5dcc298b512e796bddc8788b4ae94d09ded5d49dc",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    },
+    {
+      "run": ".local/phase2/b0/api-pilot-v1",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "f8ec7b65e66a03d49fc21b900def605c482a864493f7eadc6221afe60df8feda",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    },
+    {
+      "run": ".local/phase2/b0/development-sample-v7",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "a6589edf54ff1e466a58eb67cd7f8ce8e1052b16e219645584dab20d03fa2901",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    },
+    {
+      "run": ".local/phase2/b0/correctness-v1",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "171824edd677a811d5088a1231e88686859b247de02f6e4ca182c5e8e7fb83ea",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    },
+    {
+      "run": ".local/phase2/b0/api-pilot-lite-v1",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "56609adcbcc18f03257e20be2a960563a0c5798b12a3866f58558954d805914e",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    },
+    {
+      "run": ".local/phase2/b0/api-pilot-v2",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "58aef43669bbeec4d78614c4d190be775b4ba60a191dd428eece6bd1b568e300",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    },
+    {
+      "run": ".local/phase2/b0/development-sample-v8",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "02fb66ade97744d804a8c6905d88f392aa93c48921ad16781b96d59232a9de30",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    },
+    {
+      "run": ".local/phase2/b0/development-sample-v6",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "bdd4c73efb3fbbd3ce588214051d2c9615f033005f1b0e6faade307c4ebb16f3",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    },
+    {
+      "run": ".local/phase2/b0/development-sample-v8-rotation/attempt-003",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "9fd18b78f11f8ed453b70135f70ba88581523e69761df7c2ab0ec744f61efa13",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    },
+    {
+      "run": ".local/phase2/b0/development-sample-v8-rotation/attempt-004",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "cd7a269bcc93cbe469676213c7ffed04fd6068ffe13d0228798846ddeba8d999",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    },
+    {
+      "run": ".local/phase2/b0/development-sample-v8-rotation/attempt-002",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "f5a8f5f7e27e087ed700f34869685c065375685271c098d7235cbd1838ccb1e1",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    },
+    {
+      "run": ".local/phase2/b0/development-sample-v8-rotation/attempt-001",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "5ae7de2ba7d61bd0f3ff8b44dba7bad3a04198b7eb4c23ea8db248aa4a2e8d1f",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    },
+    {
+      "run": ".local/phase2/b0/development-sample-v8-rotation/attempt-005",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "80609998f0101bb6fccacbe12de7bebac8ee8b1f4c1e9ecedbc2fd922c49eac5",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    },
+    {
+      "run": ".local/phase2/b0/development-sample-v8-rotation/attempt-006",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "29029574a0f9cf34c54c83750373b07e6caf2cc6b215d3f4e6e244c59c97859c",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    },
+    {
+      "run": ".local/phase2/b0/development-sample-v7-rotation/attempt-003",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "2560d03e7517b5ad08ce6e66c102f295373799ec5e599d0f9dae338936c19742",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    },
+    {
+      "run": ".local/phase2/b0/development-sample-v7-rotation/attempt-002",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "a775250e049c04899e89187f358f80b1c62460221f05497f0b8a7808e165bc52",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    },
+    {
+      "run": ".local/phase2/b0/development-sample-v7-rotation/attempt-001",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "16a9eb0ee463ba42e1b8354483c39eed561240d7096132f5ac2fd8608b487c89",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    },
+    {
+      "run": ".local/phase2/b0/development-sample-v6-rotation/attempt-003",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "7955258a4fa591acf2df5b9ef039517cb21e5b3a1dfd03c2c1117ea188ea282b",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    },
+    {
+      "run": ".local/phase2/b0/development-sample-v6-rotation/attempt-004",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "ecd25d41072e743cc629b31ba1897499545fb0e18a8abf5d1bf637ef043a3cab",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    },
+    {
+      "run": ".local/phase2/b0/development-sample-v6-rotation/attempt-002",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "1e5b04b5d7c52c089e0e863c594698ac4402cf35785341151aec79107c22b5c0",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    },
+    {
+      "run": ".local/phase2/b0/development-sample-v6-rotation/attempt-001",
+      "classification": "探索性，不计入 B0",
+      "manifest_sha256": "d573ee9fa24dd1afa3a112568e96be871cef38429819410ee186fdf209d2b173",
+      "reason": "prior mixed answer models or superseded model/vector configuration"
+    }
+  ],
+  "old_calibration_tables": "superseded; do not reuse; new300 must sample only new completed run",
+  "per_run_classification_sidecars_verified": 25
+}

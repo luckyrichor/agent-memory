@@ -1,0 +1,44 @@
+{
+  "scenario": "F9",
+  "observations": [
+    {
+      "repeat": 1,
+      "limited_filesystem_bytes": 16777216,
+      "tablespace_bytes": 3178616,
+      "failed_write_http": 422,
+      "read_during_full_http": 200,
+      "write_after_cleanup_http": 201,
+      "seconds": 0.39827591134235263,
+      "read_recovery_pass": true,
+      "explicit_retryable_error_semantics_pass": false
+    },
+    {
+      "repeat": 2,
+      "limited_filesystem_bytes": 16777216,
+      "tablespace_bytes": 3178616,
+      "failed_write_http": 422,
+      "read_during_full_http": 200,
+      "write_after_cleanup_http": 201,
+      "seconds": 0.35775018529966474,
+      "read_recovery_pass": true,
+      "explicit_retryable_error_semantics_pass": false
+    },
+    {
+      "repeat": 3,
+      "limited_filesystem_bytes": 16777216,
+      "tablespace_bytes": 3178616,
+      "failed_write_http": 422,
+      "read_during_full_http": 200,
+      "write_after_cleanup_http": 201,
+      "seconds": 0.13820196501910686,
+      "read_recovery_pass": true,
+      "explicit_retryable_error_semantics_pass": false
+    }
+  ],
+  "confirmed_writes": 52,
+  "confirmed_missing": 0,
+  "external_model_calls": 0,
+  "scope": "Separate1CPU/512MiB PostgreSQL container; only memory_versions physical tablespace relocated to a16MiB tmpfs. Schema/business code unchanged. Full-volume file removed between trials; host root disk was never filled. Read/recovery correctness distinct from error semantics.",
+  "valid_fault_evidence": false,
+  "reason": "First non201 was422; not evidence of actual disk-full write failure. Superseded by stricter repeat requiring captured SQLSTATE53100."
+}

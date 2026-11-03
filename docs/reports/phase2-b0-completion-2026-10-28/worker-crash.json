@@ -1,0 +1,38 @@
+{
+  "scenario": "F5",
+  "observations": [
+    {
+      "repeat": 1,
+      "child_exit": 77,
+      "default_lease_seconds": 30,
+      "recovery_seconds": 30.964271027129143,
+      "status": "succeeded",
+      "attempts": 2,
+      "outcome": "succeeded",
+      "vector_rows_for_version": 1
+    },
+    {
+      "repeat": 2,
+      "child_exit": 77,
+      "default_lease_seconds": 30,
+      "recovery_seconds": 31.049279754050076,
+      "status": "succeeded",
+      "attempts": 2,
+      "outcome": "succeeded",
+      "vector_rows_for_version": 1
+    },
+    {
+      "repeat": 3,
+      "child_exit": 77,
+      "default_lease_seconds": 30,
+      "recovery_seconds": 31.185585571918637,
+      "status": "succeeded",
+      "attempts": 2,
+      "outcome": "succeeded",
+      "vector_rows_for_version": 1
+    }
+  ],
+  "passed": true,
+  "model_calls": 0,
+  "method": "Three actual subprocess os._exit deaths after committed native backend claim; default 30 second lease expires on real clock; frozen replacement EmbeddingWorker, exact precomputed Tencent native vectors; isolated synthetic clone. No SQL job status edits."
+}

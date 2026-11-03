@@ -1,0 +1,160 @@
+{
+  "rows": 73,
+  "original_content_unchanged": true,
+  "all_reasons_present": true,
+  "filled_sha256": "66422c01944c423c0b154067f606f578ed1e2a29c707c4ac4e0b67600caa9236",
+  "original_sha256": "5f4be6cbfe8046b1521ab8e7f5c37820abe22a30e952f3c08b1b5c4c3fc1cbd8",
+  "models": {
+    "glm-5.2": {
+      "overall": {
+        "n": 73,
+        "accuracy": 0.9452054794520548,
+        "cohen_kappa": 0.8856695379796398,
+        "confusion_human_rows_judge_columns": [
+          [
+            42,
+            3
+          ],
+          [
+            1,
+            27
+          ]
+        ],
+        "judge_true_human_false": 3,
+        "false_positive_fraction_all": 0.0410958904109589,
+        "false_positive_fraction_judge_positive": 0.1,
+        "eligible": true
+      },
+      "recall": {
+        "n": 30,
+        "accuracy": 1.0,
+        "cohen_kappa": 1.0,
+        "confusion_human_rows_judge_columns": [
+          [
+            23,
+            0
+          ],
+          [
+            0,
+            7
+          ]
+        ],
+        "judge_true_human_false": 0,
+        "false_positive_fraction_all": 0.0,
+        "false_positive_fraction_judge_positive": 0.0,
+        "eligible": true
+      },
+      "precision": {
+        "n": 43,
+        "accuracy": 0.9069767441860465,
+        "cohen_kappa": 0.8142548596112309,
+        "confusion_human_rows_judge_columns": [
+          [
+            19,
+            3
+          ],
+          [
+            1,
+            20
+          ]
+        ],
+        "judge_true_human_false": 3,
+        "false_positive_fraction_all": 0.06976744186046512,
+        "false_positive_fraction_judge_positive": 0.13043478260869565,
+        "eligible": true
+      }
+    },
+    "minimax-m3": {
+      "overall": {
+        "n": 73,
+        "accuracy": 0.958904109589041,
+        "cohen_kappa": 0.9148191365227537,
+        "confusion_human_rows_judge_columns": [
+          [
+            42,
+            3
+          ],
+          [
+            0,
+            28
+          ]
+        ],
+        "judge_true_human_false": 3,
+        "false_positive_fraction_all": 0.0410958904109589,
+        "false_positive_fraction_judge_positive": 0.0967741935483871,
+        "eligible": true
+      },
+      "recall": {
+        "n": 30,
+        "accuracy": 1.0,
+        "cohen_kappa": 1.0,
+        "confusion_human_rows_judge_columns": [
+          [
+            23,
+            0
+          ],
+          [
+            0,
+            7
+          ]
+        ],
+        "judge_true_human_false": 0,
+        "false_positive_fraction_all": 0.0,
+        "false_positive_fraction_judge_positive": 0.0,
+        "eligible": true
+      },
+      "precision": {
+        "n": 43,
+        "accuracy": 0.9302325581395349,
+        "cohen_kappa": 0.8608414239482199,
+        "confusion_human_rows_judge_columns": [
+          [
+            19,
+            3
+          ],
+          [
+            0,
+            21
+          ]
+        ],
+        "judge_true_human_false": 3,
+        "false_positive_fraction_all": 0.06976744186046512,
+        "false_positive_fraction_judge_positive": 0.125,
+        "eligible": true
+      }
+    }
+  },
+  "human_metrics": {
+    "EX1": {
+      "value": 0.4883720930232558,
+      "n": 8,
+      "numerator": 21,
+      "denominator": 43,
+      "ci95": [
+        0.2,
+        0.7222222222222222
+      ]
+    },
+    "EX2": {
+      "value": 0.23333333333333334,
+      "n": 8,
+      "numerator": 7,
+      "denominator": 30,
+      "ci95": [
+        0.0,
+        0.48148148148148145
+      ]
+    },
+    "EX3": 0.3157894736842105
+  },
+  "method": "Full73 sampled extraction judgments, no extra model calls;43 candidate validity and30 gold coverage labels. Human EX1/EX2 use conversation-cluster intervals from8 conversations across3 repeats.",
+  "threshold": "Per-task kappa>=0.7 OR accuracy>=0.9. Failing task judge cannot supply formal metric; full owner judgments directly supply sampled human EX1/EX2.",
+  "limitations": [
+    "DuLeMon selected dev8 conversations only; not all dev data or a test-set estimate.",
+    "EX5 wrong-subject sublabel is not separately calibrated by these binary validity/coverage judgments and remains diagnostic.",
+    "Extraction judge repeat stability is not covered by QA100x3 results.",
+    "DeepSeek is also a gold annotation vendor; same-vendor extraction can bias scores upward; joint two-vendor gold retention partly mitigates this."
+  ],
+  "phase2_accepted": false,
+  "full_aggregate_ready": false
+}

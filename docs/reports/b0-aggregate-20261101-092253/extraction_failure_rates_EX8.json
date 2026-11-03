@@ -1,0 +1,72 @@
+{
+  "longmemeval_oracle": {
+    "value": 0.0,
+    "n": 5,
+    "numerator": 0,
+    "denominator": 246,
+    "ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "locomo": {
+    "value": 0.0,
+    "n": 1,
+    "numerator": 0,
+    "denominator": 1887,
+    "ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "perltqa_zh": {
+    "value": 0.0,
+    "n": 3,
+    "numerator": 0,
+    "denominator": 579,
+    "ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "chinese_queries_v2": {
+    "value": 0.0,
+    "n": 10,
+    "numerator": 0,
+    "denominator": 396,
+    "ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "dulemon_gold": {
+    "value": 0.0,
+    "n": 8,
+    "numerator": 0,
+    "denominator": 384,
+    "ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "ecd_negative": {
+    "value": 0.0,
+    "n": 8,
+    "numerator": 0,
+    "denominator": 252,
+    "ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  "longmemeval_s": {
+    "value": 0.000364963503649635,
+    "n": 2,
+    "numerator": 1,
+    "denominator": 2740,
+    "ci95": [
+      0.0,
+      0.0006925207756232687
+    ]
+  }
+}

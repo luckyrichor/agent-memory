@@ -1,0 +1,19 @@
+{
+  "at": "2026-10-26T10:06:10.657436+00:00",
+  "repository_base_commit": "2fae08bdb524497070b6cd8ab5cdbaabfff5ced1",
+  "working_tree_uncommitted": true,
+  "pytest_passed": 460,
+  "pytest_seconds": 45.79,
+  "ruff_passed": true,
+  "strict_mypy_passed": true,
+  "foundation_passed": true,
+  "log_sha256": "f666736bf316a27ce02b47facf83ce4182b5a594e310e78b381200a4afb5617e",
+  "regressions": [
+    "Ark blocked before network",
+    "alternate DeepSeek model not allowed",
+    "response version drift stops",
+    "vector budget prevents extra HTTP",
+    "prior mixed tables cannot be adopted",
+    "native Tencent fixed1024 request and genuine index rebuild observations"
+  ]
+}

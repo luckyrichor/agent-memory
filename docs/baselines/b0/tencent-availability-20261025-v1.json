@@ -1,0 +1,108 @@
+{
+  "at_beijing": "2026-10-25T20:38:57.920358+08:00",
+  "scope": "actual tiny probes only; no balance lookup, no full qualification claim",
+  "records": [
+    {
+      "model": "hy4-preview",
+      "http": 402,
+      "error_code": "401008",
+      "actual_response_valid": false,
+      "vector_dimensions": null,
+      "response_model": null,
+      "response_sha256": "16936f4db0856bb042ed1e65bc886c27dd9d8a7bbb61de8bfc8b6c4af55b5c5c",
+      "key_slot": 1
+    },
+    {
+      "model": "hy3",
+      "http": 402,
+      "error_code": "401008",
+      "actual_response_valid": false,
+      "vector_dimensions": null,
+      "response_model": null,
+      "response_sha256": "cd3d60b6316052e7f5085dcfccc25e6afaf48e53cc5037a047b333379a8d1104",
+      "key_slot": 1
+    },
+    {
+      "model": "glm-5.2",
+      "http": 402,
+      "error_code": "401008",
+      "actual_response_valid": false,
+      "vector_dimensions": null,
+      "response_model": null,
+      "response_sha256": "b14265b5c0315b63922c85c3c43c935cc95c1d11549ffb4db30c1e460feceee1",
+      "key_slot": 1
+    },
+    {
+      "model": "minimax-m3",
+      "http": 402,
+      "error_code": "401008",
+      "actual_response_valid": false,
+      "vector_dimensions": null,
+      "response_model": null,
+      "response_sha256": "ddca23be57f2d97fb151e6ff6043a938924d3ebc5f4cfa3e38d2656707113ca4",
+      "key_slot": 1
+    },
+    {
+      "model": "kinfra-text-embedding-0.6b",
+      "http": 200,
+      "error_code": null,
+      "actual_response_valid": true,
+      "vector_dimensions": 1024,
+      "response_model": "kinfra-text-embedding-0.6b",
+      "response_sha256": "3b15fd07902b91ddfbf17145eebac3a33879d9d79f2746f385e272ca57ffc8d6",
+      "key_slot": 1
+    },
+    {
+      "model": "hy4-preview",
+      "http": 402,
+      "error_code": "401008",
+      "actual_response_valid": false,
+      "vector_dimensions": null,
+      "response_model": null,
+      "response_sha256": "6bede4e3b4c33d47a2dc5dfe386af1fd4eeb119c84bcb9d78689be9f7d7cbbeb",
+      "key_slot": 2
+    },
+    {
+      "model": "hy3",
+      "http": 200,
+      "error_code": null,
+      "actual_response_valid": true,
+      "vector_dimensions": null,
+      "response_model": "hy3",
+      "response_sha256": "6682c6a23a930a957f2e542ac1e1e20ccfb0781d642c75672ee1155453ca1594",
+      "key_slot": 2
+    },
+    {
+      "model": "glm-5.2",
+      "http": 200,
+      "error_code": null,
+      "actual_response_valid": true,
+      "vector_dimensions": null,
+      "response_model": "glm-5.2",
+      "response_sha256": "ce97113c747f34cab834594a89a98d8ee6a6f111b841b47ff078f951063cda7a",
+      "key_slot": 2
+    },
+    {
+      "model": "minimax-m3",
+      "http": 200,
+      "error_code": null,
+      "actual_response_valid": true,
+      "vector_dimensions": null,
+      "response_model": "minimax-m3",
+      "response_sha256": "6499a8e40b4dc8e119f8e1fa6d1b5442542bb5a2cb8507420736e768f3ba5ba9",
+      "key_slot": 2
+    },
+    {
+      "model": "kinfra-text-embedding-0.6b",
+      "http": 200,
+      "error_code": null,
+      "actual_response_valid": true,
+      "vector_dimensions": 1024,
+      "response_model": "kinfra-text-embedding-0.6b",
+      "response_sha256": "4b0451ba7f3f80fca4c3c6d7e711a99a2373954456ad61eb5d511fddfa276ac7",
+      "key_slot": 2
+    }
+  ],
+  "correction": "previous Kinfra400 was unsupported dimensions request, not quota; native fixed1024 call succeeded on both Tencent keys",
+  "source": "https://cloud.tencent.com/document/product/1823/133515"
+}

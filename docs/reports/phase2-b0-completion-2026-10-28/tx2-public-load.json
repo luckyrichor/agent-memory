@@ -1,0 +1,275 @@
+{
+  "status": "measurements_complete",
+  "points": [
+    {
+      "size": 10000,
+      "repeat": 1,
+      "control_exit": 0,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.16666666666666663,
+      "maximum_load_memory_fraction": 0.25917874683850883,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 289,
+          "rate": 0.7429221722669621
+        },
+        "b0_sample_errors": {
+          "count": 194,
+          "rate": 0.49870900145256275
+        },
+        "b0_sample_client_ms": {
+          "avg": 22318.35831206227,
+          "min": 26.574799,
+          "med": 29989.848473,
+          "max": 30005.173652,
+          "p(90)": 29992.704558200003,
+          "p(95)": 30000.496029
+        },
+        "b0_sample_server_ms": {
+          "avg": 6639.874820494734,
+          "min": 22.275632,
+          "med": 6459.61565,
+          "max": 29979.826392,
+          "p(90)": 11240.586173400005,
+          "p(95)": 13177.173700199997
+        },
+        "dropped_iterations": {
+          "count": 11,
+          "rate": 0.0282773145153515
+        }
+      },
+      "wall_seconds": 411.96607566298917,
+      "rate_per_second": 1,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300
+    },
+    {
+      "size": 10000,
+      "repeat": 2,
+      "control_exit": 0,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.13131313131313127,
+      "maximum_load_memory_fraction": 0.24714622070285364,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 289,
+          "rate": 0.741024099017193
+        },
+        "b0_sample_errors": {
+          "rate": 0.49743486231603956,
+          "count": 194
+        },
+        "b0_sample_client_ms": {
+          "avg": 22248.504126557098,
+          "min": 31.743156,
+          "med": 29988.719381,
+          "max": 30003.542216,
+          "p(90)": 29992.39549,
+          "p(95)": 30000.4558528
+        },
+        "b0_sample_server_ms": {
+          "max": 26942.628857,
+          "p(90)": 13441.247509200024,
+          "p(95)": 20693.4798573,
+          "avg": 6430.752933084213,
+          "min": 25.778046,
+          "med": 5513.654653
+        },
+        "dropped_iterations": {
+          "count": 11,
+          "rate": 0.02820506951276513
+        }
+      },
+      "wall_seconds": 411.79705058038235,
+      "rate_per_second": 1,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300
+    },
+    {
+      "size": 10000,
+      "repeat": 3,
+      "control_exit": 0,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.13636363636363635,
+      "maximum_load_memory_fraction": 0.24367801031529546,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 289,
+          "rate": 0.7410235182801702
+        },
+        "b0_sample_errors": {
+          "count": 169,
+          "rate": 0.433332092004667
+        },
+        "b0_sample_client_ms": {
+          "avg": 20623.276435429067,
+          "min": 35.230257,
+          "med": 29988.933734,
+          "max": 30001.369467,
+          "p(90)": 29992.0597446,
+          "p(95)": 30000.5960766
+        },
+        "b0_sample_server_ms": {
+          "avg": 7420.5745021249995,
+          "min": 26.016074,
+          "med": 5508.9197215,
+          "max": 29576.653753,
+          "p(90)": 17575.90482540001,
+          "p(95)": 24265.0228363
+        },
+        "dropped_iterations": {
+          "rate": 0.028205047408587793,
+          "count": 11
+        }
+      },
+      "wall_seconds": 411.8898278949782,
+      "rate_per_second": 1,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300
+    },
+    {
+      "size": 100000,
+      "repeat": 1,
+      "control_exit": 0,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.12060301507537685,
+      "maximum_load_memory_fraction": 0.2468424793237486,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 296,
+          "rate": 0.7609186615283012
+        },
+        "b0_sample_errors": {
+          "count": 293,
+          "rate": 0.7532066480668658
+        },
+        "b0_sample_client_ms": {
+          "avg": 29986.793919905416,
+          "min": 29380.632882,
+          "med": 29990.190947,
+          "max": 30000.76559,
+          "p(90)": 29991.288950000002,
+          "p(95)": 29991.97898075
+        },
+        "b0_sample_server_ms": {
+          "avg": 29653.036068666668,
+          "min": 29373.282371,
+          "med": 29696.802103,
+          "max": 29889.023732,
+          "p(90)": 29850.579406200002,
+          "p(95)": 29869.8015691
+        },
+        "dropped_iterations": {
+          "count": 11,
+          "rate": 0.028277382691930114
+        }
+      },
+      "wall_seconds": 412.01365410909057,
+      "rate_per_second": 1,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300
+    },
+    {
+      "size": 100000,
+      "repeat": 2,
+      "control_exit": 0,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.10606060606060608,
+      "maximum_load_memory_fraction": 0.24478775822980314,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 296,
+          "rate": 0.7589731307184111
+        },
+        "b0_sample_errors": {
+          "count": 287,
+          "rate": 0.7358962449871082
+        },
+        "b0_sample_client_ms": {
+          "avg": 29974.707648983094,
+          "min": 28792.076465,
+          "med": 29989.9921445,
+          "max": 30001.004633,
+          "p(90)": 29991.11091,
+          "p(95)": 29991.68750425
+        },
+        "b0_sample_server_ms": {
+          "avg": 29477.14880977778,
+          "min": 28784.227352,
+          "med": 29630.166831,
+          "max": 29878.794342,
+          "p(90)": 29817.7785692,
+          "p(95)": 29848.2864556
+        },
+        "dropped_iterations": {
+          "count": 11,
+          "rate": 0.028205082560481497
+        }
+      },
+      "wall_seconds": 411.96131689008325,
+      "rate_per_second": 1,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300
+    },
+    {
+      "size": 100000,
+      "repeat": 3,
+      "control_exit": 0,
+      "server_monitor_exit": 0,
+      "load_host_resources_valid": true,
+      "maximum_load_cpu_fraction": 0.12060301507537685,
+      "maximum_load_memory_fraction": 0.24831751098829102,
+      "measured_metrics": {
+        "b0_sample_requests": {
+          "count": 296,
+          "rate": 0.75897349481103
+        },
+        "b0_sample_errors": {
+          "count": 289,
+          "rate": 0.741024797298607
+        },
+        "b0_sample_client_ms": {
+          "p(90)": 29991.162029,
+          "p(95)": 29991.86150375,
+          "avg": 29984.1226235169,
+          "min": 29295.883647,
+          "med": 29990.0521115,
+          "max": 30003.614869
+        },
+        "b0_sample_server_ms": {
+          "p(95)": 29956.7399898,
+          "avg": 29731.385049428576,
+          "min": 29287.134891,
+          "med": 29773.565379,
+          "max": 29980.512396,
+          "p(90)": 29932.9675836
+        },
+        "dropped_iterations": {
+          "count": 11,
+          "rate": 0.02820509609095044
+        }
+      },
+      "wall_seconds": 411.925926358439,
+      "rate_per_second": 1,
+      "warmup_seconds": 60,
+      "measurement_seconds": 300
+    }
+  ],
+  "external_model_calls": 0,
+  "phase2_accepted": false,
+  "full_aggregate_ready": false,
+  "environment": {
+    "load_host": "TX2 VM-4-5-ubuntu,2CPU/2GB",
+    "target": "TX isolated B0 PostgreSQL container,2CPU/3GiB/shm512MiB",
+    "model": "kinfra-text-embedding-0.6b native1024,precomputed exact real vectors",
+    "query_count": 128,
+    "corpus": "fixed fictional32-character query set sampled from first10k seed IDs and reused at both scales; no real conversations exported",
+    "repeats": "fresh API process and drained app database sessions before each timed run; database cache not reset"
+  },
+  "limitation": "Only read/search1QPS points at10k/100k,100tenants,80%hot tenant. Not write/context throughput, full tenant-count grid, maximum capacity or cross-region proof. Failed/dropped requests retained. Load host invalidity forbids capacity claims."
+}

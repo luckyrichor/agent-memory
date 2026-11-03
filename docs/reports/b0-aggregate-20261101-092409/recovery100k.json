@@ -1,0 +1,256 @@
+{
+  "tables": {
+    "alembic_version": {
+      "rows": 1,
+      "canonical_json_md5_multiset_checksum": "ff1ba70facb5d57196c50d55dc9aa62a"
+    },
+    "audit_logs": {
+      "rows": 0,
+      "canonical_json_md5_multiset_checksum": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    "events": {
+      "rows": 0,
+      "canonical_json_md5_multiset_checksum": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    "evidence": {
+      "rows": 0,
+      "canonical_json_md5_multiset_checksum": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    "idempotency_records": {
+      "rows": 0,
+      "canonical_json_md5_multiset_checksum": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    "jobs": {
+      "rows": 100000,
+      "canonical_json_md5_multiset_checksum": "26f5f5ae2e1e46d48a9a5f359729f06f"
+    },
+    "memories": {
+      "rows": 100000,
+      "canonical_json_md5_multiset_checksum": "5a7e382b372047689cab3c26ffa7fa2a"
+    },
+    "memory_embeddings": {
+      "rows": 100000,
+      "canonical_json_md5_multiset_checksum": "fa0f608587e8d56e89e621a56f0fd4d5"
+    },
+    "memory_versions": {
+      "rows": 100000,
+      "canonical_json_md5_multiset_checksum": "3c1ff49189d0398fd42d84f1f4a1b1f7"
+    },
+    "outbox_messages": {
+      "rows": 0,
+      "canonical_json_md5_multiset_checksum": "d41d8cd98f00b204e9800998ecf8427e"
+    }
+  },
+  "random_sample_rows": 1000,
+  "retrieval_query_count": 32,
+  "RT1_at10": 1.0,
+  "environment": {
+    "postgres": "PostgreSQL 16.15 (Debian 16.15-1.pgdg12+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit",
+    "pgvector": "0.8.6",
+    "rls": [
+      [
+        "alembic_version",
+        false,
+        false
+      ],
+      [
+        "audit_logs",
+        true,
+        true
+      ],
+      [
+        "events",
+        true,
+        true
+      ],
+      [
+        "evidence",
+        true,
+        true
+      ],
+      [
+        "idempotency_records",
+        true,
+        true
+      ],
+      [
+        "jobs",
+        true,
+        true
+      ],
+      [
+        "memories",
+        true,
+        true
+      ],
+      [
+        "memory_embeddings",
+        true,
+        true
+      ],
+      [
+        "memory_versions",
+        true,
+        true
+      ],
+      [
+        "outbox_messages",
+        true,
+        true
+      ]
+    ],
+    "roles": [
+      [
+        "agent_memory",
+        true,
+        true,
+        true,
+        true
+      ],
+      [
+        "agent_memory_app",
+        false,
+        false,
+        true,
+        false
+      ],
+      [
+        "b0_pf_app",
+        false,
+        false,
+        true,
+        true
+      ]
+    ]
+  },
+  "role_checks": {
+    "cross_tenant_read_count": 0,
+    "foreign_write_rejected": true,
+    "own_tenant_readable": true,
+    "app_superuser": false,
+    "app_bypassrls": false
+  },
+  "seconds": 182.59302907111123,
+  "status": "passed",
+  "shared_memory_correction": {
+    "initial_bytes": 67108864,
+    "corrected_bytes": 536870912,
+    "initial_result": "DiskFull resizing shared memory during parallel search",
+    "container_cpu": 2,
+    "container_memory_bytes": 3221225472,
+    "business_code_changed": false
+  },
+  "backup": {
+    "backup_seconds": 39.14215057203546,
+    "bytes": 484088060,
+    "sha256": "eaf307b39f9ac49d2f836ce1987e8fcfcfebef93279598be2ab93f38f51c714c",
+    "rows": 100000,
+    "synthetic_only": true
+  },
+  "comparison": {
+    "table_counts_and_checksums_equal": true,
+    "all_1000_sample_row_checksums_equal": true,
+    "same_sample_sha256": true,
+    "all_32_query_results_equal": true,
+    "rt1_equal": true,
+    "rls_settings_equal": true,
+    "role_attributes_equal": true,
+    "target_rls_checks_pass": true
+  },
+  "target_environment": {
+    "postgres": "PostgreSQL 16.15 (Homebrew) on aarch64-apple-darwin27.0.0, compiled by Apple clang version 21.0.0 (clang-2100.3.34.2), 64-bit",
+    "pgvector": "0.8.7",
+    "rls": [
+      [
+        "alembic_version",
+        false,
+        false
+      ],
+      [
+        "audit_logs",
+        true,
+        true
+      ],
+      [
+        "events",
+        true,
+        true
+      ],
+      [
+        "evidence",
+        true,
+        true
+      ],
+      [
+        "idempotency_records",
+        true,
+        true
+      ],
+      [
+        "jobs",
+        true,
+        true
+      ],
+      [
+        "memories",
+        true,
+        true
+      ],
+      [
+        "memory_embeddings",
+        true,
+        true
+      ],
+      [
+        "memory_versions",
+        true,
+        true
+      ],
+      [
+        "outbox_messages",
+        true,
+        true
+      ]
+    ],
+    "roles": [
+      [
+        "agent_memory",
+        true,
+        true,
+        true,
+        true
+      ],
+      [
+        "agent_memory_app",
+        false,
+        false,
+        true,
+        false
+      ],
+      [
+        "b0_pf_app",
+        false,
+        false,
+        true,
+        true
+      ]
+    ]
+  },
+  "target_role_checks": {
+    "cross_tenant_read_count": 0,
+    "foreign_write_rejected": true,
+    "own_tenant_readable": true,
+    "app_superuser": false,
+    "app_bypassrls": false
+  },
+  "target_query_verification_seconds": 45.42299495797488,
+  "restore": {
+    "restore_seconds": 9.396245957992505,
+    "database": "b0pf_restored_100000_100",
+    "dump_bytes": 484088060,
+    "dump_sha256": "eaf307b39f9ac49d2f836ce1987e8fcfcfebef93279598be2ab93f38f51c714c",
+    "synthetic_only": true
+  },
+  "target": "Mac luomac.local, independent machine, native PostgreSQL16.15/pgvector0.8.7; source pgvector0.8.6; fully fictional performance data only",
+  "environment_note": "RL6 source verification used512MiB container shared memory after a recorded64MiB failure. Subsequent fault container restarts restore Docker configured64MiB mount; PF points must record actual shared memory separately and must not claim isolated cross-environment performance comparison."
+}
