@@ -36,6 +36,7 @@ class EventIngestionService:
                 principal.tenant_id,
                 principal.user_id,
                 command.drafts,
+                command.priority,
             )
             annotate(event_count=len(results), reason_code="EVENTS_INGESTED")
             _logger.event(

@@ -46,6 +46,9 @@ class EventBatchRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     events: list[EventRequest] = Field(min_length=1, max_length=100)
+    # C4: "interactive" is an agent waiting on its reply; "bulk" is a backfill that may queue.
+    # Only the order of runnable jobs changes, never whether a job runs.
+    priority: Literal["interactive", "bulk"] = "interactive"
 
 
 class EventIngestionItemResponse(BaseModel):

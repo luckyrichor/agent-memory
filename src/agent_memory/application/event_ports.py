@@ -14,6 +14,7 @@ class OutboxMessage:
     event_id: UUID
     topic: str
     created_at: datetime
+    priority: int = 0
 
 
 class EventIngestionRepository(Protocol):
@@ -22,6 +23,7 @@ class EventIngestionRepository(Protocol):
         tenant_id: UUID,
         actor_user_id: UUID,
         drafts: tuple[EventDraft, ...],
+        priority: int = ...,
     ) -> tuple[EventIngestionResult, ...]: ...
 
 

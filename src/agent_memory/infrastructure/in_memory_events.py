@@ -6,7 +6,7 @@ from agent_memory.application.event_commands import EventIngestionResult
 from agent_memory.application.event_ports import OutboxMessage
 from agent_memory.domain.errors import EventIdempotencyConflict, EventSequenceConflict
 from agent_memory.domain.events import Event, EventDraft
-from agent_memory.domain.jobs import Job, JobStatus
+from agent_memory.domain.jobs import Job, JobPriority, JobStatus
 
 
 class InMemoryEventIngestionRepository:
@@ -50,6 +50,7 @@ class InMemoryEventIngestionRepository:
         tenant_id: UUID,
         actor_user_id: UUID,
         drafts: tuple[EventDraft, ...],
+        priority: int = int(JobPriority.INTERACTIVE),
     ) -> tuple[EventIngestionResult, ...]:
         staged_events = dict(self._events)
         staged_sequences = dict(self._sequences)
@@ -93,6 +94,7 @@ class InMemoryEventIngestionRepository:
                 event_id=event.event_id,
                 topic="event.recorded",
                 created_at=self._now(),
+                priority=priority,
             )
             staged_events[event_key] = (event, request_hash)
             staged_sequences[sequence_key] = draft.idempotency_key
@@ -134,6 +136,7 @@ class InMemoryEventIngestionRepository:
                     status=JobStatus.PENDING,
                     attempts=0,
                     max_attempts=5,
+                    priority=message.priority,
                     available_at=self._now(),
                     leased_until=None,
                     lease_owner=None,

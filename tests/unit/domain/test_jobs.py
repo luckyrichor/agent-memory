@@ -4,14 +4,16 @@ from uuid import UUID
 import pytest
 
 from agent_memory.domain.errors import LeaseLost, LeaseUnavailable
-from agent_memory.domain.jobs import Job, JobStatus
+from agent_memory.domain.jobs import Job, JobPriority, JobStatus
 
 TENANT_ID = UUID("00000000-0000-0000-0000-00000000000a")
 JOB_ID = UUID("00000000-0000-0000-0000-00000000000b")
 NOW = datetime(2026, 8, 30, 12, 0, tzinfo=UTC)
 
 
-def pending_job(*, attempts: int = 0, max_attempts: int = 5) -> Job:
+def pending_job(
+    *, attempts: int = 0, max_attempts: int = 5, priority: int = int(JobPriority.BULK)
+) -> Job:
     return Job(
         tenant_id=TENANT_ID,
         job_id=JOB_ID,
@@ -27,6 +29,7 @@ def pending_job(*, attempts: int = 0, max_attempts: int = 5) -> Job:
         last_error_code=None,
         created_at=NOW,
         updated_at=NOW,
+        priority=priority,
     )
 
 
@@ -82,3 +85,19 @@ def test_max_attempts_or_permanent_failure_moves_job_to_dead() -> None:
 
     assert exhausted.fail("worker-a", NOW, "TEMPORARY", retryable=True).status is JobStatus.DEAD
     assert permanent.fail("worker-b", NOW, "INVALID_EVENT", retryable=False).status is JobStatus.DEAD
+
+
+def test_priority_survives_every_transition() -> None:
+    """C4: a retry or a reclaim must stay in the class it was enqueued with."""
+    claimed = pending_job(priority=int(JobPriority.INTERACTIVE)).claim(
+        "worker-a", NOW, timedelta(seconds=30)
+    )
+    assert claimed.priority == int(JobPriority.INTERACTIVE)
+
+    retried = claimed.fail("worker-a", NOW, "EXTRACTOR_UNAVAILABLE", retryable=True)
+    assert retried.status is JobStatus.RETRY_WAIT
+    assert retried.priority == int(JobPriority.INTERACTIVE)
+
+    reclaimed = retried.claim("worker-b", retried.available_at, timedelta(seconds=30))
+    assert reclaimed.priority == int(JobPriority.INTERACTIVE)
+    assert reclaimed.succeed("worker-b", NOW).priority == int(JobPriority.INTERACTIVE)

@@ -1,7 +1,7 @@
 from collections.abc import Mapping
 from dataclasses import dataclass, replace
 from datetime import datetime, timedelta
-from enum import Enum
+from enum import Enum, IntEnum
 from types import MappingProxyType
 from uuid import UUID
 
@@ -14,6 +14,18 @@ class JobStatus(str, Enum):
     RETRY_WAIT = "retry_wait"
     SUCCEEDED = "succeeded"
     DEAD = "dead"
+
+
+class JobPriority(IntEnum):
+    """Claim order inside one job type: higher runs first (C4).
+
+    An agent answering a user must not wait behind a backfill. Values are spaced so a class can be
+    inserted later without renumbering rows that are already queued; priority never changes whether
+    a job is runnable, only the order in which runnable jobs are picked up.
+    """
+
+    BULK = 0
+    INTERACTIVE = 100
 
 
 @dataclass(frozen=True, slots=True)
@@ -32,6 +44,7 @@ class Job:
     last_error_code: str | None
     created_at: datetime
     updated_at: datetime
+    priority: int = int(JobPriority.BULK)
 
     def __post_init__(self) -> None:
         object.__setattr__(self, "payload", MappingProxyType(dict(self.payload)))

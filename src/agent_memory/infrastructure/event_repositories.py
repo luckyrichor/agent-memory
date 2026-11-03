@@ -2,7 +2,7 @@ from collections.abc import Callable
 from datetime import datetime, timedelta
 from uuid import UUID
 
-from sqlalchemy import and_, func, or_, select, true, update
+from sqlalchemy import and_, func, or_, select, text, true, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
@@ -19,7 +19,7 @@ from agent_memory.domain.errors import (
     LeaseLost,
 )
 from agent_memory.domain.events import Event, EventDraft, EventType, MemoryCandidate
-from agent_memory.domain.jobs import Job, JobStatus
+from agent_memory.domain.jobs import Job, JobPriority, JobStatus
 from agent_memory.domain.models import Memory, MemoryScope
 from agent_memory.domain.principal import RequestPrincipal
 from agent_memory.infrastructure.db import database_now, session_for_principal
@@ -51,6 +51,7 @@ class PostgresEventIngestionRepository:
         tenant_id: UUID,
         actor_user_id: UUID,
         drafts: tuple[EventDraft, ...],
+        priority: int = int(JobPriority.INTERACTIVE),
     ) -> tuple[EventIngestionResult, ...]:
         idempotency_keys = {draft.idempotency_key for draft in drafts}
         existing_rows = (
@@ -130,7 +131,7 @@ class PostgresEventIngestionRepository:
                 topic="event.recorded",
                 aggregate_type="event",
                 aggregate_id=event_id,
-                payload={"event_id": str(event_id)},
+                payload={"event_id": str(event_id), "priority": priority},
                 status="pending",
                 available_at=received_at,
                 attempts=0,
@@ -205,6 +206,7 @@ class PostgresOutboxRepository:
                     status=JobStatus.PENDING.value,
                     attempts=0,
                     max_attempts=5,
+                    priority=int(message.payload.get("priority", JobPriority.BULK)),
                     available_at=now,
                     leased_until=None,
                     lease_owner=None,
@@ -254,7 +256,9 @@ class PostgresJobQueue:
                         ),
                     ),
                 )
-                .order_by(JobRow.available_at, JobRow.created_at, JobRow.job_id)
+                .order_by(
+                    JobRow.priority.desc(), JobRow.available_at, JobRow.created_at, JobRow.job_id
+                )
                 .limit(1)
                 .with_for_update(skip_locked=True)
             )
@@ -349,6 +353,7 @@ class PostgresJobQueue:
             last_error_code=row.last_error_code,
             created_at=row.created_at,
             updated_at=row.updated_at,
+            priority=row.priority,
         )
 
     @staticmethod
@@ -360,6 +365,7 @@ class PostgresJobQueue:
         row.lease_owner = job.lease_owner
         row.last_error_code = job.last_error_code
         row.updated_at = job.updated_at
+        row.priority = job.priority
 
 
 class PostgresExtractionBackend:
@@ -435,6 +441,12 @@ class PostgresExtractionBackend:
         now: datetime,
     ) -> None:
         async with session_for_principal(self._sessions, self._principal(tenant_id)) as session:
+            # C4: the version trigger creates the embed_memory job inside this transaction; this
+            # setting is how it learns the priority of the extract_event job that produced it.
+            await session.execute(
+                text("SELECT set_config('app.job_priority', :priority, true)"),
+                {"priority": str(job.priority)},
+            )
             memory_repository: MemoryRepository = PostgresMemoryRepository(session)
             for candidate in candidates:
                 duplicate_version = await self._find_duplicate(session, tenant_id, candidate)

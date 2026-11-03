@@ -11,6 +11,7 @@ from agent_memory.api.event_schemas import (
 from agent_memory.application.event_commands import IngestEventBatchCommand
 from agent_memory.application.event_ingestion import EventIngestionService
 from agent_memory.domain.events import EventDraft, EventType
+from agent_memory.domain.jobs import JobPriority
 from agent_memory.domain.models import MemoryScope
 from agent_memory.domain.principal import RequestPrincipal
 
@@ -49,7 +50,12 @@ def create_event_router(
                         payload=item.payload.model_dump(exclude_none=True),
                     )
                     for item in body.events
-                )
+                ),
+                priority=int(
+                    JobPriority.INTERACTIVE
+                    if body.priority == "interactive"
+                    else JobPriority.BULK
+                ),
             ),
             principal,
         )

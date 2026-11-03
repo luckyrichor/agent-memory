@@ -257,6 +257,15 @@ class JobRow(Base):
             "available_at",
             "created_at",
         ),
+        # C4: claim order is per type, highest priority first, then oldest first.
+        Index(
+            "ix_jobs_claim_order",
+            "tenant_id",
+            "job_type",
+            "priority",
+            "available_at",
+            "created_at",
+        ),
         Index("ix_jobs_expired_lease", "tenant_id", "status", "leased_until"),
     )
 
@@ -268,6 +277,9 @@ class JobRow(Base):
     status: Mapped[str] = mapped_column(String(16), nullable=False)
     attempts: Mapped[int] = mapped_column(Integer, nullable=False)
     max_attempts: Mapped[int] = mapped_column(Integer, nullable=False)
+    priority: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=0, server_default="0"
+    )
     available_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     leased_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     lease_owner: Mapped[str | None] = mapped_column(String(255))
