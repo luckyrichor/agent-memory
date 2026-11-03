@@ -609,3 +609,14 @@ B0-CANDIDATE-ACTIVATION-MISSING：候选记忆无自动生效路径；冻结B0�
 旧正式报告原样保留；按精确哈希清单删除161520个原始调用/逐题过程/日志/数据库与向量文件，释放4.93GiB，项目由约6.78GiB降至约1.86GiB。24328个保留文件集合/内容SHA256一致；阶段1数据、人工标签、聚合结果、元数据、worktrees和Docker卷不动，服务仍停止。删除原始证据后不再支持完整逐题重算或用已删快照恢复。
 
 验证：18点来源与归档字段一致、无原文/凭据、精确清单全部不存在、保留摘要前后相等、git diff检查；本轮不改业务代码、不跑模型/实验。结项归档首提交6570a6c；完整清理指标见cleanup-result.json。飞书按用户暂缓要求待同步。
+
+## 2026-11-03T19:38—19:40+08:00 结项追加清理：normalized-v2/v3 删除与 mypy/ruff 本地卸载
+
+用户授权结项追加清理，由 CodeBuddy 实施（glm-5.3，不回退），Codex 已独立验收。范围仅本仓库；服务/进程/容器保持停止，未跑实验/模型/服务，不改变阶段2未验收状态。实施前核对：主机 VM-0-15-ubuntu/ubuntu、HEAD `78bb9f3` 工作区干净、三目标真实目录无 symlink/独立挂载/越界（同属根文件系统）。
+
+- 删除（逐文件哈希后执行，仅三条精确路径）：`.local/phase1/normalized-v2`（11 文件，du 块 407,695,360 B/表观 407,659,161 B）、`.local/phase1/normalized-v3`（11 文件，407,687,168/407,659,170；两目录合计块 815,382,528 B≈777.7 MiB，与用户预期约 778 MiB 一致）、`.mypy_cache`（3 文件，21,872,640/21,852,384）。删除后三路径均不存在。25 文件清单（表观合计 837,170,715 B）存 `.agent-tasks/2026-11-03-normalized-tools-cleanup-manifest.jsonl.gz`（SHA256 `c6404274…`）。
+- 卸载：`uv pip uninstall --python .venv/bin/python mypy ruff`（uv 0.12.17，exit 0，`Uninstalled 2 packages: mypy==1.20.2, ruff==0.16.5`）。核验：importlib.metadata 对 mypy/ruff 均 `PackageNotFoundError`；`.venv/bin/{mypy,dmypy,mypyc,stubgen,stubtest,ruff}` 与 site-packages 下 `mypy/`、`mypyc/`、`mypy-1.20.2.dist-info`、`ruff/`、`ruff-0.16.5.dist-info`、`0aca9ce3…__mypyc…so` 均不存在；`mypy_extensions` 1.1.0 及其他所有包保留，`.venv/bin/python -c "import agent_memory"` 正常。未碰系统/全局 Python 与其他 venv。
+- 恢复方法：`pyproject.toml`（第 24/27 行）与 `uv.lock`（第 403/771 行）声明原样保留，未来 `uv sync` 可完整重装 mypy/ruff；**验证卸载状态不要用 `uv run`**（会触发环境自动同步、立刻重装），须直接用 `.venv/bin/python` 查询。
+- 空间实测：`du -s -B1` 仓库 1,999,400,960 → 1,084,149,760 B（释放 915,251,200 B≈872.7 MiB，其中 .venv 释放 78,000,128 B；= 837,255,168 + 78,000,128 − 4,096，两次测量间新增 pre.json 一个块，精确对账）；`du -sb` 释放 911,540,756 B（= 837,170,715 + 74,371,144 − 1,103，同样精确）。初始基线 1,999,380,480 B 与用户交接记录一致。
+- 保留核验：normalized-v1（3 文件）、.local 根 7 个人工 CSV、round3 全部人工材料、docs/reports 含 closeout-2026-11-03 全部旧报告与阶段 2 结论未动；受保护 10 文件集合内容摘要前后一致（SHA256 `81aa73da…`）；核验时点 git 工作区仍干净。未修改任何 docs/reports 文件，便于 Codex 按保留报告哈希校验。
+- 审计文件（`.agent-tasks/`，经 `.git/info/exclude` 排除不入 Git）：`2026-11-03-normalized-tools-cleanup.md`（实施前任务说明）、`-manifest.jsonl.gz`、`-pre.json`、`-result.json`（all_ok=true）。本轮仓库修改仅 AGENTS.md 与本文件，Codex 独立验收通过：424 个报告与人工 CSV 的组合 SHA256 前后一致，元数据/入口/删除路径检查通过；交接记录随本次正常提交推送。飞书 Wiki 按用户要求暂不写，待同步：本次追加清理。

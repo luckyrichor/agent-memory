@@ -1,5 +1,14 @@
 # AGENTS.md
 
+<!-- NORMALIZED_TOOLS_CLEANUP_20261103_START -->
+- 2026-11-03T19:38—19:40+08:00（北京时间，date实测）用户授权结项追加清理并已执行核验（result all_ok=true；实施CodeBuddy glm-5.3，Codex已独立验收）。实施前核对：主机VM-0-15-ubuntu/ubuntu、HEAD `78bb9f3`工作区干净、三目标均真实目录无symlink/独立挂载/越界。
+- 已删除（逐文件哈希后执行）：`.local/phase1/normalized-v2/`（11文件）与`normalized-v3/`（11文件，两目录合计du块815,382,528 B≈777.7MiB，与用户预期约778MiB一致）及`.mypy_cache/`（3文件：.gitignore、CACHEDIR.TAG、3.12/cache.db）；删除后三路径`[ -e ]`/`[ -L ]`均不存在。25文件path/size/sha256/allocated清单（表观合计837,170,715 B）存`.agent-tasks/2026-11-03-normalized-tools-cleanup-manifest.jsonl.gz`（SHA256 `c6404274…`）。
+- 已从本项目`.venv`完整卸载mypy 1.20.2与ruff 0.16.5两个发行包（`uv pip uninstall --python .venv/bin/python mypy ruff`，uv 0.12.17，exit 0）：importlib.metadata两者均PackageNotFoundError；`.venv/bin/{mypy,dmypy,mypyc,stubgen,stubtest,ruff}`与site-packages下`mypy/`、`mypyc/`、两个dist-info、`0aca9ce3…__mypyc…so`编译文件均不存在；`mypy_extensions` 1.1.0及其他包未动，`import agent_memory`正常。`pyproject.toml`/`uv.lock`声明保留，未来`uv sync`可重装；**验证卸载不要用`uv run`（会自动同步触发重装），须直接用`.venv/bin/python`**。
+- 空间实测：`du -s -B1`仓库1,999,400,960→1,084,149,760 B（释放915,251,200 B≈872.7MiB，其中.venv释放78,000,128 B；=837,255,168+78,000,128−4,096，与两次测量间新增pre.json一个块精确对账）；`du -sb`释放911,540,756 B（=837,170,715+74,371,144−1,103，同样精确）。初始基线1,999,380,480 B与用户交接一致。
+- 保留核验未动：normalized-v1（3文件）、.local根7个人工CSV（dulemon*/ecd*）、round3全部人工材料、docs/reports含closeout-2026-11-03全部旧报告与阶段2结论；受保护10文件集合内容摘要前后一致（SHA256 `81aa73da…`）；核验时点git工作区仍干净，未修改任何docs/reports文件便于按保留哈希校验。本轮不跑实验/模型/服务，不改变阶段2未验收状态。
+- 本机审计（`.agent-tasks/`，经`.git/info/exclude`排除不入Git）：`2026-11-03-normalized-tools-cleanup.md`（实施前任务说明）、`.py`、`-manifest.jsonl.gz`、`-pre.json`、`-result.json`。本轮仓库修改仅AGENTS.md与docs/progress.md，Codex独立验收通过：424个报告与人工CSV的组合SHA256前后一致，卸载元数据与入口、删除路径均核验通过；交接记录随本次正常提交推送。飞书待同步：本次追加清理；用户暂不写Wiki，未创建或修改飞书文档。
+<!-- NORMALIZED_TOOLS_CLEANUP_20261103_END -->
+
 <!-- PROJECT_CLOSEOUT_20261103_START -->
 - 2026-11-03T19:23:27.741025+08:00（北京时间）用户明确项目结项、不再继续；因CodeBuddy指定模型429配额超限，用户明确授权本次由Codex亲自归档与清理。
 - 当前结项入口：`docs/reports/closeout-2026-11-03/结项补充.md`、`conclusions.json`、`staircase-trials.csv`、`cleanup-result.json`。补齐旧交付之后18个阶梯点及PerLTQA额度暂停（0结果行）；项目结项不等于阶段2验收通过，失败/未测/中断照实保留，不进入阶段3。
