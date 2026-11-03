@@ -183,9 +183,50 @@ async def test_missing_iterative_scan_falls_back_to_the_exact_scan(app_database_
     )
 
 
-async def test_planner_uses_the_hnsw_index_for_the_nearest_first_shape(
-    app_database_url, database_url
-):
+async def seed_bulk(sessions, who, count: int) -> None:
+    """Bulk-load one tenant, so the planner has a realistic choice between index and scan."""
+    async with session_for_principal(sessions, who) as session:
+        await session.execute(
+            text(
+                "WITH seed AS (SELECT g, gen_random_uuid() AS mid, gen_random_uuid() AS vid"
+                " FROM generate_series(1, :n) g)"
+                " INSERT INTO memories (tenant_id, memory_id, memory_type, status, scope_kind,"
+                " workspace_id, subject_user_id, visibility, owner_user_id, current_version_id,"
+                " revision, created_at, updated_at)"
+                " SELECT :t, mid, 'semantic', 'active', 'tenant', NULL, NULL, 'scope', :u, vid, 1,"
+                " now(), now() FROM seed"
+            ),
+            {"n": count, "t": who.tenant_id, "u": who.user_id},
+        )
+        await session.execute(
+            text(
+                "WITH seed AS (SELECT g, gen_random_uuid() AS mid, gen_random_uuid() AS vid"
+                " FROM generate_series(1, :n) g)"
+                " INSERT INTO memory_versions (tenant_id, memory_version_id, memory_id,"
+                " version_number, content, structured_content, content_hash, confidence, utility,"
+                " authority_level, verification_status, created_at)"
+                " SELECT :t, vid, mid, 1, 'v' || g, '{}', md5('v' || g), 0.5, 0.5, 2,"
+                " 'unverified', now() FROM seed"
+            ),
+            {"n": count, "t": who.tenant_id},
+        )
+        await session.execute(
+            text(
+                "WITH seed AS (SELECT g, gen_random_uuid() AS mid, gen_random_uuid() AS vid"
+                " FROM generate_series(1, :n) g)"
+                " INSERT INTO memory_embeddings (tenant_id, memory_version_id, model, embedding,"
+                " updated_at)"
+                " SELECT :t, vid, :m, ('[' || array_to_string(ARRAY(SELECT"
+                " CASE WHEN i = 1 + (g % 1024) THEN 1.0 ELSE 0.01 END"
+                " FROM generate_series(1, 1024) i), ',') || ']')::vector, now()"
+                " FROM seed"
+            ),
+            {"n": count, "t": who.tenant_id, "m": MODEL},
+        )
+        await session.execute(text("ANALYZE memories, memory_versions, memory_embeddings"))
+
+
+async def test_planner_uses_the_hnsw_index_for_the_nearest_first_shape(app_database_url):
     if not await supports_iterative_scan(app_database_url):
         pytest.skip("needs pgvector >= 0.8 (hnsw.iterative_scan)")
 
@@ -199,7 +240,7 @@ async def test_planner_uses_the_hnsw_index_for_the_nearest_first_shape(
         statements.append((statement, parameters))
 
     try:
-        await seed(sessions, who, 40)
+        await seed_bulk(sessions, who, 3000)
         async with session_for_principal(sessions, who) as session:
             provider = PostgresCandidateProvider(session, vector_search="hnsw")
             await provider.candidates(
@@ -212,7 +253,6 @@ async def test_planner_uses_the_hnsw_index_for_the_nearest_first_shape(
     assert nearest, "the nearest-first shape must be what reaches the database"
     statement, parameters = nearest[-1]
     plan = explain_as_app_role(app_database_url, who.tenant_id, statement, parameters)
-    assert "hnsw" in plan.lower()
     assert "ix_memory_embeddings_hnsw" in plan
 
 
