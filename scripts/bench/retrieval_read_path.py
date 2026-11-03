@@ -49,12 +49,13 @@ def percentile(values: list[float], q: float) -> float:
     return ordered[min(len(ordered) - 1, max(0, round(q * (len(ordered) - 1))))]
 
 
-def seed(connection, text, count: int, content_words: int, with_vectors: bool) -> None:
+def seed(connection, text, count: int, content_words: int, with_vectors: bool,
+         with_evidence: bool = False) -> None:
     vocab = "{" + ",".join(VOCAB) + "}"
     connection.execute(text("SELECT setseed(0.42)"))
     connection.execute(text("""
         CREATE TEMP TABLE seed AS
-        SELECT g, gen_random_uuid() AS mid, gen_random_uuid() AS vid,
+        SELECT g, gen_random_uuid() AS mid, gen_random_uuid() AS vid, gen_random_uuid() AS eid,
                'topic' || (g % 200) || ' area' || (g % 37) || ' ' || (
                  SELECT string_agg((CAST(:vocab AS text[]))[1 + floor(random() * :n)::int], ' ')
                  FROM generate_series(1, :words) WHERE g > 0) AS body
@@ -73,6 +74,17 @@ def seed(connection, text, count: int, content_words: int, with_vectors: bool) -
         " content, structured_content, content_hash, confidence, utility, authority_level,"
         " verification_status, created_at) SELECT :t, vid, mid, 1, body, '{}', md5(body), 0.5, 0.5,"
         " 2, 'unverified', now() FROM seed"), {"t": TENANT})
+    if with_evidence:  # one source event per memory, role triggered_by (what extraction writes)
+        connection.execute(text(
+            "INSERT INTO events (tenant_id, event_id, idempotency_key, request_hash, session_id,"
+            " sequence_number, event_type, scope_kind, workspace_id, subject_user_id,"
+            " actor_user_id, agent_id, occurred_at, received_at, payload)"
+            " SELECT :t, eid, 'bench-' || g, md5(g::text), 'bench-session-' || (g / 50), g,"
+            " 'tool.result', 'tenant', NULL, NULL, :u, 'bench', now(), now(), '{}' FROM seed"),
+            {"t": TENANT, "u": USER})
+        connection.execute(text(
+            "INSERT INTO evidence (tenant_id, memory_version_id, event_id, role, created_at)"
+            " SELECT :t, vid, eid, 'triggered_by', now() FROM seed"), {"t": TENANT})
     if with_vectors:
         connection.execute(text(
             "INSERT INTO memory_embeddings (tenant_id, memory_version_id, model, embedding,"
@@ -90,6 +102,8 @@ async def main() -> None:
     parser.add_argument("--content-words", type=int, default=120, help="~6 bytes per word")
     parser.add_argument("--queries", type=int, default=20, help="queries per class")
     parser.add_argument("--with-vectors", action="store_true")
+    parser.add_argument("--with-evidence", action="store_true",
+                        help="one source event + evidence row per memory")
     parser.add_argument("--database-url")
     parser.add_argument("--out", type=Path)
     args = parser.parse_args()
@@ -135,7 +149,8 @@ async def main() -> None:
             connection.execute(text("GRANT agent_memory_app TO bench_app"))
             connection.execute(text("SELECT set_config('app.current_tenant_id', :t, true)"),
                                {"t": str(TENANT)})
-            seed(connection, text, args.rows, args.content_words, args.with_vectors)
+            seed(connection, text, args.rows, args.content_words, args.with_vectors,
+                 args.with_evidence)
             connection.execute(text("ANALYZE"))
             version = connection.execute(text("SHOW server_version")).scalar()
             vector_version = connection.execute(text(
@@ -212,6 +227,7 @@ async def main() -> None:
                 "client_and_database_same_host": True,
                 "vectors": "random fixture (not semantic)" if args.with_vectors else "none"},
             "data": {"rows": args.rows, "avg_content_bytes": int(avg_bytes),
+                     "evidence_rows": args.rows if args.with_evidence else 0,
                      "queries_per_class": args.queries},
             "classes": report,
             "note": "body bytes are string-length estimates; old tree ships every candidate "

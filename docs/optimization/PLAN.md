@@ -90,7 +90,7 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 
 | ID | 任务 | 方案编号 | 状态 | 验证方式 | 证据 |
 |---|---|---|---|---|---|
-| E1 | 证据引用：检索结果和 context 里带上来源事件的引用 | 阶段 4 | 待做 | API 测试 | |
+| E1 | 证据引用：检索结果和 context 里带上来源事件的引用 | 阶段 4 | 完成-仅规则抽取产生的证据；每次搜索多约 1.6–3 ms | API 测试 | `tests/integration/test_evidence_refs.py`、`tests/unit/application/test_retrieval.py`、`test_context_builder.py`、`measurements/e1-{before,after}-10k-*.json` |
 | E2 | 精确重复去重：同租户同作用域内规范化后相同的候选，不新建记忆，只追加证据 | 阶段 4 / LC1 | 完成-仅抽取路径；并发竞态未处理（见日志） | 单测 + 集成测试 | `domain/dedup.py`、迁移 `0012_dedup_hash`、`tests/integration/test_candidate_dedup.py`、`tests/unit/domain/test_dedup.py`、`tests/integration/test_dedup_migration.py` |
 | E3 | 上下文打分：相关度 + 新旧（按记忆类型分半衰期）+ 来源可信度，按 分数/占用 贪心装入预算 | O6 | 待做 | 单测（确定性排序）；效果指标待负责人侧重跑 | |
 | E4 | 冲突标注：同主体同类型相互矛盾的记忆在 context 里标 `conflicts` | 阶段 4 / O8 | 待做 | 仅规则型（不调模型）；语义冲突留给后续 | |
@@ -237,6 +237,15 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 - 改了一个旧测试的输入：`test_llm_pipeline` 里 mock 模型对两个不同事件返回完全相同的文本，原来落成两条候选，现在按 E2 会合并成一条。我让 mock 对不同事件返回不同文本，保留"两个事件各产出候选"的原意，断言本身没有放松；重复合并的行为由 `test_candidate_dedup.py` 单独覆盖。
 - **局限，不得夸大**：① 只覆盖**抽取路径**；显式写入（`POST /v1/memories`）和纠正版本不去重，因为那是调用方明确的意图。② 只做精确匹配（NFKC、大小写、空白）；标点不同、同义改写都不算重复，语义去重没做。③ 迁移前就已存在的重复不会被合并，只是以后的候选会和它们去重（回填会给它们补哈希）。④ **没有数据库唯一约束**，也没有对"两个并发 worker 同时抽取到同一句话"加锁：C3 的 `--concurrency` 下两个循环可能同时查不到、各建一条，造成漏去重。这个竞态没有测试，也没有测量。⑤ 回填在迁移里同步执行，大表要放进维护窗口。⑥ 没有测去重对检索质量或候选数量的真实影响（没有真实抽取数据）。
 - 下一步：E1（证据引用）→ E4 → E3 → C4 → B3 收尾 → STORY.md。
+
+### 2026-11-03 — E1 证据引用完成（本沙箱 localpg）
+- 现状：`evidence` 表（版本→事件，角色 `triggered_by/supports/contradicts/verified_by`）早就有，但检索结果和 context 里 `evidence_refs` 恒为空占位。
+- 做了：`/v1/memories/search` 每条命中新增 `evidence`（至多 5 条）与 `evidence_total`；`/v1/memories/context` 把 `evidence_refs` 填成至多 3 条 `{event_id, role}`，多于 3 条时才附 `evidence_total`（没有证据的条目渲染结果与改前逐字节相同，所以旧预算测试没动）。引用字段：`event_id`、`role`、`event_type`、`occurred_at`、`session_id`、`sequence_number`——**没有事件正文**。带 session/sequence 是因为事件接口只有写入、没有按 ID 读取，只给 `event_id` 调用方无处可查；它们是调用方自己写入的坐标。
+- 设计：沿用 B1 的两阶段，证据只对当前页（≤100）用**一条**窗口函数查询取回（`CandidateProvider.evidence()`，Postgres 与内存适配器都实现）。封顶时排序为 origin（`triggered_by`）→ `contradicts` → `verified_by` → `supports`，同角色内新的在前，所以 E2 追加再多的 `supports` 也挤不掉起源和反驳。预算紧到连"空内容条目"都放不下时，context 先丢引用（`evidence_total` 保留）而不是丢记忆。有证据**不**改变 `trust` 标签（仍是 `unverified_historical_reference`）。
+- 验证：单测 5 个（只为当前页取证据、空页不取、封顶且保留总数、context 紧凑/封顶/无证据逐字节不变/紧预算先丢引用）；集成测试 3 个（真实事件→抽取→E2 追加后：封顶 5 条与总数 7、起源在首位且坐标正确、context 引用与 `event_id` 对得上、别的租户读不到；追加 `contradicts`/`verified_by` 后封顶仍保留它们；HTTP 与 SDK 响应键集合恰为 6 个字段、不含事件内容、显式写入的记忆证据为空、跨租户无结果）。**变异验证**：分别去掉角色排序、让 `evidence()` 返回空、让 context 路由不透传证据、取消封顶，对应测试各自失败（4/4）。四道门（localpg，排除 `test_b0_harness`）：539 passed、1 skipped（B3 需要 pgvector 0.8 的测试）、ruff、mypy strict 106 文件、foundation 8/8，含"SDK 覆盖全部路由"测试。
+- 代价（`scripts/bench/retrieval_read_path.py --with-evidence`，每条记忆 1 个事件和 1 条证据，同一脚本同一数据，改前 `1bd6cbf` 对改后，各 3 次，1 万行，2 核同机，无向量，p50 中位）：词法窄 10.5 → 13.5 ms；词法宽 65.9 → 67.6 ms；词法+结构化 25.4 → 27.0 ms。前后范围互不重叠，即每次搜索多约 1.6–3 ms，是多出来的那条查询，对最快的查询相对比例不小。"改后"是在 `1bd6cbf` 之上、提交前的工作区采集的。没有测过证据很多的记忆或更大规模。
+- 局限（不得夸大）：① 只有抽取路径产生证据；显式写入和纠正版本没有来源事件，列表为空。② 证据按**版本**挂，纠正产生的新版本不继承旧版本的证据。③ 引用只是指针，**不**等于"已验证"，也没有做证据质量评估。④ 没有按 ID 读取事件的接口，我没有新增（超出 E1 范围），消费者靠 session/sequence 对回自己的记录。
+- 下一步：E4（冲突标注）→ E3（上下文打分）→ C4/B3 的 PLAN 收尾 → STORY.md。
 
 ## 9. 需要负责人决定或配合的事项
 

@@ -27,6 +27,10 @@ class ContextPacket:
     counter: str = "utf8_bytes_conservative"
 
 
+# Context is prompt text: keep citations compact. The search API returns the full references.
+CONTEXT_EVIDENCE_REFS = 3
+
+
 class MemoryContextBuilder:
     def __init__(self, counter: TokenCounter | None = None) -> None:
         self.counter = counter or Utf8ByteCounter()
@@ -52,13 +56,22 @@ class MemoryContextBuilder:
             if key in seen:
                 continue
             seen.add(key)
+            refs = [{"event_id": str(ref.event_id), "role": ref.role}
+                    for ref in hit.evidence[:CONTEXT_EVIDENCE_REFS]]
             entry: dict[str, object] = {
                 "memory_id": key, "version_id": str(hit.version_id),
                 "trust": "unverified_historical_reference",
                 "status": "active_at_retrieval_snapshot",
-                "evidence_refs": [], "conflicts": "not_assessed",
+                "evidence_refs": refs, "conflicts": "not_assessed",
                 "content": hit.content,
             }
+            if hit.evidence_total:
+                entry["evidence_total"] = hit.evidence_total
+            if refs and self.counter.count(render(entries + [{**entry, "content": ""}])) > budget:
+                # Citations are optional metadata: when even an empty-content entry would not
+                # fit, drop the references (evidence_total still says some exist) rather than
+                # losing the memory itself.
+                entry["evidence_refs"] = []
             if self.counter.count(render(entries + [entry])) > budget:
                 # Clip only content on Unicode boundaries. Include JSON framing in the budget.
                 low, high = 0, len(hit.content)

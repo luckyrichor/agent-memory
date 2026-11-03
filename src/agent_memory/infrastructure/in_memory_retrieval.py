@@ -2,11 +2,16 @@
 
 import math
 from collections.abc import Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from uuid import UUID
 
 from agent_memory.application.ports import MemoryRecord
-from agent_memory.application.retrieval import Candidate, RetrievalQuery
+from agent_memory.application.retrieval import (
+    Candidate,
+    EvidenceRef,
+    RetrievalQuery,
+    VersionEvidence,
+)
 from agent_memory.domain.enums import MemoryStatus
 from agent_memory.domain.lexical import lexical_tokens
 from agent_memory.domain.principal import RequestPrincipal
@@ -17,6 +22,21 @@ class InMemoryCandidateProvider:
     records: list[MemoryRecord]
     embeddings: dict[UUID, tuple[str, tuple[float, ...]]]
     candidate_limit: int = 1000
+    # E1: the in-memory store has no event table; tests/evals may pass evidence by version id.
+    evidence_by_version: dict[UUID, tuple[EvidenceRef, ...]] = field(default_factory=dict)
+
+    async def evidence(
+        self, version_ids: Sequence[UUID], principal: RequestPrincipal, per_version: int
+    ) -> dict[UUID, VersionEvidence]:
+        found = {
+            version_id: self.evidence_by_version[version_id]
+            for version_id in version_ids
+            if version_id in self.evidence_by_version
+        }
+        return {
+            version_id: VersionEvidence(refs[:per_version], len(refs))
+            for version_id, refs in found.items()
+        }
 
     async def contents(
         self, version_ids: Sequence[UUID], principal: RequestPrincipal

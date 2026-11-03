@@ -3,13 +3,24 @@ from collections.abc import Sequence
 from typing import Literal
 from uuid import UUID
 
-from sqlalchemy import String, and_, cast, func, or_, select, text
+from sqlalchemy import String, and_, case, cast, func, or_, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.elements import ColumnElement
 
-from agent_memory.application.retrieval import Candidate, RetrievalQuery
+from agent_memory.application.retrieval import (
+    Candidate,
+    EvidenceRef,
+    RetrievalQuery,
+    VersionEvidence,
+)
 from agent_memory.domain.principal import RequestPrincipal
-from agent_memory.infrastructure.orm import MemoryEmbeddingRow, MemoryRow, MemoryVersionRow
+from agent_memory.infrastructure.orm import (
+    EventRow,
+    EvidenceRow,
+    MemoryEmbeddingRow,
+    MemoryRow,
+    MemoryVersionRow,
+)
 
 # pgvector 0.8 added iterative index scans. Without them an approximate scan stops after
 # ``hnsw.ef_search`` rows, so a tenant/status filter applied afterwards can leave the candidate
@@ -74,6 +85,64 @@ class PostgresCandidateProvider:
             )
         )
         return {version_id: content for version_id, content in rows}
+
+    async def evidence(
+        self, version_ids: Sequence[UUID], principal: RequestPrincipal, per_version: int
+    ) -> dict[UUID, VersionEvidence]:
+        """E1: source-event references for the page, one query for all versions.
+
+        Reads only ids and the caller's own event coordinates, never the event payload.
+        Order inside a version: origin first, then contradicting, verifying, plain support;
+        newest first within a role, so a cap drops the least informative references.
+        """
+        if not version_ids:
+            return {}
+        ev, e = EvidenceRow, EventRow
+        role_rank = case(
+            {"triggered_by": 0, "contradicts": 1, "verified_by": 2, "supports": 3},
+            value=ev.role,
+            else_=9,
+        )
+        numbered = (
+            select(
+                ev.memory_version_id.label("version_id"),
+                ev.event_id,
+                ev.role,
+                e.event_type,
+                e.occurred_at,
+                e.session_id,
+                e.sequence_number,
+                func.row_number()
+                .over(
+                    partition_by=ev.memory_version_id,
+                    order_by=(role_rank, e.occurred_at.desc(), ev.event_id),
+                )
+                .label("position"),
+                func.count().over(partition_by=ev.memory_version_id).label("total"),
+            )
+            .join(e, and_(e.tenant_id == ev.tenant_id, e.event_id == ev.event_id))
+            .where(
+                ev.tenant_id == principal.tenant_id,
+                ev.memory_version_id.in_(list(version_ids)),
+            )
+            .subquery()
+        )
+        rows = await self.session.execute(
+            select(numbered).where(numbered.c.position <= per_version).order_by(
+                numbered.c.version_id, numbered.c.position
+            )
+        )
+        refs: dict[UUID, list[EvidenceRef]] = {}
+        totals: dict[UUID, int] = {}
+        for row in rows:
+            refs.setdefault(row.version_id, []).append(
+                EvidenceRef(
+                    row.event_id, row.role, row.event_type, row.occurred_at,
+                    row.session_id, int(row.sequence_number),
+                )
+            )
+            totals[row.version_id] = int(row.total)
+        return {vid: VersionEvidence(tuple(items), totals[vid]) for vid, items in refs.items()}
 
     async def candidates(
         self, query: RetrievalQuery, principal: RequestPrincipal

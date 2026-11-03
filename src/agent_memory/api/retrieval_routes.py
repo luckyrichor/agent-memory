@@ -8,12 +8,18 @@ from fastapi import APIRouter, Depends, HTTPException
 from agent_memory.api.schemas import (
     ContextRequest,
     ContextResponse,
+    EvidenceRefOut,
     SearchHit,
     SearchRequest,
     SearchResponse,
 )
 from agent_memory.application.context_builder import MemoryContextBuilder
-from agent_memory.application.retrieval import MemoryRetriever, RetrievalHit, RetrievalQuery
+from agent_memory.application.retrieval import (
+    EvidenceRef,
+    MemoryRetriever,
+    RetrievalHit,
+    RetrievalQuery,
+)
 from agent_memory.config import Settings
 from agent_memory.domain.errors import MemoryScopeForbidden
 from agent_memory.domain.principal import RequestPrincipal
@@ -75,6 +81,8 @@ def create_retrieval_router(
                     score=hit.score,
                     ranks=hit.ranks,
                     raw_scores=hit.raw_scores,
+                    evidence=[EvidenceRefOut(**asdict(ref)) for ref in hit.evidence],
+                    evidence_total=hit.evidence_total,
                 )
                 for hit in page.items
             ],
@@ -93,7 +101,9 @@ def create_retrieval_router(
     ) -> ContextResponse:
         response = await search(body, principal, service)
         hits = tuple(RetrievalHit(item.memory_id, item.version_id, item.content,
-                                 item.score, item.ranks, item.raw_scores)
+                                 item.score, item.ranks, item.raw_scores,
+                                 tuple(EvidenceRef(**ref.model_dump()) for ref in item.evidence),
+                                 item.evidence_total)
                      for item in response.items)
         packet = MemoryContextBuilder().build(hits, body.token_budget)
         return ContextResponse.model_validate(asdict(packet))

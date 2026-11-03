@@ -1,0 +1,60 @@
+{
+  "label": "e1-after-3",
+  "src_tree": "/home/claude/agent-memory/src",
+  "commit": "1bd6cbf",
+  "measured_at_utc": "2026-11-03T06:10:43+00:00",
+  "environment": {
+    "host": "vm",
+    "cpus": 2,
+    "python": "3.12.3",
+    "postgres": "16.15 (Ubuntu 16.15-0ubuntu0.24.04.1)",
+    "pgvector": "0.6.0",
+    "client_and_database_same_host": true,
+    "vectors": "none"
+  },
+  "data": {
+    "rows": 10000,
+    "avg_content_bytes": 849,
+    "evidence_rows": 10000,
+    "queries_per_class": 20
+  },
+  "classes": {
+    "lexical_narrow": {
+      "n": 20,
+      "p50_ms": 12.2,
+      "p95_ms": 13.3,
+      "mean_ms": 12.3,
+      "median_channel_rows": {
+        "lexical": 319,
+        "vector": 0,
+        "structured": 0
+      },
+      "median_body_bytes_from_db": 16945
+    },
+    "lexical_broad": {
+      "n": 20,
+      "p50_ms": 66.8,
+      "p95_ms": 90.2,
+      "mean_ms": 69.4,
+      "median_channel_rows": {
+        "lexical": 1000,
+        "vector": 0,
+        "structured": 0
+      },
+      "median_body_bytes_from_db": 16955
+    },
+    "lexical_plus_structured": {
+      "n": 20,
+      "p50_ms": 27.0,
+      "p95_ms": 56.6,
+      "mean_ms": 30.5,
+      "median_channel_rows": {
+        "lexical": 319,
+        "vector": 0,
+        "structured": 1000
+      },
+      "median_body_bytes_from_db": 16928
+    }
+  },
+  "note": "body bytes are string-length estimates; old tree ships every candidate body, new tree only the requested page"
+}

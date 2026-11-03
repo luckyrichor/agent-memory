@@ -1,5 +1,5 @@
 from datetime import UTC, datetime
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 import pytest
 
@@ -49,10 +49,14 @@ class SpyProvider:
     """Wraps the in-memory adapter and records which version ids had their body requested."""
 
     def __init__(self, inner, drop=frozenset()):
-        self.inner, self.drop, self.requested = inner, drop, []
+        self.inner, self.drop, self.requested, self.evidence_requested = inner, drop, [], []
 
     async def candidates(self, query, principal):
         return await self.inner.candidates(query, principal)
+
+    async def evidence(self, version_ids, principal, per_version):
+        self.evidence_requested.append(list(version_ids))
+        return await self.inner.evidence(version_ids, principal, per_version)
 
     async def contents(self, version_ids, principal):
         self.requested.append(list(version_ids))
@@ -106,3 +110,54 @@ async def test_hit_whose_body_cannot_be_read_is_dropped_not_returned_blank():
     spy = SpyProvider(InMemoryCandidateProvider(records, {}), drop={gone})
     page = await MemoryRetriever(spy).search(RetrievalQuery("compiler", limit=10), principal)
     assert gone not in {hit.version_id for hit in page.items} and len(page.items) == 2
+
+
+def _ref(n, role="supports"):
+    from agent_memory.application.retrieval import EvidenceRef
+
+    return EvidenceRef(UUID(int=n), role, "tool.result", datetime(2026, 10, 1, tzinfo=UTC),
+                       f"session-{n}", n)
+
+
+@pytest.mark.asyncio
+async def test_evidence_is_requested_for_the_page_versions_only():
+    principal, records = _corpus(8)
+    spy = SpyProvider(InMemoryCandidateProvider(records, {}))
+    page = await MemoryRetriever(spy).search(RetrievalQuery("compiler", limit=3), principal)
+    assert len(spy.evidence_requested) == 1
+    assert spy.evidence_requested[0] == [hit.version_id for hit in page.items]  # 3 of 8, in order
+    assert all(hit.evidence == () and hit.evidence_total == 0 for hit in page.items)
+
+
+@pytest.mark.asyncio
+async def test_more_than_five_references_are_capped_but_the_total_is_kept():
+    principal, records = _corpus(3)
+    target = records[0].current_version.version_id
+    refs = tuple(_ref(n) for n in range(1, 9))  # 8 references on one version
+    inner = InMemoryCandidateProvider(records, {}, evidence_by_version={target: refs})
+    page = await MemoryRetriever(inner).search(RetrievalQuery("compiler", limit=10), principal)
+    hit = next(h for h in page.items if h.version_id == target)
+    assert len(hit.evidence) == 5 and hit.evidence_total == 8
+    others = [h for h in page.items if h.version_id != target]
+    assert others and all(h.evidence == () and h.evidence_total == 0 for h in others)
+
+
+@pytest.mark.asyncio
+async def test_hit_with_evidence_on_the_requested_page_carries_refs_in_order_and_total():
+    principal, records = _corpus(2)
+    target = records[0].current_version.version_id
+    refs = (_ref(1, "triggered_by"), _ref(2, "supports"))
+    inner = InMemoryCandidateProvider(records, {}, evidence_by_version={target: refs})
+    page = await MemoryRetriever(inner).search(RetrievalQuery("compiler", limit=10), principal)
+    hit = next(h for h in page.items if h.version_id == target)
+    assert [r.role for r in hit.evidence] == ["triggered_by", "supports"]
+    assert hit.evidence_total == 2
+
+
+@pytest.mark.asyncio
+async def test_empty_page_does_not_ask_for_evidence():
+    principal, records = _corpus(2)
+    spy = SpyProvider(InMemoryCandidateProvider(records, {}))
+    empty = await MemoryRetriever(spy).search(
+        RetrievalQuery("compiler", limit=3, offset=9), principal)
+    assert empty.items == () and spy.evidence_requested == []

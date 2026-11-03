@@ -1,10 +1,11 @@
 import json
+from datetime import UTC, datetime
 from uuid import UUID
 
 import pytest
 
 from agent_memory.application.context_builder import MemoryContextBuilder
-from agent_memory.application.retrieval import RetrievalHit
+from agent_memory.application.retrieval import EvidenceRef, RetrievalHit
 
 
 def hit(n: int, text: str, score: float) -> RetrievalHit:
@@ -38,3 +39,44 @@ def test_injection_remains_escaped_untrusted_data() -> None:
     assert item["content"].startswith('"}]')
     with pytest.raises(ValueError):
         MemoryContextBuilder().build((), -1)
+
+
+# ---- E1: evidence references in the rendered context ----
+def _ref(n, role="supports"):
+    return EvidenceRef(UUID(int=n), role, "tool.result", datetime(2026, 10, 1, tzinfo=UTC),
+                       "private-session-name", n)
+
+
+def _entry(rendered):
+    return json.loads(rendered)["memories"][0]
+
+
+def test_evidence_refs_are_compact_capped_and_counted():
+    hit = RetrievalHit(UUID(int=1), UUID(int=101), "body", 1.0, {}, {},
+                       tuple(_ref(n, "triggered_by" if n == 1 else "supports") for n in range(1, 6)),
+                       9)
+    packet = MemoryContextBuilder().build((hit,), 100000)
+    entry = _entry(packet.rendered)
+    assert [r["role"] for r in entry["evidence_refs"]] == ["triggered_by", "supports", "supports"]
+    assert set(entry["evidence_refs"][0]) == {"event_id", "role"}  # nothing else leaks into prompt
+    assert entry["evidence_total"] == 9
+    assert "private-session-name" not in packet.rendered
+    assert entry["trust"] == "unverified_historical_reference"  # evidence does not verify
+
+
+def test_no_evidence_renders_exactly_as_before():
+    hit = RetrievalHit(UUID(int=1), UUID(int=101), "body", 1.0, {}, {})
+    entry = _entry(MemoryContextBuilder().build((hit,), 100000).rendered)
+    assert entry["evidence_refs"] == [] and "evidence_total" not in entry
+
+
+def test_tight_budget_drops_the_references_before_it_drops_the_memory():
+    bare = RetrievalHit(UUID(int=1), UUID(int=101), "x" * 40, 1.0, {}, {})
+    cited = RetrievalHit(UUID(int=1), UUID(int=101), "x" * 40, 1.0, {}, {},
+                         tuple(_ref(n) for n in range(1, 4)), 3)
+    # budget = exactly what the memory needs WITHOUT references
+    budget = MemoryContextBuilder().build((bare,), 100000).used_tokens + 20
+    packet = MemoryContextBuilder().build((cited,), budget)
+    assert packet.omitted == 0 and packet.used_tokens <= budget  # memory kept
+    entry = _entry(packet.rendered)
+    assert entry["evidence_refs"] == [] and entry["evidence_total"] == 3  # honest: some exist

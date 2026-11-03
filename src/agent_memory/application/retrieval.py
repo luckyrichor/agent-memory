@@ -2,6 +2,7 @@
 import math
 from collections.abc import Sequence
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Protocol
 from uuid import UUID
 
@@ -40,6 +41,30 @@ class Candidate:
     raw_score: float
 
 
+# At most this many evidence references travel with one hit; the rest is only counted.
+EVIDENCE_PER_HIT = 5
+
+
+@dataclass(frozen=True)
+class EvidenceRef:
+    """Pointer to the source event of a memory version. Carries NO event payload text: only the
+    event id and the caller's own coordinates (session, sequence, type, time) so the citation can
+    be located in the caller's transcript. There is no event read API to resolve the id."""
+
+    event_id: UUID
+    role: str
+    event_type: str
+    occurred_at: datetime
+    session_id: str
+    sequence_number: int
+
+
+@dataclass(frozen=True)
+class VersionEvidence:
+    refs: tuple[EvidenceRef, ...]
+    total: int  # all evidence rows of the version, refs may be a capped subset
+
+
 @dataclass(frozen=True)
 class RetrievalHit:
     memory_id: UUID
@@ -48,6 +73,8 @@ class RetrievalHit:
     score: float
     ranks: dict[str, int]
     raw_scores: dict[str, float]
+    evidence: tuple[EvidenceRef, ...] = ()
+    evidence_total: int = 0
 
 
 class CandidateProvider(Protocol):
@@ -57,6 +84,12 @@ class CandidateProvider(Protocol):
     async def contents(self, version_ids: Sequence[UUID],
                        principal: RequestPrincipal) -> dict[UUID, str]:
         """Body text of already-authorized versions; unknown or foreign ids are simply absent."""
+        ...
+
+    async def evidence(self, version_ids: Sequence[UUID], principal: RequestPrincipal,
+                       per_version: int) -> dict[UUID, VersionEvidence]:
+        """Source-event references of already-authorized versions (E1); absent = none recorded.
+        Origin and contradicting evidence rank before plain support when the list is capped."""
         ...
 
 
@@ -94,10 +127,14 @@ class MemoryRetriever:
             end = query.offset + query.limit
             page = fused[query.offset:end]
             # Second stage: only the current page (<= 100 rows) needs its body text.
-            contents = (await self.provider.contents([item[1] for item in page], principal)
+            page_versions = [item[1] for item in page]
+            contents = (await self.provider.contents(page_versions, principal) if page else {})
+            evidence = (await self.provider.evidence(page_versions, principal, EVIDENCE_PER_HIT)
                         if page else {})
             hits = [RetrievalHit(memory_id, version_id, contents[version_id], score,
-                                 hit_ranks, raw_scores)
+                                 hit_ranks, raw_scores,
+                                 evidence[version_id].refs if version_id in evidence else (),
+                                 evidence[version_id].total if version_id in evidence else 0)
                     for memory_id, version_id, score, hit_ranks, raw_scores in page
                     if version_id in contents]
             return RetrievalPage(tuple(hits),

@@ -1,3 +1,5 @@
+from datetime import datetime
+from typing import Literal
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -98,6 +100,17 @@ class SearchRequest(BaseModel):
     offset: int = Field(default=0, ge=0, le=2900)
 
 
+class EvidenceRefOut(BaseModel):
+    """Source-event pointer of a memory version. No event text; see EvidenceRef."""
+
+    event_id: UUID
+    role: Literal["supports", "contradicts", "triggered_by", "verified_by"]
+    event_type: str
+    occurred_at: datetime
+    session_id: str
+    sequence_number: int
+
+
 class SearchHit(BaseModel):
     memory_id: UUID
     version_id: UUID
@@ -105,6 +118,10 @@ class SearchHit(BaseModel):
     score: float
     ranks: dict[str, int]
     raw_scores: dict[str, float]
+    # Empty means "no evidence recorded" (e.g. explicit writes), not "unknown". Capped; the
+    # full count is evidence_total. Evidence does not make a memory verified.
+    evidence: list[EvidenceRefOut] = Field(default_factory=list)
+    evidence_total: int = 0
 
 
 class SearchResponse(BaseModel):
