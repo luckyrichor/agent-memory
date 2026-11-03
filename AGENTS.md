@@ -1,5 +1,14 @@
 # AGENTS.md
 
+<!-- PHASE1_VENV_CLEANUP_20261103_START -->
+- 2026-11-03T19:49—19:52+08:00（北京时间，date实测）用户授权清理阶段1标注/处理中间材料并删除本项目整个`.venv`，已执行并核验（实施CodeBuddy glm-5.3不回退；Codex已独立验收）。实施前核对：主机VM-0-15-ubuntu/ubuntu、HEAD `2f743d1`工作区干净、两目标真实目录无symlink逃逸（phase1内0个symlink；.venv仅4个标准内部解释器symlink，rmtree以lstat/unlink处理不跟随）、无独立挂载、无worktree（compat-1e2730c在.local根、source-B0在phase2均在目标外）。
+- 删除前先复制最终保留物到`.local/phase1-final-kept/`（28文件，表观39,422,390 B）：按`docs/evals/phase1-acceptance-current.json`与`docs/reports/phase1-blind-adoption-2026-10-23/report.json`哈希引用精确识别——private_outputs 7（最终金标并集/人工投影/provenance）、inputs 12（final来源manifest/批次登记/adopted-old-pool/accepted-base）、protected 6（reviews与temporal ecd-owner报告），另按“小文件拿不准保留”例外复制上轮保留物normalized-v1（3文件）；复制SHA与源及report引用值全部一致。不复制整个旧目录，全部中间标签/响应/语料旧版未保留。
+- 已删除：`.local/phase1/`整个目录（16,814文件，du块820,772,864 B、表观777,058,788 B，与manifest逐文件合计精确一致）与`.venv/`（4,644文件，du块144,003,072 B、表观130,605,833 B）；删除后两路径`[ -e ]`/`[ -L ]`均不存在。系统/共享解释器、其他项目环境、.local根（7个人工CSV、backups、compat-1e2730c、phase2、reports、ark.env）、docs/reports 417文件及.local根7份人工CSV、代码/pyproject/uv.lock、phase2结论、worktrees与容器卷全部未触碰。
+- 核验：受保护424文件（docs/reports 417+根CSV 7）组合SHA256前后一致（`b671a449…`）；final-kept 28文件SHA前后一致；git工作区在文档更新前干净。空间`du -s -B1`仓库1,084,264,448→160,059,392 B，释放924,205,056 B（≈881.3 MiB，对账=820,772,864+144,003,072−39,518,208+清单gz约1,052,672 B精确自洽）。
+- 最终状态：项目已结项，**不再可直接运行**——`.venv`已删，`uv sync --all-groups`可恢复依赖；阶段1原始材料已清，最终金标/人工确认/manifest仅存`.local/phase1-final-kept/`私有归档（不入Git）；原始中间数据、逐题调用缓存均已不可恢复，重跑需重新准备输入并可能产生费用。阶段1历史验收与阶段2未验收口径不变，服务保持停止。
+- 本机审计（`.agent-tasks/`，经`.git/info/exclude`排除不入Git）：`2026-11-03-phase1-venv-cleanup.md`、`.py`、`-pre.json`、`-result.json`、`-phase1-manifest.jsonl.gz`、`-venv-manifest.jsonl.gz`。本轮仓库修改仅AGENTS.md与docs/progress.md，Codex独立核验通过：424份报告/人工CSV、7211份阶段2保留文件内容摘要均未变，28份归档逐项哈希一致（25份匹配既有报告来源哈希、3份匹配复制前清单）；交接随本次正常提交推送。飞书待同步：本次phase1/.venv清理；用户暂不写Wiki，未创建或修改飞书文档。
+<!-- PHASE1_VENV_CLEANUP_20261103_END -->
+
 <!-- NORMALIZED_TOOLS_CLEANUP_20261103_START -->
 - 2026-11-03T19:38—19:40+08:00（北京时间，date实测）用户授权结项追加清理并已执行核验（result all_ok=true；实施CodeBuddy glm-5.3，Codex已独立验收）。实施前核对：主机VM-0-15-ubuntu/ubuntu、HEAD `78bb9f3`工作区干净、三目标均真实目录无symlink/独立挂载/越界。
 - 已删除（逐文件哈希后执行）：`.local/phase1/normalized-v2/`（11文件）与`normalized-v3/`（11文件，两目录合计du块815,382,528 B≈777.7MiB，与用户预期约778MiB一致）及`.mypy_cache/`（3文件：.gitignore、CACHEDIR.TAG、3.12/cache.db）；删除后三路径`[ -e ]`/`[ -L ]`均不存在。25文件path/size/sha256/allocated清单（表观合计837,170,715 B）存`.agent-tasks/2026-11-03-normalized-tools-cleanup-manifest.jsonl.gz`（SHA256 `c6404274…`）。

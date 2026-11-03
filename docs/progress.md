@@ -620,3 +620,13 @@ B0-CANDIDATE-ACTIVATION-MISSING：候选记忆无自动生效路径；冻结B0�
 - 空间实测：`du -s -B1` 仓库 1,999,400,960 → 1,084,149,760 B（释放 915,251,200 B≈872.7 MiB，其中 .venv 释放 78,000,128 B；= 837,255,168 + 78,000,128 − 4,096，两次测量间新增 pre.json 一个块，精确对账）；`du -sb` 释放 911,540,756 B（= 837,170,715 + 74,371,144 − 1,103，同样精确）。初始基线 1,999,380,480 B 与用户交接记录一致。
 - 保留核验：normalized-v1（3 文件）、.local 根 7 个人工 CSV、round3 全部人工材料、docs/reports 含 closeout-2026-11-03 全部旧报告与阶段 2 结论未动；受保护 10 文件集合内容摘要前后一致（SHA256 `81aa73da…`）；核验时点 git 工作区仍干净。未修改任何 docs/reports 文件，便于 Codex 按保留报告哈希校验。
 - 审计文件（`.agent-tasks/`，经 `.git/info/exclude` 排除不入 Git）：`2026-11-03-normalized-tools-cleanup.md`（实施前任务说明）、`-manifest.jsonl.gz`、`-pre.json`、`-result.json`（all_ok=true）。本轮仓库修改仅 AGENTS.md 与本文件，Codex 独立验收通过：424 个报告与人工 CSV 的组合 SHA256 前后一致，元数据/入口/删除路径检查通过；交接记录随本次正常提交推送。飞书 Wiki 按用户要求暂不写，待同步：本次追加清理。
+
+## 2026-11-03T19:49—19:52+08:00 阶段1中间材料与 .venv 清理（结项后最终瘦身）
+
+用户授权（HEAD `2f743d1`，工作区干净，glm-5.3不回退，Codex已独立验收）。范围核验：两目标无symlink逃逸/独立挂载/worktree，.venv仅标准内部symlink且rmtree不跟随。
+
+删除前按 `docs/evals/phase1-acceptance-current.json` 与 `docs/reports/phase1-blind-adoption-2026-10-23/report.json` 哈希引用，将最终采纳结果（金标并集、人工确认/投影、最终来源manifest、provenance与reviews小结论报告，含例外保留normalized-v1）共28文件39,422,390 B 复制到 `.local/phase1-final-kept/`（私有，不入Git），逐文件SHA与源及报告引用值全部一致。随后整体删除 `.local/phase1/`（16,814文件、du块820,772,864 B）与本项目 `.venv/`（4,644文件、144,003,072 B），两路径确认不存在。
+
+核验通过：受保护424文件（docs/reports+根7人工CSV）组合SHA256前后一致（`b671a449…`）；final-kept前后SHA一致；.local根、phase2、worktrees、容器卷、系统/共享解释器未触碰。仓库 `du -s -B1` 1,084,264,448 → 160,059,392 B，释放924,205,056 B（≈881.3 MiB，与各项du精确对账）。逐文件哈希清单与实施记录见 `.agent-tasks/2026-11-03-phase1-venv-cleanup*`。
+
+最终状态：项目结项后不再可直接运行——`uv sync --all-groups` 可恢复依赖，但阶段1原始中间数据已删，最终结果仅存 `.local/phase1-final-kept/`；重跑须重新准备输入并可能产生费用。阶段1验收与阶段2未验收口径不变，服务保持停止。本轮未跑实验/模型/服务。Codex独立核验：424份报告/人工CSV与7211份阶段2文件内容摘要不变、28份归档哈希逐项相符（25份另匹配既有报告来源哈希、3份匹配复制前清单）；交接随本次正常提交推送。飞书按用户暂缓要求待同步本次清理。
