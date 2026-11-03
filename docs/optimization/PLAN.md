@@ -66,7 +66,7 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 | B1 | 两段式检索：先只取 id 与分数，只对当前页取正文；候选数上限可配置（默认 1000→200） | O1 | 完成-传输量降低，延迟无改善；默认值未降 | 单测 + 微基准（行数/传输量/延迟） | `tests/unit/application/test_retrieval.py`、`tests/integration/test_two_stage_retrieval.py`、`scripts/bench/retrieval_read_path.py`、`measurements/b1-{before,after}-10k-*.json` |
 | B2 | 英文词法通道补 GIN 索引；检查三路查询的执行计划 | O1 | 完成-改用存储列（GIN 在 RLS 下用不上）；仅 1 万行 | `EXPLAIN` 前后对比 | `migrations/versions/0010_stored_lexical_vectors.py`、`scripts/bench/explain_read_path.py`、`measurements/b2-*` |
 | B3 | 向量近似索引（HNSW）实验 + 过滤后结果过少的处理 | O2 | 待做 | 召回率对精确扫描、延迟，1 万 / 10 万向量 | |
-| B4 | 连接池参数可配置、池耗尽快速失败返回 503（带 Retry-After），不再挂 30 秒 | F2 | 待做 | 单测 + 并发复现 | |
+| B4 | 连接池参数可配置、池耗尽快速失败返回 503（带 Retry-After），不再挂 30 秒 | F2 | 完成-行为已验证，未做压测 | 单测 + 并发复现 | `tests/integration/test_pool_exhaustion.py`、`api/infrastructure_errors.py` |
 
 ### C. 写路径与 worker（O4、O5）
 
@@ -83,7 +83,7 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 | ID | 任务 | 方案编号 | 状态 | 验证方式 | 证据 |
 |---|---|---|---|---|---|
 | D1 | 查询文本不进日志 / span（SC4） | SC4 | 待做 | 捕获日志的断言测试 | |
-| D2 | 磁盘满 / 数据库不可用等错误映射为明确的 503 与稳定错误码（F9） | F9 | 待做 | 单测（模拟异常） | |
+| D2 | 磁盘满 / 数据库不可用等错误映射为明确的 503 与稳定错误码（F9） | F9 | 完成-仅单测（模拟 SQLSTATE），没有真的写满磁盘 | 单测（模拟异常） | `tests/unit/api/test_infrastructure_errors.py` |
 | D3 | 逻辑删除后的正文清理方案（LC7）：设计 + 可执行的清理命令 | LC7 | 待做 | 集成测试（清理后正文与向量不可读） | |
 
 ### E. 记忆深度与上下文（阶段 4、5）
@@ -201,6 +201,13 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 - 需要负责人决定：若要让词法检索随数据量次线性增长，只能让 GIN 被应用角色用上，选项（SECURITY DEFINER 且自行强制租户过滤的检索函数、把 `@@` 实现标 LEAKPROOF、独立无 RLS 的词法表）都会触及"RLS 是纵深防御"这条核心不变量，我没有擅自做。
 - 验证：四道门（localpg）484 passed（排除 `test_b0_harness`，含升降级迁移测试）、ruff、mypy strict、foundation 8/8；新增 2 个集成测试（存储列与旧表达式逐值相等且整实体查询不含它们；中英文检索仍可用）。
 - 下一步：B4 连接池快速失败；之后 B3。
+
+### 2026-11-03 — 同步远端；B4 + D2 完成（新会话接手，沙箱 v230）
+- 同步：`main` 无新提交（仍是 `53cba0f`）；远端 `optimize/stage3-6` 比本地多 3 个提交（C3 补测、B1、B2，由另一会话推送），已快进合并，未发生冲突。该沙箱自带 pgvector（`/usr/lib/postgresql/16/lib/vector.so`）。
+- 做了：配置 `MEMORY_DB_POOL_SIZE`（默认 10）、`MEMORY_DB_MAX_OVERFLOW`（10）、`MEMORY_DB_POOL_TIMEOUT_SECONDS`（默认 2，原来是 SQLAlchemy 的 30 秒）、`MEMORY_DB_STATEMENT_TIMEOUT_MS`（默认 15000，0 = 不限）；`create_engine` 新增同名参数，**默认值等于旧行为，所以 worker 不变，只有 API 走新配置**；`api/infrastructure_errors.py` 按 SQLSTATE 分类，`SQLAlchemyError` 统一处理：连接池耗尽 → 503 `SERVICE_OVERLOADED`（`Retry-After: 1`）；磁盘满 / 资源上限（53100/53000/53200/53400）→ 503 `STORAGE_UNAVAILABLE`（30 秒）；语句超时 57014 → 504 `DATABASE_TIMEOUT`；连接类错误 → 503 `DATABASE_UNAVAILABLE`；其余数据库错误 → 500 `INTERNAL_ERROR`，不可重试。响应与指标里都不含异常文本。
+- 验证：`test_pool_exhaustion.py`：连接池大小 1、占住唯一连接，请求在 0.3 秒池超时后 2 秒内返回 503，释放后恢复；错误体的 `request_id` 与响应头一致。语句超时配置在每个连接上生效（`SHOW statement_timeout`），并能真的取消 `pg_sleep`。四道门（localpg）496 passed（排除 `test_b0_harness`）、ruff、mypy strict、foundation 8/8。
+- 局限：① 没有重做 B0 那种 1 QPS 的压测，所以**不能**说"1 QPS 不再超时"，只能说"池耗尽时现在 2 秒内明确失败而不是挂 30 秒"。1 QPS 大量超时的根因是 B1/B2（每次查询要扫全表并现算分词）加上池太小，B1/B2 已经把单次查询从 ~0.7–1.9 s 降到 ~10–70 ms（见上），这才是改善吞吐的主因，需要压测机验证。② D2 只验证了 SQLSTATE 映射，没有真的写满磁盘。③ 默认池 10+10 是我的取值，没有依据，需要在压测机上按数据库 `max_connections` 和实例数核定。
+- 下一步：B3（HNSW 实验）→ C5 → D1 → E 系列。
 
 ## 9. 需要负责人决定或配合的事项
 

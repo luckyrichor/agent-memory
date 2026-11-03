@@ -7,12 +7,14 @@ from uuid import uuid4
 
 from fastapi import Depends, FastAPI, Request
 from fastapi.responses import JSONResponse
+from sqlalchemy.exc import SQLAlchemyError
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from agent_memory.api.auth import JwtPrincipalResolver
 from agent_memory.api.body_limit import RequestBodyLimit
 from agent_memory.api.errors import AuthenticationRequired
 from agent_memory.api.event_routes import create_event_router
+from agent_memory.api.infrastructure_errors import classify_infrastructure_error
 from agent_memory.api.middleware import observe_request
 from agent_memory.api.retrieval_routes import create_retrieval_router
 from agent_memory.api.routes import create_router
@@ -47,6 +49,7 @@ from agent_memory.infrastructure.repositories import (
     PostgresMemoryRepository,
 )
 from agent_memory.infrastructure.retrieval import PostgresCandidateProvider
+from agent_memory.observability import record_operation
 from agent_memory.observability.setup import configure_observability
 
 
@@ -65,7 +68,13 @@ def create_app(settings: Settings) -> FastAPI:
     app = FastAPI(title="Agent Memory", version="1.0.0", lifespan=lifespan)
     app.add_middleware(RequestBodyLimit, max_bytes=settings.max_request_body_bytes)
     app.add_middleware(BaseHTTPMiddleware, dispatch=observe_request)
-    engine = create_engine(settings.database_url)
+    engine = create_engine(
+        settings.database_url,
+        pool_size=settings.db_pool_size,
+        max_overflow=settings.db_max_overflow,
+        pool_timeout=settings.db_pool_timeout_seconds,
+        statement_timeout_ms=settings.db_statement_timeout_ms,
+    )
     sessions = create_session_factory(engine)
     resolver = JwtPrincipalResolver(settings)
     app.state.engine = engine
@@ -239,6 +248,27 @@ def create_app(settings: Settings) -> FastAPI:
             "INVALID_STATUS_TRANSITION",
             "The memory state does not allow this operation.",
             409,
+        )
+
+    @app.exception_handler(SQLAlchemyError)
+    async def database_failure(request: Request, error: SQLAlchemyError) -> JSONResponse:
+        """Stable, honest status for infrastructure failures instead of an opaque 500."""
+        failure = classify_infrastructure_error(error)
+        record_operation(
+            action="http.database_error", decision="error", reason_code=failure.reason_code
+        )
+        headers = {"Retry-After": str(failure.retry_after)} if failure.retry_after else None
+        return JSONResponse(
+            status_code=failure.status_code,
+            headers=headers,
+            content={
+                "error": {
+                    "code": failure.code,
+                    "message": failure.message,
+                    "retryable": failure.retryable,
+                    "request_id": _request_id(request),
+                }
+            },
         )
 
     async def retrieval_dependency(

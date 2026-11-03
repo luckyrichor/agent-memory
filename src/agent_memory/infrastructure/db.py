@@ -19,8 +19,26 @@ from agent_memory.observability import span
 from agent_memory.observability.tracing import tracer
 
 
-def create_engine(database_url: str) -> AsyncEngine:
-    engine = create_async_engine(database_url, pool_pre_ping=True)
+def create_engine(
+    database_url: str,
+    *,
+    pool_size: int = 5,
+    max_overflow: int = 10,
+    pool_timeout: float = 30,
+    statement_timeout_ms: int = 0,
+) -> AsyncEngine:
+    """Defaults equal SQLAlchemy's, so workers behave as before; the API passes Settings values."""
+    connect_args: dict[str, Any] = {}
+    if statement_timeout_ms:
+        connect_args["options"] = f"-c statement_timeout={int(statement_timeout_ms)}"
+    engine = create_async_engine(
+        database_url,
+        pool_pre_ping=True,
+        pool_size=pool_size,
+        max_overflow=max_overflow,
+        pool_timeout=pool_timeout,
+        connect_args=connect_args,
+    )
 
     @event.listens_for(engine.sync_engine, "before_cursor_execute")
     def before(
