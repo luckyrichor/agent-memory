@@ -100,8 +100,9 @@ async def main() -> None:
         config.set_main_option("sqlalchemy.url", owner_url)
         command.upgrade(config, "head")
         owner = create_sync(owner_url)
-        # Migration 0014 ships the index; the baselines below need it gone, and the index runs
-        # re-create it with the same name so the numbers describe the deployed object.
+        # There is no migration for the index (0014 was dropped after measuring that the planner
+        # ignores it at the production candidate limit). The baselines below therefore start from a
+        # bare table, and the index runs create the very object an operator would create.
         with owner.connect().execution_options(isolation_level="AUTOCOMMIT") as connection:
             connection.execute(text("DROP INDEX IF EXISTS ix_memory_embeddings_hnsw"))
         big = uuid4()

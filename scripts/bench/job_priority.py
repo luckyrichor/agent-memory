@@ -89,6 +89,9 @@ async def main() -> None:
             with owner.begin() as connection:
                 connection.execute(text("DROP SCHEMA public CASCADE"))
                 connection.execute(text("CREATE SCHEMA public"))
+                # A recreated schema carries no ACLs, so the app role cannot resolve an
+                # unqualified table name and every query fails as "relation does not exist".
+                connection.execute(text("GRANT USAGE ON SCHEMA public TO PUBLIC"))
         owner.dispose()
         config = Config(str(ROOT / "alembic.ini"))
         config.set_main_option("script_location", str(ROOT / "migrations"))

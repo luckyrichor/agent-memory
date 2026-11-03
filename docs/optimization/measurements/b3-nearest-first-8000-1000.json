@@ -1,0 +1,420 @@
+{
+  "label": "b3-nearest-first-8000-1000",
+  "commit": "975eee4",
+  "dirty_tree": true,
+  "measured_at_utc": "2026-11-03T06:23:46+00:00",
+  "environment": {
+    "host": "VM-0-15-ubuntu",
+    "cpus": 4,
+    "postgres": "16.15 (Debian 16.15-1.pgdg12+2)",
+    "pgvector": "0.8.6",
+    "client_and_database_same_host": true,
+    "vectors": "clustered synthetic (50 centers, noise 0.3), NOT semantic"
+  },
+  "data": {
+    "big_tenant_rows": 8000,
+    "small_tenants": 8,
+    "small_tenant_rows": 500,
+    "dims": 1024,
+    "seed_seconds": 46.6,
+    "queries_per_class": 30,
+    "recall_k": 20,
+    "candidate_limit": 1000
+  },
+  "hnsw": {
+    "m": 16,
+    "ef_construction": 64,
+    "build_seconds": 15.1,
+    "index_size": "94 MB",
+    "embedding_table_size": "1192 kB",
+    "iterative_scan_supported": true
+  },
+  "results": {
+    "exact_no_index": {
+      "big": {
+        "p50_ms": 126.8,
+        "p95_ms": 171.1,
+        "candidates_min": 1000,
+        "candidates_median": 1000.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false,
+        "plan_nodes": [
+          "Limit",
+          "Sort",
+          "Result",
+          "Hash Join",
+          "Seq Scan",
+          "Hash",
+          "Hash Join",
+          "Seq Scan",
+          "Hash",
+          "Seq Scan"
+        ]
+      },
+      "small": {
+        "p50_ms": 15.4,
+        "p95_ms": 20.3,
+        "candidates_min": 500,
+        "candidates_median": 500.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false,
+        "plan_nodes": [
+          "Limit",
+          "Sort",
+          "Result",
+          "Nested Loop",
+          "Hash Join",
+          "Bitmap Heap Scan",
+          "Bitmap Index Scan[ix_memories_tenant_user_status]",
+          "Hash",
+          "Bitmap Heap Scan",
+          "Bitmap Index Scan[memory_embeddings_pkey]",
+          "Index Only Scan[pk_memory_versions]"
+        ]
+      }
+    },
+    "two_step_shape_no_index": {
+      "big": {
+        "p50_ms": 69.3,
+        "p95_ms": 86.4,
+        "candidates_min": 1000,
+        "candidates_median": 1000.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false
+      },
+      "small": {
+        "p50_ms": 4.6,
+        "p95_ms": 6.0,
+        "candidates_min": 500,
+        "candidates_median": 500.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false
+      }
+    },
+    "provider_exact_with_index": {
+      "big": {
+        "p50_ms": 142.4,
+        "p95_ms": 205.8,
+        "candidates_min": 1000,
+        "candidates_median": 1000.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false,
+        "plan_nodes": [
+          "Limit",
+          "Sort",
+          "Result",
+          "Hash Join",
+          "Seq Scan",
+          "Hash",
+          "Hash Join",
+          "Seq Scan",
+          "Hash",
+          "Seq Scan"
+        ]
+      },
+      "small": {
+        "p50_ms": 17.3,
+        "p95_ms": 26.3,
+        "candidates_min": 500,
+        "candidates_median": 500.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false,
+        "plan_nodes": [
+          "Limit",
+          "Sort",
+          "Result",
+          "Nested Loop",
+          "Hash Join",
+          "Bitmap Heap Scan",
+          "Bitmap Index Scan[ix_memories_tenant_user_status]",
+          "Hash",
+          "Bitmap Heap Scan",
+          "Bitmap Index Scan[memory_embeddings_pkey]",
+          "Index Only Scan[pk_memory_versions]"
+        ]
+      }
+    },
+    "provider_nearest_first_ef_search_40": {
+      "big": {
+        "p50_ms": 61.5,
+        "p95_ms": 100.3,
+        "candidates_min": 1000,
+        "candidates_median": 1000.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false,
+        "plan_nodes": [
+          "Limit",
+          "Limit",
+          "Sort",
+          "Result",
+          "Seq Scan",
+          "Sort",
+          "Result",
+          "Nested Loop",
+          "Hash Join",
+          "CTE Scan",
+          "Hash",
+          "Seq Scan",
+          "Index Only Scan[pk_memory_versions]"
+        ]
+      },
+      "small": {
+        "p50_ms": 12.1,
+        "p95_ms": 16.6,
+        "candidates_min": 500,
+        "candidates_median": 500.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false,
+        "plan_nodes": [
+          "Limit",
+          "Limit",
+          "Sort",
+          "Result",
+          "Bitmap Heap Scan",
+          "Bitmap Index Scan[memory_embeddings_pkey]",
+          "Sort",
+          "Result",
+          "Nested Loop",
+          "Hash Join",
+          "CTE Scan",
+          "Hash",
+          "Bitmap Heap Scan",
+          "Bitmap Index Scan[ix_memories_tenant_user_status]",
+          "Index Only Scan[pk_memory_versions]"
+        ]
+      }
+    },
+    "provider_nearest_first_ef_search_200": {
+      "big": {
+        "p50_ms": 71.4,
+        "p95_ms": 108.1,
+        "candidates_min": 1000,
+        "candidates_median": 1000.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false,
+        "plan_nodes": [
+          "Limit",
+          "Limit",
+          "Sort",
+          "Result",
+          "Seq Scan",
+          "Sort",
+          "Result",
+          "Nested Loop",
+          "Hash Join",
+          "CTE Scan",
+          "Hash",
+          "Seq Scan",
+          "Index Only Scan[pk_memory_versions]"
+        ]
+      },
+      "small": {
+        "p50_ms": 16.1,
+        "p95_ms": 31.6,
+        "candidates_min": 500,
+        "candidates_median": 500.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false,
+        "plan_nodes": [
+          "Limit",
+          "Limit",
+          "Sort",
+          "Result",
+          "Bitmap Heap Scan",
+          "Bitmap Index Scan[memory_embeddings_pkey]",
+          "Sort",
+          "Result",
+          "Nested Loop",
+          "Hash Join",
+          "CTE Scan",
+          "Hash",
+          "Bitmap Heap Scan",
+          "Bitmap Index Scan[ix_memories_tenant_user_status]",
+          "Index Only Scan[pk_memory_versions]"
+        ]
+      }
+    },
+    "provider_nearest_first_ef_search_1000": {
+      "big": {
+        "p50_ms": 91.9,
+        "p95_ms": 174.1,
+        "candidates_min": 1000,
+        "candidates_median": 1000.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false,
+        "plan_nodes": [
+          "Limit",
+          "Limit",
+          "Sort",
+          "Result",
+          "Seq Scan",
+          "Sort",
+          "Result",
+          "Nested Loop",
+          "Hash Join",
+          "CTE Scan",
+          "Hash",
+          "Seq Scan",
+          "Index Only Scan[pk_memory_versions]"
+        ]
+      },
+      "small": {
+        "p50_ms": 22.1,
+        "p95_ms": 27.2,
+        "candidates_min": 500,
+        "candidates_median": 500.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false,
+        "plan_nodes": [
+          "Limit",
+          "Limit",
+          "Sort",
+          "Result",
+          "Bitmap Heap Scan",
+          "Bitmap Index Scan[memory_embeddings_pkey]",
+          "Sort",
+          "Result",
+          "Nested Loop",
+          "Hash Join",
+          "CTE Scan",
+          "Hash",
+          "Bitmap Heap Scan",
+          "Bitmap Index Scan[ix_memories_tenant_user_status]",
+          "Index Only Scan[pk_memory_versions]"
+        ]
+      }
+    },
+    "raw_two_step_ef_search_40": {
+      "big": {
+        "p50_ms": 64.8,
+        "p95_ms": 82.8,
+        "candidates_min": 1000,
+        "candidates_median": 1000.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false
+      },
+      "small": {
+        "p50_ms": 5.1,
+        "p95_ms": 8.9,
+        "candidates_min": 500,
+        "candidates_median": 500.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false
+      }
+    },
+    "raw_two_step_iterative_ef_search_40": {
+      "big": {
+        "p50_ms": 79.8,
+        "p95_ms": 98.5,
+        "candidates_min": 1000,
+        "candidates_median": 1000.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false
+      },
+      "small": {
+        "p50_ms": 6.7,
+        "p95_ms": 9.8,
+        "candidates_min": 500,
+        "candidates_median": 500.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false
+      }
+    },
+    "raw_two_step_ef_search_200": {
+      "big": {
+        "p50_ms": 63.7,
+        "p95_ms": 87.1,
+        "candidates_min": 1000,
+        "candidates_median": 1000.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false
+      },
+      "small": {
+        "p50_ms": 5.6,
+        "p95_ms": 7.5,
+        "candidates_min": 500,
+        "candidates_median": 500.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false
+      }
+    },
+    "raw_two_step_iterative_ef_search_200": {
+      "big": {
+        "p50_ms": 62.6,
+        "p95_ms": 96.7,
+        "candidates_min": 1000,
+        "candidates_median": 1000.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false
+      },
+      "small": {
+        "p50_ms": 7.3,
+        "p95_ms": 10.4,
+        "candidates_min": 500,
+        "candidates_median": 500.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false
+      }
+    },
+    "raw_two_step_ef_search_1000": {
+      "big": {
+        "p50_ms": 62.3,
+        "p95_ms": 85.0,
+        "candidates_min": 1000,
+        "candidates_median": 1000.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false
+      },
+      "small": {
+        "p50_ms": 5.6,
+        "p95_ms": 8.3,
+        "candidates_min": 500,
+        "candidates_median": 500.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false
+      }
+    },
+    "raw_two_step_iterative_ef_search_1000": {
+      "big": {
+        "p50_ms": 62.8,
+        "p95_ms": 91.4,
+        "candidates_min": 1000,
+        "candidates_median": 1000.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false
+      },
+      "small": {
+        "p50_ms": 4.0,
+        "p95_ms": 4.3,
+        "candidates_min": 500,
+        "candidates_median": 500.0,
+        "recall_at_k_mean": 1.0,
+        "recall_at_k_min": 1.0,
+        "uses_hnsw_index": false
+      }
+    }
+  }
+}

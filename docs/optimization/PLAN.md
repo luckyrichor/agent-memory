@@ -65,7 +65,7 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 |---|---|---|---|---|---|
 | B1 | 两段式检索：先只取 id 与分数，只对当前页取正文；候选数上限可配置（默认 1000→200） | O1 | 完成-传输量降低，延迟无改善；默认值未降 | 单测 + 微基准（行数/传输量/延迟） | `tests/unit/application/test_retrieval.py`、`tests/integration/test_two_stage_retrieval.py`、`scripts/bench/retrieval_read_path.py`、`measurements/b1-{before,after}-10k-*.json` |
 | B2 | 英文词法通道补 GIN 索引；检查三路查询的执行计划 | O1 | 完成-改用存储列（GIN 在 RLS 下用不上）；仅 1 万行 | `EXPLAIN` 前后对比 | `migrations/versions/0010_stored_lexical_vectors.py`、`scripts/bench/explain_read_path.py`、`measurements/b2-*` |
-| B3 | 向量近似索引（HNSW）实验 + 过滤后结果过少的处理 | O2 | 进行中（实验数据已有，结论待写） | 召回率对精确扫描、延迟，1 万 / 10 万向量 | |
+| B3 | 向量近似索引（HNSW）实验 + 过滤后结果过少的处理 | O2 | 完成-不上索引迁移；改查询形状后即使无索引也快约 2 倍；索引改为运维可选步骤 | 召回率对精确扫描、延迟；8 千 / 2 万向量 × 候选上限 1000 / 100 | `src/agent_memory/infrastructure/retrieval.py`、`scripts/bench/vector_index.py`、`measurements/b3-nearest-first-{8000,20000}-{1000,100}.json` |
 | B4 | 连接池参数可配置、池耗尽快速失败返回 503（带 Retry-After），不再挂 30 秒 | F2 | 完成-行为已验证，未做压测 | 单测 + 并发复现 | `tests/integration/test_pool_exhaustion.py`、`api/infrastructure_errors.py` |
 
 ### C. 写路径与 worker（O4、O5）
@@ -75,7 +75,7 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 | C1 | worker 有活时不睡眠，只有空闲才等待 | O5 | 完成 | 积压 N 条任务的清空时间 | `docs/optimization/measurements/c-*-burst-*.json` |
 | C2 | 触发式唤醒：PostgreSQL `LISTEN/NOTIFY`，保留低频轮询兜底 | O5 | 完成 | "写入→可检索"延迟 p50/p95 前后对比 | `c-*-steady-*.json`、迁移 `0009_job_notify.py`、`tests/integration/test_worker_wakeup.py` |
 | C3 | 单进程多并发消费（`--concurrency`） | O5 | 完成 | 吞吐对比；租约不重复领取 | `docs/optimization/measurements/c3-conc{1,4}-burst-*.json`、`tests/integration/test_worker_concurrency.py` |
-| C4 | 任务优先级（交互写入 > 批量导入） | O5 | 待做 | 混合负载下交互任务延迟 | |
+| C4 | 任务优先级（交互写入 > 批量导入） | O5 | 完成-交互事件 p50 29.7 s → 0.22 s（1500 条积压，前后范围互不重叠） | 混合负载下交互任务延迟，优先级 on/off 各 3 次 | `migrations/versions/0013_job_priority.py`、`tests/integration/test_job_priority.py`、`scripts/bench/job_priority.py`、`measurements/c4-priority-{off,on}-{1,2,3}.json` |
 | C5 | 同租户、同模型、相同正文的向量复用（内容哈希） | O4 | 完成-仅单测/集成测试（计数提供器断言调用次数，无规模化测量） | 向量调用次数前后对比（计数提供器） | `tests/unit/application/test_embedding_reuse.py`、迁移 `0011_content_hash_index` |
 
 ### D. 可靠性与安全（阶段 6 能在本环境验证的部分）
@@ -120,11 +120,23 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 ### B3 向量索引（HNSW）
 - 现状：`memory_embeddings` 没有向量索引，检索是精确扫描 + 过滤。
 - 难点：近似索引先找"全局最近的 N 个"再过滤租户 / 状态，小租户可能被挤到只剩几条甚至 0 条。
-- 方案：实验对比 ① 无索引精确扫描 ② 全局 HNSW + 放大候选 ③ 小租户走精确扫描、大租户走索引。本沙箱 pgvector 0.6.0 无迭代扫描，结论标注版本。
+- 方案：实验对比 ① 无索引精确扫描 ② 全局 HNSW + 放大候选 ③ 小租户走精确扫描、大租户走索引。
+- **结论（实测，tx 服务器 Docker `pgvector/pgvector:pg16`，pgvector 0.8.6，客户端与库同机）**：
+  - 候选上限取生产默认 1000 时，**规划器从不选 HNSW 索引**——8 千行和 2 万行都一样，建了索引也不选。加索引对当前查询毫无作用，`0014_vector_hnsw_index` 迁移已删除。
+  - 真正起效的是**查询形状**：先在 `memory_embeddings` 上取最近邻（物化 CTE），再关联 `memories` 过滤状态，而不是先 join 再整体排序。即使**没有索引**，8 千行 126.8 → 61.5 ms，2 万行 239.2 → 111.7 ms，约 2 倍；召回@20 全为 1.0（新形状返回的仍是那批最近邻，只是不再重复扫描）。小租户（500 行）11.3 → 11.2 ms，没有退化。
+  - 只有把候选上限压到 100，索引才会被选中：原始两步 SQL 14.5–18.0 ms，但召回掉到 0.4983（`ef_search=40` 且无迭代扫描时**候选只剩 23 条**）到 0.7967；开迭代扫描后 `ef=40` 恢复到 0.7650。这条路径是拿召回换延迟，**不适合默认开启**。
+- 决定：上"最近邻优先"的形状，不上索引迁移。索引写成运维可选步骤，前置条件是 pgvector ≥ 0.8（`hnsw.iterative_scan`），因为低于 0.8 时过滤会把近似扫描截断成几十条，正是上面 0.4983 那种召回塌陷。
+- 诚实边界：夹具是聚类合成向量（50 个中心 + 噪声 0.3），**不是语义向量**，召回数字只说明形状与索引的行为，不能当检索质量；规模只到 2 万，没有 10 万；客户端与数据库同机。
 
 ### C2 触发式唤醒
 - 数据库在 `jobs` / `outbox_messages` 插入时 `pg_notify`；worker 用独立连接 `LISTEN`，收到通知立刻领取；`poll-seconds` 保留作兜底（通知丢失、连接断开时不卡死）。租约、围栏、`FOR UPDATE SKIP LOCKED` 不变。
 - 注意：通知只是"叫醒"，任务是否可领仍由数据库里的状态和租约决定，所以通知重复或丢失都不影响正确性。
+
+### C4 任务优先级
+- 现状：`jobs` 只有 `available_at` / `created_at` 排序，领取是纯 FIFO。批量导入一灌，交互写入排在几千条后面。
+- 方案：`jobs.priority`（`BULK=0` / `INTERACTIVE=100`）+ 索引 `ix_jobs_claim_order(tenant_id, job_type, priority DESC, available_at, created_at, job_id)`；领取时按 `priority DESC` 再按原来的顺序，所以**同优先级内部仍是 FIFO**，默认值 0 与改动前行为等价。
+- 优先级要跨两跳传递：outbox 消息带 `priority` → `extract_event` 任务继承 → 抽取事务里设 GUC `app.job_priority`，让触发器生成的 `embed_memory` 任务继承。只改第一跳的话，交互事件仍会卡在别人的 embedding 任务后面。
+- 边界：outbox → job 这一跳仍按到达顺序派发（`dispatch_once` 不分优先级）。它只搬运下游引用、不干活，排队时间近似为零；真要改，代价是 outbox 表也要加列。
 
 ### C5 向量复用
 - 只复用**完全相同**的正文，键是 `(租户, 模型, 正文 SHA-256)`，**不跨租户**。近似重复不在这里处理（归 E2 以及后续语义去重）。
@@ -246,6 +258,18 @@ PYTHONPATH=scripts/dev .venv/bin/python -m pytest -p localpg -q
 - 代价（`scripts/bench/retrieval_read_path.py --with-evidence`，每条记忆 1 个事件和 1 条证据，同一脚本同一数据，改前 `1bd6cbf` 对改后，各 3 次，1 万行，2 核同机，无向量，p50 中位）：词法窄 10.5 → 13.5 ms；词法宽 65.9 → 67.6 ms；词法+结构化 25.4 → 27.0 ms。前后范围互不重叠，即每次搜索多约 1.6–3 ms，是多出来的那条查询，对最快的查询相对比例不小。"改后"是在 `1bd6cbf` 之上、提交前的工作区采集的。没有测过证据很多的记忆或更大规模。
 - 局限（不得夸大）：① 只有抽取路径产生证据；显式写入和纠正版本没有来源事件，列表为空。② 证据按**版本**挂，纠正产生的新版本不继承旧版本的证据。③ 引用只是指针，**不**等于"已验证"，也没有做证据质量评估。④ 没有按 ID 读取事件的接口，我没有新增（超出 E1 范围），消费者靠 session/sequence 对回自己的记录。
 - 下一步：E4（冲突标注）→ E3（上下文打分）→ C4/B3 的 PLAN 收尾 → STORY.md。
+
+### 2026-11-03 — B3 与 C4 完成（tx 服务器，Docker PG16）
+
+- B3 做法见 5 · B3。代码：`PostgresCandidateProvider(vector_search="nearest_first" | "exact")`，默认 `nearest_first`，只在 pgvector ≥ 0.8 时走新形状，否则退回精确扫描（0.8 以下会被过滤截断）。配置项 `MEMORY_VECTOR_SEARCH`、`MEMORY_VECTOR_EF_SEARCH`。
+- B3 证据：`measurements/b3-nearest-first-{8000,20000}-{1000,100}.json`，4 组、每组 30 条查询，含 p50/p95、召回@20、EXPLAIN 计划节点。**四组里 `provider_nearest_first_*` 与 `provider_exact_*` 的 `uses_hnsw_index` 全是 false**，这是"不上索引迁移"的直接依据。
+- B3 测试：`tests/integration/test_vector_search.py` 4 个（最近邻与精确扫描头部一致；跨租户与归档不泄漏；缺迭代扫描时退回精确形状且不发 `hnsw.ef_search`；新形状确实把物化 CTE 与 `ef_search` 探测发到库里）。**删掉了原来的"规划器必须选索引"测试**——它靠夹具行数凑规划器，40 / 3000 / 8000 行都失败过，钉住的是行数不是行为。
+- C4 做法见 5 · C4。代码：迁移 `0013_job_priority`、`JobPriority`、`ingest_batch(priority=)`、`commit_candidates` 里设 GUC。
+- C4 证据：`measurements/c4-priority-{off,on}-{1,2,3}.json`，1500 条 bulk 积压 + 5 条交互事件，每个配置 3 次。交互事件 ingest → active 的 p50 依次为 40.952 / 24.018 / 29.748 s（中位 29.7 s）与 0.445 / 0.076 / 0.223 s（中位 0.22 s），**两组范围互不重叠**。bulk 的 p50 中位 21.9 → 25.3 s，是 5 条交互任务插队应付的代价；只有 1 个 worker、1 个客户端，不要当吞吐结论。
+- 测量口径：B3 与 C4 的 JSON 都是 `dirty_tree: true`，因为工作区比当时 HEAD 多出的是本轮提交里的文档与 `scripts/bench/*.py --reset` 的 schema ACL 修补（重建 public 后不加 `GRANT USAGE`，应用角色连表名都解析不了）；被测的 `src/` 与 `975eee4` 一致。
+- 四道门（tx，pgvector 0.8.6，Docker）：541 passed、ruff、mypy strict 106 文件、foundation 8/8。本沙箱 localpg 是 pgvector 0.6.0，B3 有一个测试在那边 skip，属版本差异不是缺陷。
+- 局限（不得夸大）：① 没有语义向量，召回数字不代表检索质量。② 规模到 2 万，没到 10 万。③ C4 只验证了"积压时交互任务不再排队"，没有测多 worker 抢同一租户，也没有测优先级造成的饥饿。④ 优先级只有两档，且 outbox → job 这一跳不分级。
+- 下一步：E4（冲突标注）→ E3（上下文打分）→ STORY.md。
 
 ## 9. 需要负责人决定或配合的事项
 

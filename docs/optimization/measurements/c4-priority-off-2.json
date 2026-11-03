@@ -1,0 +1,38 @@
+{
+  "label": "c4-priority-off-2",
+  "commit": "975eee4",
+  "dirty_tree": true,
+  "measured_at_utc": "2026-11-03T06:38:26+00:00",
+  "environment": {
+    "host": "VM-0-15-ubuntu",
+    "cpus": 4,
+    "python": "3.12.3",
+    "postgres": "16.15 (Debian 16.15-1.pgdg12+2)",
+    "extractor": "rule (CodingFailureRuleExtractor)",
+    "workers": 1,
+    "clients_workers_database_same_host": true
+  },
+  "workload": {
+    "bulk_events": 1500,
+    "interactive_events": 5,
+    "priority": "off",
+    "settle_s": 1.0
+  },
+  "interactive_latency": {
+    "n": 5,
+    "p50_s": 24.018,
+    "p95_s": 24.03,
+    "max_s": 24.03,
+    "mean_s": 24.017
+  },
+  "bulk_latency": {
+    "n": 1500,
+    "p50_s": 21.914,
+    "p95_s": 24.466,
+    "max_s": 25.016,
+    "mean_s": 19.434
+  },
+  "completed": 1505,
+  "total_wall_s": 65.0,
+  "interactive_finished": 5
+}
